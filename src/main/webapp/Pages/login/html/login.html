@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<header>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registration</title>
+    <link rel="stylesheet" type="text/css" href="../css/login.css">
+</header>
+<body>
+<form class="login-form" action="../../../login" method="post">
+    <div class="login_form_header">
+        <h1>Log in</h1>
+    </div>
+    <div class="login_form_body">
+        <div class="login_form_left">
+            <label for="nic" class="login_form_title">NIC *</label>
+            <input type="text" name="nic" id="nic" class="login_form_data" placeholder="Enter your NIC number" required="required" />
+        </div>
+        <div class="login_form_left">
+            <label for="password" class="login_form_title">Password *</label>
+            <input type="password" name="password" id="password" class="login_form_data" placeholder="Enter your password" required="required" />
+        </div>
+    </div>
+    <div class="login_form_footer">
+        <button type="submit" class="login_form_button">Log in</button>
+    </div>
+</form>
+</body>
+</html>

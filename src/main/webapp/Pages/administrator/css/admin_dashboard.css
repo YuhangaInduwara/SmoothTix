@@ -1,0 +1,81 @@
+/* Reset some default styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: sans-serif;
+}
+
+/* Style for the body */
+body {
+    margin: 0;
+    padding: 0;
+}
+
+/* Style for the header */
+header {
+    /* background-color: #333; */
+    color: white;
+    text-align: center;
+    /* padding: 10px 0; */
+}
+
+/* Style for the title */
+title {
+    font-size: 24px;
+}
+
+/* Style for the navigation menu */
+nav {
+    background-color: none;
+    padding: 10px 30px 0 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+/* Style for the logo */
+.admin_dashboard_logo img {
+    width: 150px;
+    height: auto;
+}
+
+/* Style for the navigation links */
+.admin_dashboard_nav_links ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.admin_dashboard_nav_links ul li {
+    display: inline-block;
+    margin-left: 20px; /* Add spacing between menu items by adjusting margin */
+}
+
+.admin_dashboard_nav_links ul li:first-child {
+    margin-left: 0; /* Remove margin from the first item */
+}
+
+.admin_dashboard_nav_links ul li a {
+    color: black;
+    text-decoration: none;
+    font-size: 18px;
+    transition: color 0.3s;
+}
+
+.admin_dashboard_nav_links ul li a:hover {
+    color: #ff4500;
+}
+
+/* Style for the main content */
+.admin_dashboard {
+    width: 100%;
+    height: 100vh;
+    position: relative;
+    overflow: hidden;
+    background: linear-gradient(to left, rgb(225, 120, 120), rgb(255, 255, 255));
+    /* display: flex; */
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
