@@ -1,29 +1,72 @@
 <!DOCTYPE html>
 <html lang="en">
-<header>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Registration</title>
-    <link rel="stylesheet" type="text/css" href="../css/login.css">
-</header>
-<body>
-<form class="login-form" action="../../../login" method="post">
-    <div class="login_form_header">
-        <h1>Log in</h1>
-    </div>
-    <div class="login_form_body">
-        <div class="login_form_left">
-            <label for="nic" class="login_form_title">NIC *</label>
-            <input type="text" name="nic" id="nic" class="login_form_data" placeholder="Enter your NIC number" required="required" />
+    <header>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Registration</title>
+        <link rel="stylesheet" type="text/css" href="../css/login.css">
+    </header>
+    <body>
+        <div class="login-container">
+            <div class="login_header">
+                <div class="site_logo">
+                    <img src="../../../images/logo.png" alt="sitelogo" class="site_logo_img">
+                    <p class="site_logo_caption">Your Ticket to a Smooth Travel</p>
+                </div>
+                <div class="navbar">
+                    <div class="navbar_element">
+                        <a href="./home" class="navbar_element_link">Home</a>
+                    </div>
+                    <div class="navbar_element">
+                        <a href="./contact" class="navbar_element_link">Contact</a>
+                    </div>
+                    <div class="navbar_element">
+                        <a href="./about" class="navbar_element_link">About</a>
+                    </div>
+                    <div class="navbar_element">
+                        <a href="./login" class="navbar_element_link">Login</a>
+                    </div>
+                    <div class="navbar_element">
+                        <button class="navbar_element_button">Register</button>
+                    </div>
+                </div>
+            </div>
+            <div class="login_body">
+                <div class="login_img">
+                    <img src="../../../images/Wallpaper2.jpg" alt="loginimage" class="login_img_bus">
+                </div>
+                <div class="login_form">
+                    <div class="form_heading">
+                        <div class="form_heading_text">
+                            <h3>Login With</h3>
+                        </div>
+                        <div class="form_heading_logo">
+                            <img src="../../../images/logo.png" alt="form_heading_logo" class="form_heading_logo_img">
+                        </div>
+                    </div>
+                    <form action="../../../loginController" method="post">
+                        <div class="login_form_body">
+                            <div>
+                                <label for="nic" class="reg_form_title">NIC Number<span class="login_form_data_required">*</span></label>
+                                <input type="text" name="nic" id="nic" class="login_form_body" placeholder="Enter Your NIC Number" required="required" />
+                            </div>
+                            <div>
+                                <label for="password" class="reg_form_title">Password<span class="login_form_data_required">*</span></label>
+                                <input type="text" name="password" id="password" class="login_form_body" placeholder="Enter Your Password" required="required" />
+                            </div>
+                        </div>
+                        <div class="login_form_submit">
+                            <button type="submit" class="login_form_button">Login</button>
+                        </div>
+                    </form>
+                    <div>
+                        <p>Don’t have an account? <a href="test">Register</a> </p>
+                    </div>
+                </div>
+            </div>
+            <div class="login_footer">
+
+            </div>
         </div>
-        <div class="login_form_left">
-            <label for="password" class="login_form_title">Password *</label>
-            <input type="password" name="password" id="password" class="login_form_data" placeholder="Enter your password" required="required" />
-        </div>
-    </div>
-    <div class="login_form_footer">
-        <button type="submit" class="login_form_button">Log in</button>
-    </div>
-</form>
-</body>
+    </body>
 </html>
