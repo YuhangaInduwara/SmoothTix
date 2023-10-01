@@ -7,14 +7,16 @@ public class Passenger {
     private String mobileNo;
     private String email;
     private String password;
+    private int priority;
 
-    public Passenger(String fname, String lname, String nic, String mobileNo, String email, String password){
+    public Passenger(String fname, String lname, String nic, String mobileNo, String email, String password, int priority){
         this.fname = fname;
         this.lname = lname;
         this.nic = nic;
         this.mobileNo = mobileNo;
         this.email = email;
         this.password = password;
+        this.priority = priority;
     }
 
     public String getfname(){
@@ -41,6 +43,10 @@ public class Passenger {
         return password;
     }
 
+    public int getpriority(){
+        return priority;
+    }
+
     public void setfname(){
         this.fname = fname;
     }
@@ -63,6 +69,10 @@ public class Passenger {
 
     public void setpassword(){
         this.password = password;
+    }
+
+    public void setpriority(){
+        this.priority = priority;
     }
 
 }
