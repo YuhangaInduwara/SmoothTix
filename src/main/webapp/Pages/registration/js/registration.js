@@ -9,7 +9,6 @@ document.getElementById("regForm").addEventListener("submit", function(event) {
     const password = document.getElementById("password").value;
     const priority = 6;
 
-    // Create a JavaScript object representing the user data
     const userData = {
         fname: fname,
         lname: lname,
@@ -20,10 +19,8 @@ document.getElementById("regForm").addEventListener("submit", function(event) {
         priority: priority
     };
     console.log(userData)
-    // Convert the JavaScript object to JSON
     const jsonData = JSON.stringify(userData);
 
-    // Send a POST request with JSON data to your backend
     fetch('../../../registerController', {
         method: 'POST',
         headers: {
@@ -33,13 +30,10 @@ document.getElementById("regForm").addEventListener("submit", function(event) {
     })
         .then(response => {
             if (response.ok) {
-                // Successful login (status code 200), redirect to UserRegister.js
                 window.location.href = '../../login/html/login.html';
             } else if (response.status === 401) {
-                // Unauthorized login (status code 401), display an error message
                 console.log('Login unsuccessful');
             } else {
-                // Handle other status codes or errors
                 console.error('Error:', response.status);
             }
         })

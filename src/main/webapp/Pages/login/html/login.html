@@ -5,7 +5,6 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Registration</title>
         <link rel="stylesheet" type="text/css" href="../css/login.css">
-        <script src="../js/login.js"></script>
     </head>
     <body>
         <div class="login-container">
@@ -45,7 +44,7 @@
                             <img src="../../../images/logo.png" alt="form_heading_logo" class="form_heading_logo_img">
                         </div>
                     </div>
-                    <form action="../../../loginController" method="post">
+                    <form id="loginForm" method="post">
                         <div class="login_form_body">
                             <div>
                                 <label for="nic" class="reg_form_title">NIC Number<span class="login_form_data_required">*</span></label>
@@ -57,10 +56,11 @@
                             </div>
                         </div>
                         <div class="login_form_submit">
+                            <input type="submit" class="req_form_buttn">
                         </div>
                     </form>
                     <div>
-                        <p>Don’t have an account? <a href="test">Register</a> </p>
+                        <p>Don’t have an account? <a href="../../registration/html/registration.html">Register</a> </p>
                     </div>
                 </div>
             </div>
@@ -68,5 +68,6 @@
 
             </div>
         </div>
+        <script src="../js/login.js"></script>
     </body>
 </html>
