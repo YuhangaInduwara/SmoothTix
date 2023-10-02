@@ -15,13 +15,13 @@
 <!--    <url-pattern>/registerController</url-pattern>-->
 <!--  </servlet-mapping>-->
 
-  <servlet>
-    <servlet-name>LoginController</servlet-name>
-    <servlet-class>com.smoothtix.controller.LoginController</servlet-class>
-  </servlet>
+<!--  <servlet>-->
+<!--    <servlet-name>LoginController</servlet-name>-->
+<!--    <servlet-class>com.smoothtix.controller.LoginController</servlet-class>-->
+<!--  </servlet>-->
 
-  <servlet-mapping>
-    <servlet-name>LoginController</servlet-name>
-    <url-pattern>/loginController</url-pattern>
-  </servlet-mapping>
+<!--  <servlet-mapping>-->
+<!--    <servlet-name>LoginController</servlet-name>-->
+<!--    <url-pattern>/loginController</url-pattern>-->
+<!--  </servlet-mapping>-->
 </web-app>

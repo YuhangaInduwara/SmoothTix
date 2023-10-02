@@ -22,56 +22,43 @@ public class Passenger {
     public String getfname(){
         return fname;
     }
-
     public String getlname(){
         return lname;
     }
-
     public String getnic(){
         return nic;
     }
-
     public String getmobileNo(){
         return mobileNo;
     }
-
     public String getemail(){
         return email;
     }
-
     public String getpassword(){
         return password;
     }
-
     public int getpriority(){
         return priority;
     }
-
-    public void setfname(){
+    public void setfname(String fname){
         this.fname = fname;
     }
-
-    public void setlname(){
+    public void setlname(String lname){
         this.lname = lname;
     }
-
-    public void setnic(){
+    public void setnic(String nic){
         this.nic = nic;
     }
-
-    public void setmobileNo(){
+    public void setmobileNo(String mobileNo){
         this.mobileNo = mobileNo;
     }
-
-    public void setemail(){
+    public void setemail(String email){
         this.email = email;
     }
-
-    public void setpassword(){
+    public void setpassword(String password){
         this.password = password;
     }
-
-    public void setpriority(){
+    public void setpriority(int priority){
         this.priority = priority;
     }
 

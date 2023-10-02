@@ -23,23 +23,19 @@ public class RegisterController extends HttpServlet {
         try {
             Gson gson = new Gson();
 
-            // Read JSON data from the request body
             BufferedReader reader = request.getReader();
             Passenger passenger = gson.fromJson(reader, Passenger.class);
-            System.out.println(passenger.getpriority());
+            String hashedPassword = PasswordHash.hashPassword(passenger.getpassword());
+            passenger.setpassword(hashedPassword);
             int registrationSuccess = passengerTable.insert(passenger);
 
             if (registrationSuccess >= 1) {
-                // Set HTTP status code to indicate success (HTTP 200 OK)
                 response.setStatus(HttpServletResponse.SC_OK);
             } else {
-                // Set HTTP status code to indicate failure (HTTP 400 Bad Request)
                 response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
             }
         } catch (Exception e) {
             e.printStackTrace();
-            // Handle any exceptions that occur during registration
-            // Set the status code to indicate failure in this case
             response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
         }
     }
