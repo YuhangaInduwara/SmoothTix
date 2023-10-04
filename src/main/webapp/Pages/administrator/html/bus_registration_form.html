@@ -65,48 +65,53 @@
         </div>
         <div class="body_container">
             <div class="body_content">
-                <form class="reg-form" id="regForm">
-                    <div class="reg_form_header">
-                        <h1>Create Your Account</h1>
+                <form class="bus_reg_form" id="busRegForm">
+                    <div class="bus_reg_form_header">
+                        <h1>Add New Bus</h1>
                     </div>
-                    <div class="reg_form_body">
-                        <div class="reg_form_left">
-                            <label for="fname" class="reg_form_title">First name *</label>
-                            <input type="text" name="fname" id="fname" class="reg_form_data" placeholder="Enter your first name" required="required" />
+                    <div class="bus_reg_form_body">
+                        <div class="bus_reg_form_left">
+                            <label for="bus_id" class="bus_reg_form_title">Bus Id *</label>
+                            <input type="text" name="bus_id" id="bus_id" class="reg_form_data" placeholder="Enter the Bus ID" required="required" />
                         </div>
                         <div class="reg_form_right">
-                            <label for="lname" class="reg_form_title">Last name *</label>
-                            <input type="text" name="lname" id="lname" class="reg_form_data" placeholder="Enter your last name" required="required" />
+                            <label for="owner_id" class="bus_reg_form_title">Owner NIC *</label>
+                            <input type="text" name="owner_id" id="owner_id" class="reg_form_data" placeholder="Enter Owner NIC" required="required" />
                         </div>
                         <div class="reg_form_left">
-                            <label for="nic" class="reg_form_title">NIC *</label>
-                            <input type="text" name="nic" id="nic" class="reg_form_data" placeholder="Enter your NIC number" required="required" />
+                            <label for="engineNo" class="bus_reg_form_title">Engine No *</label>
+                            <input type="text" name="engineNo" id="engineNo" class="reg_form_data" placeholder="Enter Engine No" required="required" />
                         </div>
                         <div class="reg_form_right">
-                            <label for="mobileNo" class="reg_form_title">Mobile number *</label>
-                            <input type="number" name="mobileNo" id="mobileNo" class="reg_form_data" placeholder="0711231234" required="required" />
+                            <label for="chassisNo" class="bus_reg_form_title">Chassis No *</label>
+                            <input type="text" name="chassisNo" id="chassisNo" class="reg_form_data" placeholder="Enter Chassis No" required="required" />
                         </div>
                         <div class="reg_form">
-                            <label for="email" class="reg_form_title">Email *</label>
-                            <input type="email" name="email" id="email" class="reg_form_data" placeholder="sample@example.com" required="required" />
+                            <label for="noOfSeats" class="bus_reg_form_title">Number of Seats *</label>
+                            <input type="number" name="noOfSeats" id="noOfSeats" class="reg_form_data" placeholder="Enter Number of Seats" required="required" />
                         </div>
                         <div class="reg_form_left">
-                            <label for="password" class="reg_form_title">Password *</label>
-                            <input type="password" name="password" id="password" class="reg_form_data" placeholder="Enter your password" required="required" />
+                            <label for="manufact_year" class="bus_reg_form_title">Manufactured Year *</label>
+                            <input type="text" name="manufact_year" id="manufact_year" class="reg_form_data" placeholder="Enter Manufactured Year" required="required" />
                         </div>
                         <div class="reg_form_left">
-                            <label for="password_confirm" class="reg_form_title">Confirm password *</label>
-                            <input type="password" name="password_confirm" id="password_confirm" class="reg_form_data" placeholder="Confirm your password" required="required" />
+                            <label for="brand" class="bus_reg_form_title">Brand *</label>
+                            <input type="text" name="brand" id="brand" class="reg_form_data" placeholder="Enter Brand" required="required" />
+                        </div>
+                        <div class="reg_form_left">
+                            <label for="model" class="bus_reg_form_title">Model *</label>
+                            <input type="text" name="model" id="model" class="reg_form_data" placeholder="Enter Model" required="required" />
                         </div>
                     </div>
-                    <div class="reg_form_footer">
-                        <input type="submit" class="req_form_button">
+                    <div class="bus_reg_form_footer">
+                        <input type="submit" class="bus_reg_form_button">
                     </div>
                 </form>
             </div>
         </div>
     </div>
 </div>
+<script src="../js/bus_registration_form.js"></script>
 </body>
 </html>
 

@@ -44,3 +44,16 @@ function displayDataAsTable(data) {
         tbody.appendChild(row);
     });
 }
+
+
+// updateIcon.addEventListener("click", () => {
+//     // Implement update logic here
+//     // You can access the data for this row using the item object
+//     console.log("Update clicked for bus_id: " + item["bus_id"]);
+// });
+//
+// deleteIcon.addEventListener("click", () => {
+//     // Implement delete logic here
+//     // You can access the data for this row using the item object
+//     console.log("Delete clicked for bus_id: " + item["bus_id"]);
+// });
