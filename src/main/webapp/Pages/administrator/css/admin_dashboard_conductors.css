@@ -68,8 +68,9 @@ body{
 
 .sidebar{
     flex: .23;
-    background: linear-gradient(180deg, #FCBFBF 7.7%, rgba(253, 181, 181, 0.84) 52.35%, #F6E1E1 94.76%);
-    box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.25);
+    /*background: linear-gradient(180deg, #FCBFBF 7.7%, rgba(253, 181, 181, 0.84) 52.35%, #F6E1E1 94.76%);*/
+    /*box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.25);*/
+    background-color: #A5A5A5;
     display: flex;
     flex-direction: column;
 }
