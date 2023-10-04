@@ -28,7 +28,7 @@ document.getElementById("loginForm").addEventListener("submit", function(event) 
         .then(parsedResponse => {
             const priority = parsedResponse.priority;
             if (priority === 1) {
-                window.location.href = '../../administrator/html/admin_dashboard.html';
+                window.location.href = '../../administrator/html/admin_dashboard_home.html';
             } else if (priority === 2) {
                 window.location.href = '../../timekeeper/html/timekpr_dashboard.html';
             } else if (priority === 3) {
