@@ -38,7 +38,7 @@ document.getElementById("loginForm").addEventListener("submit", function(event) 
             } else if (priority === 5) {
                 window.location.href = '../../busemployee/html/emp_dashboard.html';
             } else if (priority === 6) {
-                window.location.href = '../../passenger/html/passenger_dashboard.html';
+                window.location.href = '../../passenger/html/passenger_dashboard_home.html';
             }
         })
 

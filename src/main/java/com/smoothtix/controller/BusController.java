@@ -22,10 +22,19 @@ public class BusController extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         response.setContentType("text/html");
         PrintWriter out = response.getWriter();
-        JSONArray busDataArray = new JSONArray(); // Create a JSON array for data
+        JSONArray busDataArray = new JSONArray();
+
+        String bus_id = request.getHeader("bus_id");
 
         try {
-            ResultSet rs = busTable.getAll();
+            ResultSet rs = null;
+            if(bus_id == null){
+                rs = busTable.getAll();
+            }
+            else{
+                rs = busTable.get(bus_id);
+            }
+
             while (rs.next()) {
                 JSONObject busData = new JSONObject();
                 busData.put("bus_id", rs.getString("bus_id"));
@@ -70,4 +79,52 @@ public class BusController extends HttpServlet {
             response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
         }
     }
+
+    @Override
+    protected void doPut(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        response.setContentType("text/html");
+        PrintWriter out = response.getWriter();
+
+        try {
+            Gson gson = new Gson();
+
+            String bus_id = request.getHeader("bus_id");
+
+            BufferedReader reader = request.getReader();
+            Bus bus = gson.fromJson(reader, Bus.class);
+
+
+            int updateSuccess = busTable.update(bus_id, bus);
+
+            if (updateSuccess >= 1) {
+                response.setStatus(HttpServletResponse.SC_OK);
+            } else {
+                response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @Override
+    protected void doDelete(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        response.setContentType("text/html");
+        PrintWriter out = response.getWriter();
+
+        try {
+            String bus_id = request.getHeader("bus_id");
+            int deleteSuccess = busTable.delete(bus_id);
+
+            if (deleteSuccess >= 1) {
+                response.setStatus(HttpServletResponse.SC_OK);
+            } else {
+                response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+        }
+    }
+
 }
