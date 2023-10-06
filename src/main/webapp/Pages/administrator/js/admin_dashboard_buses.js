@@ -92,10 +92,10 @@ document.getElementById("busRegForm").addEventListener("submit", function(event)
                 closeForm_add();
                 openAlertSuccess();
             } else if (response.status === 401) {
-                openAlertFail();
+                openAlertFail(response.status);
                 console.log('Registration unsuccessful');
             } else {
-                openAlertFail();
+                openAlertFail(response.status);
                 console.error('Error:', response.status);
             }
         })
@@ -181,10 +181,13 @@ function updateRow(bus_id){
         })
             .then(response => {
                 if (response.ok) {
-                    window.location.href = '../html/admin_dashboard_buses.html';
+                    closeForm_update();
+                    openAlertSuccess();
                 } else if (response.status === 401) {
+                    openAlertFail(response.status);
                     console.log('Update unsuccessful');
                 } else {
+                    openAlertFail(response.status);
                     console.error('Error:', response.status);
                 }
             })
@@ -205,10 +208,12 @@ function deleteRow(bus_id){
     })
         .then(response => {
             if (response.ok) {
-                window.location.href = '../html/admin_dashboard_buses.html';
+                openAlertSuccess();
             } else if (response.status === 401) {
-                console.log('Update unsuccessful');
+                openAlertFail(response.status);
+                console.log('Delete unsuccessful');
             } else {
+                openAlertFail(response.status);
                 console.error('Error:', response.status);
             }
         })
@@ -260,7 +265,8 @@ function closeAlertSuccess() {
     window.location.href = "../html/admin_dashboard_buses.html";
 }
 
-function openAlertFail() {
+function openAlertFail(response) {
+    document.getElementById("failMsg").innerHTML = "Operation failed (" + response + ")";
     document.getElementById("failAlert").style.display = "block";
     document.getElementById("overlay").style.display = "block";
 }
