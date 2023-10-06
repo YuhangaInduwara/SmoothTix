@@ -1,0 +1,269 @@
+body {
+  margin: 0;
+  line-height: normal;
+}
+:root {
+  /* fonts */
+  --font-times-new-roman: "Times New Roman";
+  --font-roboto: Roboto;
+
+  /* font sizes */
+  --font-size-16xl: 35px;
+  --font-size-51xl: 70px;
+
+  /* Colors */
+  --color-black: #000;
+  --fill-icon: #222;
+
+  /* Border radiuses */
+  --br-12xs: 1px;
+}
+
+.home-page-child {
+  position: absolute;
+  top: 0;
+  left: 0;
+  background-color: #e7d5d5;
+  width: 1440px;
+  height: 1024px;
+}
+.image-3-icon {
+  position: absolute;
+  top: 165px;
+  left: 404px;
+  width: 1066px;
+  height: 859px;
+  object-fit: cover;
+  opacity: 0.4;
+}
+.span {
+  font-size: 90px;
+}
+.p {
+  margin: 0;
+}
+.welcome-to-txt-container {
+  line-break: anywhere;
+  width: 100%;
+}
+.welcome-to {
+  position: absolute;
+  top: 443px;
+  left: 593px;
+  font-family: var(--font-roboto);
+  color: #141313;
+  white-space: pre-wrap;
+  text-align: left;
+  display: flex;
+  align-items: center;
+  width: 410px;
+  height: 155px;
+  font-size: var(--font-size-51xl);
+}
+.logo-1-icon {
+  position: absolute;
+  top: 478px;
+  left: 747px;
+  width: 512.46px;
+  height: 208px;
+  object-fit: cover;
+}
+.home-page-item {
+  position: absolute;
+  right: 1036px;
+  bottom: 0;
+  background: linear-gradient(
+    180deg,
+    #fcbfbf 7.7%,
+    rgba(253, 181, 181, 0.84) 52.35%,
+    #f6e1e1 94.76%
+  );
+  box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
+  width: 403px;
+  height: 859px;
+}
+.star-half-outline-2-icon {
+  position: absolute;
+  top: 648px;
+  left: 25px;
+  width: 42px;
+  height: 36px;
+  overflow: hidden;
+}
+.file-dock-icon {
+  position: absolute;
+  top: 583px;
+  left: 28px;
+  width: 34px;
+  height: 37px;
+}
+.user-box-duotone-line-icon,
+.user-fill-icon {
+  position: absolute;
+  top: 465px;
+  left: 33px;
+  width: 27px;
+  height: 27px;
+}
+.user-fill-icon {
+  top: 401px;
+  left: 28px;
+  width: 32px;
+  height: 32px;
+}
+.user-scan-light-icon {
+  position: absolute;
+  top: 338px;
+  left: 31px;
+  width: 29px;
+  height: 30px;
+}
+.darhboard-alt-child,
+.darhboard-alt-inner,
+.darhboard-alt-item,
+.rectangle-div {
+  position: absolute;
+  height: 34.29%;
+  width: 29.65%;
+  top: 14.1%;
+  right: 56.01%;
+  bottom: 51.6%;
+  left: 14.34%;
+  border-radius: var(--br-12xs);
+  border: 2px solid var(--fill-icon);
+  box-sizing: border-box;
+}
+.darhboard-alt-inner,
+.darhboard-alt-item,
+.rectangle-div {
+  height: 25.96%;
+  top: 59.94%;
+  bottom: 14.1%;
+}
+.darhboard-alt-inner,
+.rectangle-div {
+  top: 14.1%;
+  right: 14.34%;
+  bottom: 59.94%;
+  left: 56.01%;
+}
+.rectangle-div {
+  height: 34.29%;
+  top: 51.6%;
+  bottom: 14.1%;
+}
+.darhboard-alt {
+  position: absolute;
+  top: 212px;
+  left: 24px;
+  width: 43px;
+  height: 39px;
+}
+.bus-profile,
+.conductor,
+.driver,
+.home {
+  position: absolute;
+  top: 221px;
+  left: 77px;
+  line-height: 20px;
+}
+.bus-profile,
+.conductor,
+.driver {
+  top: 345px;
+}
+.conductor,
+.driver {
+  top: 407px;
+}
+.conductor {
+  top: 469px;
+}
+.location,
+.log-out,
+.ratings,
+.reports {
+  position: absolute;
+  top: 531px;
+  left: 78px;
+  line-height: 20px;
+}
+.log-out,
+.ratings,
+.reports {
+  top: 593px;
+}
+.log-out,
+.ratings {
+  top: 655px;
+}
+.log-out {
+  top: 871px;
+  left: 82px;
+}
+.home-page-inner {
+  position: absolute;
+  top: 262px;
+  left: 0;
+  width: 404px;
+  height: 64px;
+}
+.bus {
+  position: absolute;
+  top: 283px;
+  left: 77px;
+  line-height: 20px;
+}
+.bus-outline-2-icon,
+.location-outline-2-icon {
+  position: absolute;
+  top: 276px;
+  left: 27px;
+  width: 35px;
+  height: 32px;
+  object-fit: cover;
+}
+.location-outline-2-icon {
+  top: 528px;
+  left: 29px;
+  width: 32px;
+  height: 28px;
+}
+.login-as-a {
+  position: absolute;
+  top: 818px;
+  left: 82px;
+  line-height: 20px;
+}
+.vector-icon {
+  position: absolute;
+  height: 2.54%;
+  width: 2.01%;
+  top: 84.57%;
+  right: 95.63%;
+  bottom: 12.89%;
+  left: 2.36%;
+  max-width: 100%;
+  overflow: hidden;
+  max-height: 100%;
+}
+.person-add-outline-2-icon {
+  position: absolute;
+  top: 815px;
+  left: 30px;
+  width: 32px;
+  height: 28px;
+  overflow: hidden;
+}
+.home-page {
+  position: relative;
+  background-color: #fff;
+  width: 100%;
+  height: 1024px;
+  overflow: hidden;
+  text-align: center;
+  font-size: var(--font-size-16xl);
+  color: var(--color-black);
+  font-family: var(--font-times-new-roman);
+}
