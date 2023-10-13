@@ -1,50 +1,93 @@
 <!DOCTYPE html>
 <html lang="en">
-<header>
+<head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Registration</title>
     <link rel="stylesheet" type="text/css" href="../css/registration.css">
-</header>
-    <body>
-        <form class="reg-form" id="regForm">
-            <div class="reg_form_header">
-                <h1>Create Your Account</h1>
+</head>
+<body>
+<div class="login-container">
+    <div class="login_header">
+        <div class="site_logo">
+            <img src="../../../images/logo.png" alt="sitelogo" class="site_logo_img">
+            <p class="site_logo_caption">Your Ticket to a Smooth Travel</p>
+        </div>
+        <div class="navbar">
+            <div class="navbar_element">
+                <a href="./home" class="navbar_element_link">Home</a>
             </div>
-            <div class="reg_form_body">
-                <div class="reg_form_left">
-                    <label for="fname" class="reg_form_title">First name *</label>
-                    <input type="text" name="fname" id="fname" class="reg_form_data" placeholder="Enter your first name" required="required" />
+            <div class="navbar_element">
+                <a href="./contact" class="navbar_element_link">Contact</a>
+            </div>
+            <div class="navbar_element">
+                <a href="./about" class="navbar_element_link">About</a>
+            </div>
+            <div class="navbar_element">
+                <a href="../../login/html/login.html" class="navbar_element_link">Login</a>
+            </div>
+            <div class="navbar_element">
+                <button class="navbar_element_button" onclick="window.location.href='../../registration/html/registration.html'">Register</button>
+            </div>
+        </div>
+    </div>
+    <div class="login_body">
+        <div class="login_img">
+            <img src="../../../images/Wallpaper2.jpg" alt="loginimage" class="login_img_bus">
+        </div>
+        <div class="login_form">
+            <div class="login-form-body">
+                <div class="form_heading">
+                    <div class="form_heading_text">
+                        <h3>Register With</h3>
+                    </div>
+                    <div class="form_heading_logo">
+                        <img src="../../../images/logo.png" alt="form_heading_logo" class="form_heading_logo_img">
+                    </div>
                 </div>
-                <div class="reg_form_right">
-                    <label for="lname" class="reg_form_title">Last name *</label>
-                    <input type="text" name="lname" id="lname" class="reg_form_data" placeholder="Enter your last name" required="required" />
-                </div>
-                <div class="reg_form_left">
-                    <label for="nic" class="reg_form_title">NIC *</label>
-                    <input type="text" name="nic" id="nic" class="reg_form_data" placeholder="Enter your NIC number" required="required" />
-                </div>
-                <div class="reg_form_right">
-                    <label for="mobileNo" class="reg_form_title">Mobile number *</label>
-                    <input type="number" name="mobileNo" id="mobileNo" class="reg_form_data" placeholder="0711231234" required="required" />
-                </div>
-                <div class="reg_form">
-                    <label for="email" class="reg_form_title">Email *</label>
-                    <input type="email" name="email" id="email" class="reg_form_data" placeholder="sample@example.com" required="required" />
-                </div>
-                <div class="reg_form_left">
-                    <label for="password" class="reg_form_title">Password *</label>
-                    <input type="password" name="password" id="password" class="reg_form_data" placeholder="Enter your password" required="required" />
-                </div>
-                <div class="reg_form_left">
-                    <label for="password_confirm" class="reg_form_title">Confirm password *</label>
-                    <input type="password" name="password_confirm" id="password_confirm" class="reg_form_data" placeholder="Confirm your password" required="required" />
+                <form id="regForm" method="post">
+                    <div class="form-group">
+                        <label for="fname" class="reg_form_title">First name <span class="required">*</span></label>
+                        <input type="text" name="fname" id="fname" class="form-control" placeholder="Enter your first name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="lname" class="reg_form_title">Last name <span class="required">*</span></label>
+                        <input type="text" name="lname" id="lname" class="form-control" placeholder="Enter your last name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="nic" class="reg_form_title">NIC <span class="required">*</span></label>
+                        <input type="text" name="nic" id="nic" class="form-control" placeholder="Enter your NIC number" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="mobileNo" class="reg_form_title">Mobile number <span class="required">*</span></label>
+                        <input type="number" name="mobileNo" id="mobileNo" class="form-control" placeholder="0711231234" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="email" class="reg_form_title">Email <span class="required">*</span></label>
+                        <input type="email" name="email" id="email" class="form-control" placeholder="sample@example.com" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="password">Password<span class="required">*</span></label>
+                        <input type="password" name="password" id="password" class="form-control" placeholder="Enter Your Password" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="password_confirm" class="reg_form_title">Confirm password <span class="required">*</span></label>
+                        <input type="password" name="password_confirm" id="password_confirm" class="form-control" placeholder="Confirm your password" required>
+                    </div>
+                    <div class="form-group-btn">
+                        <button type="submit" class="btn-login">Register</button>
+                    </div>
+                </form>
+                <div class="form_footer">
+                    <p>Already has an account? <a href="../../login/html/login.html">Register</a> </p>
                 </div>
             </div>
-            <div class="reg_form_footer">
-                <input type="submit" class="req_form_button">
-            </div>
-        </form>
-        <script src="../js/registration.js"></script>
-    </body>
+        </div>
+    </div>
+    <div class="login_footer">
+
+    </div>
+</div>
+<script src="../js/registration.js"></script>
+</body>
 </html>
