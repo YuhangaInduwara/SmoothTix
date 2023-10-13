@@ -187,3 +187,45 @@ a{
     cursor: pointer;
 }
 
+/* Style the list container */
+.list {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    margin: 20px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+    background-color: #fff;
+    max-width: 300px;
+}
+
+/* Style each data item in the list */
+.dataList {
+    padding: 10px;
+    border-bottom: 1px solid #ccc;
+}
+
+/* Style the Edit and Delete buttons */
+.editDeleteButtons {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 10px 0;
+}
+
+.editDeleteButtons {
+    padding: 5px 10px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-right: 20px;
+}
+
+/* Style the buttons on hover */
+.editDeleteButtons button:hover {
+    background-color: #0056b3;
+}
