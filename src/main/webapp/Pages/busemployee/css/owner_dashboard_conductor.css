@@ -234,7 +234,11 @@ a{
 }
 
 .conductor_add_form_body,
+<<<<<<< HEAD
+.conductor_update_form_body{
+=======
 .conductor_add_form_body{
+>>>>>>> 6be5f78f3c5decf91c05292537563dda97a9322c
     display: flex;
     flex-direction: row;
     align-items: center;
