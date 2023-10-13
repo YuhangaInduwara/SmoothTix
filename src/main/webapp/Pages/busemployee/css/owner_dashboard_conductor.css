@@ -233,8 +233,8 @@ a{
     font-size: 20px;
 }
 
-.bus_add_form_body,
-.bus_update_form_body{
+.conductor_add_form_body,
+.conductor_add_form_body{
     display: flex;
     flex-direction: row;
     align-items: center;
