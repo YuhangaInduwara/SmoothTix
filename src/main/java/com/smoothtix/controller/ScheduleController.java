@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import com.smoothtix.dao.busTable;
 import com.smoothtix.dao.scheduleTable;
 import com.smoothtix.model.Bus;
+import com.smoothtix.model.Schedule;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -57,28 +58,28 @@ public class ScheduleController extends HttpServlet {
         }
     }
 
-//    @Override
-//    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-//        response.setContentType("text/html");
-//        PrintWriter out = response.getWriter();
-//
-//        try {
-//            Gson gson = new Gson();
-//
-//            BufferedReader reader = request.getReader();
-//            Bus bus = gson.fromJson(reader, Bus.class);
-//            int registrationSuccess = busTable.insert(bus);
-//
-//            if (registrationSuccess >= 1) {
-//                response.setStatus(HttpServletResponse.SC_OK);
-//            } else {
-//                response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-//            }
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-//        }
-//    }
+    @Override
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        response.setContentType("text/html");
+        PrintWriter out = response.getWriter();
+
+        try {
+            Gson gson = new Gson();
+
+            BufferedReader reader = request.getReader();
+            Schedule schedule = gson.fromJson(reader, Schedule.class);
+            int registrationSuccess = scheduleTable.insert(schedule);
+
+            if (registrationSuccess >= 1) {
+                response.setStatus(HttpServletResponse.SC_OK);
+            } else {
+                response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+        }
+    }
 //
 //    @Override
 //    protected void doPut(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
