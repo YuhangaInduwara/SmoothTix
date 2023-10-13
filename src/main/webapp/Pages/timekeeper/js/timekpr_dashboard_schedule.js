@@ -372,8 +372,3 @@ function searchData() {
            console.error('Error:', error);
        });
 }
-
-
-
-
-

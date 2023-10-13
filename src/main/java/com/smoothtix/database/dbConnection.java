@@ -10,7 +10,7 @@ public class dbConnection {
         String dbURL = "jdbc:mysql:// localhost:3306/";
         String dbName = "SmoothTix";
         String dbUsername = "root";
-        String dbPassword = "";
+        String dbPassword = "W@2915djkq#";
         Class.forName(dbDriver);
         return DriverManager.getConnection(dbURL + dbName, dbUsername, dbPassword);
     }
