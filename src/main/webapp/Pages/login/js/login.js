@@ -27,6 +27,7 @@ document.getElementById("loginForm").addEventListener("submit", function(event) 
         })
         .then(parsedResponse => {
 
+
             const priority = parsedResponse.priority;
             if (priority === 1) {
                 window.location.href = '../../administrator/html/admin_dashboard_home.html';
@@ -42,6 +43,7 @@ document.getElementById("loginForm").addEventListener("submit", function(event) 
                 window.location.href = '../../passenger/html/passenger_dashboard_home.html';
             }
         })
+
 
         .catch(error => {
             console.error('Error:', error);
