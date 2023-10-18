@@ -198,12 +198,12 @@ function updateRow(bus_id){
 }
 
 // Handle delete
-function deleteRow(nic){
+function deleteRow(bus_id){
     fetch(`../../../busController`, {
         method: 'DELETE',
         headers: {
             'Content-Type': 'application/json',
-            'nic': nic
+            'bus_id': bus_id
         },
     })
         .then(response => {

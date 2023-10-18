@@ -52,74 +52,74 @@ public class ConductorController extends HttpServlet {
         }
     }
 
-//    @Override
-//    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-//        response.setContentType("text/html");
-//        PrintWriter out = response.getWriter();
-//
-//        try {
-//            Gson gson = new Gson();
-//
-//            BufferedReader reader = request.getReader();
-//            Bus bus = gson.fromJson(reader, Bus.class);
-//            int registrationSuccess = busTable.insert(bus);
-//
-//            if (registrationSuccess >= 1) {
-//                response.setStatus(HttpServletResponse.SC_OK);
-//            } else {
-//                response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-//            }
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-//        }
-//    }
-//
-//    @Override
-//    protected void doPut(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-//        response.setContentType("text/html");
-//        PrintWriter out = response.getWriter();
-//
-//        try {
-//            Gson gson = new Gson();
-//
-//            String bus_id = request.getHeader("bus_id");
-//
-//            BufferedReader reader = request.getReader();
-//            Bus bus = gson.fromJson(reader, Bus.class);
-//
-//
-//            int updateSuccess = busTable.update(bus_id, bus);
-//
-//            if (updateSuccess >= 1) {
-//                response.setStatus(HttpServletResponse.SC_OK);
-//            } else {
-//                response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-//            }
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-//        }
-//    }
-//
-//    @Override
-//    protected void doDelete(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-//        response.setContentType("text/html");
-//        PrintWriter out = response.getWriter();
-//
-//        try {
-//            String bus_id = request.getHeader("bus_id");
-//            int deleteSuccess = busTable.delete(bus_id);
-//
-//            if (deleteSuccess >= 1) {
-//                response.setStatus(HttpServletResponse.SC_OK);
-//            } else {
-//                response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-//            }
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-//        }
-//    }
-//
+    @Override
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        response.setContentType("text/html");
+        PrintWriter out = response.getWriter();
+
+        try {
+            Gson gson = new Gson();
+
+            BufferedReader reader = request.getReader();
+            Conductor conductor = gson.fromJson(reader, Conductor.class);
+            int registrationSuccess = conductorTable.insert(conductor);
+
+            if (registrationSuccess >= 1) {
+                response.setStatus(HttpServletResponse.SC_OK);
+            } else {
+                response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @Override
+    protected void doPut(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        response.setContentType("text/html");
+        PrintWriter out = response.getWriter();
+
+        try {
+            Gson gson = new Gson();
+
+            String conductor_id = request.getHeader("conductor_id");
+
+            BufferedReader reader = request.getReader();
+            Conductor conductor = gson.fromJson(reader, Conductor.class);
+
+
+            int updateSuccess = conductorTable.update(conductor_id, conductor);
+
+            if (updateSuccess >= 1) {
+                response.setStatus(HttpServletResponse.SC_OK);
+            } else {
+                response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @Override
+    protected void doDelete(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        response.setContentType("text/html");
+        PrintWriter out = response.getWriter();
+
+        try {
+            String conductor_id = request.getHeader("conductor_id");
+            int deleteSuccess = conductorTable.delete(conductor_id);
+            System.out.println(conductor_id);
+            if (deleteSuccess >= 1) {
+                response.setStatus(HttpServletResponse.SC_OK);
+            } else {
+                response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+        }
+    }
+
 }

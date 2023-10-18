@@ -35,10 +35,10 @@ function displayDataAsTable(data) {
             <td>${item.nic}</td>
             <td>
                 <span class="icon-container">
-                    <i class="fas fa-pencil-alt" style="color: #ff0202" onclick="updateRow('${item.bus_id}')"></i>
+                    <i class="fas fa-pencil-alt" style="color: #ff0202" onclick="updateRow('${item.conductor_id}')"></i>
                 </span>
                 <span class="icon-container" style="margin-left: 10px;"> <!-- Adjust the margin as needed -->
-                    <i class="fas fa-trash-alt" style="color: #ff0202" onclick="deleteRow('${item.bus_id}')"></i>
+                    <i class="fas fa-trash-alt" style="color: #ff0202" onclick="deleteRow('${item.conductor_id}')"></i>
                 </span>
             </td>
         `;
@@ -47,7 +47,7 @@ function displayDataAsTable(data) {
     });
 }
 
-// Add new bus to the database
+//
 document.getElementById("conductorForm").addEventListener("submit", function(event) {
     event.preventDefault();
 
@@ -145,10 +145,13 @@ function updateRow(conductor_id){
         })
             .then(response => {
                 if (response.ok) {
-                    window.location.href = '../html/owner_dashboard_conductor.html';
+                    closeForm_update();
+                    openAlertSuccess();
                 } else if (response.status === 401) {
+                    openAlertFail(response.status);
                     console.log('Update unsuccessful');
                 } else {
+                    openAlertFail(response.status);
                     console.error('Error:', response.status);
                 }
             })
@@ -160,6 +163,8 @@ function updateRow(conductor_id){
 
 // Handle delete
 function deleteRow(conductor_id){
+    console.log(conductor_id)
+    console.log("hello")
     fetch(`../../../conductorController`, {
         method: 'DELETE',
         headers: {
@@ -169,10 +174,12 @@ function deleteRow(conductor_id){
     })
         .then(response => {
             if (response.ok) {
-                window.location.href = '../html/owner_dashboard_conductor.html';
+                openAlertSuccess();
             } else if (response.status === 401) {
+                openAlertFail(response.status);
                 console.log('Delete unsuccessful');
             } else {
+                openAlertFail(response.status);
                 console.error('Error:', response.status);
             }
         })
