@@ -10,7 +10,6 @@ public class dbConnection {
         String dbURL = "jdbc:mysql:// localhost:3306/";
         String dbName = "SmoothTix";
         String dbUsername = "root";
-
         String dbPassword = "";
 
         Class.forName(dbDriver);
