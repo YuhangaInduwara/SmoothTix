@@ -27,7 +27,7 @@ fetchAllData();
 
 // Display all data
 function displayDataAsParagraphs(data) {
-    const container = document.querySelector("#dataContainer");
+    const container = document.querySelector("#dataList");
 
     data.forEach(item => {
         const paragraph = document.createElement("p");
@@ -43,6 +43,7 @@ function displayDataAsParagraphs(data) {
         container.appendChild(paragraph);
     });
 }
+
 
 
 function update(nic){
