@@ -93,7 +93,7 @@ a{
     display: flex;
     flex-direction: column;
     background-color: white;
-    height: 86vh;
+    height: 100vh;
 }
 
 .navbar{
@@ -123,6 +123,52 @@ a{
     margin-right: 20px;
 }
 
+.body_content{
+    height: 100%;
+}
+
+.tile_grid{
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+.raw_1,
+.raw_2{
+    flex: 1;
+    display: flex;
+    flex-direction: row;
+    height: 100%;
+    gap: 40px;
+    align-items: center;
+    justify-content: center;
+}
+
+.raw_2{
+    margin-top: -70px;
+}
+
+.tile{
+    background-color: #e0e0de;
+    height: 35vh;
+    width: 50vh;
+    border-radius: 10px;
+    font-size: x-small;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+}
+
+.tile:hover{
+    background: linear-gradient(90deg, rgba(98, 97, 97, 0.47) 100%, rgba(253, 81, 81, 0) 100%);
+    transform: scale(1.05);
+}
+
+.count{
+    color: red;
+    font-size: xx-large;
+}
 
 
 

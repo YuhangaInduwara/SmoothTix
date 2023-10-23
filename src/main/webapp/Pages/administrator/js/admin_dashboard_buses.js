@@ -26,7 +26,10 @@ fetchAllData();
 // Display all data
 function displayDataAsTable(data) {
     const tableBody = document.querySelector("#dataTable tbody");
-
+    const rowCount = data.length;
+    if(rowCount >=10){
+        renderPageControl()
+    }
     data.forEach(item => {
         const row = document.createElement("tr");
 
@@ -43,16 +46,20 @@ function displayDataAsTable(data) {
             <td>${item.model}</td>
             <td>
                 <span class="icon-container">
-                    <i class="fas fa-pencil-alt" style="color: #ff0202" onclick="updateRow('${item.bus_id}')"></i>
+                    <i onclick="updateRow('${item.bus_id}')"><img src="../../../images/vector_icons/update_icon.png" alt="update" class="action_icon"></i>
                 </span>
-                <span class="icon-container" style="margin-left: 10px;">
-                    <i class="fas fa-trash-alt" style="color: #ff0202" onclick="deleteRow('${item.bus_id}')"></i>
+                <span class="icon-container" style="margin-left: 1px;">
+                    <i onclick="deleteRow('${item.bus_id}')"><img src="../../../images/vector_icons/delete_icon.png" alt="delete" class="action_icon"></i>
                 </span>
             </td>
         `;
 
         tableBody.appendChild(row);
     });
+}
+
+function renderPageControl(){
+    document.getElementById("page_control").style.display = "flex";
 }
 
 // Add new bus to the database
@@ -289,7 +296,7 @@ function createForm() {
     var form= `
         <div class="bus_form_left">
             <div class="form_div">
-                <label for="owner_nic" class="bus_form_title">Owner NIC <span class="reg_form_require">*</span></label>
+                <label for="owner_nic" class="bus_form_title">Owner NIC <span class="bus_form_require">*</span></label>
                 <input type="text" name="owner_nic" id="owner_nic" class="form_data" placeholder="Enter Owner NIC" required="required" />
             </div>
             <div class="form_div">

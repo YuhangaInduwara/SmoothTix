@@ -47,7 +47,7 @@ public class scheduleTable {
         Connection con = dbConnection.initializeDatabase();
         PreparedStatement pst = con.prepareStatement("UPDATE bus SET bus_id=?, owner_id=?, engineNo=?, chassisNo=?, noOfSeats=?, manufact_year=?, brand=?, model=? WHERE bus_id=?");
         pst.setString(1,bus.getBus_id());
-        pst.setString(2,bus.getOwner_id());
+//        pst.setString(2,bus.getOwner_id());
         pst.setString(3,bus.getEngineNo());
         pst.setString(4,bus.getChassisNo());
         pst.setInt(5,bus.getNoOfSeats());
