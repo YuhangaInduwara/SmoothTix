@@ -390,8 +390,8 @@ tbody tr:hover {
 }
 
 .action_icon {
-    width: 17px;
-    height: 17px;
+    width: 15px;
+    height: 15px;
     cursor: pointer;
     margin-right: 1px;
 }
@@ -408,8 +408,8 @@ tbody tr:hover {
 }
 
 .arrow_img{
-    width: 15px;
-    height: 15px;
+    width: 17px;
+    height: 17px;
     opacity: 0.7;
     cursor: pointer;
     margin-right: 10px;
@@ -418,3 +418,4 @@ tbody tr:hover {
 .arrow_img:hover{
     transform: scale(1.1);
 }
+

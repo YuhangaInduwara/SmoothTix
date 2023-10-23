@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Registration</title>
+    <title>Login</title>
     <link rel="stylesheet" type="text/css" href="../css/login.css">
 </head>
 <body>
@@ -15,7 +15,7 @@
         </div>
         <div class="navbar">
             <div class="navbar_element">
-                <a href="./home" class="navbar_element_link">Home</a>
+                <a href="../../../index.html" class="navbar_element_link">Home</a>
             </div>
             <div class="navbar_element">
                 <a href="./contact" class="navbar_element_link">Contact</a>
@@ -60,6 +60,17 @@
                 </form>
                 <div class="form_footer">
                     <p>Don’t have an account? <a href="../../registration/html/registration.html">Register</a> </p>
+                </div>
+                <div class="overlay" id="overlay"></div>
+                <div class="alertBody" id="loginSuccess">
+                    <img src="../../../images/Alert_icons/Success_icon.png" class="successImg" alt="success">
+                    <div class="alertMsgSuccess" id="successMsg">Login Success!</div>
+                    <button class="okButton" onclick="closeAlertSuccess()">Ok</button>
+                </div>
+                <div class="alertBody" id="loginFail">
+                    <img src="../../../images/Alert_icons/Error_icon.png" class="failImg" alt="fail">
+                    <div class="alertMsgFail" id="failMsg">Login Failed!</div>
+                    <button class="tryButton" onclick="closeAlertFail()">Try Again</button>
                 </div>
             </div>
         </div>
