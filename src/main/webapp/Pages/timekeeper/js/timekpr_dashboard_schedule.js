@@ -36,16 +36,15 @@ function displayDataAsTable(data) {
             <td>${item.date}</td>
             <td>${item.route_id}</td>
             <td>${item.start}</td>
-
             <td>${item.destination}</td>
             <td>${item.start_time}</td>
             <td>${item.end_time}</td>
             <td>
                 <span class="icon-container">
-                    <i class="fas fa-pencil-alt" style="color: #ff0202" onclick="updateRow('${item.bus_id}')"></i>
+                    <i class="fas fa-pencil-alt" style="color: #ff0202" onclick="updateRow('${item.schedule_id}')"></i>
                 </span>
                 <span class="icon-container" style="margin-left: 10px;"> <!-- Adjust the margin as needed -->
-                    <i class="fas fa-trash-alt" style="color: #ff0202" onclick="deleteRow('${item.bus_id}')"></i>
+                    <i class="fas fa-trash-alt" style="color: #ff0202" onclick="deleteRow('${item.schedule_id}')"></i>
                 </span>
             </td>
         `;
@@ -58,29 +57,28 @@ function displayDataAsTable(data) {
 document.getElementById("busRegForm").addEventListener("submit", function(event) {
    event.preventDefault();
 
-   const bus_id = document.getElementById("add_bus_id").value;
-   const owner_id = document.getElementById("add_owner_id").value;
-   const engineNo = document.getElementById("add_engineNo").value;
-   const chassisNo = document.getElementById("add_chassisNo").value;
-   const noOfSeats = document.getElementById("add_noOfSeats").value;
-   const manufact_year = document.getElementById("add_manufact_year").value;
-   const brand = document.getElementById("add_brand").value;
-   const model = document.getElementById("add_model").value;
+   const schedule_id = document.getElementById("add_schedule_id").value;
+   const date = document.getElementById("add_date").value;
+   const route_id = document.getElementById("add_route_id").value;
+   const start = document.getElementById("add_start").value;
+   const destination = document.getElementById("add_destination").value;
+   const start_time = document.getElementById("add_start_timer").value;
+   const end_time = document.getElementById("end_time").value;
+
 
    const userData = {
-       bus_id: bus_id,
-       owner_id: owner_id,
-       engineNo: engineNo,
-       chassisNo: chassisNo,
-       noOfSeats: noOfSeats,
-       manufact_year: manufact_year,
-       brand: brand,
-       model: model
+       schedule_id: schedule_id,
+       date: date,
+       route_id: route_id,
+       start: start,
+       destination: destination,
+       start_time: start_time,
+       end_time: end_time
    };
    console.log(userData)
    const jsonData = JSON.stringify(userData);
 
-   fetch('../../../busController', {
+   fetch('../../../scheduleController', {
        method: 'POST',
        headers: {
            'Content-Type': 'application/json'
@@ -112,13 +110,13 @@ function updateRow(bus_id){
 
    const urlParams = new URLSearchParams(window.location.search);
 
-   document.getElementById("header_bus_id").innerHTML = bus_id
+   document.getElementById("header_schedule_id").innerHTML = schedule_id
 
-   fetch('../../../busController', {
+   fetch('../../../scheduleController', {
        method: 'GET',
        headers: {
            'Content-Type': 'application/json',
-           'bus_id': bus_id
+           'schedule_id': schedule_id
        },
    })
        .then(response => {
@@ -127,14 +125,14 @@ function updateRow(bus_id){
                    existingData = data[0];
                    console.log("existingData:", existingData);
 
-                   document.getElementById("update_bus_id").value = existingData.bus_id;
-                   document.getElementById("update_owner_id").value = existingData.owner_id;
-                   document.getElementById("update_engineNo").value = existingData.engineNo;
-                   document.getElementById("update_chassisNo").value = existingData.chassisNo;
-                   document.getElementById("update_noOfSeats").value = existingData.noOfSeats;
-                   document.getElementById("update_manufact_year").value = existingData.manufact_year;
-                   document.getElementById("update_brand").value = existingData.brand;
-                   document.getElementById("update_model").value = existingData.model;
+                   document.getElementById("update_schedule_id").value = existingData.schedule_id;
+                   document.getElementById("update_date").value = existingData.date;
+                   document.getElementById("update_route_id").value = existingData.route_id;
+                   document.getElementById("update_start").value = existingData.start;
+                   document.getElementById("update_destination").value = existingData.destination;
+                   document.getElementById("update_start_time").value = existingData.start_time;
+                   document.getElementById("update_end_time").value = existingData.end_time;
+
                });
            } else if (response.status === 401) {
                console.log('Unauthorized');
@@ -149,39 +147,39 @@ function updateRow(bus_id){
    document.getElementById("busUpdateForm").addEventListener("submit", function(event) {
        event.preventDefault();
 
-       const bus_id = document.getElementById("update_bus_id").value;
-       const owner_id = document.getElementById("update_owner_id").value;
-       const engineNo = document.getElementById("update_engineNo").value;
-       const chassisNo = document.getElementById("update_chassisNo").value;
-       const noOfSeats = document.getElementById("update_noOfSeats").value;
-       const manufact_year = document.getElementById("update_manufact_year").value;
-       const brand = document.getElementById("update_brand").value;
-       const model = document.getElementById("update_model").value;
+       const schedule_id = document.getElementById("update_schedule_id").value;
+       const date = document.getElementById("update_date").value;
+       const route_id = document.getElementById("update_route_id").value;
+       const start = document.getElementById("update_start").value;
+       const destination = document.getElementById("update_destination").value;
+       const start_time = document.getElementById("update_start_time").value;
+       const end_time = document.getElementById("update_end_time").value;
+
 
        const updatedData = {
-           bus_id: bus_id,
-           owner_id: owner_id,
-           engineNo: engineNo,
-           chassisNo: chassisNo,
-           noOfSeats: noOfSeats,
-           manufact_year: manufact_year,
-           brand: brand,
-           model: model
+           schedule_id: schedule_id,
+           date: date,
+           route_id: route_id,
+           start: start,
+           destination: destination,
+           start_time: start_time,
+           end_time: end_time,
+
        };
 
        const jsonData = JSON.stringify(updatedData);
 
-       fetch(`../../../busController`, {
+       fetch(`../../../scheduleController`, {
            method: 'PUT',
            headers: {
                'Content-Type': 'application/json',
-               'bus_id': bus_id
+               'schedule_id': schedule_id
            },
            body: jsonData
        })
            .then(response => {
                if (response.ok) {
-                   window.location.href = '../html/admin_dashboard_buses.html';
+                   window.location.href = '../html/timekpr_dashboard_schedule.html';
                } else if (response.status === 401) {
                    console.log('Update unsuccessful');
                } else {
@@ -195,17 +193,17 @@ function updateRow(bus_id){
 }
 
 // Handle delete
-function deleteRow(bus_id){
-   fetch(`../../../busController`, {
+function deleteRow(schedule_id){
+   fetch(`../../../scheduleController`, {
        method: 'DELETE',
        headers: {
            'Content-Type': 'application/json',
-           'bus_id': bus_id
+           'schedule_id': schedule_id
        },
    })
        .then(response => {
            if (response.ok) {
-               window.location.href = '../html/admin_dashboard_buses.html';
+               window.location.href = '../html/timekpr_dashboard_schedule.html';
            } else if (response.status === 401) {
                console.log('Update unsuccessful');
            } else {
@@ -282,46 +280,34 @@ function createForm() {
    var form= `
        <div class="bus_form_left">
            <div class="form_div">
-               <label for="bus_id" class="bus_form_title">Bus Id <span class="bus_form_require">*</span></label>
-               <input type="text" name="bus_id" id="bus_id" class="form_data" placeholder="Enter the Bus ID" required="required" />
+               <label for="schedule_id" class="bus_form_title">Schedule Id <span class="bus_form_require">*</span></label>
+               <input type="text" name="schedule_id" id="schedule_id" class="form_data" placeholder="Enter the Schedule ID" required="required" />
            </div>
            <div class="form_div">
-               <label for="owner_id" class="bus_form_title">Owner NIC <span class="reg_form_require">*</span></label>
-               <input type="text" name="owner_id" id="owner_id" class="form_data" placeholder="Enter Owner NIC" required="required" />
+               <label for="date" class="bus_form_title">Owner NIC <span class="reg_form_require">*</span></label>
+               <input type="number" name="date" id="date" class="form_data" placeholder="Enter the Date" required="required" />
            </div>
            <div class="form_div">
-               <label for="engineNo" class="bus_form_title">Engine No <span class="bus_form_require">*</span></label>
-               <input type="text" name="engineNo" id="engineNo" class="form_data" placeholder="Enter Engine No" required="required" />
+               <label for="route_id" class="bus_form_title">Route Id <span class="bus_form_require">*</span></label>
+               <input type="text" name="route_id" id="route_id" class="form_data" placeholder="Enter Route Id" required="required" />
            </div>
            <div class="form_div">
-               <label for="chassisNo" class="bus_form_title">Chassis No <span class="bus_form_require">*</span></label>
-               <input type="text" name="chassisNo" id="chassisNo" class="form_data" placeholder="Enter Chassis No" required="required" />
+               <label for="start" class="bus_form_title">Start Location <span class="bus_form_require">*</span></label>
+               <input type="text" name="start" id="start" class="form_data" placeholder="Enter Start Location" required="required" />
            </div>
            <div class="form_div">
-               <label for="chassisNo2" class="bus_form_title">Chassis No <span class="bus_form_require">*</span></label>
-               <input type="text" name="chassisNo" id="chassisNo2" class="form_data" placeholder="Enter Chassis No" required="required" />
+               <label for="destination" class="bus_form_title">Destination <span class="bus_form_require">*</span></label>
+               <input type="text" name="destination" id="destination" class="form_data" placeholder="Enter Destination" required="required" />
            </div>
        </div>
        <div class="bus_form_right">
            <div class="form_div">
-               <label for="noOfSeats" class="bus_form_title">Number of Seats <span class="bus_form_require">*</span></label>
-               <input type="number" name="noOfSeats" id="noOfSeats" class="form_data" placeholder="Enter Number of Seats" required="required" />
+               <label for="start_time" class="bus_form_title">StartTime <span class="bus_form_require">*</span></label>
+               <input type="number" name="start_time" id="start_time" class="form_data" placeholder="Enter Start Time" required="required" />
            </div>
            <div class="form_div">
-               <label for="manufact_year" class="bus_form_title">Manufactured Year <span class="bus_form_require">*</span></label>
-               <input type="text" name="manufact_year" id="manufact_year" class="form_data" placeholder="Enter Manufactured Year" required="required" />
-           </div>
-           <div class="form_div">
-               <label for="brand" class="bus_form_title">Brand <span class="bus_form_require">*</span></label>
-               <input type="text" name="brand" id="brand" class="form_data" placeholder="Enter Brand" required="required" />
-           </div>
-           <div class="form_div">
-               <label for="model" class="bus_form_title">Model <span class="bus_form_require">*</span></label>
-               <input type="text" name="model" id="model" class="form_data" placeholder="Enter Model" required="required" />
-           </div>
-           <div class="form_div">
-               <label for="chassisNo1" class="bus_form_title">Chassis No <span class="bus_form_require">*</span></label>
-               <input type="text" name="chassisNo" id="chassisNo1" class="form_data" placeholder="Enter Chassis No" required="required" />
+               <label for="end_time" class="bus_form_title">End Time<span class="bus_form_require">*</span></label>
+               <input type="number" name="end_time" id="end_time" class="form_data" placeholder="Enter End Time" required="required" />
            </div>
        </div>
        `;
@@ -351,11 +337,11 @@ function searchData() {
        return;
    }
 
-   fetch('../../../busController', {
+   fetch('../../../scheduleController', {
        method: 'GET',
        headers: {
            'Content-Type': 'application/json',
-           'bus_id': searchTerm
+           'schedule_id': searchTerm
        },
    })
        .then(response => {
