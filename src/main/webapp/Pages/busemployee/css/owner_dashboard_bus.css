@@ -233,8 +233,8 @@ a{
     font-size: 20px;
 }
 
-.conductor_add_form_body,
-.conductor_update_form_body{
+.bus_add_form_body,
+.bus_update_form_body{
     display: flex;
     flex-direction: row;
     align-items: center;
@@ -314,17 +314,25 @@ a{
 
 .alertImg {
     width: 80px;
-    margin-bottom: 20px;
+    margin-bottom: 40px;
 }
 
-.alertMsg {
-    color: #109046;
+.alertMsgSuccess,
+.alertMsgFail {
     font-size: 25px;
     font-family: Times New Roman, serif;
     font-weight: 700;
     line-height: 1.5;
     word-wrap: break-word;
-    margin-bottom: 20px;
+    margin-bottom: 40px;
+}
+
+.alertMsgSuccess{
+    color: #109046;
+}
+
+.alertMsgFail{
+    color: #ff0202;
 }
 
 .okButton {
@@ -380,4 +388,5 @@ td, th {
 tbody tr:hover {
     background-color: #989898;
 }
+
 

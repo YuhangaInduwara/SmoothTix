@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Buses</title>
     <link rel="stylesheet" type="text/css" href="../css/owner_dashboard_bus.css">
+    <link rel="icon" type="image/x-icon" href="../../../images/favicon/favicon.png">
 </head>
 <body>
 <div class="dashboard">
@@ -67,9 +68,81 @@
                 <img src="../../../images/vector_icons/user.png" alt="userimage" class="user_img">
             </div>
         </div>
+        <div class="body_content">
+            <div class="functions">
+                <div class="add-new">
+                    <button class="add-new-button" onclick="openForm_add()">Add New Bus</button>
+                </div>
+                <div class="overlay" id="overlay"></div>
+                <div class="body_content">
+                    <div class="form">
+                        <form class="bus_form" id="busRegForm">
+                            <div class="bus_form_header">
+                                <h2>Add New Bus</h2>
+                            </div>
+                            <div id="formContainer_add"></div>
+                            <div class="bus_form_footer">
+                                <button type="button" class="bus_form_button" onclick="closeForm_add()">Close</button>
+                                <input type="submit" class="bus_form_button" value="Add" id="busRegFormSubmit">
+                            </div>
+                        </form>
+                    </div>
+                    <div class="form">
+                        <form class="bus_form" id="busUpdateForm">
+                            <div class="bus_form_header">
+                                <h2>Update <span id="header_bus_id"></span> Details</h2>
+                            </div>
+                            <div id="formContainer_update"></div>
+                            <div class="bus_form_footer">
+                                <button type="button" class="bus_form_button" onclick="closeForm_update()">Close</button>
+                                <input type="submit" class="bus_form_button" value="Update">
+                            </div>
+                        </form>
+                    </div>
+                    <div class="alertBody" id="successAlert">
+                        <img src="../../../images/Alert_icons/Success_icon.png" class="alertImg" alt="success">
+                        <div class="alertMsgSuccess">Operation Successful!</div>
+                        <button class="okButton" onclick="closeAlertSuccess()">Ok</button>
+                    </div>
+                    <div class="alertBody" id="failAlert">
+                        <img src="../../../images/Alert_icons/Error_icon.png" class="alertImg" alt="fail">
+                        <div class="alertMsgFail" id="failMsg"></div>
+                        <button class="okButton" onclick="closeAlertFail()">Ok</button>
+                    </div>
+                </div>
+                <div class="search_box">
+                    <div class="search">
+                        <label>
+                            <input class="search_input" type="text" placeholder="Search" id="searchInput">
+                        </label>
+                        <button id="searchButton" onclick="searchData()">
+                            <img src="../../../images/vector_icons/search_icon.png" alt="Search" class="search_img">
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div>
+                <table id="dataTable" class="bus_table">
+                    <thead>
+                    <tr>
+                        <th>Bus ID</th>
+                        <th>Owner ID</th>
+                        <th>Engine Number</th>
+                        <th>Chassis Number</th>
+                        <th>Number of Seats</th>
+                        <th>Manufacturing Year</th>
+                        <th>Brand</th>
+                        <th>Model</th>
+                        <th>Actions</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+            </div>
+        </div>
     </div>
 </div>
-<script src="../js/owner_dashboard_home.js"></script>
+<script src="../js/owner_dashboard_bus.js"></script>
 </body>
 </html>
-
