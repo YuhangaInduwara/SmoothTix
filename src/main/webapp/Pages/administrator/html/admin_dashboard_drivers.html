@@ -23,6 +23,10 @@
                 <a href="./admin_dashboard_passengers.html"><img src="../../../images/vector_icons/passenger.png" alt="passenger" class="sidebar_img"></a>
                 <a href="./admin_dashboard_passengers.html">Passengers</a>
             </div>
+            <div class="sidebar_element">
+                <a href="./admin_dashboard_owners.html"><img src="../../../images/vector_icons/owner.png" alt="owner" class="sidebar_img"></a>
+                <a href="./admin_dashboard_owners.html">Owners</a>
+            </div>
             <div class="sidebar_element_main">
                 <a href="./admin_dashboard_drivers.html"><img src="../../../images/vector_icons/driver.png" alt="driver" class="sidebar_img"></a>
                 <a href="./admin_dashboard_drivers.html">Drivers</a>
@@ -66,6 +70,9 @@
         </div>
         <div class="body_content">
             <div class="functions">
+                <div class="add-new">
+                    <button class="add-new-button" onclick="openFlagged()">Flagged Drivers</button>
+                </div>
                 <div class="overlay" id="overlay"></div>
                 <div class="body_content">
                     <div class="form">
@@ -118,20 +125,120 @@
                 <table id="dataTable" class="bus_table">
                     <thead>
                     <tr>
-                        <th>Bus ID</th>
-                        <th>Owner ID</th>
-                        <th>Engine Number</th>
-                        <th>Chassis Number</th>
-                        <th>Number of Seats</th>
-                        <th>Manufacturing Year</th>
-                        <th>Brand</th>
-                        <th>Model</th>
-                        <th>Actions</th>
+                        <th>Driver ID</th>
+                        <th>Passenger ID</th>
+                        <th>Driving license No.</th>
+                        <th>Name</th>
+                        <th>NIC</th>
+                        <th>Mobile Number</th>
+                        <th>Email</th>
+                        <th>Points</th>
+                        <th>Flag</th>
                     </tr>
                     </thead>
                     <tbody>
+                    <tr>
+                        <td>D001</td>
+                        <td>P001</td>
+                        <td>DL001</td>
+                        <td>Yuhanga Induwara</td>
+                        <td>200126702280</td>
+                        <td>0702561331</td>
+                        <td>yuhanga2001@gmail.com</td>
+                        <td>3.5/5.0</td>
+                        <td>
+                            <span class="icon-container">
+                                <i onclick="updateRow('${item.bus_id}')"><img src="../../../images/vector_icons/flag_icon.png" alt="flag" class="action_icon"></i>
+                            </span>
+                        </td>
+                    </tr>
                     </tbody>
                 </table>
+                <div class="page_control" id="page_control">
+                    <img class="arrow_img" src="../../../images/vector_icons/arrow_left.png" alt="arrow_left">
+                    <img class="arrow_img" src="../../../images/vector_icons/arrow_right.png" alt="arrow_right">
+                </div>
+            </div>
+            <div id="flagTable" class="flag_table">
+                <div class="page_name">
+                    <h1>Flagged Drivers</h1>
+                </div>
+                <table class="bus_table">
+                    <thead>
+                    <tr>
+                        <th>Driver ID</th>
+                        <th>Passenger ID</th>
+                        <th>Driving license No.</th>
+                        <th>Name</th>
+                        <th>NIC</th>
+                        <th>Mobile Number</th>
+                        <th>Email</th>
+                        <th>Points</th>
+                        <th>Unflag</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td>C001</td>
+                        <td>P001</td>
+                        <td>Yuhanga Induwara</td>
+                        <td>200126702280</td>
+                        <td>0702561331</td>
+                        <td>yuhanga2001@gmail.com</td>
+                        <td>3.5/5.0</td>
+                        <td>
+                            <span class="icon-container">
+                                <i onclick="updateRow('${item.bus_id}')"><img src="../../../images/vector_icons/flag_icon.png" alt="flag" class="action_icon"></i>
+                            </span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>C001</td>
+                        <td>P001</td>
+                        <td>Yuhanga Induwara</td>
+                        <td>200126702280</td>
+                        <td>0702561331</td>
+                        <td>yuhanga2001@gmail.com</td>
+                        <td>3.5/5.0</td>
+                        <td>
+                            <span class="icon-container">
+                                <i onclick="updateRow('${item.bus_id}')"><img src="../../../images/vector_icons/flag_icon.png" alt="flag" class="action_icon"></i>
+                            </span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>C001</td>
+                        <td>P001</td>
+                        <td>Yuhanga Induwara</td>
+                        <td>200126702280</td>
+                        <td>0702561331</td>
+                        <td>yuhanga2001@gmail.com</td>
+                        <td>3.5/5.0</td>
+                        <td>
+                            <span class="icon-container">
+                                <i onclick="updateRow('${item.bus_id}')"><img src="../../../images/vector_icons/flag_icon.png" alt="flag" class="action_icon"></i>
+                            </span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>C001</td>
+                        <td>P001</td>
+                        <td>Yuhanga Induwara</td>
+                        <td>200126702280</td>
+                        <td>0702561331</td>
+                        <td>yuhanga2001@gmail.com</td>
+                        <td>3.5/5.0</td>
+                        <td>
+                            <span class="icon-container">
+                                <i onclick="updateRow('${item.bus_id}')"><img src="../../../images/vector_icons/flag_icon.png" alt="flag" class="action_icon"></i>
+                            </span>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+                <div class="add-new" style="display: flex; justify-content: flex-end">
+                    <button class="add-new-button" onclick="closeFlagged()">Back</button>
+                </div>
             </div>
         </div>
     </div>

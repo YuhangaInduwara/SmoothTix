@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Buses</title>
-    <link rel="stylesheet" type="text/css" href="../css/admin_dashboard_buses.css">
+    <title>Owners</title>
+    <link rel="stylesheet" type="text/css" href="../css/admin_dashboard_owners.css">
     <link rel="icon" type="image/x-icon" href="../../../images/favicon/favicon.png">
 </head>
 <body>
@@ -23,7 +23,7 @@
                 <a href="./admin_dashboard_passengers.html"><img src="../../../images/vector_icons/passenger.png" alt="passenger" class="sidebar_img"></a>
                 <a href="./admin_dashboard_passengers.html">Passengers</a>
             </div>
-            <div class="sidebar_element">
+            <div class="sidebar_element_main">
                 <a href="./admin_dashboard_owners.html"><img src="../../../images/vector_icons/owner.png" alt="owner" class="sidebar_img"></a>
                 <a href="./admin_dashboard_owners.html">Owners</a>
             </div>
@@ -35,7 +35,7 @@
                 <a href="./admin_dashboard_conductors.html"><img src="../../../images/vector_icons/conductor.png" alt="conductor" class="sidebar_img"></a>
                 <a href="./admin_dashboard_conductors.html">Conductors</a>
             </div>
-            <div class="sidebar_element_main">
+            <div class="sidebar_element">
                 <a href="./admin_dashboard_buses.html"><img src="../../../images/vector_icons/bus.png" alt="bus" class="sidebar_img"></a>
                 <a href="./admin_dashboard_buses.html">Buses</a>
             </div>
@@ -61,7 +61,7 @@
     <div class="content_container">
         <div class="navbar">
             <div class="page_name">
-                <h1>Buses</h1>
+                <h1>Owners</h1>
             </div>
             <div class="user_profile">
                 <h3>Username</h3>
@@ -70,9 +70,6 @@
         </div>
         <div class="body_content">
             <div class="functions">
-                <div class="add-new">
-                    <button class="add-new-button" onclick="openForm_add()">Add New Bus</button>
-                </div>
                 <div class="overlay" id="overlay"></div>
                 <div class="body_content">
                     <div class="form">
@@ -124,20 +121,103 @@
             <div>
                 <table id="dataTable" class="bus_table">
                     <thead>
-                        <tr>
-                            <th>Bus ID</th>
-                            <th>Owner ID</th>
-                            <th>Route</th>
-                            <th>Engine Number</th>
-                            <th>Chassis Number</th>
-                            <th>Number of Seats</th>
-                            <th>Manufacturing Year</th>
-                            <th>Brand</th>
-                            <th>Model</th>
-                            <th>Actions</th>
-                        </tr>
+                    <tr>
+                        <th>Owner ID</th>
+                        <th>Passenger ID</th>
+                        <th>Name</th>
+                        <th>NIC</th>
+                        <th>Mobile Number</th>
+                        <th>Email</th>
+                        <th>No. of Buses</th>
+                        <th>Actions</th>
+                    </tr>
                     </thead>
                     <tbody>
+                    <tr>
+                        <td>Owner001</td>
+                        <td>P001</td>
+                        <td>Yuhanga Induwara</td>
+                        <td>200126702280</td>
+                        <td>0702561331</td>
+                        <td>yuhanga2001@gmail.com</td>
+                        <td>01</td>
+                        <td>
+                            <span class="icon-container">
+                                <i onclick="updateRow('${item.bus_id}')"><img src="../../../images/vector_icons/update_icon.png" alt="update" class="action_icon"></i>
+                            </span>
+                            <span class="icon-container" style="margin-left: 1px;">
+                                <i onclick="updateRow('${item.bus_id}')"><img src="../../../images/vector_icons/delete_icon.png" alt="delete" class="action_icon"></i>
+                            </span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Owner001</td>
+                        <td>P002</td>
+                        <td>Yuhanga Induwara</td>
+                        <td>200126702280</td>
+                        <td>0702561331</td>
+                        <td>yuhanga2001@gmail.com</td>
+                        <td>03</td>
+                        <td>
+                            <span class="icon-container">
+                                <i onclick="updateRow('${item.bus_id}')"><img src="../../../images/vector_icons/update_icon.png" alt="update" class="action_icon"></i>
+                            </span>
+                            <span class="icon-container" style="margin-left: 1px;">
+                                <i onclick="updateRow('${item.bus_id}')"><img src="../../../images/vector_icons/delete_icon.png" alt="delete" class="action_icon"></i>
+                            </span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Owner001</td>
+                        <td>P003</td>
+                        <td>Yuhanga Induwara</td>
+                        <td>200126702280</td>
+                        <td>0702561331</td>
+                        <td>yuhanga2001@gmail.com</td>
+                        <td>01</td>
+                        <td>
+                            <span class="icon-container">
+                                <i onclick="updateRow('${item.bus_id}')"><img src="../../../images/vector_icons/update_icon.png" alt="update" class="action_icon"></i>
+                            </span>
+                            <span class="icon-container" style="margin-left: 1px;">
+                                <i onclick="updateRow('${item.bus_id}')"><img src="../../../images/vector_icons/delete_icon.png" alt="delete" class="action_icon"></i>
+                            </span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Owner001</td>
+                        <td>P004</td>
+                        <td>Yuhanga Induwara</td>
+                        <td>200126702280</td>
+                        <td>0702561331</td>
+                        <td>yuhanga2001@gmail.com</td>
+                        <td>01</td>
+                        <td>
+                            <span class="icon-container">
+                                <i onclick="updateRow('${item.bus_id}')"><img src="../../../images/vector_icons/update_icon.png" alt="update" class="action_icon"></i>
+                            </span>
+                            <span class="icon-container" style="margin-left: 1px;">
+                                <i onclick="updateRow('${item.bus_id}')"><img src="../../../images/vector_icons/delete_icon.png" alt="delete" class="action_icon"></i>
+                            </span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Owner001</td>
+                        <td>P005</td>
+                        <td>Yuhanga Induwara</td>
+                        <td>200126702280</td>
+                        <td>0702561331</td>
+                        <td>yuhanga2001@gmail.com</td>
+                        <td>02</td>
+                        <td>
+                            <span class="icon-container">
+                                <i onclick="updateRow('${item.bus_id}')"><img src="../../../images/vector_icons/update_icon.png" alt="update" class="action_icon"></i>
+                            </span>
+                            <span class="icon-container" style="margin-left: 1px;">
+                                <i onclick="updateRow('${item.bus_id}')"><img src="../../../images/vector_icons/delete_icon.png" alt="delete" class="action_icon"></i>
+                            </span>
+                        </td>
+                    </tr>
                     </tbody>
                 </table>
                 <div class="page_control" id="page_control">
@@ -148,7 +228,7 @@
         </div>
     </div>
 </div>
-<script src="../js/admin_dashboard_buses.js"></script>
+<script src="../js/admin_dashboard_drivers.js"></script>
 </body>
 </html>
 
