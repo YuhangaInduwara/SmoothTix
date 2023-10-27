@@ -39,6 +39,7 @@ public class BusController extends HttpServlet {
                 JSONObject busData = new JSONObject();
                 busData.put("bus_id", rs.getString("bus_id"));
                 busData.put("owner_id", rs.getString("owner_id"));
+                busData.put("route", rs.getString("route"));
                 busData.put("engineNo", rs.getString("engineNo"));
                 busData.put("chassisNo", rs.getString("chassisNo"));
                 busData.put("noOfSeats", rs.getInt("noOfSeats"));

@@ -26,7 +26,10 @@ fetchAllData();
 // Display all data
 function displayDataAsTable(data) {
     const tableBody = document.querySelector("#dataTable tbody");
-
+    const rowCount = data.length;
+    if(rowCount >=10){
+        renderPageControl()
+    }
     data.forEach(item => {
         const row = document.createElement("tr");
 
@@ -34,6 +37,7 @@ function displayDataAsTable(data) {
             <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
             <td>${item.bus_id}</td>
             <td>${item.owner_id}</td>
+            <td>${item.route}</td>
             <td>${item.engineNo}</td>
             <td>${item.chassisNo}</td>
             <td>${item.noOfSeats}</td>
@@ -42,10 +46,10 @@ function displayDataAsTable(data) {
             <td>${item.model}</td>
             <td>
                 <span class="icon-container">
-                    <i class="fas fa-pencil-alt" style="color: #ff0202" onclick="updateRow('${item.bus_id}')"></i>
+                    <i onclick="updateRow('${item.bus_id}')"><img src="../../../images/vector_icons/update_icon.png" alt="update" class="action_icon"></i>
                 </span>
-                <span class="icon-container" style="margin-left: 10px;"> <!-- Adjust the margin as needed -->
-                    <i class="fas fa-trash-alt" style="color: #ff0202" onclick="deleteRow('${item.bus_id}')"></i>
+                <span class="icon-container" style="margin-left: 1px;">
+                    <i onclick="deleteRow('${item.bus_id}')"><img src="../../../images/vector_icons/delete_icon.png" alt="delete" class="action_icon"></i>
                 </span>
             </td>
         `;
@@ -54,13 +58,17 @@ function displayDataAsTable(data) {
     });
 }
 
+function renderPageControl(){
+    document.getElementById("page_control").style.display = "flex";
+}
+
 // Add new bus to the database
 document.getElementById("busRegForm").addEventListener("submit", function(event) {
     event.preventDefault();
 
-    const bus_id = document.getElementById("add_bus_id").value;
-    const owner_id = document.getElementById("add_owner_id").value;
+    const owner_nic = document.getElementById("add_owner_nic").value;
     const engineNo = document.getElementById("add_engineNo").value;
+    const route = document.getElementById("add_route").value;
     const chassisNo = document.getElementById("add_chassisNo").value;
     const noOfSeats = document.getElementById("add_noOfSeats").value;
     const manufact_year = document.getElementById("add_manufact_year").value;
@@ -68,9 +76,9 @@ document.getElementById("busRegForm").addEventListener("submit", function(event)
     const model = document.getElementById("add_model").value;
 
     const userData = {
-        bus_id: bus_id,
-        owner_id: owner_id,
+        owner_nic: owner_nic,
         engineNo: engineNo,
+        route: route,
         chassisNo: chassisNo,
         noOfSeats: noOfSeats,
         manufact_year: manufact_year,
@@ -113,7 +121,7 @@ function updateRow(bus_id){
     const urlParams = new URLSearchParams(window.location.search);
 
     document.getElementById("header_bus_id").innerHTML = bus_id
-
+0
     fetch('../../../busController', {
         method: 'GET',
         headers: {
@@ -127,9 +135,9 @@ function updateRow(bus_id){
                     existingData = data[0];
                     console.log("existingData:", existingData);
 
-                    document.getElementById("update_bus_id").value = existingData.bus_id;
-                    document.getElementById("update_owner_id").value = existingData.owner_id;
+                    document.getElementById("update_owner_nic").value = existingData.owner_id;
                     document.getElementById("update_engineNo").value = existingData.engineNo;
+                    document.getElementById("update_route").value = existingData.route;
                     document.getElementById("update_chassisNo").value = existingData.chassisNo;
                     document.getElementById("update_noOfSeats").value = existingData.noOfSeats;
                     document.getElementById("update_manufact_year").value = existingData.manufact_year;
@@ -149,9 +157,9 @@ function updateRow(bus_id){
     document.getElementById("busUpdateForm").addEventListener("submit", function(event) {
         event.preventDefault();
 
-        const bus_id = document.getElementById("update_bus_id").value;
-        const owner_id = document.getElementById("update_owner_id").value;
+        const owner_nic = document.getElementById("update_owner_nic").value;
         const engineNo = document.getElementById("update_engineNo").value;
+        const route = document.getElementById("update_route").value;
         const chassisNo = document.getElementById("update_chassisNo").value;
         const noOfSeats = document.getElementById("update_noOfSeats").value;
         const manufact_year = document.getElementById("update_manufact_year").value;
@@ -159,9 +167,9 @@ function updateRow(bus_id){
         const model = document.getElementById("update_model").value;
 
         const updatedData = {
-            bus_id: bus_id,
-            owner_id: owner_id,
+            owner_nic: owner_nic,
             engineNo: engineNo,
+            route: route,
             chassisNo: chassisNo,
             noOfSeats: noOfSeats,
             manufact_year: manufact_year,
@@ -288,12 +296,12 @@ function createForm() {
     var form= `
         <div class="bus_form_left">
             <div class="form_div">
-                <label for="bus_id" class="bus_form_title">Bus Id <span class="bus_form_require">*</span></label>
-                <input type="text" name="bus_id" id="bus_id" class="form_data" placeholder="Enter the Bus ID" required="required" />
+                <label for="owner_nic" class="bus_form_title">Owner NIC <span class="bus_form_require">*</span></label>
+                <input type="text" name="owner_nic" id="owner_nic" class="form_data" placeholder="Enter Owner NIC" required="required" />
             </div>
             <div class="form_div">
-                <label for="owner_id" class="bus_form_title">Owner NIC <span class="reg_form_require">*</span></label>
-                <input type="text" name="owner_id" id="owner_id" class="form_data" placeholder="Enter Owner NIC" required="required" />
+                <label for="route" class="bus_form_title">Route <span class="bus_form_require">*</span></label>
+                <input type="text" name="route" id="route" class="form_data" placeholder="Enter Route" required="required" />
             </div>
             <div class="form_div">
                 <label for="engineNo" class="bus_form_title">Engine No <span class="bus_form_require">*</span></label>
@@ -302,10 +310,6 @@ function createForm() {
             <div class="form_div">
                 <label for="chassisNo" class="bus_form_title">Chassis No <span class="bus_form_require">*</span></label>
                 <input type="text" name="chassisNo" id="chassisNo" class="form_data" placeholder="Enter Chassis No" required="required" />
-            </div>
-            <div class="form_div">
-                <label for="chassisNo2" class="bus_form_title">Chassis No <span class="bus_form_require">*</span></label>
-                <input type="text" name="chassisNo" id="chassisNo2" class="form_data" placeholder="Enter Chassis No" required="required" />
             </div>
         </div>
         <div class="bus_form_right">
@@ -324,10 +328,6 @@ function createForm() {
             <div class="form_div">
                 <label for="model" class="bus_form_title">Model <span class="bus_form_require">*</span></label>
                 <input type="text" name="model" id="model" class="form_data" placeholder="Enter Model" required="required" />
-            </div>
-            <div class="form_div">
-                <label for="chassisNo1" class="bus_form_title">Chassis No <span class="bus_form_require">*</span></label>
-                <input type="text" name="chassisNo" id="chassisNo1" class="form_data" placeholder="Enter Chassis No" required="required" />
             </div>
         </div>
         `;
