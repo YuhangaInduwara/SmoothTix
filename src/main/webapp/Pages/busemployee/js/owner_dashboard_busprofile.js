@@ -1,5 +1,5 @@
 function fetchAllData() {
-    fetch('../../../conductorController', {
+    fetch('../../../busprofileController', {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json'
@@ -31,14 +31,18 @@ function displayDataAsTable(data) {
 
         row.innerHTML = `
             <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+            <td>${item.busprofile_id}</td>
+            <td>${item.driver_id}</td>
             <td>${item.conductor_id}</td>
-            <td>${item.nic}</td>
+            <td>${item.noOfSeats}</td>
+            <td>${item.route}</td>
+
             <td>
                 <span class="icon-container">
-                    <i class="fas fa-pencil-alt" style="color: #ff0202" onclick="updateRow('${item.conductor_id}')"></i>
+                    <button class="fas fa-pencil-alt" style="color: #ff0202" onclick="updateRow('${item.busprofile_id}')"></button>
                 </span>
                 <span class="icon-container" style="margin-left: 10px;"> <!-- Adjust the margin as needed -->
-                    <i class="fas fa-trash-alt" style="color: #ff0202" onclick="deleteRow('${item.conductor_id}')"></i>
+                    <button class="fas fa-trash-alt" style="color: #ff0202" onclick="deleteRow('${item.busprofile_id}')"></button>
                 </span>
             </td>
         `;
@@ -48,20 +52,25 @@ function displayDataAsTable(data) {
 }
 
 //
-document.getElementById("conductorForm").addEventListener("submit", function(event) {
+document.getElementById("busprofileForm").addEventListener("submit", function(event) {
     event.preventDefault();
 
+    const busprofile_id = document.getElementById("add_busprofile_id").value;
+    const driver_id = document.getElementById("add_driver_id").value;
     const conductor_id = document.getElementById("add_conductor_id").value;
-    const nic = document.getElementById("add_nic").value;
-
+    const noOfSeats = document.getElementById("add_noOfSeats").value;
+    const route = document.getElementById("add_route").value;
     const userData = {
+        busprofile_id: busprofile_id,
+        driver_id: driver_id,
         conductor_id: conductor_id,
-        nic: nic,
+        noOfSeats: noOfSeats,
+        route: route,
     };
     console.log(userData)
     const jsonData = JSON.stringify(userData);
 
-    fetch('../../../conductorController', {
+    fetch('../../../busprofileController', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
@@ -86,20 +95,20 @@ document.getElementById("conductorForm").addEventListener("submit", function(eve
 });
 
 // Handle update
-function updateRow(conductor_id){
+function updateRow(busprofile_id){
     openForm_update();
 
     let existingData = {};
 
     const urlParams = new URLSearchParams(window.location.search);
 
-    document.getElementById("header_conductor_id").innerHTML = conductor_id
+    document.getElementById("header_busprofile_id").innerHTML = busprofile_id
 
-    fetch('../../../conductorController', {
+    fetch('../../../busprofileController', {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json',
-            'conductor_id': conductor_id
+            'busprofile_id': busprofile_id
         },
     })
         .then(response => {
@@ -108,8 +117,11 @@ function updateRow(conductor_id){
                     existingData = data[0];
                     console.log("existingData:", existingData);
 
+                    document.getElementById("update_busprofile_id").value = existingData.busprofile_id;
+                    document.getElementById("update_driver_id").value = existingData.driver_id;
                     document.getElementById("update_conductor_id").value = existingData.conductor_id;
-                    document.getElementById("update_nic").value = existingData.nic;
+                    document.getElementById("update_noOfSeats").value = existingData.noOfSeats;
+                    document.getElementById("update_route").value = existingData.route;
                 });
             } else if (response.status === 401) {
                 console.log('Unauthorized');
@@ -121,25 +133,31 @@ function updateRow(conductor_id){
             console.error('Error:', error);
         });
 
-    document.getElementById("conductorUpdateForm").addEventListener("submit", function(event) {
+    document.getElementById("busprofileUpdateForm").addEventListener("submit", function(event) {
         event.preventDefault();
 
+        const busprofile_id = document.getElementById("update_busprofile_id").value;
+        const driver_id = document.getElementById("update_driver_id").value;
         const conductor_id = document.getElementById("update_conductor_id").value;
-        const nic = document.getElementById("update_nic").value;
+        const noOfSeats = document.getElementById("update_noOfSeats").value;
+        const route = document.getElementById("update_route").value;
 
         const updatedData = {
+            busprofile_id: busprofile_id,
+            driver_id: driver_id,
             conductor_id: conductor_id,
-            nic: nic,
+            noOfSeats: noOfSeats,
+            route: route,
 
         };
 
         const jsonData = JSON.stringify(updatedData);
 
-        fetch(`../../../conductorController`, {
+        fetch(`../../../busprofileController`, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',
-                'conductor_id': conductor_id
+                'busprofile_id': busprofile_id
             },
             body: jsonData
         })
@@ -162,14 +180,12 @@ function updateRow(conductor_id){
 }
 
 // Handle delete
-function deleteRow(conductor_id){
-    console.log(conductor_id)
-    console.log("hello")
-    fetch(`../../../conductorController`, {
+function deleteRow(busprofile_id){
+    fetch(`../../../busprofileController`, {
         method: 'DELETE',
         headers: {
             'Content-Type': 'application/json',
-            'conductor_id': conductor_id
+            'busprofile_id': busprofile_id
         },
     })
         .then(response => {
@@ -189,34 +205,34 @@ function deleteRow(conductor_id){
 }
 
 function openForm_add() {
-    const existingForm = document.querySelector(".conductor_add_form_body");
+    const existingForm = document.querySelector(".busprofile_add_form_body");
 
     if (!existingForm) {
         createForm();
     }
 
-    document.getElementById("conductorForm").style.display = "block";
+    document.getElementById("busprofileForm").style.display = "block";
     document.getElementById("overlay").style.display = "block";
 }
 
 function closeForm_add() {
-    document.getElementById("conductorForm").style.display = "none";
+    document.getElementById("busprofileForm").style.display = "none";
     document.getElementById("overlay").style.display = "none";
 }
 
 function openForm_update() {
-    const existingForm = document.querySelector(".conductor_update_form_body");
+    const existingForm = document.querySelector(".busprofile_update_form_body");
 
     if (!existingForm) {
         createForm();
     }
 
-    document.getElementById("conductorUpdateForm").style.display = "block";
+    document.getElementById("busprofileUpdateForm").style.display = "block";
     document.getElementById("overlay").style.display = "block";
 }
 
 function closeForm_update() {
-    document.getElementById("conductorUpdateForm").style.display = "none";
+    document.getElementById("busprofileUpdateForm").style.display = "none";
     document.getElementById("overlay").style.display = "none";
 }
 
@@ -228,7 +244,7 @@ function openAlertSuccess() {
 function closeAlertSuccess() {
     document.getElementById("successAlert").style.display = "none";
     document.getElementById("overlay").style.display = "none";
-    window.location.href = "../html/owner_dashboard_conductor.html";
+    window.location.href = "../html/owner_dashboard_busprofile.html";
 }
 
 function openAlertFail() {
@@ -239,28 +255,38 @@ function openAlertFail() {
 function closeAlertFail() {
     document.getElementById("failAlert").style.display = "none";
     document.getElementById("overlay").style.display = "none";
-    window.location.href = "../html/owner_dashboard_conductor.html";
+    window.location.href = "../html/owner_dashboard_busprofile.html";
 }
 
 // Create the add and update forms
 function createForm() {
     const form_add = document.createElement('div');
-    form_add.classList.add('conductor_add_form_body');
+    form_add.classList.add('busprofile_add_form_body');
 
     const form_update = document.createElement('div');
-    form_update.classList.add('conductor_update_form_body');
+    form_update.classList.add('busprofile_update_form_body');
 
     var form= `
-        <div class="bus_form_left">
+        <div class="busprofile_form_right">
             <div class="form_div">
-                <label for="conductor_id" class="conductor_form_title">Conductor Id <span class="conductor_form_require">*</span></label>
-                <input type="text" name="conductor_id" id="conductor_id" class="form_data" placeholder="Enter the Conductor ID" required="required" />
+                <label for="busprofile_id" class="busprofile_form_title">Bus profile Id <span class="busprofile_form_require">*</span></label>
+                <input type="text" name="busprofile_id" id="busprofile_id" class="form_data" placeholder="Enter Bus profile ID" required="required" />
             </div>
-        </div>
-        <div class="bus_form_right">
             <div class="form_div">
-                <label for="nic" class="conductor_form_title">NIC Number <span class="conductor_form_require">*</span></label>
-                <input type="number" name="nic" id="nic" class="form_data" placeholder="Enter NIC Number" required="required" />
+                <label for="driver_id" class="busprofile_form_title">Driver ID <span class="busprofile_form_require">*</span></label>
+                <input type="text" name="driver_id" id="driver_id" class="form_data" placeholder="Enter Driver ID" required="required" />
+            </div>
+            <div class="form_div">
+                <label for="conductor_id" class="busprofile_form_title">Conductor ID<span class="busprofile_form_require">*</span></label>
+                <input type="text" name="conductor_id" id="conductor_id" class="form_data" placeholder="Enter Conductor ID" required="required" />
+            </div>
+            <div class="form_div">
+                <label for="noOfSeats" class="busprofile_form_title">No of Seats<span class="busprofile_form_require">*</span></label>
+                <input type="number" name="noOfSeats" id="noOfSeats" class="form_data" placeholder="Enter No of Seats" required="required" />
+            </div>
+            <div class="form_div">
+                <label for="route" class="busprofile_form_title">Route <span class="busprofile_form_require">*</span></label>
+                <input type="text" name="route" id="route" class="form_data" placeholder="Enter Route" required="required" />
             </div>
         </div>
         `;
@@ -290,11 +316,11 @@ function searchData() {
         return;
     }
 
-    fetch('../../../conductorController', {
+    fetch('../../../busprofileController', {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json',
-            'conductor_id': searchTerm
+            'busprofile_id': searchTerm
         },
     })
         .then(response => {

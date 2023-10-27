@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Buses</title>
+    <link rel="stylesheet" type="text/css" href="../css/owner_dashboard_bus.css">
+    <link rel="icon" type="image/x-icon" href="../../../images/favicon/favicon.png">
+</head>
+<body>
+<div class="dashboard">
+    <div class="sidebar">
+        <div class="site_logo">
+            <img src="../../../images/logo.png" alt="site_logo" class="site_logo_img">
+            <p class="site_logo_caption">Your Ticket to a Smooth Travel</p>
+        </div>
+        <div>
+            <div class="sidebar_element">
+                <a href="./owner_dashboard_home.html"><img src="../../../images/vector_icons/home.png" alt="home" class="sidebar_img"></a>
+                <a href="./owner_dashboard_home.html">Home</a>
+            </div>
+            <div class="sidebar_element_main">
+                <a href="owner_dashboard_bus.html"><img src="../../../images/vector_icons/bus.png" alt="bus" class="sidebar_img"></a>
+                <a href="owner_dashboard_bus.html">Buses</a>
+            </div>
+            <div class="sidebar_element">
+                <a href="owner_dashboard_busprofile.html"><img src="../../../images/vector_icons/user.png" alt="Bus_profile" class="sidebar_img"></a>
+                <a href="owner_dashboard_busprofile.html">Bus Profile</a>
+            </div>
+            <div class="sidebar_element">
+                <a href="./owner_dashboard_drivers.html"><img src="../../../images/vector_icons/driver.png" alt="driver" class="sidebar_img"></a>
+                <a href="./owner_dashboard_drivers.html">Driver</a>
+            </div>
+            <div class="sidebar_element">
+                <a href="./owner_dashboard_conductor.html"><img src="../../../images/vector_icons/conductor.png" alt="conductor" class="sidebar_img"></a>
+                <a href="./owner_dashboard_conductor.html">Conductor</a>
+            </div>
+            <div class="sidebar_element">
+                <a href="./owner_dashboard_location.html"><img src="../../../images/vector_icons/location.png" alt="location" class="sidebar_img"></a>
+                <a href="./owner_dashboard_location.html">Location</a>
+            </div>
+            <div class="sidebar_element">
+                <a href="./owner_dashboard_report.html"><img src="../../../images/vector_icons/report.png" alt="report" class="sidebar_img"></a>
+                <a href="./owner_dashboard_report.html">Reports</a>
+            </div>
+            <div class="sidebar_element">
+                <a href="./owner_dashboard_ratings.html"><img src="../../../images/vector_icons/review.png" alt="ratings" class="sidebar_img"></a>
+                <a href="./owner_dashboard_ratings.html">Ratings</a>
+            </div>
+            <div class="sidebar_element">
+                <a href="../../passenger/html/passenger_dashboard_home.html"><img src="../../../images/vector_icons/login.png" alt="login" class="sidebar_img"></a>
+                <a href="../../passenger/html/passenger_dashboard_home.html">Login as a Passenger</a>
+            </div>
+            <div class="sidebar_element">
+                <a href="../../login/html/login.html"><img src="../../../images/vector_icons/logout.png" alt="logout" class="sidebar_img"></a>
+                <a href="../../login/html/login.html">Logout</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="content_container">
+        <div class="navbar">
+            <div class="page_name">
+                <h1>Buses</h1>
+            </div>
+            <div class="user_profile">
+                <h3>Username</h3>
+                <img src="../../../images/vector_icons/user.png" alt="userimage" class="user_img">
+            </div>
+        </div>
+        <div class="body_content">
+            <div class="functions">
+                <div class="add-new">
+                    <button class="add-new-button" onclick="openForm_add()">Add New Bus</button>
+                </div>
+                <div class="overlay" id="overlay"></div>
+                <div class="body_content">
+                    <div class="form">
+                        <form class="bus_form" id="busRegForm">
+                            <div class="bus_form_header">
+                                <h2>Add New Bus</h2>
+                            </div>
+                            <div id="formContainer_add"></div>
+                            <div class="bus_form_footer">
+                                <button type="button" class="bus_form_button" onclick="closeForm_add()">Close</button>
+                                <input type="submit" class="bus_form_button" value="Add" id="busRegFormSubmit">
+                            </div>
+                        </form>
+                    </div>
+                    <div class="form">
+                        <form class="bus_form" id="busUpdateForm">
+                            <div class="bus_form_header">
+                                <h2>Update <span id="header_bus_id"></span> Details</h2>
+                            </div>
+                            <div id="formContainer_update"></div>
+                            <div class="bus_form_footer">
+                                <button type="button" class="bus_form_button" onclick="closeForm_update()">Close</button>
+                                <input type="submit" class="bus_form_button" value="Update">
+                            </div>
+                        </form>
+                    </div>
+                    <div class="alertBody" id="successAlert">
+                        <img src="../../../images/Alert_icons/Success_icon.png" class="alertImg" alt="success">
+                        <div class="alertMsgSuccess">Operation Successful!</div>
+                        <button class="okButton" onclick="closeAlertSuccess()">Ok</button>
+                    </div>
+                    <div class="alertBody" id="failAlert">
+                        <img src="../../../images/Alert_icons/Error_icon.png" class="alertImg" alt="fail">
+                        <div class="alertMsgFail" id="failMsg"></div>
+                        <button class="okButton" onclick="closeAlertFail()">Ok</button>
+                    </div>
+                </div>
+                <div class="search_box">
+                    <div class="search">
+                        <label>
+                            <input class="search_input" type="text" placeholder="Search" id="searchInput">
+                        </label>
+                        <button id="searchButton" onclick="searchData()">
+                            <img src="../../../images/vector_icons/search_icon.png" alt="Search" class="search_img">
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div>
+                <table id="dataTable" class="bus_table">
+                    <thead>
+                    <tr>
+                        <th>Bus ID</th>
+                        <th>Owner ID</th>
+                        <th>Engine Number</th>
+                        <th>Chassis Number</th>
+                        <th>Number of Seats</th>
+                        <th>Manufacturing Year</th>
+                        <th>Brand</th>
+                        <th>Model</th>
+                        <th>Actions</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="../js/owner_dashboard_bus.js"></script>
+</body>
+</html>

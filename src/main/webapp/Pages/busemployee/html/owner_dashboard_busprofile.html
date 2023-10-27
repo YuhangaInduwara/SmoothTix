@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Conductor</title>
-    <link rel="stylesheet" type="text/css" href="../css/owner_dashboard_home.css">
+    <title>Bus Profile</title>
+    <link rel="stylesheet" type="text/css" href="../css/owner_dashboard_busprofile.css">
 </head>
 <body>
 <div class="dashboard">
@@ -31,11 +31,11 @@
                 <a href="./owner_dashboard_drivers.html">Driver</a>
             </div>
             <div class="sidebar_element">
-                <a href="./owner_dashboard_conductors.html"><img src="../../../images/vector_icons/conductor.png" alt="conductor" class="sidebar_img"></a>
-                <a href="./owner_dashboard_conductors.html">Conductor</a>
+                <a href="./owner_dashboard_conductor.html"><img src="../../../images/vector_icons/conductor.png" alt="conductor" class="sidebar_img"></a>
+                <a href="./owner_dashboard_conductor.html">Conductor</a>
             </div>
             <div class="sidebar_element">
-                <a href="./owner_dashboard_location.html.html"><img src="../../../images/vector_icons/location.png" alt="location" class="sidebar_img"></a>
+                <a href="./owner_dashboard_location.html"><img src="../../../images/vector_icons/location.png" alt="location" class="sidebar_img"></a>
                 <a href="./owner_dashboard_location.html">Location</a>
             </div>
             <div class="sidebar_element">
@@ -47,8 +47,8 @@
                 <a href="./owner_dashboard_ratings.html">Ratings</a>
             </div>
             <div class="sidebar_element">
-                <a href="../../passenger/html/passenger_dashboard.html"><img src="../../../images/vector_icons/login.png" alt="login" class="sidebar_img"></a>
-                <a href="../../passenger/html/passenger_dashboard.html">Login as a Passenger</a>
+                <a href="../../passenger/html/passenger_dashboard_home.html"><img src="../../../images/vector_icons/login.png" alt="login" class="sidebar_img"></a>
+                <a href="../../passenger/html/passenger_dashboard_home.html">Login as a Passenger</a>
             </div>
             <div class="sidebar_element">
                 <a href="../../login/html/login.html"><img src="../../../images/vector_icons/logout.png" alt="logout" class="sidebar_img"></a>
@@ -57,18 +57,78 @@
         </div>
     </div>
 
-    <div class="content_container">
-        <div class="navbar">
-            <div class="page_name">
-                <h1>Bus profile</h1>
+    <div class="body_content">
+        <div class="functions">
+            <div class="add-new">
+                <button class="add-new-button" onclick="openForm_add()">Add New Bus profile</button>
             </div>
-            <div class="user_profile">
-                <h3>Username</h3>
-                <img src="../../../images/vector_icons/user.png" alt="userimage" class="user_img">
+            <div class="overlay" id="overlay"></div>
+            <div class="body_content">
+                <div class="form">
+                    <form class="busprofile_form" id="busprofileForm">
+                        <div class="busprofile_form_header">
+                            <h2>Add New Bus profile</h2>
+                        </div>
+                        <div id="formContainer_add"></div>
+                        <div class="busprofile_form_footer">
+                            <button type="button" class="busprofile_form_button" onclick="closeForm_add()">Close</button>
+                            <input type="submit" class="busprofile_form_button" value="Add" id="busprofileRegFormSubmit">
+                        </div>
+                    </form>
+                </div>
+                <div class="form">
+                    <form class="busprofile_form" id="busprofileUpdateForm">
+                        <div class="busprofile_form_header">
+                            <h2>Update <span id="header_busprofile_id"></span> Details</h2>
+                        </div>
+                        <div id="formContainer_update"></div>
+                        <div class="busprofile_form_footer">
+                            <button type="button" class="busprofile_form_button" onclick="closeForm_update()">Close</button>
+                            <input type="submit" class="busprofile_form_button" value="Update">
+                        </div>
+                    </form>
+                </div>
+                <div class="alertBody" id="successAlert">
+                    <img src="../../../images/Alert_icons/Success_icon.png" class="alertImg" alt="success">
+                    <div class="alertMsg">Successfully Added !</div>
+                    <button class="okButton" onclick="closeAlertSuccess()">Ok</button>
+                </div>
+                <div class="alertBody" id="failAlert">
+                    <img src="../../../images/Alert_icons/Error_icon.png" class="alertImg" alt="fail">
+                    <div class="alertMsg">Adding New Bus Profile Failed !</div>
+                    <button class="okButton" onclick="closeAlertFail()">Ok</button>
+                </div>
             </div>
+            <div class="search_box">
+                <div class="search">
+                    <label>
+                        <input class="search_input" type="text" placeholder="Search" id="searchInput">
+                    </label>
+                    <button id="searchButton" onclick="searchData()">
+                        <img src="../../../images/vector_icons/search_icon.png" alt="Search" class="search_img">
+                    </button>
+                </div>
+            </div>
+        </div>
+        <div>
+            <table id="dataTable" class="busprofile_table">
+                <thead>
+                <tr>
+                    <th>Bus profile ID</th>
+                    <th>Conductor ID</th>
+                    <th>Driver ID</th>
+                    <th>No. Of Seat</th>
+                    <th>Route</th>
+                    <th>Actions</th>
+                </tr>
+                </thead>
+                <tbody>
+                </tbody>
+            </table>
         </div>
     </div>
 </div>
-<script src="../js/owner_dashboard_home.js"></script>
+</div>
+<script src="../js/owner_dashboard_busprofile.js"></script>
 </body>
 </html>
