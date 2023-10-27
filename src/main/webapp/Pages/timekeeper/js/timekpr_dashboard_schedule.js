@@ -62,8 +62,8 @@ document.getElementById("busRegForm").addEventListener("submit", function(event)
    const route_id = document.getElementById("add_route_id").value;
    const start = document.getElementById("add_start").value;
    const destination = document.getElementById("add_destination").value;
-   const start_time = document.getElementById("add_start_timer").value;
-   const end_time = document.getElementById("end_time").value;
+   const start_time = document.getElementById("add_start_time").value;
+   const end_time = document.getElementById("add_end_time").value;
 
 
    const userData = {
@@ -103,14 +103,14 @@ document.getElementById("busRegForm").addEventListener("submit", function(event)
 });
 
 // Handle update
-function updateRow(bus_id){
+function updateRow(schedule_id){
    openForm_update();
 
    let existingData = {};
 
    const urlParams = new URLSearchParams(window.location.search);
 
-   document.getElementById("header_schedule_id").innerHTML = schedule_id
+   document.getElementById("header_bus_id").innerHTML = schedule_id
 
    fetch('../../../scheduleController', {
        method: 'GET',
@@ -255,7 +255,7 @@ function openAlertSuccess() {
 function closeAlertSuccess() {
    document.getElementById("successAlert").style.display = "none";
    document.getElementById("overlay").style.display = "none";
-   window.location.href = "../html/admin_dashboard_buses.html";
+   window.location.href = "../html/timekpr_dashboard_schedule.html";
 }
 
 function openAlertFail() {
@@ -299,8 +299,6 @@ function createForm() {
                <label for="destination" class="bus_form_title">Destination <span class="bus_form_require">*</span></label>
                <input type="text" name="destination" id="destination" class="form_data" placeholder="Enter Destination" required="required" />
            </div>
-       </div>
-       <div class="bus_form_right">
            <div class="form_div">
                <label for="start_time" class="bus_form_title">StartTime <span class="bus_form_require">*</span></label>
                <input type="number" name="start_time" id="start_time" class="form_data" placeholder="Enter Start Time" required="required" />
