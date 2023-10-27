@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>About Me</title>
     <link rel="stylesheet" type="text/css" href="../css/timekpr_dashboard_about.css">
+    <link rel="icon" type="image/x-icon" href="../../../images/favicon/favicon.png">
 </head>
 <body>
 <div class="dashboard">
@@ -63,13 +64,40 @@
                 <img src="../../../images/vector_icons/user.png" alt="userimage" class="user_img">
             </div>
         </div>
+        <div class="body_content">
+            <div class="functions">
+                <div class="search_box">
+                    <div class="search">
+                        <label>
+                            <input class="search_input" type="text" placeholder="Search" id="searchInput">
+                        </label>
+                        <button id="searchButton" onclick="searchData()">
+                            <img src="../../../images/vector_icons/search_icon.png" alt="Search" class="search_img">
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div class="list">
+                <div class="dataList" id="dataList">
+                    <p><strong>Name:</strong> John Doe</p>
+                    <p><strong>Phone Number:</strong> +1234567890</p>
+                    <p><strong>NIC Number:</strong> 123-4567890-1</p>
+                    <p><strong>Timekeeper ID:</strong> TK12345</p>
+                    <p><strong>Email Address:</strong> john@example.com</p>
+                    <p><strong>Address:</strong> 123 Main Street, City, Country</p>
+                </div>
+                <div class="editDeleteButtons">
+                    <button class="edit" onclick="">Edit</button>
+                    <button class="delete" onclick="">Delete</button>
+                </div>
+            </div>
 
+        </div>
     </div>
 </div>
-<script src="../js/timekpr_dashboard_about.js"></script>
+<script src="../js/passenger_dashboard_aboutMe.js"></script>
 </body>
 </html>
-
 
 
 
