@@ -57,9 +57,9 @@ document.getElementById("busprofileForm").addEventListener("submit", function(ev
 
     const busprofile_id = document.getElementById("add_busprofile_id").value;
     const driver_id = document.getElementById("add_driver_id").value;
-    const conductor_id = document.getElementById("update_conductor_id").value;
-    const noOfSeats = document.getElementById("update_noOfSeats").value;
-    const route = document.getElementById("update_route").value;
+    const conductor_id = document.getElementById("add_conductor_id").value;
+    const noOfSeats = document.getElementById("add_noOfSeats").value;
+    const route = document.getElementById("add_route").value;
     const userData = {
         busprofile_id: busprofile_id,
         driver_id: driver_id,
@@ -276,9 +276,6 @@ function createForm() {
                 <label for="driver_id" class="busprofile_form_title">Driver ID <span class="busprofile_form_require">*</span></label>
                 <input type="text" name="driver_id" id="driver_id" class="form_data" placeholder="Enter Driver ID" required="required" />
             </div>
-        </div>
-
-        <div class="busprofile_form_left">
             <div class="form_div">
                 <label for="conductor_id" class="busprofile_form_title">Conductor ID<span class="busprofile_form_require">*</span></label>
                 <input type="text" name="conductor_id" id="conductor_id" class="form_data" placeholder="Enter Conductor ID" required="required" />
