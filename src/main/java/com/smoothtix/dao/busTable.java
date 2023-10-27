@@ -57,7 +57,7 @@ public class busTable {
             if (rs_new.next()) {
                 nextOwnerID = rs_new.getInt("next_owner_id");
             }
-            return "B" + String.format("%03d", nextOwnerID);
+            return "Owner" + String.format("%03d", nextOwnerID);
         }
     }
 

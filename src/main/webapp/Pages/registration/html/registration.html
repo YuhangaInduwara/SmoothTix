@@ -15,7 +15,7 @@
         </div>
         <div class="navbar">
             <div class="navbar_element">
-                <a href="./home" class="navbar_element_link">Home</a>
+                <a href="../../../index.html" class="navbar_element_link">Home</a>
             </div>
             <div class="navbar_element">
                 <a href="./contact" class="navbar_element_link">Contact</a>
@@ -24,10 +24,10 @@
                 <a href="./about" class="navbar_element_link">About</a>
             </div>
             <div class="navbar_element">
-                <a href="../../login/html/login.html" class="navbar_element_link">Login</a>
+                <button class="navbar_element_button" onclick="window.location.href='../../login/html/login.html'">Login</button>
             </div>
-            <div class="navbar_element">
-                <button class="navbar_element_button" onclick="window.location.href='../../registration/html/registration.html'">Register</button>
+            <div class="navbar_element" style="margin-left: -30px;">
+                <button class="navbar_element_button" style="background: white;color: #030303; border: 1px solid black;" onmouseover="this.style.backgroundColor='#ccc'; this.style.color='white';" onmouseout="this.style.backgroundColor='white'; this.style.color='black';" onclick="window.location.href='./registration.html'">Register</button>
             </div>
         </div>
     </div>
@@ -79,7 +79,7 @@
                     </div>
                 </form>
                 <div class="form_footer">
-                    <p>Already has an account? <a href="../../login/html/login.html">Login</a> </p>
+                    <p>Already has an account? <a href="../../login/html/login.html" style="text-decoration: none; color: red; font-family: Roboto, serif; font-style: normal; font-weight: 500; line-height: normal;">Login</a> </p>
                 </div>
             </div>
         </div>

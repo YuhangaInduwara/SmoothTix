@@ -24,9 +24,9 @@
                 <a href="./about" class="navbar_element_link">About</a>
             </div>
             <div class="navbar_element">
-                <a href="./login.html" class="navbar_element_link">Login</a>
+                <button class="navbar_element_button" style="background: white;color: #030303; border: 1px solid black;" onmouseover="this.style.backgroundColor='#ccc'; this.style.color='white';" onmouseout="this.style.backgroundColor='white'; this.style.color='black';" onclick="window.location.href='./login.html'">Login</button>
             </div>
-            <div class="navbar_element">
+            <div class="navbar_element" style="margin-left: -30px;">
                 <button class="navbar_element_button" onclick="window.location.href='../../registration/html/registration.html'">Register</button>
             </div>
         </div>
@@ -59,7 +59,7 @@
                     </div>
                 </form>
                 <div class="form_footer">
-                    <p>Don’t have an account? <a href="../../registration/html/registration.html">Register</a> </p>
+                    <p>Don’t have an account? <a href="../../registration/html/registration.html" style="text-decoration: none; color: red; font-family: Roboto, serif; font-style: normal; font-weight: 500; line-height: normal;">Register</a> </p>
                 </div>
                 <div class="overlay" id="overlay"></div>
                 <div class="alertBody" id="loginSuccess">
@@ -76,7 +76,6 @@
         </div>
     </div>
     <div class="login_footer">
-
     </div>
 </div>
 <script src="../js/login.js"></script>
