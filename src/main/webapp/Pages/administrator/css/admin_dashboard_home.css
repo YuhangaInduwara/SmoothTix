@@ -149,7 +149,10 @@ a{
 }
 
 .tile{
-    background-color: #e0e0de;
+    background-image: url('../../../images/Wallpapers/Background6.jpg');
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
     height: 35vh;
     width: 50vh;
     border-radius: 10px;
@@ -161,8 +164,9 @@ a{
 }
 
 .tile:hover{
-    background: linear-gradient(90deg, rgba(98, 97, 97, 0.47) 100%, rgba(253, 81, 81, 0) 100%);
-    transform: scale(1.05);
+    background-image: url('../../../images/Wallpapers/Background5.jpg');
+    transform: scale(1.08);
+    border: 1px solid black;
 }
 
 .count{

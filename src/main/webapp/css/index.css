@@ -1,81 +1,98 @@
-/* Reset some default styles */
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-family: sans-serif;
+body{
+    margin:0;
 }
 
-/* Style for the body */
-body {
-    margin: 0;
-    padding: 0;
-}
-
-/* Style for the header */
-header {
-    /* background-color: #333; */
-    color: white;
-    text-align: center;
-    /* padding: 10px 0; */
-}
-
-/* Style for the title */
-title {
-    font-size: 24px;
-}
-
-/* Style for the navigation menu */
-nav {
-    background-color: none;
-    padding: 10px 30px 0 20px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
-/* Style for the logo */
-.home_logo img {
-    width: 150px;
-    height: auto;
-}
-
-/* Style for the navigation links */
-.home_nav_links ul {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-}
-
-.home_nav_links ul li {
-    display: inline-block;
-    margin-left: 20px; /* Add spacing between menu items by adjusting margin */
-}
-
-.home_nav_links ul li:first-child {
-    margin-left: 0; /* Remove margin from the first item */
-}
-
-.home_nav_links ul li a {
-    color: black;
-    text-decoration: none;
-    font-size: 18px;
-    transition: color 0.3s;
-}
-
-.home_nav_links ul li a:hover {
-    color: #ff4500;
-}
-
-/* Style for the main content */
-.home_main {
-    width: 100%;
+.login-container{
+    background-color: white;
+    width:100%;
     height: 100vh;
-    position: relative;
-    overflow: hidden;
-    background: linear-gradient(to left, rgb(225, 120, 120), rgb(255, 255, 255));
-    /* display: flex; */
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
 }
+
+.login_header{
+    flex:1;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.site_logo{
+    flex: 1;
+    margin-left: 20px;
+}
+
+.site_logo_img{
+    margin-top: 10px;
+    width: 200px;
+}
+
+.site_logo_caption{
+    margin-top: -30px;
+    margin-left: 50px;
+    font-size: 10px;
+}
+
+.navbar{
+    flex: 1;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 40px;
+    justify-content: flex-end;
+}
+
+.navbar_element_link{
+    text-decoration: none;
+    color: #030303;
+    font-family: Roboto, serif;
+    font-size: 20px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
+}
+
+.navbar_element_link:hover{
+    color: #ff0000;: rgba(255, 1, 1, 0.47);
+}
+
+.navbar_element_button{
+    font-family: Roboto, serif;
+    font-size: 20px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
+    margin-right: 20px;
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: rgb(255, 0, 0);
+    color: #fff;
+    text-decoration: none;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.navbar_element_button:hover {
+    background-color: rgba(255, 1, 1, 0.47);
+}
+
+.home_body{
+    margin-top: 20px;
+}
+.home_welcome{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 200vh;
+    flex-shrink: 0;
+    border-radius: 50px;
+    mix-blend-mode: darken;
+    box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.25);
+    background-image: url('../images/Wallpapers/Wallpaper1.png');
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+

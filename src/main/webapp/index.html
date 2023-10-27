@@ -1,28 +1,45 @@
 <!DOCTYPE html>
 <html lang="en">
-    <header>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>SmoothTix</title>
-        <link rel="stylesheet" type="text/css" href="css/index.css">
-    </header>
-    <body>
-        <div class="home_main">
-            <nav>
-                <div class="home_logo">
-                    <img src="./images/logo.png">
-                </div>
-                <div class="home_nav_links">
-                    <ul>
-                        <li><a href="Pages/registration/html/registration.html">Register</a></li>
-                        <li><a href="Pages/login/html/login.html">Login</a></li>
-                    </ul>
-                </div>
-            </nav>
-
-            <div>
-                
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SmoothTix</title>
+    <link rel="stylesheet" type="text/css" href="./css/index.css">
+</head>
+<body>
+<div class="login-container">
+    <div class="login_header">
+        <div class="site_logo">
+            <img src="../../../images/logo.png" alt="sitelogo" class="site_logo_img">
+            <p class="site_logo_caption">Your Ticket to a Smooth Travel</p>
+        </div>
+        <div class="navbar">
+            <div class="navbar_element">
+                <a href="../../../index.html" class="navbar_element_link">Home</a>
+            </div>
+            <div class="navbar_element">
+                <a href="./contact" class="navbar_element_link">Contact</a>
+            </div>
+            <div class="navbar_element">
+                <a href="./about" class="navbar_element_link">About</a>
+            </div>
+            <div class="navbar_element">
+                <button class="navbar_element_button" onclick="window.location.href='./Pages/login/html/login.html'">Login</button>
+            </div>
+            <div class="navbar_element" style="margin-left: -30px;">
+                <button class="navbar_element_button" onclick="window.location.href='./Pages/registration/html/registration.html'">Register</button>
             </div>
         </div>
-    </body>
+    </div>
+    <div class="home_body">
+        <div class="home_welcome">
+            <div class="home_welcome_text">
+
+            </div>
+        </div>
+    </div>
+
+</div>
+<!--<script src="../js/login.js"></script>-->
+</body>
 </html>
