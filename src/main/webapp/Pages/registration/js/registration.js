@@ -30,8 +30,9 @@ document.getElementById("regForm").addEventListener("submit", function(event) {
     })
         .then(response => {
             if (response.ok) {
-                window.location.href = '../../login/html/login.html';
+                openAlertSuccess()
             } else if (response.status === 401) {
+                openAlertFail()
                 console.log('Login unsuccessful');
             } else {
                 console.error('Error:', response.status);
@@ -42,3 +43,23 @@ document.getElementById("regForm").addEventListener("submit", function(event) {
         });
 });
 
+function openAlertSuccess() {
+    document.getElementById("registrationSuccess").style.display = "block";
+    document.getElementById("overlay").style.display = "block";
+}
+
+function openAlertFail() {
+    document.getElementById("registrationFail").style.display = "block";
+    document.getElementById("overlay").style.display = "block";
+}
+
+function closeAlertSuccess() {
+    document.getElementById("registrationSuccess").style.display = "none";
+    document.getElementById("overlay").style.display = "none";
+    window.location.href = '../../login/html/login.html';
+}
+
+function closeAlertFail() {
+    document.getElementById("registrationFail").style.display = "none";
+    document.getElementById("overlay").style.display = "none";
+}

@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Drivers</title>
-    <link rel="stylesheet" type="text/css" href="../css/admin_dashboard_drivers.css">
+    <title>Timekeepers</title>
+    <link rel="stylesheet" type="text/css" href="../css/admin_dashboard_timekeepers.css">
     <link rel="icon" type="image/x-icon" href="../../../images/favicon/favicon.png">
 </head>
 <body>
@@ -23,11 +23,11 @@
                 <a href="./admin_dashboard_passengers.html"><img src="../../../images/vector_icons/passenger.png" alt="passenger" class="sidebar_img"></a>
                 <a href="./admin_dashboard_passengers.html">Passengers</a>
             </div>
-            <div class="sidebar_element">
+            <div class="sidebar_element_main">
                 <a href="./admin_dashboard_timekeepers.html"><img src="../../../images/vector_icons/timeKeeper.png" alt="timeKeeper" class="sidebar_img"></a>
                 <a href="./admin_dashboard_timekeepers.html">Timekeepers</a>
             </div>
-            <div class="sidebar_element_main">
+            <div class="sidebar_element">
                 <a href="./admin_dashboard_drivers.html"><img src="../../../images/vector_icons/driver.png" alt="driver" class="sidebar_img"></a>
                 <a href="./admin_dashboard_drivers.html">Drivers</a>
             </div>
@@ -61,7 +61,7 @@
     <div class="content_container">
         <div class="navbar">
             <div class="page_name">
-                <h1>Drivers</h1>
+                <h1>Timekeepers</h1>
             </div>
             <div class="user_profile">
                 <h3>Username</h3>
@@ -71,14 +71,14 @@
         <div class="body_content">
             <div class="functions">
                 <div class="add-new">
-                    <button class="add-new-button" onclick="openFlagged()">Flagged Drivers</button>
+                    <button class="add-new-button" onclick="openForm_add()">Add New Timekeeper</button>
                 </div>
                 <div class="overlay" id="overlay"></div>
                 <div class="body_content">
                     <div class="form">
                         <form class="bus_form" id="busRegForm">
                             <div class="bus_form_header">
-                                <h2>Add New Bus</h2>
+                                <h2>Add New Timekeeper</h2>
                             </div>
                             <div id="formContainer_add"></div>
                             <div class="bus_form_footer">
@@ -125,75 +125,93 @@
                 <table id="dataTable" class="bus_table">
                     <thead>
                     <tr>
-                        <th>Driver ID</th>
+                        <th>Timekeeper ID</th>
                         <th>Passenger ID</th>
-                        <th>Driving license No.</th>
                         <th>Name</th>
                         <th>NIC</th>
                         <th>Mobile Number</th>
                         <th>Email</th>
-                        <th>Points</th>
-                        <th>Flag</th>
+                        <th>Actions</th>
                     </tr>
                     </thead>
                     <tbody>
                     <tr>
-                        <td>D001</td>
+                        <td>TK001</td>
                         <td>P001</td>
-                        <td>DL001</td>
                         <td>Person001</td>
                         <td>200100000001</td>
-                        <td>0701241234</td>
+                        <td>0701231234</td>
                         <td>Person001@gmail.com</td>
-                        <td>3.3/5.0</td>
                         <td>
                             <span class="icon-container">
-                                <i onclick="updateRow('${item.bus_id}')"><img src="../../../images/vector_icons/flag_icon.png" alt="flag" class="action_icon"></i>
+                                <i onclick="openForm_update()"><img src="../../../images/vector_icons/update_icon.png" alt="update" class="action_icon"></i>
+                            </span>
+                            <span class="icon-container" style="margin-left: 1px;">
+                                <i onclick="updateRow('${item.bus_id}')"><img src="../../../images/vector_icons/delete_icon.png" alt="delete" class="action_icon"></i>
                             </span>
                         </td>
                     </tr>
                     <tr>
-                        <td>D002</td>
+                        <td>TK002</td>
                         <td>P002</td>
-                        <td>DL002</td>
                         <td>Person002</td>
                         <td>200100000002</td>
-                        <td>0701241235</td>
+                        <td>0701235678</td>
                         <td>Person002@gmail.com</td>
-                        <td>2.7/5.0</td>
                         <td>
                             <span class="icon-container">
-                                <i onclick="updateRow('${item.bus_id}')"><img src="../../../images/vector_icons/flag_icon.png" alt="flag" class="action_icon"></i>
+                                <i onclick="openForm_update()"><img src="../../../images/vector_icons/update_icon.png" alt="update" class="action_icon"></i>
+                            </span>
+                            <span class="icon-container" style="margin-left: 1px;">
+                                <i onclick="updateRow('${item.bus_id}')"><img src="../../../images/vector_icons/delete_icon.png" alt="delete" class="action_icon"></i>
                             </span>
                         </td>
                     </tr>
                     <tr>
-                        <td>D003</td>
+                        <td>TK003</td>
                         <td>P003</td>
-                        <td>DL003</td>
                         <td>Person003</td>
                         <td>200100000003</td>
-                        <td>0701241236</td>
+                        <td>0701241234</td>
                         <td>Person003@gmail.com</td>
-                        <td>4.3/5.0</td>
                         <td>
                             <span class="icon-container">
-                                <i onclick="updateRow('${item.bus_id}')"><img src="../../../images/vector_icons/flag_icon.png" alt="flag" class="action_icon"></i>
+                                <i onclick="openForm_update()"><img src="../../../images/vector_icons/update_icon.png" alt="update" class="action_icon"></i>
+                            </span>
+                            <span class="icon-container" style="margin-left: 1px;">
+                                <i onclick="updateRow('${item.bus_id}')"><img src="../../../images/vector_icons/delete_icon.png" alt="delete" class="action_icon"></i>
                             </span>
                         </td>
                     </tr>
                     <tr>
-                        <td>D005</td>
-                        <td>P005</td>
-                        <td>DL005</td>
-                        <td>Person005</td>
-                        <td>200100000005</td>
-                        <td>0701241238</td>
-                        <td>Person005@gmail.com</td>
-                        <td>3.5/5.0</td>
+                        <td>TK004</td>
+                        <td>P004</td>
+                        <td>Person004</td>
+                        <td>200100000004</td>
+                        <td>0701245678</td>
+                        <td>Person004@gmail.com</td>
                         <td>
                             <span class="icon-container">
-                                <i onclick="updateRow('${item.bus_id}')"><img src="../../../images/vector_icons/flag_icon.png" alt="flag" class="action_icon"></i>
+                                <i onclick="openForm_update()"><img src="../../../images/vector_icons/update_icon.png" alt="update" class="action_icon"></i>
+                            </span>
+                            <span class="icon-container" style="margin-left: 1px;">
+                                <i onclick="updateRow('${item.bus_id}')"><img src="../../../images/vector_icons/delete_icon.png" alt="delete" class="action_icon"></i>
+                            </span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>TK005</td>
+                        <td>P005</td>
+                        <td>Person005</td>
+                        <td>200100000005</td>
+                        <td>0701251234</td>
+                        <td>Person005@gmail.com</td>
+                        <td>
+                            <span class="icon-container">
+                                <i onclick="openForm_update()"><img src="../../../images/vector_icons/update_icon.png" alt="update" class="action_icon"></i>
+                            </span>
+                            <span class="icon-container" style="margin-left: 1px;">
+                                <i onclick="updateRow('${item.bus_id}')"><img src="../../../images/vector_icons/delete_icon.png" alt="delete" class="action_icon"></i>
                             </span>
                         </td>
                     </tr>
@@ -204,50 +222,10 @@
                     <img class="arrow_img" src="../../../images/vector_icons/arrow_right.png" alt="arrow_right">
                 </div>
             </div>
-            <div id="flagTable" class="flag_table">
-                <div class="page_name">
-                    <h1>Flagged Drivers</h1>
-                </div>
-                <table class="bus_table">
-                    <thead>
-                    <tr>
-                        <th>Driver ID</th>
-                        <th>Passenger ID</th>
-                        <th>Driving license No.</th>
-                        <th>Name</th>
-                        <th>NIC</th>
-                        <th>Mobile Number</th>
-                        <th>Email</th>
-                        <th>Points</th>
-                        <th>Unflag</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <tr>
-                        <td>D004</td>
-                        <td>P004</td>
-                        <td>DL004</td>
-                        <td>Person004</td>
-                        <td>200100000004</td>
-                        <td>0701241237</td>
-                        <td>Person004@gmail.com</td>
-                        <td>3.5/5.0</td>
-                        <td>
-                            <span class="icon-container">
-                                <i onclick="updateRow('${item.bus_id}')"><img src="../../../images/vector_icons/unflag_icon.png" alt="flag" class="action_icon"></i>
-                            </span>
-                        </td>
-                    </tr>
-                    </tbody>
-                </table>
-                <div class="add-new" style="display: flex; justify-content: flex-end">
-                    <button class="add-new-button" onclick="closeFlagged()">Back</button>
-                </div>
-            </div>
         </div>
     </div>
 </div>
-<script src="../js/admin_dashboard_drivers.js"></script>
+<script src="../js/admin_dashboard_timekeepers.js"></script>
 </body>
 </html>
 
