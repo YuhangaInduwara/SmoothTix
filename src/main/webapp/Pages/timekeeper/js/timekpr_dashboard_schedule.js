@@ -284,7 +284,7 @@ function createForm() {
                <input type="text" name="schedule_id" id="schedule_id" class="form_data" placeholder="Enter the Schedule ID" required="required" />
            </div>
            <div class="form_div">
-               <label for="date" class="bus_form_title">Owner NIC <span class="reg_form_require">*</span></label>
+               <label for="date" class="bus_form_title"> Date <span class="reg_form_require">*</span></label>
                <input type="number" name="date" id="date" class="form_data" placeholder="Enter the Date" required="required" />
            </div>
            <div class="form_div">
