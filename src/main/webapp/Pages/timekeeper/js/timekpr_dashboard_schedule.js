@@ -103,14 +103,14 @@ document.getElementById("busRegForm").addEventListener("submit", function(event)
 });
 
 // Handle update
-function updateRow(bus_id){
+function updateRow(schedule_id){
    openForm_update();
 
    let existingData = {};
 
    const urlParams = new URLSearchParams(window.location.search);
 
-   document.getElementById("header_schedule_id").innerHTML = schedule_id
+   document.getElementById("header_bus_id").innerHTML = schedule_id
 
    fetch('../../../scheduleController', {
        method: 'GET',
@@ -255,7 +255,7 @@ function openAlertSuccess() {
 function closeAlertSuccess() {
    document.getElementById("successAlert").style.display = "none";
    document.getElementById("overlay").style.display = "none";
-   window.location.href = "../html/admin_dashboard_buses.html";
+   window.location.href = "../html/timekpr_dashboard_schedule.html";
 }
 
 function openAlertFail() {
