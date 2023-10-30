@@ -1,231 +1,246 @@
 body{
-    margin:0;
-    background-color: white;
-    max-height: 100vh;
+  margin:0;
+  background-color: white;
+  max-height: 100vh;
 }
 
 .dashboard{
-    display: flex;
-    flex-direction: row;
+  display: flex;
+  flex-direction: row;
 }
 
 .sidebar{
-    background-color: #cccccc;
-    display: flex;
-    flex-direction: column;
-    width: 240px;
-    height: 97vh;
-    margin-top: 10px;
-    margin-bottom: 10px;
-    margin-left: 10px;
-    border-radius: 10px;
-    box-shadow: 0 0 10px rgba(0.1, 0.1, 0.1, 0.1);
+  background-color: #cccccc;
+  display: flex;
+  flex-direction: column;
+  width: 240px;
+  height: 97vh;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  margin-left: 10px;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0.1, 0.1, 0.1, 0.1);
 }
 
 .site_logo{
-    margin-left: auto;
-    margin-right: auto;
-    margin-top: 10px
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 10px
 }
 
 .site_logo_img{
-    margin-top: 10px;
-    width: 200px;
+  margin-top: 10px;
+  width: 200px;
 }
 
 .site_logo_caption{
-    margin-top: -30px;
-    margin-left: 50px;
-    font-size: 10px;
+  margin-top: -30px;
+  margin-left: 50px;
+  font-size: 10px;
 }
 
 .sidebar_element {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    gap: 15px;
-    text-decoration: none;
-    padding-top: 10px;
-    padding-left: 20px;
-    margin-top: 10px;
-    transition: transform 0.3s;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 15px;
+  text-decoration: none;
+  padding-top: 10px;
+  padding-left: 20px;
+  margin-top: 10px;
+  transition: transform 0.3s;
 }
 
 .empty{
-    margin-top: 40%;
+  margin-top: 40%;
 }
 
 .sidebar_element:hover{
-    background: linear-gradient(90deg, rgba(98, 97, 97, 0.47) 100%, rgba(253, 81, 81, 0) 100%);
-    border-radius: 5px;
-    transform: scale(1.1);
+  background: linear-gradient(90deg, rgba(98, 97, 97, 0.47) 100%, rgba(253, 81, 81, 0) 100%);
+  border-radius: 5px;
+  transform: scale(1.1);
 }
 
 .sidebar_element_main{
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    gap: 15px;
-    text-decoration: none;
-    padding-top: 10px;
-    padding-left: 20px;
-    background: linear-gradient(90deg, rgba(255, 1, 1, 0.47) 25.91%, rgba(26, 1, 2, 0) 100%);
-    transition: transform 0.3s;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 15px;
+  text-decoration: none;
+  padding-top: 10px;
+  padding-left: 20px;
+  background: linear-gradient(90deg, rgba(255, 1, 1, 0.47) 25.91%, rgba(26, 1, 2, 0) 100%);
+  transition: transform 0.3s;
 }
 
 .sidebar_element_main:hover{
-    border-radius: 5px;
-    transform: scale(1.1);
+  border-radius: 5px;
+  transform: scale(1.1);
 }
 
 a{
-    text-decoration: none;
-    color: #000;
-    text-align: center;
-    font-family: Times New Roman, serif;
-    font-size: 15px;
-    font-style: normal;
-    font-weight: 700;
-    line-height: 20px;
+  text-decoration: none;
+  color: #000;
+  text-align: center;
+  font-family: Times New Roman, serif;
+  font-size: 15px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 20px;
 }
 
 .sidebar_img{
-    width: 40px;
+  width: 40px;
 }
 
 .content_container{
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    background-color: white;
-    height: 86vh;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  background-color: white;
+  height: 86vh;
 }
 
 .navbar{
-    display: flex;
-    flex-direction: row;
-    align-items: center;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
 }
 
 .page_name{
-    margin-left: 25px;
-    font-family: Times New Roman, serif;
+  margin-left: 25px;
+  font-family: Times New Roman, serif;
 }
 
 .user_profile{
-    flex:1;
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    gap: 15px;
-    justify-content: flex-end;
-    width: 100%;
+  flex:1;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 15px;
+  justify-content: flex-end;
+  width: 100%;
 }
 
 .user_img{
-    width: 40px;
-    border-radius: 100%;
-    margin-right: 20px;
+  width: 40px;
+  border-radius: 100%;
+  margin-right: 20px;
 }
 
 .functions{
-    display: flex;
-    flex-direction: row;
+  display: flex;
+  flex-direction: row;
 }
 
 .search_box{
-    flex: 1;
-    display: flex;
-    gap: 10px;
-    justify-content: flex-end;
-    transition: transform 0.1s;
+  flex: 1;
+  display: flex;
+  gap: 10px;
+  justify-content: flex-end;
+  transition: transform 0.1s;
 }
 
 .search {
-    background-color: rgba(176, 176, 176, 0.4);
-    padding: 7px;
-    border-radius: 10px;
-    display: flex;
-    align-items: center;
-    gap: 10px;
+  background-color: rgba(176, 176, 176, 0.4);
+  padding: 7px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
 }
 
 .search:hover{
-    transform: scale(1.1);
+  transform: scale(1.1);
 }
 
 .search_input {
-    border: none;
-    background: transparent;
-    outline: none;
-    width: 100%;
-    color: #000000;
-    font-size: 16px;
-    margin-left: 5px;
+  border: none;
+  background: transparent;
+  outline: none;
+  width: 100%;
+  color: #000000;
+  font-size: 16px;
+  margin-left: 5px;
 }
 
 .search_img {
-    width: 20px;
-    height: 20px;
-    opacity: 0.7;
-    cursor: pointer;
-    margin-right: 5px;
+  width: 20px;
+  height: 20px;
+  opacity: 0.7;
+  cursor: pointer;
+  margin-right: 5px;
 }
 
 .search_img:hover {
-    opacity: 1.5;
+  opacity: 1.5;
 }
 
 .search_box {
-    margin: 20px;
+  margin: 20px;
 }
 
 #searchButton {
-    background: none;
-    border: none;
-    padding: 0;
-    cursor: pointer;
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
 }
 
-/* Style the list container */
-.list {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    margin: 20px;
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
-    background-color: #fff;
-    max-width: 300px;
-}
+/* Style the form container */
 
-/* Style each data item in the list */
-.dataList {
-    padding: 10px;
-    border-bottom: 1px solid #ccc;
-}
-
-/* Style the Edit and Delete buttons */
-.editDeleteButtons {
+.centered {
     display: flex;
     justify-content: center;
     align-items: center;
-    margin: 10px 0;
+    height: 70vh;
+    margin bottom: 0;
 }
 
-.editDeleteButtons {
-    padding: 5px 10px;
-    background-color: #007bff;
-    color: #fff;
-    border: none;
+.centered {
+    text-align: center;
+}
+
+.u-image {
+     width: 100px;
+     hight:100px;
+     border-radius: 100%;
+
+}
+
+.user-details-form {
+    width: 700px;
+    align-items: left;
+    background-color: #f4f4f4;
+    padding: 20px;
     border-radius: 5px;
-    cursor: pointer;
-    margin-right: 20px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+    margin bottom: 50px;
 }
 
-/* Style the buttons on hover */
-.editDeleteButtons button:hover {
-    background-color: #0056b3;
+
+/*.user-details-form input, .user-details-form textarea {
+    width: 100%;
+
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}*/
+.user-details-form label {
+    display: block;
+    margin-bottom: 8px;
+    flex: 1;
+
 }
+
+.user-details-form input {
+    padding: 10px;
+    width: 50%;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    margin-bottom: 10px;
+    flex: 2;
+}
+
+
