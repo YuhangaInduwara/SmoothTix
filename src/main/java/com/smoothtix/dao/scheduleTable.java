@@ -12,7 +12,7 @@ import java.sql.SQLException;
 public class scheduleTable {
     public static int insert(Schedule schedule) throws SQLException, ClassNotFoundException {
         Connection con = dbConnection.initializeDatabase();
-        PreparedStatement pst = con.prepareStatement("insert into shedule(schedule_id, date, route_id, start, destination, start_time, end_time) values (?,?,?,?,?,?,?)");
+        PreparedStatement pst = con.prepareStatement("insert into schedule(schedule_id, date, route_id, start, destination, start_time, end_time) values (?,?,?,?,?,?,?)");
         pst.setString(1,schedule.getSchedule_id());
         pst.setString(2,schedule.getDate());
         pst.setString(3,schedule.getRoute_id());
@@ -54,7 +54,7 @@ public class scheduleTable {
         pst.setString(5,schedule.getDestination());
         pst.setString(6,schedule.getStart_time());
         pst.setString(7,schedule.getEnd_time());
-        pst.setString(9,schedule_id);
+        pst.setString(8,schedule_id);
 
         int rawCount = pst.executeUpdate();
         con.close();

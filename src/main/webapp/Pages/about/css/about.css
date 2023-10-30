@@ -1,0 +1,51 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f0f0f0;
+    margin: 0;
+    padding: 0;
+    background-image: url("../../../images/Wallpapers/Wallpaper2.jpg");
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    height: 100vh;
+}
+
+header {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+    background-color: rgba(217, 217, 217, 0.64);
+    color: black;
+    padding: 20px;
+    gap: 490px;
+}
+
+h1 {
+    font-size: 32px;
+}
+
+.container {
+    max-width: 800px;
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    margin: 70px auto auto;
+}
+
+p {
+    font-size: 18px;
+    line-height: 1.5;
+}
+
+.site_logo_img{
+    width: 200px;
+}
+
+.site_logo_caption{
+    margin-top: -30px;
+    margin-left: 50px;
+    font-size: 10px;
+    color: black;
+}

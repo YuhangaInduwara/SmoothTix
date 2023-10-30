@@ -167,7 +167,8 @@ body{
     flex-direction: row;
     align-items: center;
     justify-content: center;
-    height: 72.5vh;
+    height: 86vh;
+    /*background-color: black;*/
 }
 
 .login_img{
@@ -194,9 +195,9 @@ body{
     justify-content: center;
     align-items: center;
     margin-right: 50px;
-    background-color:#B0B0B066;
+    background-color: rgba(217, 217, 217, 0.64);
     margin-left: 70px;
-    height: 450px;
+    height: 420px;
     border-radius: 20px;
 }
 
@@ -298,7 +299,9 @@ body{
     z-index: 999;
 }
 
-.login_footer {
-    background-color: black;
-    height: 90px;
+.login-container {
+    background-image: url("../../../images/Wallpapers/Wallpaper4.jpg");
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
 }
