@@ -32,6 +32,14 @@ public class passengerTable {
         return pst.executeQuery();
     }
 
+    public static ResultSet getAll() throws SQLException, ClassNotFoundException {
+        Connection con = dbConnection.initializeDatabase();
+        PreparedStatement pst = con.prepareStatement("SELECT * FROM passenger");
+        ResultSet rs = pst.executeQuery();
+//        con.close();
+        return rs;
+    }
+
     public static int update(String nic, Passenger passenger) throws SQLException, ClassNotFoundException {
         Connection con = dbConnection.initializeDatabase();
         PreparedStatement pst = con.prepareStatement("UPDATE passenger SET fname=?, lname=?, nic=?, mobileNo=?, email=?, password=? WHERE nic=?");
@@ -41,6 +49,7 @@ public class passengerTable {
         pst.setString(4,passenger.getmobileNo());
         pst.setString(5,passenger.getemail());
         pst.setString(6,passenger.getpassword());
+        pst.setString(7,nic);
         int rawCount = pst.executeUpdate();
         con.close();
         return rawCount;
