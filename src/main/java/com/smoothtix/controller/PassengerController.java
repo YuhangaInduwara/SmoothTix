@@ -93,7 +93,8 @@ public class PassengerController extends HttpServlet {
             BufferedReader reader = request.getReader();
             Passenger passenger = gson.fromJson(reader, Passenger.class);
 
-
+            String hashedPassword = PasswordHash.hashPassword(passenger.getpassword());
+            passenger.setpassword(hashedPassword);
             int updateSuccess = passengerTable.update(nic, passenger);
 
             if (updateSuccess >= 1) {
