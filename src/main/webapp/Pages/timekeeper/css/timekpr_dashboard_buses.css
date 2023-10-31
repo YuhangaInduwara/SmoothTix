@@ -381,3 +381,27 @@ tbody tr:hover {
     background-color: #989898;
 }
 
+.arrow_img{
+    width: 17px;
+    height: 17px;
+    opacity: 0.7;
+    cursor: pointer;
+    margin-right: 10px;
+}
+
+.arrow_img:hover{
+    transform: scale(1.1);
+}
+.bus-profile{
+    background-color: red;
+    color: #fff;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 4px;
+    cursor: pointer;
+
+}
+.bus-profile:hover{
+  background-color:#F0A78A;
+}
+

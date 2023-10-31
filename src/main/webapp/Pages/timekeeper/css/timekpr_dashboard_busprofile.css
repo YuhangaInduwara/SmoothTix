@@ -149,8 +149,8 @@ a{
 }
 
 .u-image {
-     width: 100px;
-     hight:100px;
+     width: 200px;
+     hight:200px;
      border-radius: 100%;
 
 }
@@ -194,19 +194,34 @@ a{
     margin-bottom: 10px;
     flex: 2;
 }
-.button {
+.button_1 {
 
-    /*background-color: #7F868D;*/
-    background-color:rgb(255, 0, 0);
-    color: #fff;
-    border: none;
-    padding: 10px 20px;
-    border-radius: 4px;
-    cursor: pointer;
-    margin-left:300px;
-    }
-.button:hover{
+      background-color: rgb(255, 0, 0);
+     color: #fff;
+     border: none;
+     padding: 10px 20px;
+     border-radius: 4px;
+     cursor: pointer;
+     margin-left:180px;
+     }
+.button_2 {
+
+      background-color: rgb(255, 0, 0);
+     color: #fff;
+     border: none;
+     padding: 10px 20px;
+     border-radius: 4px;
+     cursor: pointer;
+     margin-left:5px;
+     }
+
+.button_1:hover{
+   background-color:rgba(255, 1, 1, 0.47);
+}
+.button_2:hover{
    background-color: rgba(255, 1, 1, 0.47);
 }
+
+
 
 

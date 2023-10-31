@@ -4,7 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Bookings</title>
-    <link rel="stylesheet" type="text/css" href="../css/timekpr_dashboard_bookings.css">
+    <link rel="stylesheet" type="text/css" href="../css/timekpr_dashboard_test.css">
+    <link rel="icon" type="image/x-icon" href="../../../images/favicon/favicon.png">
 </head>
 <body>
 <div class="dashboard">
@@ -34,10 +35,7 @@
                 <a href="./timekpr_dashboard_buses.html"><img src="../../../images/vector_icons/bus.png" alt="bus" class="sidebar_img"></a>
                 <a href="./timekpr_dashboard_buses.html">Buses</a>
             </div>
-            <div class="sidebar_element">
-                <a href="./timekpr_dashboard_routes.html"><img src="../../../images/vector_icons/route.png" alt="route" class="sidebar_img"></a>
-                <a href="./timekpr_dashboard_routes.html">Routes</a>
-            </div>
+
             <div class="sidebar_element_main">
                 <a href="./timekpr_dashboard_bookings.html"><img src="../../../images/vector_icons/bookASeat.png" alt="bookASeat" class="sidebar_img"></a>
                 <a href="./timekpr_dashboard_bookings.html">Bookings</a>
@@ -63,7 +61,136 @@
                 <img src="../../../images/vector_icons/user.png" alt="userimage" class="user_img">
             </div>
         </div>
+        <div class="body_content">
+            <div class="functions">
 
+                <div class="search_box">
+                    <div class="search">
+                        <label>
+                            <input class="search_input" type="text" placeholder="Search" id="searchInput">
+                        </label>
+                        <button id="searchButton" onclick="searchData()">
+                            <img src="../../../images/vector_icons/search_icon.png" alt="Search" class="search_img">
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div>
+                <div class ="title">
+                    <p>Current Bookings</p>
+                </div>
+                <table  class="bus_table">
+                    <thead>
+                    <tr>
+                        <th>Booked Reference ID</th>
+                        <th>Start Location</th>
+                        <th>End Location</th>
+                        <th>Bus No</th>
+                        <th>Booked Date</th>
+                        <th>Departure Time</th>
+                        <th>Seat No</th>
+                        <!--<th>Actions</th>-->
+
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <th>PH001</th>
+                        <th>Colombo</th>
+                        <th>Galle</th>
+                        <th>105</th>
+                        <th>03/24</th>
+                        <th>4.15</th>
+                        <th>05</th>
+                        <!--<td><a class="bus-profile" href="./timekpr_dashboard_busprofile.html">Add a review </a></td>-->
+                    </tr>
+                    <tr>
+                        <th>PH001</th>
+                        <th>Colombo</th>
+                        <th>Galle</th>
+                        <th>105</th>
+                        <th>03/24</th>
+                        <th>4.15</th>
+                        <th>05</th>
+                        <!--<td><a class="bus-profile" href="./timekpr_dashboard_busprofile.html">Add a review </a></td>-->
+                    </tr>
+                    <tr>
+                        <th>PH001</th>
+                        <th>Colombo</th>
+                        <th>Galle</th>
+                        <th>105</th>
+                        <th>03/24</th>
+                        <th>4.15</th>
+                        <th>05</th>
+                        <!--<td><a class="bus-profile" href="./timekpr_dashboard_busprofile.html">Add a review </a></td>-->
+                    </tr>
+                    </tbody>
+                </table>
+                <div class="page_control" >
+                    <img class="arrow_img" src="../../../images/vector_icons/arrow_left.png" alt="arrow_left">
+                    <img class="arrow_img" src="../../../images/vector_icons/arrow_right.png" alt="arrow_right">
+                </div>
+
+                <div class ="title">
+                    <p>History</p>
+                </div>
+
+
+                <table id="dataTable" class="bus_table">
+                    <thead>
+                    <tr>
+                        <th>Booked Reference ID</th>
+                        <th>Start Location</th>
+                        <th>End Location</th>
+                        <th>Bus No</th>
+                        <th>Booked Date</th>
+                        <th>Departure Time</th>
+                        <th>Seat No</th>
+                        <!--<th>Actions</th>-->
+
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <th>PH001</th>
+                        <th>Colombo</th>
+                        <th>Galle</th>
+                        <th>105</th>
+                        <th>03/24</th>
+                        <th>4.15</th>
+                        <th>05</th>
+                        <!--<td><a class="bus-profile" href="./timekpr_dashboard_busprofile.html">Add a review </a></td>-->
+                    </tr>
+                    <tr>
+                        <th>PH001</th>
+                        <th>Colombo</th>
+                        <th>Galle</th>
+                        <th>105</th>
+                        <th>03/24</th>
+                        <th>4.15</th>
+                        <th>05</th>
+                        <!--<td><a class="bus-profile" href="./timekpr_dashboard_busprofile.html">Add a review</a></td>-->
+                    </tr>
+                    <tr>
+                        <th>PH001</th>
+                        <th>Colombo</th>
+                        <th>Galle</th>
+                        <th>105</th>
+                        <th>03/24</th>
+                        <th>4.15</th>
+                        <th>05</th>
+                        <!--<td><a class="bus-profile" href="./timekpr_dashboard_busprofile.html">Add a review </a></td>-->
+                    </tr>
+                    </tbody>
+                </table>
+                <div class="page_control" id="page_control">
+                    <img class="arrow_img" src="../../../images/vector_icons/arrow_left.png" alt="arrow_left">
+                    <img class="arrow_img" src="../../../images/vector_icons/arrow_right.png" alt="arrow_right">
+                </div>
+
+
+            </div>
+        </div>
     </div>
 </div>
 <script src="../js/timekpr_dashboard_bookings.js"></script>
