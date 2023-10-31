@@ -11,7 +11,7 @@ public class dbConnection {
         String dbName = "SmoothTix";
         String dbUsername = "root";
 
-        String dbPassword = "Atheeka135";
+        String dbPassword = "";
 
         Class.forName(dbDriver);
         return DriverManager.getConnection(dbURL + dbName, dbUsername, dbPassword);

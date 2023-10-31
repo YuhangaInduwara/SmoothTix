@@ -35,10 +35,7 @@
                 <a href="./timekpr_dashboard_buses.html"><img src="../../../images/vector_icons/bus.png" alt="bus" class="sidebar_img"></a>
                 <a href="./timekpr_dashboard_buses.html">Buses</a>
             </div>
-            <div class="sidebar_element">
-                <a href="./timekpr_dashboard_routes.html"><img src="../../../images/vector_icons/route.png" alt="route" class="sidebar_img"></a>
-                <a href="./timekpr_dashboard_routes.html">Routes</a>
-            </div>
+
             <div class="sidebar_element">
                 <a href="./timekpr_dashboard_bookings.html"><img src="../../../images/vector_icons/bookASeat.png" alt="bookASeat" class="sidebar_img"></a>
                 <a href="./timekpr_dashboard_bookings.html">Bookings</a>
@@ -65,36 +62,30 @@
             </div>
         </div>
         <div class="body_content">
-            <div class="functions">
-                <div class="search_box">
-                    <div class="search">
-                        <label>
-                            <input class="search_input" type="text" placeholder="Search" id="searchInput">
-                        </label>
-                        <button id="searchButton" onclick="searchData()">
-                            <img src="../../../images/vector_icons/search_icon.png" alt="Search" class="search_img">
-                        </button>
-                    </div>
-                </div>
-            </div>
+
             <div class="centered">
-                <form class="user-details-form">
+                <form class="user-details-form" style="margin-top: 90px">
 
-                    <img src="../../../images/vector_icons/user.png" alt="User Image" class="u-image">
-                    <label >Name: <input name="" value="Dharmapriya LSIK" type="text"></label>
-                    <label >Timekeeper Id: <input name="" value="TK002" type="text"></label>
-                    <label >NIC number: <input name="" value="9962345677" type="text"></label>
-                    <label >Email: <input name="" value="tkpr123@gmail.com" type="text"></label>
-                    <label >Contact number: <input name="" value="072-563124" type="text"></label>
-                    <label >Address: <input name="" value="No. 35A, Colombo 4" type="text"></label>
+                    <img src="../../../images/vector_icons/admin_logo.jpg" alt="User Image" class="u-image">
+                    <div class="textarea">
+                        <label >Name:<input name="" value="Dharmapriya LSIK" type="text" readonly></label>
+                        <label >Timekeeper Id: <input name="" value="TK002" type="text"readonly></label>
+                        <label >NIC number: <input name="" value="9962345677" type="text"readonly></label>
+                        <label >Email: <input name="" value="tkpr123@gmail.com" type="text"readonly></label>
+                        <label >Contact number: <input name="" value="072-563124" type="text"readonly></label>
+                        <label >Address: <input name="" value="No. 35A, Colombo 4" type="text"readonly></label>
 
+                        <a class="button" href="./timekpr_dashboard_about_edit.html">Edit Profile </a>
+
+                        <!--<button type="submit">Edit Profile</button>-->
+                    </div>
 
                 </form>
             </div>
         </div>
     </div>
 </div>
-<script src="../js/passenger_dashboard_aboutMe.js"></script>
+<script src="../js/passenger_dashboard_about.js"></script>
 </body>
 </html>
 

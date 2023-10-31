@@ -46,6 +46,9 @@ function displayDataAsTable(data) {
                 <span class="icon-container" style="margin-left: 10px;"> <!-- Adjust the margin as needed -->
                     <i class="fas fa-trash-alt" style="color: #ff0202" onclick="deleteRow('${item.schedule_id}')"></i>
                 </span>
+
+
+
             </td>
         `;
 
@@ -179,7 +182,7 @@ function updateRow(schedule_id){
        })
            .then(response => {
                if (response.ok) {
-                   window.location.href = '../html/timekpr_dashboard_schedule.html';
+                   openAlertSuccess()
                } else if (response.status === 401) {
                    console.log('Update unsuccessful');
                } else {
@@ -203,7 +206,7 @@ function deleteRow(schedule_id){
    })
        .then(response => {
            if (response.ok) {
-               window.location.href = '../html/timekpr_dashboard_schedule.html';
+               openAlertSuccess()
            } else if (response.status === 401) {
                console.log('Update unsuccessful');
            } else {
@@ -255,7 +258,8 @@ function openAlertSuccess() {
 function closeAlertSuccess() {
    document.getElementById("successAlert").style.display = "none";
    document.getElementById("overlay").style.display = "none";
-   window.location.href = "../html/timekpr_dashboard_schedule.html";
+   window.location.href = '../html/timekpr_dashboard_schedule.html';
+
 }
 
 function openAlertFail() {
@@ -285,7 +289,7 @@ function createForm() {
            </div>
            <div class="form_div">
                <label for="date" class="bus_form_title"> Date <span class="reg_form_require">*</span></label>
-               <input type="number" name="date" id="date" class="form_data" placeholder="Enter the Date" required="required" />
+               <input type="text" name="date" id="date" class="form_data" placeholder="Enter the Date" required="required" />
            </div>
            <div class="form_div">
                <label for="route_id" class="bus_form_title">Route Id <span class="bus_form_require">*</span></label>
@@ -301,11 +305,11 @@ function createForm() {
            </div>
            <div class="form_div">
                <label for="start_time" class="bus_form_title">StartTime <span class="bus_form_require">*</span></label>
-               <input type="number" name="start_time" id="start_time" class="form_data" placeholder="Enter Start Time" required="required" />
+               <input type="text" name="start_time" id="start_time" class="form_data" placeholder="Enter Start Time" required="required" />
            </div>
            <div class="form_div">
                <label for="end_time" class="bus_form_title">End Time<span class="bus_form_require">*</span></label>
-               <input type="number" name="end_time" id="end_time" class="form_data" placeholder="Enter End Time" required="required" />
+               <input type="text" name="end_time" id="end_time" class="form_data" placeholder="Enter End Time" required="required" />
            </div>
        </div>
        `;

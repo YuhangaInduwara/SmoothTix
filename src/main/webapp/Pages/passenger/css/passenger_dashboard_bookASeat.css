@@ -131,6 +131,7 @@ a{
 .functions{
     display: flex;
     flex-direction: row;
+    justify-content: center
 }
 
 .search_box{
@@ -187,3 +188,106 @@ a{
     cursor: pointer;
 }
 
+.bus_table {
+    border-collapse: collapse;
+    width: 97%;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 25px;
+    font-family: Arial, sans-serif;
+}
+
+thead {
+    background-color: rgba(255, 1, 1, 0.47);
+    text-align: center;
+    padding: 10px;
+    border-top: 1px solid #dcdcdc;
+    border-bottom: 1px solid #dcdcdc;
+}
+
+tr {
+    border-bottom: 1px solid #dcdcdc;
+}
+
+tbody tr:nth-child(odd) {
+    background-color: rgb(255, 255, 255);
+}
+
+tbody tr:nth-child(even) {
+    background-color: #cccccc;
+}
+
+td, th {
+    padding: 10px;
+    text-align: center;
+}
+
+tbody tr:hover {
+    background-color: #989898;
+}
+
+.action_icon {
+    width: 17px;
+    height: 17px;
+    cursor: pointer;
+    margin-right: 1px;
+}
+
+.page_control{
+    display: flex;
+    width: 97%;
+    margin-top: 5px;
+    margin-right: auto;
+    margin-left: auto;
+    height: 40px;
+    justify-content: flex-end;
+    align-items: center;
+}
+
+.arrow_img{
+    width: 15px;
+    height: 15px;
+    opacity: 0.7;
+    cursor: pointer;
+    margin-right: 10px;
+}
+
+.arrow_img:hover{
+    transform: scale(1.1);
+}
+
+.content_tile:hover{
+    transform: scale(1.04);
+}
+
+.tile_button:hover{
+    background-color: #FF010177
+}
+
+.tile_button{
+width: 150px; height: 40px; border: none; border-radius: 20px; background: #EA2427; color: #fff; font-size: 16px; cursor: pointer;}
+
+/* Apply styles to the select element */
+select {
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    width: 150px;
+    background-color: #fff;
+}
+
+/* Style the option elements */
+select option {
+    padding: 10px;
+    font-size: 16px;
+}
+
+/* Style the dropdown arrow (optional) */
+select::after {
+    content: "\25BC"; /* Unicode character for a down arrow */
+    position: absolute;
+    top: 50%;
+    right: 10px;
+    transform: translateY(-50%);
+}

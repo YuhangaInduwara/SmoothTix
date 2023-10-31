@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>My Bookings</title>
-  <link rel="stylesheet" type="text/css" href="../css/passenger_dashboard_home.css">
+  <link rel="stylesheet" type="text/css" href="../css/passenger_dashboard_myBookings.css">
   <link rel="icon" type="image/x-icon" href="../../../images/favicon/favicon.png">
 </head>
 <body>
@@ -62,29 +62,98 @@
             </button>
           </div>
         </div>
+
       </div>
       <div>
-        <table id="dataTable" class="bookings_table">
+        <div class ="title" style="margin-top:-45px">
+          <p>Current Bookings</p>
+        </div>
+        <table id="dataTable" class="bus_table">
           <thead>
           <tr>
-              <th>Bus ID</th>
-              <th>Owner ID</th>
-              <th>Engine Number</th>
-              <th>Chassis Number</th>
-              <th>Number of Seats</th>
-              <th>Manufacturing Year</th>
-              <th>Brand</th>
-              <th>Model</th>
-              <th>Actions</th>
+            <th>Booked Reference ID</th>
+            <th>Schedule ID</th>
+            <th>Route Id</th>
+            <th>Booked Date</th>
+            <th>Booked Time</th>
+            <th>Seat No</th>
+            <th>Price</th>
+            <th>Actions</th>
+
           </tr>
           </thead>
           <tbody>
           </tbody>
         </table>
+        <div class="page_control" id="page_control">
+          <img class="arrow_img" src="../../../images/vector_icons/arrow_left.png" alt="arrow_left">
+          <img class="arrow_img" src="../../../images/vector_icons/arrow_right.png" alt="arrow_right">
+        </div>
+
+        <div class ="title" style="margin-top:-40px">
+          <p>History</p>
+        </div>
+
+
+        <table  class="bus_table" >
+          <thead>
+          <tr>
+            <th>Booked Reference ID</th>
+            <th>Schedule ID</th>
+            <th>Route Id</th>
+            <th>Booked Date</th>
+            <th>Booked Time</th>
+            <th>Seat No</th>
+            <th>Price</th>
+            <th>Actions</th>
+
+          </tr>
+          </thead>
+          <tbody>
+          <tr>
+            <th>B001</th>
+            <th>SH001</th>
+            <th>R001</th>
+            <th>2023/10/30</th>
+            <th>16.25</th>
+            <th>23</th>
+            <th>RS.400</th>
+            <td><a class="bus-profile" href="./timekpr_dashboard_busprofile.html">Add a review </a></td>
+          </tr>
+          <tr>
+            <th>B002</th>
+            <th>SH002</th>
+            <th>R005</th>
+            <th>2023/10/23</th>
+            <th>08.45</th>
+            <th>02</th>
+            <th>RS.600</th>
+            <td><a class="bus-profile" href="./timekpr_dashboard_busprofile.html">Add a review</a></td>
+          </tr>
+          <tr>
+            <th>B003</th>
+            <th>SH003</th>
+            <th>R003</th>
+            <th>2023/09/02</th>
+            <th>13.24</th>
+            <th>16</th>
+            <th>RS.500</th>
+            <td><a class="bus-profile" href="./timekpr_dashboard_busprofile.html">Add a review </a></td>
+          </tr>
+          </tbody>
+        </table>
+        <div class="page_control" >
+          <img class="arrow_img" src="../../../images/vector_icons/arrow_left.png" alt="arrow_left">
+          <img class="arrow_img" src="../../../images/vector_icons/arrow_right.png" alt="arrow_right">
+        </div>
+
+
       </div>
     </div>
   </div>
 </div>
+<script src="../js/passenger_dashboard_myBookings.js"></script>
+
 </body>
 </html>
 
