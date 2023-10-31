@@ -40,7 +40,9 @@
         </div>
     </div>
 
-    <div class="content_container">
+    <div class="content_container" style="background-image:url('../../../images/welcome.png');background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center; height: 100vh; width: 100vh">
         <div class="navbar">
             <div class="page_name">
                 <h1>Home</h1>
@@ -51,16 +53,32 @@
             </div>
         </div>
         <div class="body_content">
-            <div class="functions">
-                <div class="search_box">
-                    <div class="search">
-                        <label>
-                            <input class="search_input" type="text" placeholder="Search" id="searchInput">
-                        </label>
-                        <button id="searchButton" onclick="searchData()">
-                            <img src="../../../images/vector_icons/search_icon.png" alt="Search" class="search_img">
-                        </button>
-                    </div>
+            <div class="tile_grid">
+                <div class="raw_1">
+                    <h1 style="font-size: 40px; margin: 50px 0 0 60px">Welcome Inod</h1>
+                </div>
+                <div class="raw_2">
+                    <a href="./passenger_dashboard_myBookings.html">
+                        <div class="tile">
+                            <h1>Number of Total Bookings</h1>
+                            <h1 class="count">3</h1>
+                            <img src="../../../images/vector_icons/myBookings.png" alt="bookings" class="sidebar_img">
+                        </div>
+                    </a>
+                    <a href="./passenger_dashboard_myBookings.html">
+                        <div class="tile">
+                            <h1>Number of Current Bookings</h1>
+                            <h1 class="count">0</h1>
+                            <img src="../../../images/vector_icons/bookASeat.png" alt="bookings" class="sidebar_img">
+                        </div>
+                    </a>
+                    <a href="./passenger_dashboard_home.html">
+                        <div class="tile">
+                            <h1>Next Booking Date & Time</h1>
+                            <h1 class="count">N/A</h1>
+                            <img src="../../../images/vector_icons/timeKeeper.png" alt="time" class="sidebar_img">
+                        </div>
+                    </a>
                 </div>
             </div>
         </div>
