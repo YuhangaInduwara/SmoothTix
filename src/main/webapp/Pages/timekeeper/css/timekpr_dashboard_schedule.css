@@ -198,7 +198,23 @@ a{
     transition: background-color 0.3s;
 }
 
+.generate-schedule-button {
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: rgb(255, 0, 0);
+    color: #fff;
+    text-decoration: none;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
 .add-new-button:hover {
+    background-color: rgba(255, 1, 1, 0.47);
+}
+
+.generate-schedule-button:hover {
     background-color: rgba(255, 1, 1, 0.47);
 }
 
