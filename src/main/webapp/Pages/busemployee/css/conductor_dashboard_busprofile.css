@@ -233,8 +233,8 @@ a{
     font-size: 20px;
 }
 
-.driver_add_form_body,
-.driver_update_form_body{
+.conductor_add_form_body,
+.conductor_update_form_body{
     display: flex;
     flex-direction: row;
     align-items: center;
@@ -317,22 +317,14 @@ a{
     margin-bottom: 20px;
 }
 
-.alertMsgSuccess,
-.alertMsgFail {
+.alertMsg {
+    color: #109046;
     font-size: 25px;
     font-family: Times New Roman, serif;
     font-weight: 700;
     line-height: 1.5;
     word-wrap: break-word;
-    margin-bottom: 40px;
-}
-
-.alertMsgSuccess{
-    color: #109046;
-}
-
-.alertMsgFail{
-    color: #ff0202;
+    margin-bottom: 20px;
 }
 
 .okButton {
@@ -351,6 +343,7 @@ a{
     background: #D1191D;
 }
 
+
 .driver_table {
     border-collapse: collapse;
     width: 97%;
@@ -358,6 +351,23 @@ a{
     margin-right: auto;
     margin-top: 25px;
     font-family: Arial, sans-serif;
+}
+
+.flag_table{
+    width: 1500px;
+    display: none;
+    background: #ffffff;
+    border-radius: 10px;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+    z-index: 1000;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
 }
 
 thead {
@@ -388,12 +398,14 @@ td, th {
 tbody tr:hover {
     background-color: #989898;
 }
+
 .action_icon {
     width: 17px;
     height: 17px;
     cursor: pointer;
     margin-right: 1px;
 }
+
 .page_control{
     display: flex;
     width: 97%;
@@ -416,4 +428,5 @@ tbody tr:hover {
 .arrow_img:hover{
     transform: scale(1.1);
 }
+
 

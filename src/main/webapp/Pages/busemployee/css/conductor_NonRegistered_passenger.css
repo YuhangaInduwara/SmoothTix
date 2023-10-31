@@ -122,43 +122,43 @@ a{
     border-radius: 100%;
     margin-right: 20px;
 }
-.admit-passengers-child1 {
-position: absolute;
-top: 489px;
-left: 540px;
-border-radius: 40px;
-background-color: #ea2427;
-width: 364px;
-height: 97px;
+
+.functions{
+    display: flex;
+    flex-direction: row;
 }
-.registered {
-position: absolute;
-top: 526px;
-left: 644px;
-font-size: 45px;
-line-height: 20px;
-color: #fff;
-text-align: left;
-}
-.admit-passengers-child2 {
-position: absolute;
-top: 489px;
-left: 950px;
-border-radius: 40px;
-background-color: #ea2427;
-width: 364px;
-height: 97px;
-}
-.non-registered {
-position: absolute;
-top: 526px;
-left: 1080px;
-font-size: 45px;
-line-height: 20px;
-color: #fff;
-text-align: left;
+.content_tile:hover{
+    transform: scale(1.04);
 }
 
+.tile_button:hover{
+    background-color: #FF010177
+}
 
+.tile_button{
+width: 150px; height: 40px; border: none; border-radius: 20px; background: #EA2427; color: #fff; font-size: 16px; cursor: pointer;}
 
+/* Apply styles to the select element */
+select {
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    width: 150px;
+    background-color: #fff;
+}
 
+/* Style the option elements */
+select option {
+    padding: 10px;
+    font-size: 16px;
+}
+
+/* Style the dropdown arrow (optional) */
+select::after {
+    content: "\25BC"; /* Unicode character for a down arrow */
+    position: absolute;
+    top: 50%;
+    right: 10px;
+    transform: translateY(-50%);
+}

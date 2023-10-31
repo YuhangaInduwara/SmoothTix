@@ -122,43 +122,8 @@ a{
     border-radius: 100%;
     margin-right: 20px;
 }
-.admit-passengers-child1 {
-position: absolute;
-top: 489px;
-left: 540px;
-border-radius: 40px;
-background-color: #ea2427;
-width: 364px;
-height: 97px;
-}
-.registered {
-position: absolute;
-top: 526px;
-left: 644px;
-font-size: 45px;
-line-height: 20px;
-color: #fff;
-text-align: left;
-}
-.admit-passengers-child2 {
-position: absolute;
-top: 489px;
-left: 950px;
-border-radius: 40px;
-background-color: #ea2427;
-width: 364px;
-height: 97px;
-}
-.non-registered {
-position: absolute;
-top: 526px;
-left: 1080px;
-font-size: 45px;
-line-height: 20px;
-color: #fff;
-text-align: left;
-}
 
-
-
-
+.functions{
+    display: flex;
+    flex-direction: row;
+}
