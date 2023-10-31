@@ -41,13 +41,13 @@ public class busprofileTable {
 
     public static int update(String busprofile_id, Busprofile busprofile) throws SQLException, ClassNotFoundException {
         Connection con = dbConnection.initializeDatabase();
-        PreparedStatement pst = con.prepareStatement("UPDATE bus SET busprofile_id=?, driver_id=?, conductor_id=?, noOfSeats=?, route=? WHERE busprofile_id=?");
+        PreparedStatement pst = con.prepareStatement("UPDATE busprofile SET busprofile_id=?, driver_id=?, conductor_id=?, noOfSeats=?, route=? WHERE busprofile_id=?");
         pst.setString(1,busprofile.getBusprofile_id());
         pst.setString(2,busprofile.getDriver_id());
         pst.setString(3,busprofile.getConductor_id());
         pst.setInt(4,busprofile.getNoOfSeats());
         pst.setString(5,busprofile.getRoute());
-        pst.setString(9,busprofile_id);
+        pst.setString(6,busprofile_id);
         int rawCount = pst.executeUpdate();
         con.close();
         return rawCount;

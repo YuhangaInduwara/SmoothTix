@@ -2,6 +2,8 @@ body{
     margin:0;
     background-color: white;
     max-height: 100vh;
+    max-width:87vh;
+
 }
 
 .dashboard{
@@ -72,11 +74,44 @@ body{
     border-radius: 5px;
     transform: scale(1.1);
 }
+.tdesignsearch-icon {
+    position: absolute;
+    top: -42px;
+    left: 405px;
+    width: 50px;
+    height: 50px;
+    overflow: hidden;
+}
+.search-by-bus {
+    position: absolute;
+    top: -46px;
+    left: 426px;
+    line-height: 20px;
+}
+.group-child {
+    position: absolute;
+    top: -50px;
+    left: 340px;
+    border-radius: 20px;
+    background-color: #fcbfbf;
+    width: 280px;
+    height: 27px;
+}
+.rectangle-parent {
+  	position: relative;
+  	width: 100%;
+  	height: 60px;
+  	text-align: center;
+  	font-size: 17px;
+  	color: rgba(99, 99, 108, 0.75);
+  	font-family: 'Times New Roman';
+}
+
 
 a{
     text-decoration: none;
     color: #000;
-    text-align: center;
+
     font-family: Times New Roman, serif;
     font-size: 15px;
     font-style: normal;

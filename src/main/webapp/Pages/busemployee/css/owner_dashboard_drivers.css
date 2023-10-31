@@ -202,7 +202,7 @@ a{
     background-color: rgba(255, 1, 1, 0.47);
 }
 
-.bus_form {
+.driver_form {
     display: none;
     position: fixed;
     top: 50%;
@@ -228,7 +228,7 @@ a{
     z-index: 999;
 }
 
-.bus_form_header{
+.driver_form_header{
     text-align: center;
     font-size: 20px;
 }
@@ -241,8 +241,8 @@ a{
     margin-top: 20px;
 }
 
-.bus_form_left,
-.bus_form_right {
+.driver_form_left,
+.driver_form_right {
     flex: 1;
 }
 
@@ -250,7 +250,7 @@ a{
     width: 90%;
 }
 
-.bus_form_require{
+.driver_form_require{
     color: #ff0202;
 }
 
@@ -270,12 +270,12 @@ a{
     transform: scale(1.1);
 }
 
-.bus_form_footer {
+.driver_form_footer {
     text-align: center;
     margin-top: 20px;
 }
 
-.bus_form_button {
+.driver_form_button {
     display: inline-block;
     padding: 10px 20px;
     background-color: #ff0000;
@@ -288,7 +288,7 @@ a{
     transition: background-color 0.3s;
 }
 
-.bus_form_button:hover {
+.driver_form_button:hover {
     background-color: rgba(255, 1, 1, 0.32);
 }
 
@@ -343,13 +343,31 @@ a{
     background: #D1191D;
 }
 
-.bus_table {
+
+.driver_table {
     border-collapse: collapse;
     width: 97%;
     margin-left: auto;
     margin-right: auto;
     margin-top: 25px;
     font-family: Arial, sans-serif;
+}
+
+.flag_table{
+    width: 1500px;
+    display: none;
+    background: #ffffff;
+    border-radius: 10px;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+    z-index: 1000;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
 }
 
 thead {
@@ -380,4 +398,35 @@ td, th {
 tbody tr:hover {
     background-color: #989898;
 }
+
+.action_icon {
+    width: 17px;
+    height: 17px;
+    cursor: pointer;
+    margin-right: 1px;
+}
+
+.page_control{
+    display: flex;
+    width: 97%;
+    margin-top: 5px;
+    margin-right: auto;
+    margin-left: auto;
+    height: 40px;
+    justify-content: flex-end;
+    align-items: center;
+}
+
+.arrow_img{
+    width: 15px;
+    height: 15px;
+    opacity: 0.7;
+    cursor: pointer;
+    margin-right: 10px;
+}
+
+.arrow_img:hover{
+    transform: scale(1.1);
+}
+
 

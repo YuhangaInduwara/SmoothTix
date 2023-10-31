@@ -52,7 +52,7 @@ function displayDataAsTable(data) {
 }
 
 //
-document.getElementById("busprofileForm").addEventListener("submit", function(event) {
+document.getElementById("busprofileRegForm").addEventListener("submit", function(event) {
     event.preventDefault();
 
     const busprofile_id = document.getElementById("add_busprofile_id").value;
@@ -211,12 +211,12 @@ function openForm_add() {
         createForm();
     }
 
-    document.getElementById("busprofileForm").style.display = "block";
+    document.getElementById("busprofileRegForm").style.display = "block";
     document.getElementById("overlay").style.display = "block";
 }
 
 function closeForm_add() {
-    document.getElementById("busprofileForm").style.display = "none";
+    document.getElementById("busprofileRegForm").style.display = "none";
     document.getElementById("overlay").style.display = "none";
 }
 

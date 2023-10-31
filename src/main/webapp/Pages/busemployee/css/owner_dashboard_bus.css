@@ -389,4 +389,27 @@ tbody tr:hover {
     background-color: #989898;
 }
 
+.page_control{
+    display: flex;
+    width: 97%;
+    margin-top: 5px;
+    margin-right: auto;
+    margin-left: auto;
+    height: 40px;
+    justify-content: flex-end;
+    align-items: center;
+}
+
+.arrow_img{
+    width: 15px;
+    height: 15px;
+    opacity: 0.7;
+    cursor: pointer;
+    margin-right: 10px;
+}
+
+.arrow_img:hover{
+    transform: scale(1.1);
+}
+
 
