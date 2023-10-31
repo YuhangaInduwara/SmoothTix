@@ -72,5 +72,5 @@ function closeAlertSuccess() {
 function closeAlertFail() {
     document.getElementById("loginFail").style.display = "none";
     document.getElementById("overlay").style.display = "none";
-    window.location.href = "../html/login.html";
+    // window.location.href = "../html/login.html";
 }

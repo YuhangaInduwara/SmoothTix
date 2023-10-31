@@ -149,7 +149,7 @@ a{
 }
 
 .tile{
-    background-image: url('../../../images/Wallpapers/Background6.jpg');
+    background-image: url('../../../images/Wallpapers/Background5.jpg');
     background-size: cover;
     background-repeat: no-repeat;
     background-position: center;
@@ -164,7 +164,7 @@ a{
 }
 
 .tile:hover{
-    background-image: url('../../../images/Wallpapers/Background5.jpg');
+    background-image: url('../../../images/Wallpapers/Background6.jpg');
     transform: scale(1.08);
     border: 1px solid black;
 }
