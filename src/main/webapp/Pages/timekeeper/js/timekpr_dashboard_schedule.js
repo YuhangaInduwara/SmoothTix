@@ -46,6 +46,9 @@ function displayDataAsTable(data) {
                 <span class="icon-container" style="margin-left: 10px;"> <!-- Adjust the margin as needed -->
                     <i class="fas fa-trash-alt" style="color: #ff0202" onclick="deleteRow('${item.schedule_id}')"></i>
                 </span>
+
+
+
             </td>
         `;
 
