@@ -194,7 +194,7 @@ a{
     margin-bottom: 10px;
     flex: 2;
 }
-.button_1 {
+/*.button_1 {
 
       background-color: rgb(255, 0, 0);
      color: #fff;
@@ -203,8 +203,8 @@ a{
      border-radius: 4px;
      cursor: pointer;
      margin-left:180px;
-     }
-.button_2 {
+     }*/
+/*.button_2 {
 
       background-color: rgb(255, 0, 0);
      color: #fff;
@@ -213,14 +213,14 @@ a{
      border-radius: 4px;
      cursor: pointer;
      margin-left:5px;
-     }
+     }*/
 
-.button_1:hover{
+/*.button_1:hover{
    background-color:rgba(255, 1, 1, 0.47);
-}
-.button_2:hover{
+}*/
+/*.button_2:hover{
    background-color: rgba(255, 1, 1, 0.47);
-}
+}*/
 
 
 

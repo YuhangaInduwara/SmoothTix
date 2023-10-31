@@ -397,3 +397,16 @@ tbody tr:hover {
     background-color: #989898;
 }
 
+.bus-profile{
+    background-color: red;
+    color: #fff;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 4px;
+    cursor: pointer;
+
+}
+.bus-profile:hover{
+  background-color:#F0A78A;
+}
+
