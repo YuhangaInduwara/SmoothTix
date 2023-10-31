@@ -50,7 +50,7 @@ function openAlertSuccess(priority) {
     } else if (priority === 4) {
         landingPage = '../../busemployee/html/driver_dashboard_home.html';
     } else if (priority === 5) {
-        landingPage = '../../busemployee/html/conductor_admit_passenger.html';
+        landingPage = '../../busemployee/html/conductor_dashboard_home.html';
     } else if (priority === 6) {
         landingPage = '../../passenger/html/passenger_dashboard_home.html';
     }

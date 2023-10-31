@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admit Passenger</title>
-    <link rel="stylesheet" type="text/css" href="../css/conductor_admit_passenger.css">
+    <title>Bus Profile</title>
+    <link rel="stylesheet" type="text/css" href="../css/conductor_dashboard_busprofile.css">
 </head>
 <body>
 <div class="dashboard">
@@ -14,7 +14,7 @@
             <p class="site_logo_caption">Your Ticket to a Smooth Travel</p>
         </div>
         <div>
-            <div class="sidebar_element_main">
+            <div class="sidebar_element">
                 <a href="./conductor_dashboard_home.html"><img src="../../../images/vector_icons/home.png" alt="home" class="sidebar_img"></a>
                 <a href="./conductor_dashboard_home.html">Home</a>
             </div>
@@ -22,7 +22,7 @@
                 <a href="conductor_admit_passenger.html"><img src="../../../images/vector_icons/bookASeat.png" alt="Admit Passenger" class="sidebar_img"></a>
                 <a href="conductor_admit_passenger.html">Admit Passenger</a>
             </div>
-            <div class="sidebar_element">
+            <div class="sidebar_element_main">
                 <a href="./conductor_dashboard_busprofile.html"><img src="../../../images/vector_icons/user.png" alt="Bus profile" class="sidebar_img"></a>
                 <a href="./conductor_dashboard_busprofile.html">Bus profile</a>
             </div>
@@ -52,7 +52,7 @@
     <div class="content_container">
         <div class="navbar">
             <div class="page_name">
-                <h1>Admit Passengers</h1>
+                <h1>Bus Profile</h1>
             </div>
             <div class="user_profile">
                 <h3>Username</h3>
@@ -60,22 +60,45 @@
             </div>
         </div>
         <div class="body_content">
-            <img class="image-4-icon" alt="" src="../../../images/image 4.png" style="
-                    height: 41vw;
-                    width: 86vw;
-            ">
-            <div class="B">
-                <div class="admit-passengers-child1" style="top: 45%;"></div>
-                <a href="conductor_registered_passenger.html"><b class="registered" style="top: 50%;">Registered</b></a>
-                <div class="admit-passengers-child2" style="top: 45%;"></div>
-                <a href="conducter_NonRegistered_passenger.html"><b class="non-registered" style="top: 50%;">Non Registered</b></a>
+            <div>
+                <table id="dataTable" class="driver_table">
+                    <thead>
+                    <tr>
+                        <th>Bus profile ID</th>
+                        <th>Conductor ID</th>
+                        <th>Driver ID</th>
+                        <th>Bus ID</th>
+                        <th>No. Of Seat</th>
+                        <th>Route</th>
+                        <th>Actions</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td>BP001</td>
+                        <td>C001</td>
+                        <td>D001</td>
+                        <td>B001</td>
+                        <td>44</td>
+                        <td>Galle-Colombo</td>
+                        <td> </td>
+                    </tr>
+                    <tr>
+                        <td>BP002</td>
+                        <td>C002</td>
+                        <td>D002</td>
+                        <td>B002</td>
+                        <td>54</td>
+                        <td>Kandy-Colombo</td>
+                        <td> </td>
+                    </tr>
+                    </tbody>
+                </table>
+                <div class="page_control" id="page_control">
+                    <img class="arrow_img" src="../../../images/vector_icons/arrow_left.png" alt="arrow_left">
+                    <img class="arrow_img" src="../../../images/vector_icons/arrow_right.png" alt="arrow_right">
+                </div>
             </div>
-
-            <!-- Registered Section -->
-            <a href="conductor_registered_passenger.html" name="registered"></a>
-
-            <!-- Non Registered Section -->
-            <a href="conducter_NonRegistered_passenger.html" name="non-registered"></a>
 
         </div>
     </div>

@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Registered passenger</title>
-  <link rel="stylesheet" type="text/css" href="../css/conducter_Registered_passenger.css">
+  <title>Home</title>
+  <link rel="stylesheet" type="text/css" href="../css/conductor_dashboard_home.css">
 </head>
 <body>
 <div class="dashboard">
@@ -52,7 +52,7 @@
   <div class="content_container">
     <div class="navbar">
       <div class="page_name">
-        <h1>Registered Passenger</h1>
+        <h1>Home</h1>
       </div>
       <div class="user_profile">
         <h3>Username</h3>
@@ -60,17 +60,42 @@
       </div>
     </div>
     <div class="body_content">
-      <img class="image-5-icon" alt="" src="../../../images/image 5.png" style="
-                    height: 41vw;
-                    width: 86vw;
-            ">
-      <div class="B">
-        <div class="admit-passengers-child1" style="top: 45%;"></div>
-        <a href="qrconductor.html"><b class="registered" style="top: 50%;">QR SCAN</b></a>
-        <div class="admit-passengers-child2" style="top: 45%;"></div>
-        <a href="codeconductor.html"><b class="non-registered" style="top: 50%;">CODE</b></a>
+      <div class="tile_grid">
+        <div class="raw_1">
+          <a href="./conductor_dashboard_busprofile.html">
+            <div class="tile" >
+              <h1>Bus Profile</h1>
+              <img src="../../../images/vector_icons/user.png" alt="owner" class="sidebar_img">
+            </div>
+          </a>
+          <a href="./conductor_dashboard_ratings.html.html">
+            <div class="tile">
+              <h1>Ratings</h1>
+              <img src="../../../images/vector_icons/review.png" alt="bus" class="sidebar_img">
+            </div>
+          </a>
+          <a href="./conductor_admit_passenger.html">
+            <div class="tile">
+              <h1>Admit Passenger</h1>
+              <img src="../../../images/vector_icons/passenger.png" alt="bus" class="sidebar_img">
+            </div>
+          </a>
+        </div>
+        <div class="raw_2">
+          <a href="./conductor_dashboard_location.html">
+            <div class="tile">
+              <h1>Location</h1>
+              <img src="../../../images/vector_icons/location.png" alt="conductor" class="sidebar_img">
+            </div>
+          </a>
+          <a href="./conductor_dashboard_report.html">
+            <div class="tile">
+              <h1>Reports</h1>
+              <img src="../../../images/vector_icons/report.png" alt="route" class="sidebar_img">
+            </div>
+          </a>
+        </div>
       </div>
-
     </div>
   </div>
 </div>
