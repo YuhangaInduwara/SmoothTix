@@ -43,7 +43,7 @@ public class PassengerController extends HttpServlet {
                 passengerData.put("fname", rs.getString("fname"));
                 passengerData.put("lname", rs.getString("lname"));
                 passengerData.put("nic", rs.getString("nic"));
-                passengerData.put("mobileNo", rs.getInt("mobileNo"));
+                passengerData.put("mobileNo", rs.getString("mobileNo"));
                 passengerData.put("email", rs.getString("email"));
 
                 passengerDataArray.put(passengerData);
