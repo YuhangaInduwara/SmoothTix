@@ -75,10 +75,10 @@ function update(nic){
 
                     document.getElementById("update_fname").value = existingData.fname;
                     document.getElementById("update_lname").value = existingData.lname;
-                    //document.getElementById("update_nic").value = existingData.nic;
+                    document.getElementById("update_nic").value = existingData.nic;
                     document.getElementById("update_mobileNo").value = existingData.mobileNo;
                     document.getElementById("update_email").value = existingData.email;
-                    //document.getElementById("update_password").value = existingData.password;
+                    document.getElementById("update_password").value = "...........";
                 });
             } else if (response.status === 401) {
                 console.log('Unauthorized');
@@ -95,18 +95,18 @@ function update(nic){
 
         const fname = document.getElementById("update_fname").value;
         const lname = document.getElementById("update_lname").value;
-        //const nic = document.getElementById("update_nic").value;
+        const nic = document.getElementById("update_nic").value;
         const mobileNo = document.getElementById("update_mobileNo").value;
         const email = document.getElementById("update_email").value;
-        //const password = document.getElementById("update_password").value;
+        const password = document.getElementById("update_password").value;
 
         const updatedData = {
             fname: fname,
             lname: lname,
-            //nic: nic,
+            nic: nic,
             mobileNo: mobileNo,
             email: email,
-            //password: password,
+            password: password,
         };
 
         const jsonData = JSON.stringify(updatedData);
@@ -220,12 +220,20 @@ function createForm() {
                 <input type="text" name="lname" id="lname" class="form_data" placeholder="Enter last name" required="required" />
            </div>
            <div class="form_div">
+                <label for="nic" class="passenger_form_title">NIC <span class="passenger_form_require">*</span></label>
+                <input type="text" name="nic" id="nic" class="form_data" placeholder="Enter NIC" required="required" />
+           </div>
+           <div class="form_div">
                 <label for="mobileNo" class="passenger_form_title">Mobile no <span class="passenger_form_require">*</span></label>
                 <input type="text" name="mobileNo" id="mobileNo" class="form_data" placeholder="Enter mobile no" required="required" />
            </div>
            <div class="form_div">
                 <label for="email" class="passenger_form_title">Email <span class="passenger_form_require">*</span></label>
                 <input type="text" name="email" id="email" class="form_data" placeholder="Enter email" required="required" />
+           </div>
+           <div class="form_div">
+                <label for="password" class="passenger_form_title">Password <span class="passenger_form_require">*</span></label>
+                <input type="text" name="password" id="password" class="form_data" placeholder="Enter password" required="required" />
            </div>
 
         </div>
