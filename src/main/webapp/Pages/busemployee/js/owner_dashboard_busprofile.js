@@ -39,10 +39,10 @@ function displayDataAsTable(data) {
 
             <td>
                 <span class="icon-container">
-                    <button class="fas fa-pencil-alt" style="color: #ff0202" onclick="updateRow('${item.busprofile_id}')"></button>
+                    <i onclick="updateRow('${item.busprofile_id}')"><img src="../../../images/vector_icons/update_icon.png" alt="update" class="action_icon"></i>
                 </span>
-                <span class="icon-container" style="margin-left: 10px;"> <!-- Adjust the margin as needed -->
-                    <button class="fas fa-trash-alt" style="color: #ff0202" onclick="deleteRow('${item.busprofile_id}')"></button>
+                <span class="icon-container" style="margin-left: 1px;">
+                    <i onclick="deleteRow('${item.busprofile_id}')"><img src="../../../images/vector_icons/delete_icon.png" alt="delete" class="action_icon"></i>
                 </span>
             </td>
         `;
