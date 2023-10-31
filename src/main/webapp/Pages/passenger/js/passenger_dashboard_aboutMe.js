@@ -1,6 +1,6 @@
 // Fetch all data from the database
 function fetchAllData() {
-    let nic = "2001";
+    let nic = "2000";
     fetch('../../../passengerController', {
         method: 'GET',
         headers: {
