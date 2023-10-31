@@ -29,7 +29,13 @@ public class PassengerController extends HttpServlet {
         String nic = request.getHeader("nic");
 
         try {
-            ResultSet rs = passengerTable.get(nic);
+            ResultSet rs = null;
+            if(nic == null){
+                rs = passengerTable.getAll();
+            }
+            else{
+                rs = passengerTable.get(nic);
+            }
 
 
             while (rs.next()) {
@@ -73,52 +79,53 @@ public class PassengerController extends HttpServlet {
 //            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
 //        }
 //    }
-//
-//    @Override
-//    protected void doPut(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-//        response.setContentType("text/html");
-//        PrintWriter out = response.getWriter();
-//
-//        try {
-//            Gson gson = new Gson();
-//
-//            String nic = request.getHeader("nic");
-//
-//            BufferedReader reader = request.getReader();
-//            Passenger passenger = gson.fromJson(reader, Passenger.class);
-//
-//
-//            int updateSuccess = passengerTable.update(nic, passenger);
-//
-//            if (updateSuccess >= 1) {
-//                response.setStatus(HttpServletResponse.SC_OK);
-//            } else {
-//                response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-//            }
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-//        }
-//    }
-//
-//    @Override
-//    protected void doDelete(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-//        response.setContentType("text/html");
-//        PrintWriter out = response.getWriter();
-//
-//        try {
-//            String bus_id = request.getHeader("bus_id");
-//            int deleteSuccess = busTable.delete(bus_id);
-//
-//            if (deleteSuccess >= 1) {
-//                response.setStatus(HttpServletResponse.SC_OK);
-//            } else {
-//                response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-//            }
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-//        }
-//    }
-//
+
+    @Override
+    protected void doPut(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        response.setContentType("text/html");
+        PrintWriter out = response.getWriter();
+
+        try {
+            Gson gson = new Gson();
+
+            String nic = request.getHeader("nic");
+
+            BufferedReader reader = request.getReader();
+            Passenger passenger = gson.fromJson(reader, Passenger.class);
+
+
+            int updateSuccess = passengerTable.update(nic, passenger);
+
+            if (updateSuccess >= 1) {
+                response.setStatus(HttpServletResponse.SC_OK);
+            } else {
+                response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @Override
+    protected void doDelete(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        response.setContentType("text/html");
+        PrintWriter out = response.getWriter();
+
+        try {
+            String nic = request.getHeader("nic");
+            int deleteSuccess = passengerTable.delete(nic);
+            System.out.println(nic);
+            System.out.println(deleteSuccess);
+            if (deleteSuccess >= 1) {
+                response.setStatus(HttpServletResponse.SC_OK);
+            } else {
+                response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+        }
+    }
+
 }

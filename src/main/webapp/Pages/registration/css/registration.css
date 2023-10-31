@@ -1,14 +1,13 @@
-.login-body {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    background-color: white;
-    padding: 20px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+.login-container {
+    background-image: url("../../../images/Wallpapers/Wallpaper2.jpg");
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
 }
 
 .login-image {
     margin-bottom: 20px;
+    background-color: white;
 }
 
 .login-img {
@@ -30,7 +29,7 @@
 
 .form-group {
     margin-bottom: 20px;
-    width: 500px;
+    width: 450px;
 }
 
 label {
@@ -38,7 +37,7 @@ label {
 }
 
 .form-control {
-    width: 96%;
+    width: 90%;
     padding: 10px;
     border: 1px solid #ccc;
     border-radius: 5px;
@@ -82,7 +81,6 @@ body{
 }
 
 .login-container{
-    background-color: white;
     width:100%;
     height: 100vh;
 }
@@ -161,9 +159,8 @@ body{
     flex: 1;
     display: flex;
     flex-direction: row;
-    align-items: center;
     justify-content: center;
-    height: 120vh;
+    width: auto;
 }
 
 .login_img{
@@ -186,14 +183,15 @@ body{
 .login_form{
     display: flex;
     flex-direction: column;
-    flex: 0.9;
     justify-content: center;
+    flex: 0.9;
     align-items: center;
-    margin-right: 50px;
-    background-color:#B0B0B066;
-    margin-left: 70px;
-    height: 110vh;
+    margin-right: 150px;
+    background-color: rgba(217, 217, 217, 0.64);
+    margin-left: 150px;
+    height: 80vh;
     border-radius: 20px;
+    margin-bottom: 20px;
 }
 
 .form_heading{
@@ -205,25 +203,103 @@ body{
 }
 
 .form_heading_logo_img{
-    width: 200px;
-    margin-top: 10px;
+    width: 250px;
+    margin-top: 11px;
 }
 
 .form_heading_text{
-    font-size: 28px;
+    font-size: 35px;
 }
 
 .form_footer{
     flex: 1;
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
     align-items: center;
     justify-content: center;
 }
 
-.login_footer {
-    background-color: black;
-    height: 90px;
-    margin-top: 40px;
+.reg_form_left,
+.reg_form_right {
+    flex: 1;
 }
+
+.reg_form{
+    display: flex;
+    gap: 30px;
+}
+
+.alertBody {
+    width: 512px;
+    height: 246px;
+    background: #ffffff;
+    border-radius: 10px;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+    z-index: 1000;
+    display: none;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 50px;
+    gap:40px;
+}
+
+.failImg,
+.successImg {
+    width: 80px;
+    margin-bottom: 40px;
+}
+
+.alertMsgSuccess,
+.alertMsgFail {
+    font-size: 25px;
+    font-family: Times New Roman, serif;
+    font-weight: 700;
+    line-height: 1.5;
+    word-wrap: break-word;
+    margin-bottom: 40px;
+}
+
+.alertMsgSuccess{
+    color: #109046;
+}
+
+.alertMsgFail{
+    color: #ff0202;
+}
+
+.okButton,
+.tryButton{
+    width: 150px;
+    height: 40px;
+    border: none;
+    border-radius: 20px;
+    background: #EA2427;
+    color: #fff;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background 0.3s ease;
+}
+
+.okButton:hover,
+.tryButton:hover{
+    background: #D1191D;
+}
+
+.overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 999;
+}
+
 
