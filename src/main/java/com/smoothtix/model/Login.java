@@ -1,25 +1,20 @@
 package com.smoothtix.model;
 
 public class Login {
-    private String nic;
-    private String password;
+    private final String nic;
+    private final String password;
 
     public Login(String nic, String password){
         this.nic = nic;
         this.password = password;
     }
 
-    public String getnic(){
+    public String get_nic(){
         return nic;
     }
-    public String getpassword(){
+    public String get_password(){
         return password;
     }
-    public void setnic(){
-        this.nic = nic;
-    }
-    public void setpassword(){
-        this.password = password;
-    }
+
 
 }

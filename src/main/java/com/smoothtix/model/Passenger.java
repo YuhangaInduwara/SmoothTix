@@ -1,65 +1,74 @@
 package com.smoothtix.model;
 
 public class Passenger {
-    private String fname;
-    private String lname;
+    private String p_id;
+    private String first_name;
+    private String last_name;
     private String nic;
-    private String mobileNo;
     private String email;
     private String password;
-    private int priority;
+    private Boolean flag;
+    private int privilege_level;
 
-    public Passenger(String fname, String lname, String nic, String mobileNo, String email, String password, int priority){
-        this.fname = fname;
-        this.lname = lname;
+    public Passenger(String p_id, String first_name, String last_name, String nic, String email, String password, Boolean flag, int privilege_level){
+        this.p_id = p_id;
+        this.first_name = first_name;
+        this.last_name = last_name;
         this.nic = nic;
-        this.mobileNo = mobileNo;
         this.email = email;
         this.password = password;
-        this.priority = priority;
+        this.flag = flag;
+        this.privilege_level = privilege_level;
     }
 
-    public String getfname(){
-        return fname;
+    public String get_p_id(){
+        return p_id;
     }
-    public String getlname(){
-        return lname;
+    public String get_first_name(){
+        return first_name;
     }
-    public String getnic(){
+    public String get_last_name(){
+        return last_name;
+    }
+    public String get_nic(){
         return nic;
     }
-    public String getmobileNo(){
-        return mobileNo;
-    }
-    public String getemail(){
+    public String get_email(){
         return email;
     }
-    public String getpassword(){
+    public String get_password(){
         return password;
     }
-    public int getpriority(){
-        return priority;
+    public Boolean get_flag(){
+        return flag;
     }
-    public void setfname(String fname){
-        this.fname = fname;
+    public int get_privilege_level(){
+        return privilege_level;
     }
-    public void setlname(String lname){
-        this.lname = lname;
+
+    public void set_p_id(String p_id){
+        this.p_id = p_id;
     }
-    public void setnic(String nic){
+    public void set_first_name(String first_name){
+        this.first_name = first_name;
+    }
+    public void set_last_name(String last_name){
+        this.last_name = last_name;
+    }
+    public void set_nic(String nic){
         this.nic = nic;
     }
-    public void setmobileNo(String mobileNo){
-        this.mobileNo = mobileNo;
-    }
-    public void setemail(String email){
+    public void set_email(String email){
         this.email = email;
     }
-    public void setpassword(String password){
+    public void set_password(String password){
         this.password = password;
     }
-    public void setpriority(int priority){
-        this.priority = priority;
+    public void set_flag(Boolean flag){
+        this.flag = flag;
+    }
+    public void set_privilege_level(int privilege_level){
+        this.privilege_level = privilege_level;
     }
 
 }

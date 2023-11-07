@@ -410,3 +410,11 @@ tbody tr:hover {
   background-color:#F0A78A;
 }
 
+.action_icon {
+    width: 17px;
+    height: 17px;
+    cursor: pointer;
+    margin-right: 1px;
+}
+
+

@@ -132,6 +132,7 @@
                         <th>Mobile Number</th>
                         <th>Email</th>
                         <th>Points</th>
+                        <th>Actions</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -144,6 +145,12 @@
                         <td>0773123423</td>
                         <td>ySample@gmail.com</td>
                         <td>3.5/5.0</td>
+                        <td> <span class="icon-container">
+                    <i onclick="updateRow('${item.bus_id}')"><img src="../../../images/vector_icons/update_icon.png" alt="update" class="action_icon"></i>
+                </span>
+                            <span class="icon-container" style="margin-left: 1px;">
+                    <i onclick="deleteRow('${item.bus_id}')"><img src="../../../images/vector_icons/delete_icon.png" alt="delete" class="action_icon"></i>
+                </span></td>
                     </tr>
                     <tr>
                         <td>D002</td>
@@ -154,6 +161,12 @@
                         <td>0771817139</td>
                         <td>Driver@gmail.com</td>
                         <td>3.0/5.0</td>
+                        <td> <span class="icon-container">
+                    <i onclick="updateRow('${item.bus_id}')"><img src="../../../images/vector_icons/update_icon.png" alt="update" class="action_icon"></i>
+                </span>
+                            <span class="icon-container" style="margin-left: 1px;">
+                    <i onclick="deleteRow('${item.bus_id}')"><img src="../../../images/vector_icons/delete_icon.png" alt="delete" class="action_icon"></i>
+                </span></td>
                     </tr>
                     </tbody>
                 </table>
