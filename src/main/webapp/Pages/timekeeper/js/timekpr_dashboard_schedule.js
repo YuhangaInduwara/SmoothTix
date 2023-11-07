@@ -41,14 +41,11 @@ function displayDataAsTable(data) {
             <td>${item.end_time}</td>
             <td>
                 <span class="icon-container">
-                    <i class="fas fa-pencil-alt" style="color: #ff0202" onclick="updateRow('${item.schedule_id}')"></i>
+                    <i onclick="updateRow('${item.schedule_id}')"><img src="../../../images/vector_icons/update_icon.png" alt="update" class="action_icon"></i>
                 </span>
-                <span class="icon-container" style="margin-left: 10px;"> <!-- Adjust the margin as needed -->
-                    <i class="fas fa-trash-alt" style="color: #ff0202" onclick="deleteRow('${item.schedule_id}')"></i>
+                <span class="icon-container" style="margin-left: 1px;">
+                    <i onclick="deleteRow('${item.schedule_id}')"><img src="../../../images/vector_icons/delete_icon.png" alt="delete" class="action_icon"></i>
                 </span>
-
-
-
             </td>
         `;
 

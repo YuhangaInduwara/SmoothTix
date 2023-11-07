@@ -381,8 +381,7 @@ tbody tr:hover {
     background-color: #989898;
 }
 
-<<<<<<< HEAD
-=======
+
 body{
     margin:0;
     background-color: white;
@@ -781,7 +780,6 @@ tbody tr:hover {
     margin-right: 1px;
 }
 
->>>>>>> 1dfcbe2a1a01d31d20e56a8a4eb6c97215f24f9f
 .page_control{
     display: flex;
     width: 97%;
@@ -810,8 +808,13 @@ tbody tr:hover {
     cursor: pointer;
     margin-right: 1px;
 }
-
-<<<<<<< HEAD
-
-=======
->>>>>>> 1dfcbe2a1a01d31d20e56a8a4eb6c97215f24f9f
+.page_control{
+    display: flex;
+    width: 97%;
+    margin-top: 5px;
+    margin-right: auto;
+    margin-left: auto;
+    height: 40px;
+    justify-content: flex-end;
+    align-items: center;
+}

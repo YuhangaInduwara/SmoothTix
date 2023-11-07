@@ -1,3 +1,23 @@
+function isValidNIC(nic) {
+    const nicRegex = /^(\d{9}[vVxX]|\d{12})$/;
+    return nicRegex.test(nic);
+}
+
+const nicInput = document.getElementById("nic");
+const nicError = document.getElementById("nicError");
+
+nicInput.addEventListener("change", function() {
+    if (!isValidNIC(nicInput.value)) {
+        nicInput.setCustomValidity("Please enter a valid NIC number.");
+        nicError.textContent = "Please enter a valid NIC number.";
+        nicError.style.display = "block";
+    } else {
+        nicInput.setCustomValidity("");
+        nicError.textContent = "";
+        nicError.style.display = "none";
+    }
+});
+
 let landingPage= '../../passenger/html/passenger_dashboard_home.html'
 document.getElementById("loginForm").addEventListener("submit", function(event) {
     event.preventDefault();
@@ -23,17 +43,18 @@ document.getElementById("loginForm").addEventListener("submit", function(event) 
             if (response.ok) {
                 return response.json();
             } else {
-                openAlertFail()
-                throw new Error("Login failed");
+                return response.json()
+                    .then(data => {
+                        const error_msg = data.error;
+                        openAlertFail(error_msg);
+                        throw new Error("Login failed");
+                    });
             }
         })
         .then(parsedResponse => {
-
-
             const priority = parsedResponse.priority;
             openAlertSuccess(priority)
         })
-
 
         .catch(error => {
             console.error('Error:', error);
@@ -58,7 +79,8 @@ function openAlertSuccess(priority) {
     document.getElementById("overlay").style.display = "block";
 }
 
-function openAlertFail() {
+function openAlertFail(error_msg) {
+    document.getElementById("failMsg").textContent = error_msg;
     document.getElementById("loginFail").style.display = "block";
     document.getElementById("overlay").style.display = "block";
 }
@@ -72,5 +94,4 @@ function closeAlertSuccess() {
 function closeAlertFail() {
     document.getElementById("loginFail").style.display = "none";
     document.getElementById("overlay").style.display = "none";
-    // window.location.href = "../html/login.html";
 }
