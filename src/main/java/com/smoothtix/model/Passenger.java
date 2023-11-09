@@ -21,6 +21,29 @@ public class Passenger {
         this.privilege_level = privilege_level;
     }
 
+    public Passenger(String p_id, String first_name, String last_name, String nic, String email){
+        this.p_id = p_id;
+        this.first_name = first_name;
+        this.last_name = last_name;
+        this.nic = nic;
+        this.email = email;
+    }
+
+    public Passenger(String p_id, int privilege_level){
+        this.p_id = p_id;
+        this.privilege_level = privilege_level;
+    }
+
+    public Passenger(String p_id, String password){
+        this.p_id = p_id;
+        this.password = password;
+    }
+
+    public Passenger(String p_id, Boolean flag){
+        this.p_id = p_id;
+        this.flag = flag;
+    }
+
     public String get_p_id(){
         return p_id;
     }

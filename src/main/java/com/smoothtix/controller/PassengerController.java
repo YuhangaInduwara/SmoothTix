@@ -25,16 +25,15 @@ public class PassengerController extends HttpServlet {
         response.setContentType("text/html");
         PrintWriter out = response.getWriter();
         JSONArray passengerDataArray = new JSONArray();
-
-        String nic = request.getHeader("nic");
+        String p_id = request.getHeader("p_id");
 
         try {
             ResultSet rs = null;
-            if(nic == null){
+            if(p_id == null){
                 rs = passengerTable.getAll();
             }
             else{
-                rs = passengerTable.get(nic);
+                rs = passengerTable.getBy_p_id(p_id);
             }
 
 
@@ -45,9 +44,8 @@ public class PassengerController extends HttpServlet {
                 passengerData.put("last_name", rs.getString("last_name"));
                 passengerData.put("nic", rs.getString("nic"));
                 passengerData.put("email", rs.getString("email"));
-                passengerData.put("flag", rs.getString("flag"));
-                passengerData.put("privilege_level", rs.getString("privilege_level"));
-
+                passengerData.put("flag", rs.getBoolean("flag"));
+                passengerData.put("privilege_level", rs.getInt("privilege_level"));
 
                 passengerDataArray.put(passengerData);
             }
@@ -90,16 +88,25 @@ public class PassengerController extends HttpServlet {
 
         try {
             Gson gson = new Gson();
-
-            String nic = request.getHeader("nic");
+            String p_id = request.getHeader("p_id");
 
             BufferedReader reader = request.getReader();
             Passenger passenger = gson.fromJson(reader, Passenger.class);
-
-            String hashedPassword = PasswordHash.hashPassword(passenger.get_password());
-            passenger.set_password(hashedPassword);
-            int updateSuccess = passengerTable.update(nic, passenger);
-
+            int updateSuccess = 0;
+            if(passenger.get_password() != null && !passenger.get_password().isEmpty()){
+                String hashedPassword = PasswordHash.hashPassword(passenger.get_password());
+                passenger.set_password(hashedPassword);
+                updateSuccess = passengerTable.updatePassword(p_id, passenger);
+            }
+            else if(passenger.get_flag() != null){
+                updateSuccess = passengerTable.updateFlag(p_id, passenger);
+            }
+            else if(passenger.get_privilege_level() >= 1){
+                 updateSuccess = passengerTable.updatePrivilegeLevel(p_id, passenger);
+            }
+            else{
+                updateSuccess = passengerTable.update(p_id, passenger);
+            }
             if (updateSuccess >= 1) {
                 response.setStatus(HttpServletResponse.SC_OK);
             } else {
@@ -119,8 +126,6 @@ public class PassengerController extends HttpServlet {
         try {
             String nic = request.getHeader("nic");
             int deleteSuccess = passengerTable.delete(nic);
-            System.out.println(nic);
-            System.out.println(deleteSuccess);
             if (deleteSuccess >= 1) {
                 response.setStatus(HttpServletResponse.SC_OK);
             } else {

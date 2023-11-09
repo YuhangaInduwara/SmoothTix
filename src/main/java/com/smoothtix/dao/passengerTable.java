@@ -31,11 +31,17 @@ public class passengerTable {
             nextPassengerID = rs.getInt("next_p_id");
         }
 
-
         return "P" + String.format("%04d", nextPassengerID);
     }
 
-    public static ResultSet get(String nic) throws SQLException, ClassNotFoundException {
+    public static ResultSet getBy_p_id(String p_id) throws SQLException, ClassNotFoundException {
+        Connection con = dbConnection.initializeDatabase();
+        PreparedStatement pst = con.prepareStatement("SELECT * FROM passenger WHERE p_id=?");
+        pst.setString(1,p_id);
+        return pst.executeQuery();
+    }
+
+    public static ResultSet getBy_nic(String nic) throws SQLException, ClassNotFoundException {
         Connection con = dbConnection.initializeDatabase();
         PreparedStatement pst = con.prepareStatement("SELECT * FROM passenger WHERE nic=?");
         pst.setString(1,nic);
@@ -49,15 +55,43 @@ public class passengerTable {
         return rs;
     }
 
-    public static int update(String nic, Passenger passenger) throws SQLException, ClassNotFoundException {
+    public static int update(String p_id, Passenger passenger) throws SQLException, ClassNotFoundException {
         Connection con = dbConnection.initializeDatabase();
-        PreparedStatement pst = con.prepareStatement("UPDATE passenger SET first_name=?, last_name=?, nic=?, email=?, password=? WHERE nic=?");
+        PreparedStatement pst = con.prepareStatement("UPDATE passenger SET first_name=?, last_name=?, nic=?, email=? WHERE p_id=?");
         pst.setString(1,passenger.get_first_name());
         pst.setString(2,passenger.get_last_name());
         pst.setString(3,passenger.get_nic());
         pst.setString(4,passenger.get_email());
-        pst.setString(5,passenger.get_password());
+        pst.setString(5,p_id);
         int rawCount = pst.executeUpdate();
+        return rawCount;
+    }
+
+    public static int updatePassword(String p_id, Passenger passenger) throws SQLException, ClassNotFoundException {
+        Connection con = dbConnection.initializeDatabase();
+        PreparedStatement pst = con.prepareStatement("UPDATE passenger SET password=? WHERE p_id=?");
+        pst.setString(1,passenger.get_password());
+        pst.setString(2,p_id);
+        int rawCount = pst.executeUpdate();
+        return rawCount;
+    }
+
+    public static int updateFlag(String p_id, Passenger passenger) throws SQLException, ClassNotFoundException {
+        Connection con = dbConnection.initializeDatabase();
+        PreparedStatement pst = con.prepareStatement("UPDATE passenger SET flag=? WHERE p_id=?");
+        pst.setBoolean(1,!passenger.get_flag());
+        pst.setString(2,p_id);
+        int rawCount = pst.executeUpdate();
+        return rawCount;
+    }
+
+    public static int updatePrivilegeLevel(String p_id, Passenger passenger) throws SQLException, ClassNotFoundException {
+        Connection con = dbConnection.initializeDatabase();
+        PreparedStatement pst = con.prepareStatement("UPDATE passenger SET privilege_level=? WHERE p_id=?");
+        pst.setInt(1,passenger.get_privilege_level());
+        pst.setString(2,p_id);
+        int rawCount = pst.executeUpdate();
+
         return rawCount;
     }
 
@@ -66,6 +100,7 @@ public class passengerTable {
         PreparedStatement pst = con.prepareStatement("DELETE FROM passenger WHERE nic = ?");
         pst.setString(1,nic);
         int rawCount = pst.executeUpdate();
+
         return rawCount;
     }
 }
