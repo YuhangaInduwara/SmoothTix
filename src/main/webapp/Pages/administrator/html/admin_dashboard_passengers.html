@@ -6,8 +6,6 @@
     <title>Passengers</title>
     <link rel="stylesheet" type="text/css" href="../css/admin_dashboard_passengers.css">
     <link rel="icon" type="image/x-icon" href="../../../images/favicon/favicon.png">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
-
 </head>
 <body>
 <div class="dashboard">
@@ -81,7 +79,7 @@
                         <label>
                             <input class="search_input" type="text" placeholder="Search" id="searchInput">
                         </label>
-                        <button id="searchButton" onclick="searchData()">
+                        <button id="searchButton" onclick="searchData()" >
                             <img src="../../../images/vector_icons/search_icon.png" alt="Search" class="search_img">
                         </button>
                     </div>
@@ -100,146 +98,20 @@
                     </tr>
                     </thead>
                     <tbody>
-                    <tr>
-                        <td>P001</td>
-                        <td>Person001</td>
-                        <td>200100000001</td>
-                        <td>0701231234</td>
-                        <td>Person001@gmail.com</td>
-                        <td>Administrator</td>
-                        <td>
-                            <span class="icon-container">
-                                <i onclick="updateRow('${item.bus_id}')"><img src="../../../images/vector_icons/flag_icon.png" alt="flag" class="action_icon"></i>
-                            </span>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>P002</td>
-                        <td>Person002</td>
-                        <td>200100000002</td>
-                        <td>0701235678</td>
-                        <td>Person002@gmail.com</td>
-                        <td>Passenger</td>
-                        <td>
-                            <span class="icon-container">
-                                <i onclick="updateRow('${item.bus_id}')"><img src="../../../images/vector_icons/flag_icon.png" alt="flag" class="action_icon"></i>
-                            </span>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>P004</td>
-                        <td>Person004</td>
-                        <td>200100000004</td>
-                        <td>0701245678</td>
-                        <td>Person004@gmail.com</td>
-                        <td>Timekeeper</td>
-                        <td>
-                            <span class="icon-container">
-                                <i onclick="updateRow('${item.bus_id}')"><img src="../../../images/vector_icons/flag_icon.png" alt="flag" class="action_icon"></i>
-                            </span>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>P006</td>
-                        <td>Person006</td>
-                        <td>200100000006</td>
-                        <td>0701255678</td>
-                        <td>Person006@gmail.com</td>
-                        <td>Passenger</td>
-                        <td>
-                            <span class="icon-container">
-                                <i onclick="updateRow('${item.bus_id}')"><img src="../../../images/vector_icons/flag_icon.png" alt="flag" class="action_icon"></i>
-                            </span>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>P008</td>
-                        <td>Person008</td>
-                        <td>200100000008</td>
-                        <td>0701265678</td>
-                        <td>Person008@gmail.com</td>
-                        <td>Owner</td>
-                        <td>
-                            <span class="icon-container">
-                                <i onclick="updateRow('${item.bus_id}')"><img src="../../../images/vector_icons/flag_icon.png" alt="flag" class="action_icon"></i>
-                            </span>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>P009</td>
-                        <td>Person009</td>
-                        <td>200100000009</td>
-                        <td>0701271234</td>
-                        <td>Person009@gmail.com</td>
-                        <td>Conductor</td>
-                        <td>
-                            <span class="icon-container">
-                                <i onclick="updateRow('${item.bus_id}')"><img src="../../../images/vector_icons/flag_icon.png" alt="flag" class="action_icon"></i>
-                            </span>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>P010</td>
-                        <td>Person010</td>
-                        <td>200100000010</td>
-                        <td>0701275678</td>
-                        <td>Person010@gmail.com</td>
-                        <td>Passenger</td>
-                        <td>
-                            <span class="icon-container">
-                                <i onclick="updateRow('${item.bus_id}')"><img src="../../../images/vector_icons/flag_icon.png" alt="flag" class="action_icon"></i>
-                            </span>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>P012</td>
-                        <td>Person012</td>
-                        <td>200100000012</td>
-                        <td>0701285678</td>
-                        <td>Person012@gmail.com</td>
-                        <td>Driver</td>
-                        <td>
-                            <span class="icon-container">
-                                <i onclick="updateRow('${item.bus_id}')"><img src="../../../images/vector_icons/flag_icon.png" alt="flag" class="action_icon"></i>
-                            </span>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>P013</td>
-                        <td>Person013</td>
-                        <td>200100000013</td>
-                        <td>0701291234</td>
-                        <td>Person013@gmail.com</td>
-                        <td>Owner</td>
-                        <td>
-                            <span class="icon-container">
-                                <i onclick="updateRow('${item.bus_id}')"><img src="../../../images/vector_icons/flag_icon.png" alt="flag" class="action_icon"></i>
-                            </span>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>P014</td>
-                        <td>Person014</td>
-                        <td>200100000014</td>
-                        <td>0701295678</td>
-                        <td>Person014@gmail.com</td>
-                        <td>Conductor</td>
-                        <td>
-                            <span class="icon-container">
-                                <i onclick="updateRow('${item.bus_id}')"><img src="../../../images/vector_icons/flag_icon.png" alt="flag" class="action_icon"></i>
-                            </span>
-                        </td>
-                    </tr>
                     </tbody>
                 </table>
-                <div class="page_control" id="page_control">
-                    <img class="arrow_img" src="../../../images/vector_icons/arrow_left.png" alt="arrow_left">
-                    <img class="arrow_img" src="../../../images/vector_icons/arrow_right.png" alt="arrow_right">
-                </div>
             </div>
             <div id="flagTable" class="flag_table">
                 <div class="page_name">
                     <h1>Flagged Passengers</h1>
+                    <div class="search">
+                        <label>
+                            <input class="search_input" type="text" placeholder="Search" id="searchInputFlag">
+                        </label>
+                        <button id="searchButtonFlag" onclick="searchData()" style="background: none; border: none">
+                            <img src="../../../images/vector_icons/search_icon.png" alt="Search" class="search_img">
+                        </button>
+                    </div>
                 </div>
                 <table class="bus_table">
                     <thead>
@@ -247,7 +119,6 @@
                         <th>Passenger ID</th>
                         <th>Name</th>
                         <th>NIC</th>
-                        <th>Mobile Number</th>
                         <th>Email</th>
                         <th>User Roles</th>
                         <th>Unflag</th>
@@ -255,69 +126,44 @@
                     </thead>
                     <tbody>
                     <tr>
-                        <td>P003</td>
-                        <td>Person003</td>
-                        <td>200100000003</td>
-                        <td>0701241234</td>
-                        <td>Person003@gmail.com</td>
-                        <td>Passenger</td>
-                        <td>
-                            <span class="icon-container">
-                                <i onclick="updateRow('${item.bus_id}')"><img src="../../../images/vector_icons/unflag_icon.png" alt="flag" class="action_icon"></i>
-                            </span>
-                        </td>
+                        <td>Passenger ID</td>
+                        <td>Name</td>
+                        <td>NIC</td>
+                        <td>Email</td>
+                        <td>User Roles</td>
+                        <td>Unflag</td>
                     </tr>
                     <tr>
-                        <td>P005</td>
-                        <td>Person005</td>
-                        <td>200100000005</td>
-                        <td>0701251234</td>
-                        <td>Person005@gmail.com</td>
-                        <td>Passenger</td>
-                        <td>
-                            <span class="icon-container">
-                                <i onclick="updateRow('${item.bus_id}')"><img src="../../../images/vector_icons/unflag_icon.png" alt="flag" class="action_icon"></i>
-                            </span>
-                        </td>
+                        <td>Passenger ID</td>
+                        <td>Name</td>
+                        <td>NIC</td>
+                        <td>Email</td>
+                        <td>User Roles</td>
+                        <td>Unflag</td>
                     </tr>
                     <tr>
-                        <td>P007</td>
-                        <td>Person007</td>
-                        <td>200100000007</td>
-                        <td>0701261234</td>
-                        <td>Person007@gmail.com</td>
-                        <td>Driver</td>
-                        <td>
-                            <span class="icon-container">
-                                <i onclick="updateRow('${item.bus_id}')"><img src="../../../images/vector_icons/unflag_icon.png" alt="flag" class="action_icon"></i>
-                            </span>
-                        </td>
+                        <td>Passenger ID</td>
+                        <td>Name</td>
+                        <td>NIC</td>
+                        <td>Email</td>
+                        <td>User Roles</td>
+                        <td>Unflag</td>
                     </tr>
                     <tr>
-                        <td>P011</td>
-                        <td>Person011</td>
-                        <td>200100000011</td>
-                        <td>0701281234</td>
-                        <td>Person011@gmail.com</td>
-                        <td>Passenger</td>
-                        <td>
-                            <span class="icon-container">
-                                <i onclick="updateRow('${item.bus_id}')"><img src="../../../images/vector_icons/unflag_icon.png" alt="flag" class="action_icon"></i>
-                            </span>
-                        </td>
+                        <td>Passenger ID</td>
+                        <td>Name</td>
+                        <td>NIC</td>
+                        <td>Email</td>
+                        <td>User Roles</td>
+                        <td>Unflag</td>
                     </tr>
                     <tr>
-                        <td>P015</td>
-                        <td>Person015</td>
-                        <td>200100000015</td>
-                        <td>0701331234</td>
-                        <td>Person015@gmail.com</td>
-                        <td>Driver</td>
-                        <td>
-                            <span class="icon-container">
-                                <i onclick="updateRow('${item.bus_id}')"><img src="../../../images/vector_icons/unflag_icon.png" alt="flag" class="action_icon"></i>
-                            </span>
-                        </td>
+                        <td>Passenger ID</td>
+                        <td>Name</td>
+                        <td>NIC</td>
+                        <td>Email</td>
+                        <td>User Roles</td>
+                        <td>Unflag</td>
                     </tr>
                     </tbody>
                 </table>
