@@ -82,6 +82,7 @@ public class passengerTable {
         pst.setBoolean(1,!passenger.get_flag());
         pst.setString(2,p_id);
         int rawCount = pst.executeUpdate();
+
         return rawCount;
     }
 
@@ -91,6 +92,7 @@ public class passengerTable {
         pst.setInt(1,passenger.get_privilege_level());
         pst.setString(2,p_id);
         int rawCount = pst.executeUpdate();
+
 
         return rawCount;
     }
