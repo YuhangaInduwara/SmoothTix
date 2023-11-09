@@ -25,40 +25,45 @@ public class LoginController extends HttpServlet {
 
             BufferedReader reader = request.getReader();
             Login login = gson.fromJson(reader, Login.class);
-            ResultSet resultset = passengerTable.get(login.get_nic());
+            ResultSet resultset = passengerTable.getBy_nic(login.get_nic());
             String plainPassword = login.get_password();
 
             if (resultset.next()) {
                 String hashedPassword = resultset.getString("password");
                 int privilege_level = resultset.getInt("privilege_level");
 
-                if (PasswordHash.checkPassword(plainPassword, hashedPassword)) {
-                    HttpSession session = request.getSession();
+                if(!resultset.getBoolean("flag")){
+                    if (PasswordHash.checkPassword(plainPassword, hashedPassword)) {
+                        HttpSession session = request.getSession();
 
-                    session.setAttribute("nic", login.get_nic());
-                    session.setAttribute("user_name", resultset.getString("first_name") + " " + resultset.getString("last_name"));
-                    session.setAttribute("user_role", privilege_level);
-                    session.setMaxInactiveInterval(30*60);
-                    Cookie userName = new Cookie("nic", login.get_nic());
-                    userName.setMaxAge(30*60);
-                    response.addCookie(userName);
-                    JSONObject sessionData = new JSONObject();
-                    try {
-                        sessionData.put("user_name", session.getAttribute("user_name"));
-                        sessionData.put("nic", session.getAttribute("nic"));
-                        sessionData.put("user_role", session.getAttribute("user_role"));
-                    } catch (JSONException e) {
-                        throw new RuntimeException(e);
-                    }
-                    try (PrintWriter out1 = response.getWriter()) {
-                        out1.print(sessionData.toString());
-                        response.setStatus(HttpServletResponse.SC_OK);
-                    } catch (IOException e) {
-                        e.printStackTrace();
+                        session.setAttribute("nic", login.get_nic());
+                        session.setAttribute("user_name", resultset.getString("first_name") + " " + resultset.getString("last_name"));
+                        session.setAttribute("user_role", privilege_level);
+                        session.setMaxInactiveInterval(30*60);
+                        Cookie userName = new Cookie("nic", login.get_nic());
+                        userName.setMaxAge(30*60);
+                        response.addCookie(userName);
+                        JSONObject sessionData = new JSONObject();
+                        try {
+                            sessionData.put("user_name", session.getAttribute("user_name"));
+                            sessionData.put("nic", session.getAttribute("nic"));
+                            sessionData.put("user_role", session.getAttribute("user_role"));
+                        } catch (JSONException e) {
+                            throw new RuntimeException(e);
+                        }
+                        try (PrintWriter out1 = response.getWriter()) {
+                            out1.print(sessionData.toString());
+                            response.setStatus(HttpServletResponse.SC_OK);
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    } else {
+                        response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                        out.write("{\"error\": \"Incorrect password!\"}");
                     }
                 } else {
                     response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-                    out.write("{\"error\": \"Incorrect password!\"}");
+                    out.write("{\"error\": \"You are not allowed to login!\"}");
                 }
             } else {
                 response.setStatus(HttpServletResponse.SC_NOT_FOUND);

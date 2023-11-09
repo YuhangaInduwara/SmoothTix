@@ -103,8 +103,13 @@ a{
 }
 
 .page_name{
-    margin-left: 25px;
+    margin: 20px 20px 5px 30px;
     font-family: Times New Roman, serif;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    height: 35px;
+    align-items: center;
 }
 
 .user_profile{
@@ -361,10 +366,10 @@ a{
 }
 
 .flag_table{
-    width: 1500px;
+    width: 1300px;
     display: none;
-    background: #ffffff;
-    border-radius: 10px;
+    background: rgb(252, 252, 252);
+    border-radius: 5px;
     position: fixed;
     top: 50%;
     left: 50%;
@@ -375,8 +380,6 @@ a{
     justify-content: center;
     align-items: center;
     text-align: center;
-    /*padding: 50px;*/
-    /*gap:40px;*/
 }
 
 thead {
