@@ -40,11 +40,14 @@ public class PassengerController extends HttpServlet {
 
             while (rs.next()) {
                 JSONObject passengerData = new JSONObject();
-                passengerData.put("fname", rs.getString("fname"));
-                passengerData.put("lname", rs.getString("lname"));
+                passengerData.put("p_id", rs.getString("p_id"));
+                passengerData.put("first_name", rs.getString("first_name"));
+                passengerData.put("last_name", rs.getString("last_name"));
                 passengerData.put("nic", rs.getString("nic"));
-                passengerData.put("mobileNo", rs.getString("mobileNo"));
                 passengerData.put("email", rs.getString("email"));
+                passengerData.put("flag", rs.getString("flag"));
+                passengerData.put("privilege_level", rs.getString("privilege_level"));
+
 
                 passengerDataArray.put(passengerData);
             }
