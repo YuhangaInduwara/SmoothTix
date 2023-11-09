@@ -17,7 +17,6 @@ public class passengerTable {
         pst.setBoolean(7,false);
         pst.setInt(8,6);
         int rawCount = pst.executeUpdate();
-        con.close();
         return rawCount;
     }
 
@@ -31,8 +30,6 @@ public class passengerTable {
         if (rs.next()) {
             nextPassengerID = rs.getInt("next_p_id");
         }
-
-        con.close();
 
         return "P" + String.format("%04d", nextPassengerID);
     }

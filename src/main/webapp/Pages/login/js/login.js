@@ -1,3 +1,30 @@
+function checkSessionStatus() {
+    fetch("../../../checkSessionController")
+        .then(response => {
+            if (response.status === 200) {
+                return response.json();
+            } else {
+                window.location.href = "http://localhost:2000/SmoothTix_war_exploded/Pages/login/html/login.html"
+            }
+        })
+        .then(data => {
+            const privilege_level = data.user_role;
+            if (privilege_level === 1) {
+                window.location.href = 'http://localhost:2000/SmoothTix_war_exploded/Pages/administrator/html/admin_dashboard_home.html';
+            } else if (privilege_level === 2) {
+                window.location.href = 'http://localhost:2000/SmoothTix_war_exploded/Pages/timekeeper/html/timekpr_dashboard_home.html';
+            } else if (privilege_level === 3) {
+                window.location.href = 'http://localhost:2000/SmoothTix_war_exploded/Pages/busemployee/html/owner_dashboard_home.html';
+            } else if (privilege_level === 4) {
+                window.location.href = 'http://localhost:2000/SmoothTix_war_exploded/Pages/busemployee/html/driver_dashboard_home.html';
+            } else if (privilege_level === 5) {
+                window.location.href = 'http://localhost:2000/SmoothTix_war_exploded/Pages/busemployee/html/conductor_dashboard_home.html';
+            } else if (privilege_level === 6) {
+                window.location.href = 'http://localhost:2000/SmoothTix_war_exploded/Pages/passenger/html/passenger_dashboard_home.html';
+            }
+        });
+}
+
 function isValidNIC(nic) {
     const nicRegex = /^(\d{9}[vVxX]|\d{12})$/;
     return nicRegex.test(nic);
@@ -21,7 +48,6 @@ nicInput.addEventListener("change", function() {
 let landingPage= '../../passenger/html/passenger_dashboard_home.html'
 document.getElementById("loginForm").addEventListener("submit", function(event) {
     event.preventDefault();
-    console.log("hello")
     const nic = document.getElementById("nic").value;
     const password = document.getElementById("password").value;
 
@@ -29,7 +55,6 @@ document.getElementById("loginForm").addEventListener("submit", function(event) 
         nic: nic,
         password: password,
     };
-    console.log(userData)
     const jsonData = JSON.stringify(userData);
 
     fetch('../../../loginController', {
@@ -52,8 +77,8 @@ document.getElementById("loginForm").addEventListener("submit", function(event) 
             }
         })
         .then(parsedResponse => {
-            const priority = parsedResponse.priority;
-            openAlertSuccess(priority)
+            let user_role = parsedResponse.user_role;
+            openAlertSuccess(user_role)
         })
 
         .catch(error => {
@@ -61,19 +86,19 @@ document.getElementById("loginForm").addEventListener("submit", function(event) 
         });
 });
 
-function openAlertSuccess(priority) {
-    if (priority === 1) {
-        landingPage = '../../administrator/html/admin_dashboard_home.html';
-    } else if (priority === 2) {
-        landingPage = '../../timekeeper/html/timekpr_dashboard_home.html';
-    } else if (priority === 3) {
-        landingPage = '../../busemployee/html/owner_dashboard_home.html';
-    } else if (priority === 4) {
-        landingPage = '../../busemployee/html/driver_dashboard_home.html';
-    } else if (priority === 5) {
-        landingPage = '../../busemployee/html/conductor_dashboard_home.html';
-    } else if (priority === 6) {
-        landingPage = '../../passenger/html/passenger_dashboard_home.html';
+function openAlertSuccess(user_role) {
+    if (user_role === 1) {
+        landingPage = 'http://localhost:2000/SmoothTix_war_exploded/Pages/administrator/html/admin_dashboard_home.html';
+    } else if (user_role === 2) {
+        landingPage = 'http://localhost:2000/SmoothTix_war_exploded/Pages/timekeeper/html/timekpr_dashboard_home.html';
+    } else if (user_role === 3) {
+        landingPage = 'http://localhost:2000/SmoothTix_war_exploded/Pages/busemployee/html/owner_dashboard_home.html';
+    } else if (user_role === 4) {
+        landingPage = 'http://localhost:2000/SmoothTix_war_exploded/Pages/busemployee/html/driver_dashboard_home.html';
+    } else if (user_role === 5) {
+        landingPage = 'http://localhost:2000/SmoothTix_war_exploded/Pages/busemployee/html/conductor_dashboard_home.html';
+    } else if (user_role === 6) {
+        landingPage = 'http://localhost:2000/SmoothTix_war_exploded/Pages/passenger/html/passenger_dashboard_home.html';
     }
     document.getElementById("loginSuccess").style.display = "block";
     document.getElementById("overlay").style.display = "block";
