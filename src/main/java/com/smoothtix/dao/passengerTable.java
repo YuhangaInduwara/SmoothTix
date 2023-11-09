@@ -17,7 +17,6 @@ public class passengerTable {
         pst.setBoolean(7,false);
         pst.setInt(8,6);
         int rawCount = pst.executeUpdate();
-        con.close();
         return rawCount;
     }
 
@@ -32,7 +31,6 @@ public class passengerTable {
             nextPassengerID = rs.getInt("next_p_id");
         }
 
-        con.close();
 
         return "P" + String.format("%04d", nextPassengerID);
     }
@@ -60,7 +58,6 @@ public class passengerTable {
         pst.setString(4,passenger.get_email());
         pst.setString(5,passenger.get_password());
         int rawCount = pst.executeUpdate();
-        con.close();
         return rawCount;
     }
 
@@ -69,7 +66,6 @@ public class passengerTable {
         PreparedStatement pst = con.prepareStatement("DELETE FROM passenger WHERE nic = ?");
         pst.setString(1,nic);
         int rawCount = pst.executeUpdate();
-        con.close();
         return rawCount;
     }
 }
