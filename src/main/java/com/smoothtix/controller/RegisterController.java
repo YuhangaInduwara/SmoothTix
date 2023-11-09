@@ -25,8 +25,8 @@ public class RegisterController extends HttpServlet {
 
             BufferedReader reader = request.getReader();
             Passenger passenger = gson.fromJson(reader, Passenger.class);
-            String hashedPassword = PasswordHash.hashPassword(passenger.getpassword());
-            passenger.setpassword(hashedPassword);
+            String hashedPassword = PasswordHash.hashPassword(passenger.get_password());
+            passenger.set_password(hashedPassword);
             int registrationSuccess = passengerTable.insert(passenger);
 
             if (registrationSuccess >= 1) {

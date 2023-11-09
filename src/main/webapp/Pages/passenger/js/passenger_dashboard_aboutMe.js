@@ -1,6 +1,6 @@
 // Fetch all data from the database
 function fetchAllData() {
-    let nic = "200028103322";
+    let nic = "200126702280";
     fetch('../../../passengerController', {
         method: 'GET',
         headers: {
@@ -39,9 +39,9 @@ function displayDataAsParagraphs(data) {
             <strong>Mobile No:</strong> ${item.mobileNo}<br>
             <strong>Email:</strong> ${item.email}<br><br>
 
-            <div class="editDeleteButtons">
-             <button class="edit" onclick="update('${item.nic}')">Edit</button>
-             <button class="delete" onclick="deleteEntity('${item.nic}')">Delete</button>
+            <div class="editDeleteButtons" style="margin-bottom: 10px">
+             <button class="okButton" onclick="update('${item.nic}')" style="margin-right: 10px">Edit</button>
+             <button class="okButton" onclick="deleteEntity('${item.nic}')">Delete</button>
            </div>
         `;
 
@@ -78,7 +78,7 @@ function update(nic){
                     document.getElementById("update_nic").value = existingData.nic;
                     document.getElementById("update_mobileNo").value = existingData.mobileNo;
                     document.getElementById("update_email").value = existingData.email;
-                    document.getElementById("update_password").value = "...........";
+                    document.getElementById("update_password").value = 123;
                 });
             } else if (response.status === 401) {
                 console.log('Unauthorized');
@@ -233,7 +233,7 @@ function createForm() {
            </div>
            <div class="form_div">
                 <label for="password" class="passenger_form_title">Password <span class="passenger_form_require">*</span></label>
-                <input type="text" name="password" id="password" class="form_data" placeholder="Enter password" required="required" />
+                <input type="password" name="password" id="password" class="form_data" placeholder="Enter password" required="required" />
            </div>
 
         </div>

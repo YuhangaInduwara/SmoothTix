@@ -413,3 +413,14 @@ tbody tr:hover {
 }
 
 
+.action_icon {
+    width: 17px;
+    height: 17px;
+    cursor: pointer;
+    margin-right: 1px;
+}.action_icon {
+     width: 17px;
+     height: 17px;
+     cursor: pointer;
+     margin-right: 1px;
+ }

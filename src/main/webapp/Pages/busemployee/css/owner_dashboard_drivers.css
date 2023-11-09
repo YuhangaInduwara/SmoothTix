@@ -429,4 +429,10 @@ tbody tr:hover {
     transform: scale(1.1);
 }
 
+.action_icon {
+    width: 17px;
+    height: 17px;
+    cursor: pointer;
+    margin-right: 1px;
+}
 
