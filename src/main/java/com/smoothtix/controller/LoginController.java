@@ -5,10 +5,10 @@ import com.smoothtix.dao.passengerTable;
 import com.smoothtix.model.Login;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
-import jakarta.servlet.http.HttpServlet;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
-import jakarta.servlet.http.HttpSession;
+import jakarta.servlet.http.*;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -34,11 +34,28 @@ public class LoginController extends HttpServlet {
 
                 if (PasswordHash.checkPassword(plainPassword, hashedPassword)) {
                     HttpSession session = request.getSession();
-                    session.setAttribute("username", login.get_nic());
 
-                    String jsonResponse = "{\"priority\": " + privilege_level + "}";
-                    response.setStatus(HttpServletResponse.SC_OK);
-                    out.write(jsonResponse);
+                    session.setAttribute("nic", login.get_nic());
+                    session.setAttribute("user_name", resultset.getString("first_name") + " " + resultset.getString("last_name"));
+                    session.setAttribute("user_role", privilege_level);
+                    session.setMaxInactiveInterval(30*60);
+                    Cookie userName = new Cookie("nic", login.get_nic());
+                    userName.setMaxAge(30*60);
+                    response.addCookie(userName);
+                    JSONObject sessionData = new JSONObject();
+                    try {
+                        sessionData.put("user_name", session.getAttribute("user_name"));
+                        sessionData.put("nic", session.getAttribute("nic"));
+                        sessionData.put("user_role", session.getAttribute("user_role"));
+                    } catch (JSONException e) {
+                        throw new RuntimeException(e);
+                    }
+                    try (PrintWriter out1 = response.getWriter()) {
+                        out1.print(sessionData.toString());
+                        response.setStatus(HttpServletResponse.SC_OK);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
                 } else {
                     response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
                     out.write("{\"error\": \"Incorrect password!\"}");
