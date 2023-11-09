@@ -31,7 +31,6 @@ public class passengerTable {
             nextPassengerID = rs.getInt("next_p_id");
         }
 
-
         return "P" + String.format("%04d", nextPassengerID);
     }
 
@@ -92,6 +91,7 @@ public class passengerTable {
         pst.setInt(1,passenger.get_privilege_level());
         pst.setString(2,p_id);
         int rawCount = pst.executeUpdate();
+
         return rawCount;
     }
 
@@ -100,6 +100,7 @@ public class passengerTable {
         PreparedStatement pst = con.prepareStatement("DELETE FROM passenger WHERE nic = ?");
         pst.setString(1,nic);
         int rawCount = pst.executeUpdate();
+
         return rawCount;
     }
 }
