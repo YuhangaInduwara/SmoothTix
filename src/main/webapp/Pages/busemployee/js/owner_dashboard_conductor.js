@@ -32,7 +32,8 @@ function displayDataAsTable(data) {
         row.innerHTML = `
             <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
             <td>${item.conductor_id}</td>
-            <td>${item.nic}</td>
+            <td>${item.p_id}</td>
+            <td>${item.review_points}</td>
             <td>
                 <span class="icon-container">
                     <i class="fas fa-pencil-alt" style="color: #ff0202" onclick="updateRow('${item.conductor_id}')"></i>
@@ -52,11 +53,13 @@ document.getElementById("conductorForm").addEventListener("submit", function(eve
     event.preventDefault();
 
     const conductor_id = document.getElementById("add_conductor_id").value;
-    const nic = document.getElementById("add_nic").value;
+    const p_id = document.getElementById("add_p_id").value;
+    const review_points = document.getElementById("add_review_points").value;
 
     const userData = {
         conductor_id: conductor_id,
-        nic: nic,
+        p_id: p_id,
+        review_points: review_points,
     };
     console.log(userData)
     const jsonData = JSON.stringify(userData);
@@ -109,7 +112,8 @@ function updateRow(conductor_id){
                     console.log("existingData:", existingData);
 
                     document.getElementById("update_conductor_id").value = existingData.conductor_id;
-                    document.getElementById("update_nic").value = existingData.nic;
+                    document.getElementById("update_p_id").value = existingData.p_id;
+                    document.getElementById("update_review_points").value = existingData.review_points;
                 });
             } else if (response.status === 401) {
                 console.log('Unauthorized');
@@ -125,11 +129,13 @@ function updateRow(conductor_id){
         event.preventDefault();
 
         const conductor_id = document.getElementById("update_conductor_id").value;
-        const nic = document.getElementById("update_nic").value;
+        const p_id = document.getElementById("update_p_id").value;
+        const review_points = document.getElementById("update_review_points").value;
 
         const updatedData = {
             conductor_id: conductor_id,
-            nic: nic,
+            p_id: p_id,
+            review_points: review_points,
 
         };
 
@@ -256,11 +262,13 @@ function createForm() {
                 <label for="conductor_id" class="conductor_form_title">Conductor Id <span class="conductor_form_require">*</span></label>
                 <input type="text" name="conductor_id" id="conductor_id" class="form_data" placeholder="Enter the Conductor ID" required="required" />
             </div>
-        </div>
-        <div class="bus_form_right">
             <div class="form_div">
-                <label for="nic" class="conductor_form_title">NIC Number <span class="conductor_form_require">*</span></label>
-                <input type="number" name="nic" id="nic" class="form_data" placeholder="Enter NIC Number" required="required" />
+                <label for="p_id" class="conductor_form_title">Passenger Id <span class="conductor_form_require">*</span></label>
+                <input type="text" name="p_id" id="p_id" class="form_data" placeholder="Enter the Passenger ID" required="required" />
+            </div>
+            <div class="form_div">
+                <label for="review_points" class="conductor_form_title">CONDUCTOR POINTS <span class="conductor_form_require">*</span></label>
+                <input type="text" name="review_points" id="review_points" class="form_data" placeholder="Enter Conductor Points" required="required"/>
             </div>
         </div>
         `;

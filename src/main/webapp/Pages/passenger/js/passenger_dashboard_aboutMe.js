@@ -1,11 +1,12 @@
+let p_id = ""
 // Fetch all data from the database
 function fetchAllData() {
-    let nic = "200028103322";
+
     fetch('../../../passengerController', {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json',
-            'nic': nic
+            'p_id': p_id
         },
     })
         .then(response => {
@@ -23,24 +24,23 @@ function fetchAllData() {
         });
 }
 
-fetchAllData();
-
 // Display all data
 function displayDataAsParagraphs(data) {
     const container = document.querySelector("#dataList");
+    container.innerHTML = '';
 
     data.forEach(item => {
         const paragraph = document.createElement("p");
+         paragraph.classList.add("dataParagraph");
 
         paragraph.innerHTML = `
-            <strong>First Name:</strong> ${item.fname}<br>
-            <strong>Last Name:</strong> ${item.lname}<br>
-            <strong>NIC:</strong> ${item.nic}<br>
-            <strong>Mobile No:</strong> ${item.mobileNo}<br>
-            <strong>Email:</strong> ${item.email}<br><br>
+            <p class="data_box"><strong>First Name:</strong> ${item.first_name}</p>
+            <p class="data_box"><strong>Last Name:</strong> ${item.last_name}</p>
+            <p class="data_box"><strong>NIC:</strong> ${item.nic}</p>
+            <p class="data_box"><strong>Email:</strong> ${item.email}</p>
 
-            <div class="editDeleteButtons" style="margin-bottom: 10px">
-             <button class="okButton" onclick="update('${item.nic}')" style="margin-right: 10px">Edit</button>
+            <div class="editDeleteButtons">
+             <button class="okButton" onclick="update('${item.p_id}')" style="display: center; margin-right: 10px; margin-left: 10px">Edit</button>
              <button class="okButton" onclick="deleteEntity('${item.nic}')">Delete</button>
            </div>
         `;
@@ -49,22 +49,21 @@ function displayDataAsParagraphs(data) {
     });
 }
 
-
-
-function update(nic){
+function update(p_id){
     openForm_update();
 
     let existingData = {};
+    
 
     const urlParams = new URLSearchParams(window.location.search);
 
-    document.getElementById("header_nic").innerHTML = nic
+    document.getElementById("header_nic").innerHTML = existingData.first_name;
 
     fetch('../../../passengerController', {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json',
-            'nic': nic
+            'p_id': p_id
         },
     })
         .then(response => {
@@ -252,3 +251,24 @@ function createForm() {
 // Attach the searchData function to the keyup event of the search input field
 //const searchInput = document.getElementById("searchInput");
 //searchInput.addEventListener("keyup", searchData);
+
+
+function checkSessionStatus() {
+    fetch("../../../checkSessionController")
+        .then(response => {
+            if (response.status === 200) {
+                return response.json();
+            } else {
+                window.location.href = "http://localhost:2000/SmoothTix_war_exploded/Pages/login/html/login.html"
+            }
+        })
+        .then(data => {
+            p_id = data.p_id;
+            fetchAllData();
+        });
+}
+
+window.onload = function() {
+    checkSessionStatus(); // Call the function when the page loads
+    setInterval(checkSessionStatus, 60000); // Set up periodic checks
+};

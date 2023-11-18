@@ -1,9 +1,10 @@
 package com.smoothtix.controller;
 
 import com.google.gson.Gson;
-import com.smoothtix.dao.conductorTable;
-import com.smoothtix.model.Conductor;
+import com.smoothtix.dao.driverTable;
+import com.smoothtix.model.Driver;
 import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -15,35 +16,41 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.ResultSet;
 
-public class ConductorController extends HttpServlet {
+@WebServlet(name = "driverController", value = "/driverController")
+public class DriverController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         response.setContentType("text/html");
         PrintWriter out = response.getWriter();
-        JSONArray conductorDataArray = new JSONArray();
+        JSONArray driverDataArray = new JSONArray();
 
-        String conductor_id = request.getHeader("conductor_id");
+        String driver_id = request.getHeader("driver_id");
 
         try {
             ResultSet rs = null;
-            if(conductor_id == null){
-                rs = conductorTable.getAll();
+            if(driver_id == null){
+                rs = driverTable.getAll();
             }
             else{
-                rs = conductorTable.get(conductor_id);
+                rs = driverTable.get(driver_id);
             }
 
             while (rs.next()) {
-                JSONObject conductorData = new JSONObject();
-                conductorData.put("conductor_id", rs.getString("conductor_id"));
-                conductorData.put("p_id", rs.getString("p_id"));
-                conductorData.put("review_points", rs.getFloat("review_points"));
+                JSONObject busData = new JSONObject();
+                driverData.put("driver_id", rs.getString("driver_id"));
+                driverData.put("passenger_id", rs.getString("passenger_id"));
+                driverData.put("license_no", rs.getString("license_no"));
+                driverData.put("name", rs.getString("name"));
+                driverData.put("nic", rs.getString("nic"));
+                driverData.put("mobile", rs.getString("mobile"));
+                driverData.put("email", rs.getString("email"));
+                driverData.put("points", rs.getString("points"));
 
 
-                conductorDataArray.put(conductorData);
+                driverDataArray.put(driverData);
             }
 
-            out.println(conductorDataArray.toString()); // Send JSON data as a response
+            out.println(driverDataArray.toString()); // Send JSON data as a response
             response.setStatus(HttpServletResponse.SC_OK);
         }catch (Exception e) {
             e.printStackTrace();
@@ -60,8 +67,8 @@ public class ConductorController extends HttpServlet {
             Gson gson = new Gson();
 
             BufferedReader reader = request.getReader();
-            Conductor conductor = gson.fromJson(reader, Conductor.class);
-            int registrationSuccess = conductorTable.insert(conductor);
+            Driver driver = gson.fromJson(reader, Driver.class);
+            int registrationSuccess = driverTable.insert(driver);
 
             if (registrationSuccess >= 1) {
                 response.setStatus(HttpServletResponse.SC_OK);
@@ -82,13 +89,13 @@ public class ConductorController extends HttpServlet {
         try {
             Gson gson = new Gson();
 
-            String conductor_id = request.getHeader("conductor_id");
+            String driver_id = request.getHeader("driver_id");
 
             BufferedReader reader = request.getReader();
-            Conductor conductor = gson.fromJson(reader, Conductor.class);
+            Driver driver = gson.fromJson(reader, Driver.class);
 
 
-            int updateSuccess = conductorTable.update(conductor_id, conductor);
+            int updateSuccess = driverTable.update(driver_id, driver);
 
             if (updateSuccess >= 1) {
                 response.setStatus(HttpServletResponse.SC_OK);
@@ -107,9 +114,9 @@ public class ConductorController extends HttpServlet {
         PrintWriter out = response.getWriter();
 
         try {
-            String conductor_id = request.getHeader("conductor_id");
-            int deleteSuccess = conductorTable.delete(conductor_id);
-            System.out.println(conductor_id);
+            String driver_id = request.getHeader("driver_id");
+            int deleteSuccess = driverTable.delete(driver_id);
+
             if (deleteSuccess >= 1) {
                 response.setStatus(HttpServletResponse.SC_OK);
             } else {
