@@ -24,6 +24,7 @@ public class CheckSessionController extends HttpServlet {
             String nic = (String) session.getAttribute("nic");
             int user_role = (int) session.getAttribute("user_role");
             String user_name = (String) session.getAttribute("user_name");
+            String p_id = (String) session.getAttribute("p_id");
 
             // Create a JSON object to send session data to the client
             JSONObject sessionData = new JSONObject();
@@ -31,6 +32,7 @@ public class CheckSessionController extends HttpServlet {
                 sessionData.put("nic", nic);
                 sessionData.put("user_role", user_role);
                 sessionData.put("user_name", user_name);
+                sessionData.put("p_id", p_id);
             } catch (JSONException e) {
                 throw new RuntimeException(e);
             }
