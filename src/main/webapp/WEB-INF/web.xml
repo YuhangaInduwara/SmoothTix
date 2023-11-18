@@ -2,29 +2,121 @@
  "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN"
  "http://java.sun.com/dtd/web-app_2_3.dtd" >
 
-<web-app>
+<web-app xmlns="http://xmlns.jcp.org/xml/ns/javaee"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd"
+         version="3.1">
   <display-name>Archetype Created Web Application</display-name>
   <session-config>
     <session-timeout>1</session-timeout>
   </session-config>
 
-  <!--  <servlet>-->
-<!--    <servlet-name>RegisterController</servlet-name>-->
-<!--    <servlet-class>com.smoothtix.controller.RegisterController</servlet-class>-->
-<!--  </servlet>-->
+  <servlet>
+    <servlet-name>RegisterController</servlet-name>
+    <servlet-class>com.smoothtix.controller.RegisterController</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>RegisterController</servlet-name>
+    <url-pattern>/registerController</url-pattern>
+  </servlet-mapping>
 
-<!--  <servlet-mapping>-->
-<!--    <servlet-name>RegisterController</servlet-name>-->
-<!--    <url-pattern>/registerController</url-pattern>-->
-<!--  </servlet-mapping>-->
+  <servlet>
+    <servlet-name>LoginController</servlet-name>
+    <servlet-class>com.smoothtix.controller.LoginController</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>LoginController</servlet-name>
+    <url-pattern>/loginController</url-pattern>
+  </servlet-mapping>
 
-<!--  <servlet>-->
-<!--    <servlet-name>LoginController</servlet-name>-->
-<!--    <servlet-class>com.smoothtix.controller.LoginController</servlet-class>-->
-<!--  </servlet>-->
+  <servlet>
+    <servlet-name>BookingController</servlet-name>
+    <servlet-class>com.smoothtix.controller.BookingController</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>BookingController</servlet-name>
+    <url-pattern>/bookingController</url-pattern>
+  </servlet-mapping>
 
-<!--  <servlet-mapping>-->
-<!--    <servlet-name>LoginController</servlet-name>-->
-<!--    <url-pattern>/loginController</url-pattern>-->
-<!--  </servlet-mapping>-->
+  <servlet>
+    <servlet-name>BusController</servlet-name>
+    <servlet-class>com.smoothtix.controller.BusController</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>BusController</servlet-name>
+    <url-pattern>/busController</url-pattern>
+  </servlet-mapping>
+
+  <servlet>
+    <servlet-name>BusprofileController</servlet-name>
+    <servlet-class>com.smoothtix.controller.BusprofileController</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>BusprofileController</servlet-name>
+    <url-pattern>/busprofileController</url-pattern>
+  </servlet-mapping>
+
+  <servlet>
+    <servlet-name>CheckSessionController</servlet-name>
+    <servlet-class>com.smoothtix.controller.CheckSessionController</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>CheckSessionController</servlet-name>
+    <url-pattern>/checkSessionController</url-pattern>
+  </servlet-mapping>
+
+  <servlet>
+    <servlet-name>ConductorController</servlet-name>
+    <servlet-class>com.smoothtix.controller.ConductorController</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>ConductorController</servlet-name>
+    <url-pattern>/conductorController</url-pattern>
+  </servlet-mapping>
+
+  <servlet>
+    <servlet-name>LogOutController</servlet-name>
+    <servlet-class>com.smoothtix.controller.LogOutController</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>LogOutController</servlet-name>
+    <url-pattern>/logOutController</url-pattern>
+  </servlet-mapping>
+
+  <servlet>
+    <servlet-name>PassengerController</servlet-name>
+    <servlet-class>com.smoothtix.controller.PassengerController</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>PassengerController</servlet-name>
+    <url-pattern>/passengerController</url-pattern>
+  </servlet-mapping>
+
+  <servlet>
+    <servlet-name>ScheduleController</servlet-name>
+    <servlet-class>com.smoothtix.controller.ScheduleController</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>ScheduleController</servlet-name>
+    <url-pattern>/scheduleController</url-pattern>
+  </servlet-mapping>
+
+  <servlet>
+    <servlet-name>TimeKeeperController</servlet-name>
+    <servlet-class>com.smoothtix.controller.TimeKeeperController</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>TimeKeeperController</servlet-name>
+    <url-pattern>/timeKprController</url-pattern>
+  </servlet-mapping>
+
+  <servlet>
+    <servlet-name>RouteController</servlet-name>
+    <servlet-class>com.smoothtix.controller.RouteController</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>RouteController</servlet-name>
+    <url-pattern>/routeController</url-pattern>
+  </servlet-mapping>
+
 </web-app>

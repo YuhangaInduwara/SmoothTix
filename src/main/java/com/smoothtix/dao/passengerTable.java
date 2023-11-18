@@ -41,6 +41,21 @@ public class passengerTable {
         return pst.executeQuery();
     }
 
+    public static ResultSet getBy_flag(String flag) throws SQLException, ClassNotFoundException {
+        Connection con = dbConnection.initializeDatabase();
+        PreparedStatement pst = con.prepareStatement("SELECT * FROM passenger WHERE flag=?");
+        pst.setBoolean(1,Boolean.parseBoolean(flag));
+        return pst.executeQuery();
+    }
+
+    public static ResultSet getBy_flag_p_l(String flag, String privilege_level) throws SQLException, ClassNotFoundException {
+        Connection con = dbConnection.initializeDatabase();
+        PreparedStatement pst = con.prepareStatement("SELECT * FROM passenger WHERE flag=? AND privilege_level=?");
+        pst.setBoolean(1,Boolean.parseBoolean(flag));
+        pst.setInt(2,Integer.parseInt(privilege_level));
+        return pst.executeQuery();
+    }
+
     public static ResultSet getBy_nic(String nic) throws SQLException, ClassNotFoundException {
         Connection con = dbConnection.initializeDatabase();
         PreparedStatement pst = con.prepareStatement("SELECT * FROM passenger WHERE nic=?");
@@ -51,8 +66,7 @@ public class passengerTable {
     public static ResultSet getAll() throws SQLException, ClassNotFoundException {
         Connection con = dbConnection.initializeDatabase();
         PreparedStatement pst = con.prepareStatement("SELECT * FROM passenger");
-        ResultSet rs = pst.executeQuery();
-        return rs;
+        return pst.executeQuery();
     }
 
     public static int update(String p_id, Passenger passenger) throws SQLException, ClassNotFoundException {
@@ -63,8 +77,7 @@ public class passengerTable {
         pst.setString(3,passenger.get_nic());
         pst.setString(4,passenger.get_email());
         pst.setString(5,p_id);
-        int rawCount = pst.executeUpdate();
-        return rawCount;
+        return pst.executeUpdate();
     }
 
     public static int updatePassword(String p_id, Passenger passenger) throws SQLException, ClassNotFoundException {
@@ -72,8 +85,7 @@ public class passengerTable {
         PreparedStatement pst = con.prepareStatement("UPDATE passenger SET password=? WHERE p_id=?");
         pst.setString(1,passenger.get_password());
         pst.setString(2,p_id);
-        int rawCount = pst.executeUpdate();
-        return rawCount;
+        return pst.executeUpdate();
     }
 
     public static int updateFlag(String p_id, Passenger passenger) throws SQLException, ClassNotFoundException {
@@ -81,9 +93,8 @@ public class passengerTable {
         PreparedStatement pst = con.prepareStatement("UPDATE passenger SET flag=? WHERE p_id=?");
         pst.setBoolean(1,!passenger.get_flag());
         pst.setString(2,p_id);
-        int rawCount = pst.executeUpdate();
 
-        return rawCount;
+        return pst.executeUpdate();
     }
 
     public static int updatePrivilegeLevel(String p_id, Passenger passenger) throws SQLException, ClassNotFoundException {
@@ -91,18 +102,13 @@ public class passengerTable {
         PreparedStatement pst = con.prepareStatement("UPDATE passenger SET privilege_level=? WHERE p_id=?");
         pst.setInt(1,passenger.get_privilege_level());
         pst.setString(2,p_id);
-        int rawCount = pst.executeUpdate();
-
-
-        return rawCount;
+        return pst.executeUpdate();
     }
 
     public static int delete(String nic) throws SQLException, ClassNotFoundException {
         Connection con = dbConnection.initializeDatabase();
         PreparedStatement pst = con.prepareStatement("DELETE FROM passenger WHERE nic = ?");
         pst.setString(1,nic);
-        int rawCount = pst.executeUpdate();
-
-        return rawCount;
+        return pst.executeUpdate();
     }
 }

@@ -25,8 +25,9 @@ function checkSessionStatus() {
         });
 }
 
+
 function isValidNIC(nic) {
-    const nicRegex = /^(\d{9}[vVxX]|\d{12})$/;
+    const nicRegex = /^(\d{9}[vV]|\d{12})$/;
     return nicRegex.test(nic);
 }
 
@@ -57,7 +58,7 @@ document.getElementById("loginForm").addEventListener("submit", function(event) 
     };
     const jsonData = JSON.stringify(userData);
 
-    fetch('../../../loginController', {
+    fetch('/SmoothTix_war_exploded/loginController', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'

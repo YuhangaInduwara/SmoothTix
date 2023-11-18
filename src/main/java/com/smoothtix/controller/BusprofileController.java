@@ -4,7 +4,6 @@ import com.google.gson.Gson;
 import com.smoothtix.dao.busprofileTable;
 import com.smoothtix.model.Busprofile;
 import jakarta.servlet.ServletException;
-import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -16,7 +15,6 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.ResultSet;
 
-@WebServlet(name = "busprofileController", value = "/busprofileController")
 public class BusprofileController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

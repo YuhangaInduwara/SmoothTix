@@ -389,33 +389,82 @@ tbody tr:hover {
     background-color: #989898;
 }
 
+.autocomplete {
+    position: relative;
+    display: inline-block;
+}
+
+.autocomplete-input {
+    width: 100%;
+    padding: 10px;
+    box-sizing: border-box;
+}
+
+.autocomplete-list {
+    position: absolute;
+    z-index: 1;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+}
+
+.autocomplete-list,
+.autocomplete-list-item {
+    list-style-type: none;
+    padding: 10px;
+    cursor: pointer;
+}
+
+.autocomplete-list-item:hover {
+    background-color: #cccccc;
+}
+
 .action_icon {
-    width: 15px;
-    height: 15px;
+    width: 17px;
+    height: 17px;
     cursor: pointer;
     margin-right: 1px;
 }
 
-.page_control{
-    display: flex;
-    width: 97%;
-    margin-top: 5px;
-    margin-right: auto;
-    margin-left: auto;
+#page_control{
+    width: calc(100% - 20px);
     height: 40px;
+    display: none;
     justify-content: flex-end;
     align-items: center;
+    margin-top: 10px;
+    padding-right: 20px;
 }
 
-.arrow_img{
-    width: 17px;
-    height: 17px;
+.arrow_img {
+    width: 15px;
+    height: 15px;
     opacity: 0.7;
     cursor: pointer;
-    margin-right: 10px;
+    transition: transform 0.3s ease;
 }
 
-.arrow_img:hover{
+.arrow_img:hover {
     transform: scale(1.1);
+}
+
+#prevPageIcon,
+#nextPageIcon,
+#flag_prevPageIcon,
+#flag_nextPageIcon{
+    cursor: pointer;
+    margin: 0 10px;
+}
+
+.currentPageNumber {
+    font-size: 16px;
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 3px;
+}
+
+#nextPageIcon,
+#flag_nextPageIcon{
+    margin-right: 0;
 }
 

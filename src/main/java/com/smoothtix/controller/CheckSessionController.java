@@ -1,21 +1,17 @@
 package com.smoothtix.controller;
 
-import com.google.gson.Gson;
-import com.smoothtix.dao.bookingTable;
-import com.smoothtix.model.Booking;
 import jakarta.servlet.ServletException;
-import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+
 import jakarta.servlet.http.HttpSession;
-
-import java.io.*;
-
 import org.json.JSONException;
 import org.json.JSONObject;
 
-@WebServlet("/checkSessionController")
+import java.io.IOException;
+import java.io.PrintWriter;
+
 public class CheckSessionController extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) {
         HttpSession session = request.getSession(false); // Get the current session (if it exists)
