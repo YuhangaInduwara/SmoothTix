@@ -39,6 +39,7 @@ public class LoginController extends HttpServlet {
                         session.setAttribute("nic", login.get_nic());
                         session.setAttribute("user_name", resultset.getString("first_name") + " " + resultset.getString("last_name"));
                         session.setAttribute("user_role", privilege_level);
+                        session.setAttribute("p_id", resultset.getString("p_id"));
                         session.setMaxInactiveInterval(30*60);
                         Cookie userName = new Cookie("nic", login.get_nic());
                         userName.setMaxAge(30*60);
@@ -48,6 +49,7 @@ public class LoginController extends HttpServlet {
                             sessionData.put("user_name", session.getAttribute("user_name"));
                             sessionData.put("nic", session.getAttribute("nic"));
                             sessionData.put("user_role", session.getAttribute("user_role"));
+                            sessionData.put("p_id", session.getAttribute("p_id"));
                         } catch (JSONException e) {
                             throw new RuntimeException(e);
                         }
