@@ -20,7 +20,7 @@ function checkSessionStatus() {
             } else if (privilege_level === 5) {
                 window.location.href = 'http://localhost:2000/SmoothTix_war_exploded/Pages/busemployee/html/conductor_dashboard_home.html';
             } else if (privilege_level === 6) {
-                window.location.href = 'http://localhost:2000/SmoothTix_war_exploded/Pages/passenger/html/passenger_dashboard_home.html';
+                window.location.href = '../../passenger/html/passenger_dashboard_home.html';
             }
         });
 }
@@ -98,7 +98,7 @@ function openAlertSuccess(user_role) {
     } else if (user_role === 5) {
         landingPage = 'http://localhost:2000/SmoothTix_war_exploded/Pages/busemployee/html/conductor_dashboard_home.html';
     } else if (user_role === 6) {
-        landingPage = 'http://localhost:2000/SmoothTix_war_exploded/Pages/passenger/html/passenger_dashboard_home.html';
+        landingPage = '../../passenger/html/passenger_dashboard_home.html';
     }
     document.getElementById("loginSuccess").style.display = "block";
     document.getElementById("overlay").style.display = "block";
