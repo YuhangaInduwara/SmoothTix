@@ -126,64 +126,28 @@
                     <thead>
                     <tr>
                         <th>Route ID</th>
-                        <th>Starting Stand</th>
-                        <th>Ending Stand</th>
-                        <th>Price Per Ride</th>
+                        <th>Route No</th>
+                        <th>From</th>
+                        <th>To</th>
+                        <th>Distance(km)</th>
+                        <th>Price Per Ride(LKR)</th>
                         <th>Number of Buses</th>
                         <th>Actions</th>
                     </tr>
                     </thead>
                     <tbody>
-                    <tr>
-                        <td>R001</td>
-                        <td>Colombo</td>
-                        <td>Galle</td>
-                        <td>Rs.1000</td>
-                        <td>3</td>
-                        <td>
-                            <span class="icon-container">
-                                <i onclick="openForm_update()"><img src="../../../images/vector_icons/update_icon.png" alt="update" class="action_icon"></i>
-                            </span>
-                            <span class="icon-container" style="margin-left: 1px;">
-                                <i onclick="updateRow('${item.bus_id}')"><img src="../../../images/vector_icons/delete_icon.png" alt="delete" class="action_icon"></i>
-                            </span>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>R002</td>
-                        <td>Colombo</td>
-                        <td>Galle</td>
-                        <td>Rs.1200</td>
-                        <td>2</td>
-                        <td>
-                            <span class="icon-container">
-                                <i onclick="openForm_update()"><img src="../../../images/vector_icons/update_icon.png" alt="update" class="action_icon"></i>
-                            </span>
-                            <span class="icon-container" style="margin-left: 1px;">
-                                <i onclick="updateRow('${item.bus_id}')"><img src="../../../images/vector_icons/delete_icon.png" alt="delete" class="action_icon"></i>
-                            </span>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>R003</td>
-                        <td>Colombo</td>
-                        <td>Galle</td>
-                        <td>Rs.900</td>
-                        <td>5</td>
-                        <td>
-                            <span class="icon-container">
-                                <i onclick="openForm_update()"><img src="../../../images/vector_icons/update_icon.png" alt="update" class="action_icon"></i>
-                            </span>
-                            <span class="icon-container" style="margin-left: 1px;">
-                                <i onclick="updateRow('${item.bus_id}')"><img src="../../../images/vector_icons/delete_icon.png" alt="delete" class="action_icon"></i>
-                            </span>
-                        </td>
-                    </tr>
                     </tbody>
                 </table>
-                <div class="page_control" id="page_control">
-                    <img class="arrow_img" src="../../../images/vector_icons/arrow_left.png" alt="arrow_left">
-                    <img class="arrow_img" src="../../../images/vector_icons/arrow_right.png" alt="arrow_right">
+                <div id="page_control">
+                    <span id="prevPageIcon" onclick="changePage(currentPage - 1)"><img class="arrow_img" src="../../../images/vector_icons/arrow_left.png" alt="arrow_left"></span>
+                    <span id="currentPageNumber" class="currentPageNumber">1</span>
+                    <span id="nextPageIcon" onclick="changePage(currentPage + 1)"> <img class="arrow_img" src="../../../images/vector_icons/arrow_right.png" alt="arrow_right"></span>
+                </div>
+                <div class="alertBody" id="confirmAlert">
+                    <img src="../../../images/Alert_icons/Alert_icon.png" class="alertImg" alt="confirm">
+                    <div class="alertMsgSuccess" style="color: #ff0202">Are you sure to delete: <span id="deleteUser"></span>?</div>
+                    <button class="okButton" onclick="closeAlert()" style="margin-right: 20px">Cancel</button>
+                    <button class="okButton" onclick="deleteRow()" >Yes</button>
                 </div>
             </div>
         </div>

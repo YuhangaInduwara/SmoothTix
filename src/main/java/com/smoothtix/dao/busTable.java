@@ -20,7 +20,6 @@ public class busTable {
         pst.setString(8,bus.getBrand());
         pst.setString(9,bus.getModel());
         int rawCount = pst.executeUpdate();
-        con.close();
         return rawCount;
     }
 
@@ -34,8 +33,6 @@ public class busTable {
         if (rs.next()) {
             nextBusID = rs.getInt("next_bus_id");
         }
-
-        con.close();
 
         return "B" + String.format("%03d", nextBusID);
     }
@@ -68,7 +65,6 @@ public class busTable {
         PreparedStatement pst = con.prepareStatement("SELECT * FROM bus WHERE bus_id=?");
         pst.setString(1,bus_id);
         ResultSet rs = pst.executeQuery();
-//        con.close();
         return rs;
     }
 
@@ -76,7 +72,6 @@ public class busTable {
         Connection con = dbConnection.initializeDatabase();
         PreparedStatement pst = con.prepareStatement("SELECT * FROM bus");
         ResultSet rs = pst.executeQuery();
-//        con.close();
         return rs;
     }
 
@@ -94,7 +89,6 @@ public class busTable {
         pst.setString(8,bus.getModel());
         pst.setString(9,bus_id);
         int rawCount = pst.executeUpdate();
-        con.close();
         return rawCount;
     }
 
@@ -103,7 +97,6 @@ public class busTable {
         PreparedStatement pst = con.prepareStatement("DELETE FROM bus WHERE bus_id = ?");
         pst.setString(1,bus_id);
         int rawCount = pst.executeUpdate();
-        con.close();
         return rawCount;
     }
 }

@@ -58,7 +58,7 @@ document.getElementById("regForm").addEventListener("submit", function(event) {
     console.log(userData)
     const jsonData = JSON.stringify(userData);
 
-    fetch('../../../registerController', {
+    fetch('/SmoothTix_war_exploded/registerController', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'

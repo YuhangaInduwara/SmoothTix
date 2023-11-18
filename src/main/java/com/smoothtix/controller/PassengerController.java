@@ -1,12 +1,9 @@
 package com.smoothtix.controller;
 
 import com.google.gson.Gson;
-import com.smoothtix.dao.busTable;
 import com.smoothtix.dao.passengerTable;
-import com.smoothtix.model.Bus;
 import com.smoothtix.model.Passenger;
 import jakarta.servlet.ServletException;
-import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -18,7 +15,6 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.ResultSet;
 
-@WebServlet(name = "passengerController", value = "/passengerController")
 public class PassengerController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -26,16 +22,26 @@ public class PassengerController extends HttpServlet {
         PrintWriter out = response.getWriter();
         JSONArray passengerDataArray = new JSONArray();
         String p_id = request.getHeader("p_id");
-
+        String flag = request.getHeader("flag");
+        String privilege_level = request.getHeader("privilege_level");
         try {
             ResultSet rs = null;
             if(p_id == null){
-                rs = passengerTable.getAll();
+                if(flag == null){
+                    rs = passengerTable.getAll();
+                }
+                else{
+                    if(privilege_level == null){
+                        rs = passengerTable.getBy_flag(flag);
+                    }
+                    else{
+                        rs = passengerTable.getBy_flag_p_l(flag, privilege_level);
+                    }
+                }
             }
             else{
                 rs = passengerTable.getBy_p_id(p_id);
             }
-
 
             while (rs.next()) {
                 JSONObject passengerData = new JSONObject();
@@ -46,7 +52,6 @@ public class PassengerController extends HttpServlet {
                 passengerData.put("email", rs.getString("email"));
                 passengerData.put("flag", rs.getBoolean("flag"));
                 passengerData.put("privilege_level", rs.getInt("privilege_level"));
-
                 passengerDataArray.put(passengerData);
             }
 
@@ -57,29 +62,6 @@ public class PassengerController extends HttpServlet {
             response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
         }
     }
-
-//    @Override
-//    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-//        response.setContentType("text/html");
-//        PrintWriter out = response.getWriter();
-//
-//        try {
-//            Gson gson = new Gson();
-//
-//            BufferedReader reader = request.getReader();
-//            Passenger passenger = gson.fromJson(reader, Passenger.class);
-//            int registrationSuccess = passengerTable.insert(passenger);
-//
-//            if (registrationSuccess >= 1) {
-//                response.setStatus(HttpServletResponse.SC_OK);
-//            } else {
-//                response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-//            }
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-//        }
-//    }
 
     @Override
     protected void doPut(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

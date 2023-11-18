@@ -22,7 +22,6 @@ public class scheduleTable {
         pst.setString(7,schedule.getEnd_time());
 
         int rawCount = pst.executeUpdate();
-        con.close();
         return rawCount;
     }
 
@@ -31,7 +30,6 @@ public class scheduleTable {
         PreparedStatement pst = con.prepareStatement("SELECT * FROM schedule WHERE schedule_id=?");
         pst.setString(1,schedule_id);
         ResultSet rs = pst.executeQuery();
-//        con.close();
         return rs;
     }
 
@@ -39,7 +37,6 @@ public class scheduleTable {
         Connection con = dbConnection.initializeDatabase();
         PreparedStatement pst = con.prepareStatement("SELECT * FROM schedule");
         ResultSet rs = pst.executeQuery();
-//        con.close();
         return rs;
     }
 
@@ -57,7 +54,6 @@ public class scheduleTable {
         pst.setString(8,schedule_id);
 
         int rawCount = pst.executeUpdate();
-        con.close();
         return rawCount;
     }
 
@@ -66,7 +62,6 @@ public class scheduleTable {
         PreparedStatement pst = con.prepareStatement("DELETE FROM schedule WHERE schedule_id = ?");
         pst.setString(1,schedule_id);
         int rawCount = pst.executeUpdate();
-        con.close();
         return rawCount;
     }
 }

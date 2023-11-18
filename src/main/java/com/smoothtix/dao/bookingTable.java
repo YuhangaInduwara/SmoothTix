@@ -2,7 +2,6 @@ package com.smoothtix.dao;
 
 import com.smoothtix.database.dbConnection;
 import com.smoothtix.model.Booking;
-import com.smoothtix.model.Bus;
 
 import java.sql.*;
 
@@ -18,7 +17,6 @@ public class bookingTable {
         pst.setInt(6, booking.getseat_no());
         pst.setString(7, booking.getPrice());
         int rawCount = pst.executeUpdate();
-        con.close();
         return rawCount;
     }
 
@@ -32,8 +30,6 @@ public class bookingTable {
         if (rs.next()) {
             nextBusID = rs.getInt("next_bus_id");
         }
-
-        con.close();
 
         return "B" + String.format("%03d", nextBusID);
     }
@@ -65,7 +61,6 @@ public class bookingTable {
         Connection con = dbConnection.initializeDatabase();
         PreparedStatement pst = con.prepareStatement("SELECT * FROM booking");
         ResultSet rs = pst.executeQuery();
-//        con.close();
         return rs;
     }
 }

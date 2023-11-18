@@ -1,6 +1,6 @@
 // Fetch all data from the database
 function fetchAllData() {
-    fetch('../../../busController', {
+    fetch('/SmoothTix_war_exploded/busController', {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json'
@@ -34,7 +34,6 @@ function displayDataAsTable(data) {
         const row = document.createElement("tr");
 
         row.innerHTML = `
-            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
             <td>${item.bus_id}</td>
             <td>${item.owner_id}</td>
             <td>${item.route}</td>
@@ -179,7 +178,7 @@ function updateRow(bus_id){
 
         const jsonData = JSON.stringify(updatedData);
 
-        fetch(`../../../busController`, {
+        fetch(`/SmoothTix_war_exploded/busController`, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',
@@ -207,7 +206,7 @@ function updateRow(bus_id){
 
 // Handle delete
 function deleteRow(bus_id){
-    fetch(`../../../busController`, {
+    fetch(`/SmoothTix_war_exploded/busController`, {
         method: 'DELETE',
         headers: {
             'Content-Type': 'application/json',
@@ -357,7 +356,7 @@ function searchData() {
         return;
     }
 
-    fetch('../../../busController', {
+    fetch('/SmoothTix_war_exploded/busController', {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json',

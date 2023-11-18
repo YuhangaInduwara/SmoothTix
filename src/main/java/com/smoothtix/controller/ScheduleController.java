@@ -1,12 +1,9 @@
 package com.smoothtix.controller;
 
 import com.google.gson.Gson;
-import com.smoothtix.dao.busTable;
 import com.smoothtix.dao.scheduleTable;
-import com.smoothtix.model.Bus;
 import com.smoothtix.model.Schedule;
 import jakarta.servlet.ServletException;
-import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -18,7 +15,6 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.ResultSet;
 
-@WebServlet(name = "scheduleController", value = "/scheduleController")
 public class ScheduleController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

@@ -16,7 +16,6 @@ public class conductorTable {
         pst.setString(1,conductor.getConductor_id());
         pst.setString(2,conductor.getNIC());
         int rawCount = pst.executeUpdate();
-        con.close();
         return rawCount;
     }
 
@@ -25,7 +24,6 @@ public class conductorTable {
         PreparedStatement pst = con.prepareStatement("SELECT * FROM conductor WHERE conductor_id=?");
         pst.setString(1,conductor_id);
         ResultSet rs = pst.executeQuery();
-//        con.close();
         return rs;
     }
 
@@ -33,7 +31,6 @@ public class conductorTable {
         Connection con = dbConnection.initializeDatabase();
         PreparedStatement pst = con.prepareStatement("SELECT * FROM conductor");
         ResultSet rs = pst.executeQuery();
-//        con.close();
         return rs;
     }
 
@@ -45,7 +42,6 @@ public class conductorTable {
         pst.setString(3,conductor_id);
 
         int rawCount = pst.executeUpdate();
-        con.close();
         return rawCount;
     }
 
@@ -54,7 +50,6 @@ public class conductorTable {
         PreparedStatement pst = con.prepareStatement("DELETE FROM conductor WHERE conductor_id = ?");
         pst.setString(1,conductor_id);
         int rawCount = pst.executeUpdate();
-        con.close();
         return rawCount;
     }
 }

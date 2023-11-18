@@ -2,23 +2,18 @@ package com.smoothtix.controller;
 
 import com.google.gson.Gson;
 import com.smoothtix.dao.bookingTable;
-import com.smoothtix.dao.busTable;
 import com.smoothtix.model.Booking;
-import com.smoothtix.model.Bus;
 import jakarta.servlet.ServletException;
-import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.json.JSONArray;
 import org.json.JSONObject;
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.ResultSet;
 
-@WebServlet(name = "bookingController", value = "/bookingController")
 public class BookingController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

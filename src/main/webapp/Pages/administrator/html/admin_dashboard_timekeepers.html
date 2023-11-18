@@ -81,27 +81,16 @@
                                 <h2>Add New Timekeeper</h2>
                             </div>
                             <div id="formContainer_add"></div>
+                            <div id="autocomplete-container"></div>
                             <div class="bus_form_footer">
                                 <button type="button" class="bus_form_button" onclick="closeForm_add()">Close</button>
                                 <input type="submit" class="bus_form_button" value="Add" id="busRegFormSubmit">
                             </div>
                         </form>
                     </div>
-                    <div class="form">
-                        <form class="bus_form" id="busUpdateForm">
-                            <div class="bus_form_header">
-                                <h2>Update <span id="header_bus_id"></span> Details</h2>
-                            </div>
-                            <div id="formContainer_update"></div>
-                            <div class="bus_form_footer">
-                                <button type="button" class="bus_form_button" onclick="closeForm_update()">Close</button>
-                                <input type="submit" class="bus_form_button" value="Update">
-                            </div>
-                        </form>
-                    </div>
                     <div class="alertBody" id="successAlert">
                         <img src="../../../images/Alert_icons/Success_icon.png" class="alertImg" alt="success">
-                        <div class="alertMsgSuccess">Operation Successful!</div>
+                        <div class="alertMsgSuccess" id="alertMsgSuccess"></div>
                         <button class="okButton" onclick="closeAlertSuccess()">Ok</button>
                     </div>
                     <div class="alertBody" id="failAlert">
@@ -111,6 +100,16 @@
                     </div>
                 </div>
                 <div class="search_box">
+                    <div class="search" style="margin-right: 10px">
+                        <label>
+                            <select class="search_input" id="searchSelect">
+                                <option value="" disabled selected>Search by</option>
+                                <option value="timekpr_id">Timekeeper ID</option>
+                                <option value="p_id">Passenger ID</option>
+                                <option value="nic">NIC</option>
+                            </select>
+                        </label>
+                    </div>
                     <div class="search">
                         <label>
                             <input class="search_input" type="text" placeholder="Search" id="searchInput">
@@ -129,97 +128,23 @@
                         <th>Passenger ID</th>
                         <th>Name</th>
                         <th>NIC</th>
-                        <th>Mobile Number</th>
                         <th>Email</th>
                         <th>Actions</th>
                     </tr>
                     </thead>
                     <tbody>
-                    <tr>
-                        <td>TK001</td>
-                        <td>P001</td>
-                        <td>Person001</td>
-                        <td>200100000001</td>
-                        <td>0701231234</td>
-                        <td>Person001@gmail.com</td>
-                        <td>
-                            <span class="icon-container">
-                                <i onclick="openForm_update()"><img src="../../../images/vector_icons/update_icon.png" alt="update" class="action_icon"></i>
-                            </span>
-                            <span class="icon-container" style="margin-left: 1px;">
-                                <i onclick="updateRow('${item.bus_id}')"><img src="../../../images/vector_icons/delete_icon.png" alt="delete" class="action_icon"></i>
-                            </span>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>TK002</td>
-                        <td>P002</td>
-                        <td>Person002</td>
-                        <td>200100000002</td>
-                        <td>0701235678</td>
-                        <td>Person002@gmail.com</td>
-                        <td>
-                            <span class="icon-container">
-                                <i onclick="openForm_update()"><img src="../../../images/vector_icons/update_icon.png" alt="update" class="action_icon"></i>
-                            </span>
-                            <span class="icon-container" style="margin-left: 1px;">
-                                <i onclick="updateRow('${item.bus_id}')"><img src="../../../images/vector_icons/delete_icon.png" alt="delete" class="action_icon"></i>
-                            </span>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>TK003</td>
-                        <td>P003</td>
-                        <td>Person003</td>
-                        <td>200100000003</td>
-                        <td>0701241234</td>
-                        <td>Person003@gmail.com</td>
-                        <td>
-                            <span class="icon-container">
-                                <i onclick="openForm_update()"><img src="../../../images/vector_icons/update_icon.png" alt="update" class="action_icon"></i>
-                            </span>
-                            <span class="icon-container" style="margin-left: 1px;">
-                                <i onclick="updateRow('${item.bus_id}')"><img src="../../../images/vector_icons/delete_icon.png" alt="delete" class="action_icon"></i>
-                            </span>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>TK004</td>
-                        <td>P004</td>
-                        <td>Person004</td>
-                        <td>200100000004</td>
-                        <td>0701245678</td>
-                        <td>Person004@gmail.com</td>
-                        <td>
-                            <span class="icon-container">
-                                <i onclick="openForm_update()"><img src="../../../images/vector_icons/update_icon.png" alt="update" class="action_icon"></i>
-                            </span>
-                            <span class="icon-container" style="margin-left: 1px;">
-                                <i onclick="updateRow('${item.bus_id}')"><img src="../../../images/vector_icons/delete_icon.png" alt="delete" class="action_icon"></i>
-                            </span>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>TK005</td>
-                        <td>P005</td>
-                        <td>Person005</td>
-                        <td>200100000005</td>
-                        <td>0701251234</td>
-                        <td>Person005@gmail.com</td>
-                        <td>
-                            <span class="icon-container">
-                                <i onclick="openForm_update()"><img src="../../../images/vector_icons/update_icon.png" alt="update" class="action_icon"></i>
-                            </span>
-                            <span class="icon-container" style="margin-left: 1px;">
-                                <i onclick="updateRow('${item.bus_id}')"><img src="../../../images/vector_icons/delete_icon.png" alt="delete" class="action_icon"></i>
-                            </span>
-                        </td>
-                    </tr>
                     </tbody>
                 </table>
-                <div class="page_control" id="page_control">
-                    <img class="arrow_img" src="../../../images/vector_icons/arrow_left.png" alt="arrow_left">
-                    <img class="arrow_img" src="../../../images/vector_icons/arrow_right.png" alt="arrow_right">
+                <div id="page_control">
+                    <span id="prevPageIcon" onclick="changePage(currentPage - 1)"><img class="arrow_img" src="../../../images/vector_icons/arrow_left.png" alt="arrow_left"></span>
+                    <span id="currentPageNumber" class="currentPageNumber">1</span>
+                    <span id="nextPageIcon" onclick="changePage(currentPage + 1)"> <img class="arrow_img" src="../../../images/vector_icons/arrow_right.png" alt="arrow_right"></span>
+                </div>
+                <div class="alertBody" id="confirmAlert">
+                    <img src="../../../images/Alert_icons/Alert_icon.png" class="alertImg" alt="confirm">
+                    <div class="alertMsgSuccess" style="color: #ff0202">Are you sure to delete: <span id="deleteUser"></span>?</div>
+                    <button class="okButton" onclick="closeAlert()" style="margin-right: 20px">Cancel</button>
+                    <button class="okButton" onclick="deleteRow()" >Yes</button>
                 </div>
             </div>
         </div>

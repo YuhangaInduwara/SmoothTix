@@ -1,20 +1,16 @@
 package com.smoothtix.controller;
-
 import com.google.gson.Gson;
 import com.smoothtix.dao.passengerTable;
 import com.smoothtix.model.Login;
 import jakarta.servlet.ServletException;
-import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.*;
 import org.json.JSONException;
 import org.json.JSONObject;
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.ResultSet;
 
-@WebServlet(name = "LoginController", value = "/loginController")
 public class LoginController extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
