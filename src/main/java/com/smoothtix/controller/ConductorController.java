@@ -38,7 +38,8 @@ public class ConductorController extends HttpServlet {
             while (rs.next()) {
                 JSONObject conductorData = new JSONObject();
                 conductorData.put("conductor_id", rs.getString("conductor_id"));
-                conductorData.put("nic", rs.getString("nic"));
+                conductorData.put("p_id", rs.getString("p_id"));
+                conductorData.put("review_points", rs.getFloat("review_points"));
 
 
                 conductorDataArray.put(conductorData);
