@@ -12,9 +12,10 @@ import java.sql.SQLException;
 public class conductorTable {
     public static int insert(Conductor conductor) throws SQLException, ClassNotFoundException {
         Connection con = dbConnection.initializeDatabase();
-        PreparedStatement pst = con.prepareStatement("insert into conductor(conductor_id, nic) values (?,?)");
+        PreparedStatement pst = con.prepareStatement("insert into conductor(conductor_id,p_id,review_points) values (?,?,?)");
         pst.setString(1,conductor.getConductor_id());
-        pst.setString(2,conductor.getNIC());
+        pst.setString(2,conductor.getP_id());
+        pst.setFloat(3,conductor.getReview_points());
         int rawCount = pst.executeUpdate();
         con.close();
         return rawCount;
@@ -39,10 +40,11 @@ public class conductorTable {
 
     public static int update(String conductor_id, Conductor conductor) throws SQLException, ClassNotFoundException {
         Connection con = dbConnection.initializeDatabase();
-        PreparedStatement pst = con.prepareStatement("UPDATE conductor SET conductor_id=?, nic=? WHERE conductor_id=?");
+        PreparedStatement pst = con.prepareStatement("UPDATE conductor SET conductor_id=?, p_id=?, review_points=? WHERE conductor_id=?");
         pst.setString(1,conductor.getConductor_id());
-        pst.setString(2,conductor.getNIC());
-        pst.setString(3,conductor_id);
+        pst.setString(2,conductor.getP_id());
+        pst.setFloat(3,conductor.getReview_points());
+        pst.setString(4,conductor_id);
 
         int rawCount = pst.executeUpdate();
         con.close();

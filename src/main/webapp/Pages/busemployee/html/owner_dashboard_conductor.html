@@ -105,7 +105,7 @@
                     </div>
                     <div class="alertBody" id="failAlert">
                         <img src="../../../images/Alert_icons/Error_icon.png" class="alertImg" alt="fail">
-                        <div class="alertMsg">New Conductor Failed !</div>
+                        <div class="alertMsg">Operation Failed !</div>
                         <button class="okButton" onclick="closeAlertFail()">Ok</button>
                     </div>
                 </div>
@@ -125,42 +125,13 @@
                     <thead>
                     <tr>
                         <th>CONDUCTOR ID</th>
-                        <th>NIC</th>
+                        <th>P_ID</th>
+                        <th>CONDUCTOR POINTS</th>
                         <th>Actions</th>
                     </tr>
                     </thead>
                     <tbody>
-                    <tr>
-                        <td>C001</td>
-                        <td>26702280v</td>
-                        <td> <span class="icon-container">
-                    <i onclick="updateRow('${item.bus_id}')"><img src="../../../images/vector_icons/update_icon.png" alt="update" class="action_icon"></i>
-                </span>
-                            <span class="icon-container" style="margin-left: 1px;">
-                    <i onclick="deleteRow('${item.bus_id}')"><img src="../../../images/vector_icons/delete_icon.png" alt="delete" class="action_icon"></i>
-                </span></td>
 
-                    </tr>
-                    <tr>
-                        <td>C002</td>
-                        <td>20010790292</td>
-                        <td> <span class="icon-container">
-                    <i onclick="updateRow('${item.bus_id}')"><img src="../../../images/vector_icons/update_icon.png" alt="update" class="action_icon"></i>
-                </span>
-                            <span class="icon-container" style="margin-left: 1px;">
-                    <i onclick="deleteRow('${item.bus_id}')"><img src="../../../images/vector_icons/delete_icon.png" alt="delete" class="action_icon"></i>
-                </span></td>
-                    </tr>
-                    <tr>
-                        <td>C003</td>
-                        <td>19900220292</td>
-                        <td> <span class="icon-container">
-                    <i onclick="updateRow('${item.bus_id}')"><img src="../../../images/vector_icons/update_icon.png" alt="update" class="action_icon"></i>
-                </span>
-                            <span class="icon-container" style="margin-left: 1px;">
-                    <i onclick="deleteRow('${item.bus_id}')"><img src="../../../images/vector_icons/delete_icon.png" alt="delete" class="action_icon"></i>
-                </span></td>
-                    </tr>
                     </tbody>
                 </table>
                 <div class="page_control" id="page_control">
