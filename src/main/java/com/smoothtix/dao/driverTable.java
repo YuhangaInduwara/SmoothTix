@@ -1,3 +1,4 @@
+
 package com.smoothtix.dao;
 
 import com.smoothtix.database.dbConnection;
@@ -10,10 +11,10 @@ public class driverTable {
         Connection con = dbConnection.initializeDatabase();
         PreparedStatement pst = con.prepareStatement("insert into driver(driver_id, passenger_id, license_no, name, nic, mobile, email, points) values (?,?,?,?,?,?,?,?)");
         pst.setString(1,generateDriverID());
-//        pst.setString(2,generateOwnerID(bus.getOwner_nic()));
+//        pst.setString(2,generateDriverID(driver.getDriver_id()));
         pst.setString(2,driver.getDriver_id());
         pst.setString(3,driver.getPassenger_id());
-        pst.setString(4,driver.getLicense_no());
+        pst.setString(4,driver.getLicence_no());
         pst.setString(5,driver.getName());
         pst.setString(6,driver.getNic());
         pst.setString(7,driver.getMobile());
@@ -83,12 +84,12 @@ public class driverTable {
     public static int update(String driver_id, Driver driver) throws SQLException, ClassNotFoundException {
         Connection con = dbConnection.initializeDatabase();
         PreparedStatement pst = con.prepareStatement("UPDATE driver SET driver_id=?, passenger_id=?, license_no=?, name=?, nic=?, mobile=?, email=?, points=? WHERE driver_id=?");
-//        pst.setString(1,generateOwnerID(driver.getOwner_nic()));
+//        pst.setString(1,generateOwnerID(driver.getDriver_id()));
         pst.setString(1,driver.getDriver_id());
         pst.setString(2,driver.getPassenger_id());
-        pst.setString(3,driver.getLicense_no());
+        pst.setString(3,driver.getLicence_no());
         pst.setString(4,driver.getName());
-        pst.setInt(5,driver.getNic());
+        pst.setString(5,driver.getNic());
         pst.setString(6,driver.getMobile());
         pst.setString(7,driver.getEmail());
         pst.setString(8,driver.getPoints());

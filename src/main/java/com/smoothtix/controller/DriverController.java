@@ -36,7 +36,7 @@ public class DriverController extends HttpServlet {
             }
 
             while (rs.next()) {
-                JSONObject busData = new JSONObject();
+                JSONObject driverData = new JSONObject();
                 driverData.put("driver_id", rs.getString("driver_id"));
                 driverData.put("passenger_id", rs.getString("passenger_id"));
                 driverData.put("license_no", rs.getString("license_no"));
