@@ -30,7 +30,7 @@ function fetchAndDisplayData(flag) {
             }
             else if(flag === true){
                 flagData = data;
-                updatePage(currentPage, flag);
+                updatePage(currentFlagPage, flag);
             }
             else{
                 console.log("Error" + flag)
@@ -44,8 +44,7 @@ function fetchAndDisplayData(flag) {
 function updatePage(page, flag) {
     const startIndex = (page - 1) * pageSize;
     const endIndex = startIndex + pageSize;
-    let dataToShow = [];
-
+    let dataToShow;
     if(flag === true){
         dataToShow = flagData.slice(startIndex, endIndex);
         const tableBody = document.querySelector("#flagTable tbody");
@@ -53,7 +52,7 @@ function updatePage(page, flag) {
         displayDataAsTable(dataToShow, flag);
         updateFlagPageNumber(currentFlagPage);
     }
-    else if(flag === false){
+    else{
         dataToShow = normalData.slice(startIndex, endIndex);
         const tableBody = document.querySelector("#dataTable tbody");
         tableBody.innerHTML = "";
@@ -70,31 +69,62 @@ function updateFlagPageNumber(page) {
     document.getElementById("flag_currentPageNumber").textContent = page;
 }
 
-// Add event listeners for the page control icons
 const prevPageIcon = document.getElementById("prevPageIcon");
-prevPageIcon.addEventListener("click", () => changePage(currentPage));
+prevPageIcon.addEventListener("click", (event) => {
+    event.stopPropagation();
+    changePage(currentPage - 1);
+}, true);
 
 const nextPageIcon = document.getElementById("nextPageIcon");
-nextPageIcon.addEventListener("click", () => changePage(currentPage));
+nextPageIcon.addEventListener("click", (event) => {
+    event.stopPropagation();
+    changePage(currentPage + 1);
+}, true);
 
 const flag_prevPageIcon = document.getElementById("flag_prevPageIcon");
-flag_prevPageIcon.addEventListener("click", () => changeFlagPage(currentFlagPage - 1));
+flag_prevPageIcon.addEventListener("click", (event) => {
+    event.stopPropagation();
+    changeFlagPage(currentFlagPage - 1);
+}, true);
 
 const flag_nextPageIcon = document.getElementById("flag_nextPageIcon");
-flag_nextPageIcon.addEventListener("click", () => changeFlagPage(currentFlagPage + 1));
+flag_nextPageIcon.addEventListener("click", (event) => {
+    event.stopPropagation();
+    changeFlagPage(currentFlagPage + 1);
+}, true);
+
+
 
 function changePage(newPage) {
     if (currentPage !== newPage) {
-        currentPage = Math.max(1, newPage);
-        updatePage(currentPage, false);
+        const nextPageData = getDataForPage(newPage, false);
+
+        if (nextPageData.length > 0) {
+            currentPage = Math.max(1, newPage);
+            updatePage(currentPage, false);
+        } else {
+            console.log("Next page is empty");
+        }
     }
 }
 
 function changeFlagPage(newPage) {
     if (currentFlagPage !== newPage) {
-        currentFlagPage = Math.max(1, newPage);
-        updatePage(currentFlagPage, true);
+        const nextPageData = getDataForPage(newPage, true);
+
+        if (nextPageData.length > 0) {
+            currentFlagPage = Math.max(1, newPage);
+            updatePage(currentFlagPage, true);
+        } else {
+            console.log("Next flag page is empty");
+        }
     }
+}
+
+function getDataForPage(page, flag) {
+    const startIndex = (page - 1) * pageSize;
+    const endIndex = startIndex + pageSize;
+    return flag ? flagData.slice(startIndex, endIndex) : normalData.slice(startIndex, endIndex);
 }
 
 function displayDataAsTable(data, flag) {
@@ -129,7 +159,11 @@ function displayDataAsTable(data, flag) {
                 <td>${mapPrivilegeLevel(item.privilege_level)}</td>
                 <td>
                     <span class="icon-container">
-                        <i onclick="openFlagConfirm('${item.p_id}','${item.flag}')"><img src="../../../images/vector_icons/flag_icon.png" alt="flag" class="action_icon"></i>
+                        <i onclick="openFlagConfirm('${item.p_id}','${item.flag}')">
+                            <img src="${(item.privilege_level === 2) ? '../../../images/vector_icons/delete_icon.png' : '../../../images/vector_icons/flag_icon.png'}" 
+                                 alt="${(item.privilege_level === 2) ? 'delete' : 'flag'}" 
+                                 class="action_icon">
+                        </i>
                     </span>
                 </td>
             `;
@@ -182,16 +216,30 @@ function mapPrivilegeLevel(privilege_level) {
 function openFlagConfirm(p_id, flag){
     toBeFlagged = p_id;
     currentFlag = flag;
-    document.getElementById("confirmAlert").style.display = "block";
-    document.getElementById("overlay").style.display = "block";
-    document.getElementById("flagUser").innerHTML = p_id;
+    if(flag === "false"){
+        console.log(flag)
+        document.getElementById("confirmAlert").style.display = "block";
+        document.getElementById("overlay").style.display = "block";
+        document.getElementById("flagUser").innerHTML = p_id;
+    }
+    else if(flag === "true"){
+        console.log(flag)
+        document.getElementById("confirmFlagAlert").style.display = "block";
+        document.getElementById("unFlagUser").innerHTML = p_id;
+    }
 }
 
-function closeFlagAlert() {
+function closeFlagAlert(flag) {
     toBeFlagged = "";
     currentFlag = false;
-    document.getElementById("confirmAlert").style.display = "none";
-    document.getElementById("overlay").style.display = "none";
+    if(flag === false){
+        document.getElementById("confirmAlert").style.display = "none";
+        document.getElementById("overlay").style.display = "none";
+    }
+    else if(flag === true){
+        document.getElementById("confirmFlagAlert").style.display = "none";
+    }
+
 }
 
 function openFlagged() {
@@ -208,21 +256,42 @@ function closeFlagged() {
     fetchAndDisplayData(false);
 }
 
-function openFlagSuccess(p_id) {
-    document.getElementById("successAlert").style.display = "block";
-    document.getElementById("overlay").style.display = "block";
+function openFlagSuccess(flag) {
+    if(flag === "true"){
+        document.getElementById("confirmFlagAlert").style.display = "none";
+        document.getElementById("successFlagAlert").style.display = "block";
+    }
+    else if(flag === "false"){
+        document.getElementById("confirmAlert").style.display = "none";
+        document.getElementById("overlay").style.display = "none";
+        document.getElementById("successAlert").style.display = "block";
+        document.getElementById("overlay").style.display = "block";
+    }
 }
 
-function closeAlertSuccess() {
-    document.getElementById("successAlert").style.display = "none";
-    document.getElementById("overlay").style.display = "none";
-    window.location.href = "../html/admin_dashboard_passengers.html";
+function closeAlertSuccess(flag) {
+    if(flag === false){
+        document.getElementById("successFlagAlert").style.display = "none";
+        window.location.href = "../html/admin_dashboard_passengers.html";
+    }
+    else if(flag === true){
+        document.getElementById("successAlert").style.display = "none";
+        document.getElementById("overlay").style.display = "none";
+        window.location.href = "../html/admin_dashboard_passengers.html";
+    }
 }
 
-function openFlagFail(response) {
-    document.getElementById("failMsg").innerHTML = "Operation failed (" + response + ")";
-    document.getElementById("failAlert").style.display = "block";
-    document.getElementById("overlay").style.display = "block";
+function openFlagFail(response, flag) {
+    if(flag === "true"){
+        document.getElementById("failFlagMsg").innerHTML = "Operation failed (" + response + ")";
+        document.getElementById("failFlagAlert").style.display = "block";
+    }
+    else if(flag === "false"){
+        document.getElementById("failMsg").innerHTML = "Operation failed (" + response + ")";
+        document.getElementById("failAlert").style.display = "block";
+        document.getElementById("overlay").style.display = "block";
+    }
+
 }
 
 function closeAlertFail() {
@@ -248,13 +317,12 @@ function FlagConfirm(){
     })
         .then(response => {
             if (response.ok) {
-                openFlagSuccess(toBeFlagged)
-                console.log('Successfully flagged');
+                openFlagSuccess(currentFlag)
+                // closeFlagAlert(currentFlag)
             } else if (response.status === 401) {
-                openFlagFail(response.status);
-                console.log('Flag unsuccessful');
+                openFlagFail(response.status,currentFlag);
             } else {
-                openAlertFail(response.status);
+                openFlagFail(response.status,currentFlag);
                 console.error('Error:', response.status);
             }
         })
@@ -263,76 +331,76 @@ function FlagConfirm(){
         });
 }
 
-const searchInput = document.getElementById("searchInput");
-searchInput.addEventListener("keyup", searchData);
-
-// Handle search
-function searchData() {
-    const tableBody = document.querySelector("#dataTable tbody");
-    tableBody.innerHTML = "";
-
-    const searchTerm = document.getElementById("searchInput").value;
-
-    if (searchTerm.trim() === "") {
-        fetchAllData();
-        return;
-    }
-
-    fetch('../../../passengerController', {
-        method: 'GET',
-        headers: {
-            'Content-Type': 'application/json',
-            'p_id': searchTerm
-        },
-    })
-        .then(response => {
-            if (response.ok) {
-                return response.json();
-            } else {
-                console.error('Error:', response.status);
-            }
-        })
-        .then(data => {
-            displayDataAsDataTable(data);
-        })
-        .catch(error => {
-            console.error('Error:', error);
-        });
-}
-
-const searchInputFlag = document.getElementById("searchInputFlag");
-searchInputFlag.addEventListener("keyup", searchFlagData);
-
-// Handle search
-function searchFlagData() {
-    const tableBody = document.querySelector("#flaggedTable tbody");
-    tableBody.innerHTML = "";
-
-    const searchTerm = document.getElementById("searchInputFlag").value;
-
-    if (searchTerm.trim() === "") {
-        fetchAllData();
-        return;
-    }
-
-    fetch('../../../passengerController', {
-        method: 'GET',
-        headers: {
-            'Content-Type': 'application/json',
-            'p_id': searchTerm
-        },
-    })
-        .then(response => {
-            if (response.ok) {
-                return response.json();
-            } else {
-                console.error('Error:', response.status);
-            }
-        })
-        .then(data => {
-            displayDataAsFlagTable(data);
-        })
-        .catch(error => {
-            console.error('Error:', error);
-        });
-}
+// const searchInput = document.getElementById("searchInput");
+// searchInput.addEventListener("keyup", searchData);
+//
+// // Handle search
+// function searchData() {
+//     const tableBody = document.querySelector("#dataTable tbody");
+//     tableBody.innerHTML = "";
+//
+//     const searchTerm = document.getElementById("searchInput").value;
+//
+//     if (searchTerm.trim() === "") {
+//         fetchAllData();
+//         return;
+//     }
+//
+//     fetch('../../../passengerController', {
+//         method: 'GET',
+//         headers: {
+//             'Content-Type': 'application/json',
+//             'p_id': searchTerm
+//         },
+//     })
+//         .then(response => {
+//             if (response.ok) {
+//                 return response.json();
+//             } else {
+//                 console.error('Error:', response.status);
+//             }
+//         })
+//         .then(data => {
+//             displayDataAsDataTable(data);
+//         })
+//         .catch(error => {
+//             console.error('Error:', error);
+//         });
+// }
+//
+// const searchInputFlag = document.getElementById("searchInputFlag");
+// searchInputFlag.addEventListener("keyup", searchFlagData);
+//
+// // Handle search
+// function searchFlagData() {
+//     const tableBody = document.querySelector("#flaggedTable tbody");
+//     tableBody.innerHTML = "";
+//
+//     const searchTerm = document.getElementById("searchInputFlag").value;
+//
+//     if (searchTerm.trim() === "") {
+//         fetchAllData();
+//         return;
+//     }
+//
+//     fetch('../../../passengerController', {
+//         method: 'GET',
+//         headers: {
+//             'Content-Type': 'application/json',
+//             'p_id': searchTerm
+//         },
+//     })
+//         .then(response => {
+//             if (response.ok) {
+//                 return response.json();
+//             } else {
+//                 console.error('Error:', response.status);
+//             }
+//         })
+//         .then(data => {
+//             displayDataAsFlagTable(data);
+//         })
+//         .catch(error => {
+//             console.error('Error:', error);
+//         });
+// }
