@@ -40,7 +40,7 @@ function displayDataAsParagraphs(data) {
             <p class="data_box"><strong>Email:</strong> ${item.email}</p>
 
             <div class="editDeleteButtons">
-             <button class="okButton" onclick="update('${item.p_id}')" style="display: center; margin-right: 10px; margin-left: 10px">Edit</button>
+             <button class="okButton" onclick="update('${item.p_id}')" style="margin-right: 10px; margin-left: 10px">Edit</button>
              <button class="okButton" onclick="deleteEntity('${item.nic}')">Delete</button>
            </div>
         `;
@@ -53,11 +53,9 @@ function update(p_id){
     openForm_update();
 
     let existingData = {};
-    
+
 
     const urlParams = new URLSearchParams(window.location.search);
-
-    document.getElementById("header_nic").innerHTML = existingData.first_name;
 
     fetch('../../../passengerController', {
         method: 'GET',
@@ -70,10 +68,9 @@ function update(p_id){
             if (response.ok) {
                 response.json().then(data => {
                     existingData = data[0];
-                    console.log("existingData:", existingData);
-
-                    document.getElementById("update_fname").value = existingData.fname;
-                    document.getElementById("update_lname").value = existingData.lname;
+                    document.getElementById("header_nic").innerHTML = existingData.first_name + " " + existingData.last_name + "'s";
+                    document.getElementById("update_fname").value = existingData.first_name;
+                    document.getElementById("update_lname").value = existingData.last_name;
                     document.getElementById("update_nic").value = existingData.nic;
                     document.getElementById("update_mobileNo").value = existingData.mobileNo;
                     document.getElementById("update_email").value = existingData.email;

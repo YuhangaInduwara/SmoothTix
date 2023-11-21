@@ -10,7 +10,6 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.json.JSONArray;
 import org.json.JSONObject;
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -36,7 +35,7 @@ public class DriverController extends HttpServlet {
             }
 
             while (rs.next()) {
-                JSONObject busData = new JSONObject();
+                JSONObject driverData = new JSONObject();
                 driverData.put("driver_id", rs.getString("driver_id"));
                 driverData.put("passenger_id", rs.getString("passenger_id"));
                 driverData.put("license_no", rs.getString("license_no"));
