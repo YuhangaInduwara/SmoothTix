@@ -389,6 +389,13 @@ tbody tr:hover {
     background-color: #989898;
 }
 
+.action_icon {
+    width: 17px;
+    height: 17px;
+    cursor: pointer;
+    margin-right: 1px;
+}
+
 .page_control{
     display: flex;
     width: 97%;
@@ -411,16 +418,3 @@ tbody tr:hover {
 .arrow_img:hover{
     transform: scale(1.1);
 }
-
-
-.action_icon {
-    width: 17px;
-    height: 17px;
-    cursor: pointer;
-    margin-right: 1px;
-}.action_icon {
-     width: 17px;
-     height: 17px;
-     cursor: pointer;
-     margin-right: 1px;
- }
