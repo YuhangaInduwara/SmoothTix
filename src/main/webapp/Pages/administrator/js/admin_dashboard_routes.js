@@ -158,8 +158,8 @@ document.getElementById("busRegForm").addEventListener("submit", function(event)
     })
         .then(response => {
             if (response.ok) {
-                // closeForm_add();
-                // openAlertSuccess("Successfully Added!");
+                closeForm_add();
+                openAlertSuccess("Successfully Added!");
                 console.log("Success")
             } else{
                 // return response.json()

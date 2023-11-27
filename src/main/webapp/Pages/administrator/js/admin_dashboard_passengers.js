@@ -8,58 +8,47 @@ let flagData = [];
 
 fetchAndDisplayData(false);
 
-function fetchAndDisplayData(flag) {
-    fetch('/SmoothTix_war_exploded/passengerController', {
-        method: 'GET',
-        headers: {
-            'Content-Type': 'application/json',
-            flag : flag,
-        },
-    })
-        .then(response => {
-            if (response.ok) {
-                return response.json();
-            } else {
-                console.error('Error:', response.status);
-            }
-        })
-        .then(data => {
-            if(flag === false){
-                normalData = data;
-                updatePage(currentPage, flag);
-            }
-            else if(flag === true){
-                flagData = data;
-                updatePage(currentFlagPage, flag);
-            }
-            else{
-                console.log("Error" + flag)
-            }
-        })
-        .catch(error => {
-            console.error('Error:', error);
+async function fetchAndDisplayData(flag) {
+    try {
+        const url = `/SmoothTix_war_exploded/passengerController`;
+        const response =  await fetch(url, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'flag': flag,
+            },
         });
+
+        if (!response.ok) {
+            console.log(`Error: ${response.status}`);
+        }
+
+        const data = await response.json();
+
+        if (flag) {
+            flagData = data;
+        } else {
+            normalData = data;
+        }
+
+        updatePage(flag ? currentFlagPage : currentPage, flag);
+    } catch (error) {
+        console.error('Error:', error.message);
+    }
 }
 
 function updatePage(page, flag) {
+    const data = flag ? flagData : normalData;
+    const tableBody = document.querySelector(flag ? "#flagTable tbody" : "#dataTable tbody");
     const startIndex = (page - 1) * pageSize;
     const endIndex = startIndex + pageSize;
-    let dataToShow;
-    if(flag === true){
-        dataToShow = flagData.slice(startIndex, endIndex);
-        const tableBody = document.querySelector("#flagTable tbody");
-        tableBody.innerHTML = "";
-        displayDataAsTable(dataToShow, flag);
-        updateFlagPageNumber(currentFlagPage);
-    }
-    else{
-        dataToShow = normalData.slice(startIndex, endIndex);
-        const tableBody = document.querySelector("#dataTable tbody");
-        tableBody.innerHTML = "";
-        displayDataAsTable(dataToShow, flag);
-        updatePageNumber(currentPage);
-    }
+    const dataToShow = data.slice(startIndex, endIndex);
+
+    tableBody.innerHTML = "";
+    displayDataAsTable(dataToShow, flag);
+    flag ? updateFlagPageNumber(currentFlagPage) : updatePageNumber(currentPage);
 }
+
 
 function updatePageNumber(page) {
     document.getElementById("currentPageNumber").textContent = page;
@@ -72,54 +61,44 @@ function updateFlagPageNumber(page) {
 const prevPageIcon = document.getElementById("prevPageIcon");
 prevPageIcon.addEventListener("click", (event) => {
     event.stopPropagation();
-    changePage(currentPage - 1);
+    changePage(currentPage - 1, false);
 }, true);
 
 const nextPageIcon = document.getElementById("nextPageIcon");
 nextPageIcon.addEventListener("click", (event) => {
     event.stopPropagation();
-    changePage(currentPage + 1);
+    changePage(currentPage + 1, false);
 }, true);
 
 const flag_prevPageIcon = document.getElementById("flag_prevPageIcon");
 flag_prevPageIcon.addEventListener("click", (event) => {
     event.stopPropagation();
-    changeFlagPage(currentFlagPage - 1);
+    changePage(currentFlagPage - 1, true);
 }, true);
 
 const flag_nextPageIcon = document.getElementById("flag_nextPageIcon");
 flag_nextPageIcon.addEventListener("click", (event) => {
     event.stopPropagation();
-    changeFlagPage(currentFlagPage + 1);
+    changePage(currentFlagPage + 1, true);
 }, true);
 
 
 
-function changePage(newPage) {
-    if (currentPage !== newPage) {
-        const nextPageData = getDataForPage(newPage, false);
+function changePage(newPage, isFlag) {
+    const data = getDataForPage(newPage, isFlag);
 
-        if (nextPageData.length > 0) {
-            currentPage = Math.max(1, newPage);
-            updatePage(currentPage, false);
+    if (isFlag ? currentFlagPage !== newPage : currentPage !== newPage) {
+        if (data.length > 0) {
+            isFlag ? (currentFlagPage = Math.max(1, newPage)) : (currentPage = Math.max(1, newPage));
+            isFlag ? (document.getElementById("flag_nextPageIcon").style.opacity = "1") : (document.getElementById("nextPageIcon").style.opacity = "1");
+            updatePage(isFlag ? currentFlagPage : currentPage, isFlag);
         } else {
-            console.log("Next page is empty");
+            console.log(`Next ${isFlag ? 'flag ' : ''}page is empty`);
+            isFlag ? (document.getElementById("flag_nextPageIcon").style.opacity = "0.5") : (document.getElementById("nextPageIcon").style.opacity = "0.5");
         }
     }
 }
 
-function changeFlagPage(newPage) {
-    if (currentFlagPage !== newPage) {
-        const nextPageData = getDataForPage(newPage, true);
-
-        if (nextPageData.length > 0) {
-            currentFlagPage = Math.max(1, newPage);
-            updatePage(currentFlagPage, true);
-        } else {
-            console.log("Next flag page is empty");
-        }
-    }
-}
 
 function getDataForPage(page, flag) {
     const startIndex = (page - 1) * pageSize;
@@ -145,7 +124,7 @@ function displayDataAsTable(data, flag) {
     }
 
     if(rowCount >=10){
-        renderPageControl()
+        renderPageControl(flag)
     }
 
     data.forEach(item => {
@@ -190,8 +169,13 @@ function displayDataAsTable(data, flag) {
     });
 }
 
-function renderPageControl(){
-    document.getElementById("flag_page_control").style.display = "flex";
+function renderPageControl(flag){
+    if(flag === true){
+        document.getElementById("flag_page_control").style.display = "flex";
+    }
+    else if(flag === false){
+        document.getElementById("page_control").style.display = "flex";
+    }
 }
 
 function mapPrivilegeLevel(privilege_level) {
