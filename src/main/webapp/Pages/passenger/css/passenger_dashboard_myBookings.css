@@ -47,6 +47,7 @@ body{
     text-decoration: none;
     padding-top: 10px;
     padding-left: 20px;
+    margin-top: 10px;
     transition: transform 0.3s;
 }
 

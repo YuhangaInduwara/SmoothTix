@@ -9,6 +9,7 @@
 </head>
 <body>
 <div class="dashboard">
+    <div class="overlay" id="overlay"></div>
     <div class="sidebar">
         <div class="site_logo">
             <img src="../../../images/logo.png" alt="site_logo" class="site_logo_img">
@@ -39,7 +40,12 @@
             </div>
         </div>
     </div>
-
+    <div class="seat_selection" id="seat_selection">
+        <div class="bus-container" id="bus-container">
+            <!-- Seats will be dynamically generated here -->
+        </div>
+        <button onclick="bookSelectedSeats()">Book Selected Seats</button>
+    </div>
     <div class="content_container">
         <div class="navbar">
             <div class="page_name">
@@ -55,12 +61,12 @@
                 <div class="search_box">
                     <div>
                         <label>
-                            <select id="dropdown1">
+                            <select id="dropdown_start">
                                 <option value="" disabled selected>From</option>
-                                <option value="option1">Colombo</option>
-                                <option value="option2">Galle</option>
-                                <option value="option3">Matara</option>
-                                <option value="option4">Hambantota</option>
+                                <option value="Colombo">Colombo</option>
+                                <option value="Galle">Galle</option>
+                                <option value="Matara">Matara</option>
+                                <option value="Hambantota">Hambantota</option>
                             </select>
                         </label>
                     </div>
@@ -68,137 +74,46 @@
                 <div class="search_box" >
                     <div>
                         <label>
-                            <select id="dropdown2">
+                            <select id="dropdown_destination">
                                 <option value="" disabled selected>To</option>
-                                <option value="option1">Colombo</option>
-                                <option value="option2">Galle</option>
-                                <option value="option3">Matara</option>
-                                <option value="option4">Hambantota</option>
+                                <option value="Colombo">Colombo</option>
+                                <option value="Galle">Galle</option>
+                                <option value="Matara">Matara</option>
+                                <option value="Hambantota">Hambantota</option>
                             </select>
                         </label>
                     </div>
                 </div>
-                <div class="search_box" style="">
+                <div class="search_box">
                     <input type="date" id="datePicker" style="padding: 10px; font-size: 16px; border: 1px solid #ccc; border-radius: 5px; width: 150px; background-color: #fff;">
                 </div>
-                <div class="search_box" >
-                    <label for="timePicker">Start time From</label><br>
-                    <input type="time" style="padding: 10px; font-size: 16px; border: 1px solid #ccc; border-radius: 5px; width: 150px; background-color: #fff;">
+                <div class="search_box">
+                    <label for="startTimePicker">Start time From</label>
+                    <input type="time" id="startTimePicker" style="padding: 10px; font-size: 16px; border: 1px solid #ccc; border-radius: 5px; width: 150px; background-color: #fff;">
+                </div>
+                <div class="search_box" style="gap: 10px">
+                    <label for="endTimePicker">Start time To</label>
+                    <input type="time" id="endTimePicker" style="padding: 10px; font-size: 16px; border: 1px solid #ccc; border-radius: 5px; width: 150px; background-color: #fff;">
                 </div>
                 <div class="search_box">
-                    <label for="timePicker">Start time To</label><br>
-                    <input type="time" id="timePicker" style="padding: 10px; font-size: 16px; border: 1px solid #ccc; border-radius: 5px; width: 150px; background-color: #fff;">
-                </div>
-                <div class="search_box">
-                    <button class="tile_button">Search</button>
+                    <button class="button" onclick="searchData()">Search</button>
                 </div>
             </div>
-            <div style="display:flex; justify-content:center;align-items:center;flex-direction:column; " >
-                <div style="background: linear-gradient(90deg, rgba(255, 1, 1, 0.47) -10%, rgba(26, 1, 2, 0) 100%); width: 95%; display: flex; flex-direction: column; justify-content: space-between; align-items: center; border-radius: 10px;height:150px" class="content_tile">
-                    <div style="display: flex; flex-direction: row; justify-content: center; gap: 150px; width: 100%; margin-top: 1px">
-                        <div style="background-color: #ff3333 ;width:  170px;display:flex;justify-content:center;align-items:center;height: 65px; border-radius: 10px; margin-top: 15px">
-                            <h1>NC - 1245</h1>
-                        </div>
-                        <div>
-                            <p>From: Matara</p>
-                            <p>To: Galle</p>
-                        </div>
-                        <div>
-                            <p>Booking Closing Date: 02/11/2023</p>
-                            <p>Booking Closing Time: 08:10</p>
-                        </div>
-                        <div style="  padding: 0 10px; display:flex; flex-direction: row; gap: 10px; align-content: center; justify-content: center">
-                            <h2 style="margin-top: auto; margin-bottom: auto">Available <br> Seats</h2>
-                            <h1 style="font-size: 50px;margin-top: auto; margin-bottom: auto">12</h1>
-                        </div>
-                    </div>
-                    <div style="display: flex; flex-direction: row; width: 100% ;justify-content: center; gap: 230px; align-content: center; margin-bottom: 30px; margin-top: -10px">
-                        <div>
-                            <h1>Departure Time : 09:10</h1>
-                        </div>
-                        <div style="font-weight: bold; padding: 0 10px;">
-                            <h1>Rs. 400.00</h1>
-                        </div>
-                        <div style="margin-top: auto; margin-bottom: auto">
-                            <button class="tile_button" onclick="window.location.href='./passenger_dashboard_bookASeat2.html'">Book Seat</button>
-                        </div>
-                    </div>
-                </div>
+            <div class="schedule_list" id="schedule_list">
+
             </div>
-            <div style="height:10px"></div>
-            <div style="display:flex; justify-content:center;align-items:center;flex-direction:column; " >
-                <div style="background: linear-gradient(90deg, rgba(255, 1, 1, 0.47) -10%, rgba(26, 1, 2, 0) 100%); width: 95%; display: flex; flex-direction: column; justify-content: space-between; align-items: center; border-radius: 10px;height:150px" class="content_tile">
-                    <div style="display: flex; flex-direction: row; justify-content: center; gap: 150px; width: 100%; margin-top: 1px">
-                        <div style="background-color: #ff3333 ;width:  170px;display:flex;justify-content:center;align-items:center;height: 65px; border-radius: 10px; margin-top: 15px">
-                            <h1>ND - 6596</h1>
-                        </div>
-                        <div>
-                            <p>From: Colombo</p>
-                            <p>To: Galle</p>
-                        </div>
-                        <div>
-                            <p>Booking Closing Date: 03/11/2023</p>
-                            <p>Booking Closing Time: 10:20</p>
-                        </div>
-                        <div style="  padding: 0 10px; display:flex; flex-direction: row; gap: 10px; align-content: center; justify-content: center">
-                            <h2 style="margin-top: auto; margin-bottom: auto">Available <br> Seats</h2>
-                            <h1 style="font-size: 50px;margin-top: auto; margin-bottom: auto">21</h1>
-                        </div>
-                    </div>
-                    <div style="display: flex; flex-direction: row; width: 100% ;justify-content: center; gap: 230px; align-content: center; margin-bottom: 30px; margin-top: -10px">
-                        <div>
-                            <h1>Departure Time : 11:20</h1>
-                        </div>
-                        <div style="font-weight: bold; padding: 0 10px;">
-                            <h1>Rs. 1200.00</h1>
-                        </div>
-                        <div style="margin-top: auto; margin-bottom: auto">
-                            <button class="tile_button" onclick="window.location.href='./passenger_dashboard_bookASeat2.html'">Book Seat</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div style="height:10px"></div>
-            <div style="display:flex; justify-content:center;align-items:center;flex-direction:column; " >
-                <div style="background: linear-gradient(90deg, rgba(255, 1, 1, 0.47) -10%, rgba(26, 1, 2, 0) 100%); width: 95%; display: flex; flex-direction: column; justify-content: space-between; align-items: center; border-radius: 10px;height:150px" class="content_tile">
-                    <div style="display: flex; flex-direction: row; justify-content: center; gap: 150px; width: 100%; margin-top: 1px">
-                        <div style="background-color: #ff3333 ;width:  170px;display:flex;justify-content:center;align-items:center;height: 65px; border-radius: 10px; margin-top: 15px">
-                            <h1>ND - 1234</h1>
-                        </div>
-                        <div>
-                            <p>From: Galle</p>
-                            <p>To: Hambantota</p>
-                        </div>
-                        <div>
-                            <p>Booking Closing Date: 31/11/2023</p>
-                            <p>Booking Closing Time: 14:40</p>
-                        </div>
-                        <div style="  padding: 0 10px; display:flex; flex-direction: row; gap: 10px; align-content: center; justify-content: center">
-                            <h2 style="margin-top: auto; margin-bottom: auto">Available <br> Seats</h2>
-                            <h1 style="font-size: 50px;margin-top: auto; margin-bottom: auto">18</h1>
-                        </div>
-                    </div>
-                    <div style="display: flex; flex-direction: row; width: 100% ;justify-content: center; gap: 230px; align-content: center; margin-bottom: 30px; margin-top: -10px">
-                        <div>
-                            <h1>Departure Time : 15:40</h1>
-                        </div>
-                        <div style="font-weight: bold; padding: 0 10px;">
-                            <h1>Rs. 850.00</h1>
-                        </div>
-                        <div style="margin-top: auto; margin-bottom: auto">
-                            <button class="tile_button" onclick="window.location.href='./passenger_dashboard_bookASeat2.html'">Book Seat</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-                <div class="page_control" id="page_control">
-                    <img class="arrow_img" src="../../../images/vector_icons/arrow_left.png" alt="arrow_left">
-                    <img class="arrow_img" src="../../../images/vector_icons/arrow_right.png" alt="arrow_right">
-                </div>
+            <div id="page_control">
+                <span id="prevPageIcon" onclick="changePage(currentPage - 1)"><img class="arrow_img" src="../../../images/vector_icons/arrow_left.png" alt="arrow_left"></span>
+                <span id="currentPageNumber" class="currentPageNumber">1</span>
+                <span class="currentPageNumber">/</span>
+                <span id="noOfPages" class="currentPageNumber">1</span>
+                <span id="nextPageIcon" onclick="changePage(currentPage + 1)"> <img class="arrow_img" src="../../../images/vector_icons/arrow_right.png" alt="arrow_right"></span>
             </div>
         </div>
     </div>
 </div>
+<!--<script type="module" src="../js/passenger_dashboard_bookASeat.js"></script>-->
+<script src="../js/passenger_dashboard_bookASeat.js"></script>
 </body>
 </html>
 
