@@ -1,0 +1,45 @@
+body {
+  margin: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+/*.container {*/
+/*  text-align: center;*/
+/*}*/
+
+.bus-container {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr); /* Adjust the number of columns based on your bus layout */
+  gap: 5px;
+}
+
+.seat {
+  width: 30px;
+  height: 30px;
+  background-color: #ddd;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  border-radius: 5px;
+}
+
+.seat.selected {
+  background-color: #3498db;
+}
+
+/*!* Style to distinguish different sections of the bus *!*/
+/*.left-section {*/
+/*  grid-row: span 10; !* Adjust the span based on your bus layout *!*/
+/*}*/
+
+/*.right-section {*/
+/*  grid-row: span 10; !* Adjust the span based on your bus layout *!*/
+/*}*/
+
+/*.back-row {*/
+/*  grid-row: span 1; !* Adjust the span based on your bus layout *!*/
+/*}*/
