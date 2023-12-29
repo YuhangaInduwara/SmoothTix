@@ -3,10 +3,10 @@ package com.smoothtix.controller;
 import com.google.gson.Gson;
 import com.smoothtix.dao.bookingTable;
 import com.smoothtix.model.Booking;
-import jakarta.servlet.ServletException;
-import jakarta.servlet.http.HttpServlet;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import java.io.BufferedReader;
@@ -57,9 +57,11 @@ public class BookingController extends HttpServlet {
 
             BufferedReader reader = request.getReader();
             Booking booking = gson.fromJson(reader, Booking.class);
-            int registrationSuccess = bookingTable.insert(booking);
+            String jsonResponse = bookingTable.insert(booking);
 
-            if (registrationSuccess >= 1) {
+            if (!jsonResponse.equals("Unsuccessful")) {
+
+                out.write(jsonResponse);
                 response.setStatus(HttpServletResponse.SC_OK);
             } else {
                 response.setStatus(HttpServletResponse.SC_BAD_REQUEST);

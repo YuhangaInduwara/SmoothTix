@@ -71,7 +71,7 @@ document.getElementById("loginForm").addEventListener("submit", function(event) 
     };
     const jsonData = JSON.stringify(userData);
 
-    fetch('/SmoothTix_war_exploded/loginController', {
+    fetch(`${ url }/loginController`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
@@ -91,22 +91,6 @@ document.getElementById("loginForm").addEventListener("submit", function(event) 
             }
         })
         .then(parsedResponse => {
-            const mail = "yuhanga2001@gmail.com"
-            fetch(`/SmoothTix_war_exploded/mailController?toEmail=${mail}`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-            })
-                .then(response => {
-                    if (response.ok) {
-                        console.log("Successful")
-                    } else {
-                        console.log("Unsuccessful: " + response)
-                    }
-                })
-
-
             const jwtToken = parsedResponse.token;
             localStorage.setItem('jwtToken', jwtToken);
             let user_role = parsedResponse.user_role;

@@ -2,53 +2,43 @@ package com.smoothtix.model;
 
 public class Booking {
     String booking_id;
+    String payment_id;
     String schedule_id;
-    String route_id;
-    String date;
-    String time;
-    int seat_no;
-    String price;
+    String p_id;
+    int[] selectedSeats;
 
-    public Booking(String booking_id, String schedule_id, String route_id, String date, String time, int seat_no, String price){
-        this.booking_id = booking_id;
+
+    public Booking(String payment_id, String schedule_id, String p_id, int[] selectedSeats){
+        this.payment_id = payment_id;
+        this.p_id = p_id;
         this.schedule_id = schedule_id;
-        this.route_id = route_id;
-        this.date = date;
-        this.time = time;
-        this.seat_no = seat_no;
-        this.price = price;
+        this.selectedSeats = selectedSeats;
     }
 
     public String getBooking_id(){
         return booking_id;
     }
+    public String getPayment_id(){
+        return payment_id;
+    }
     public String getSchedule_id(){ return schedule_id; }
-    public String getRoute_id(){ return route_id; }
-    public String getdate(){
-        return date;
-    }
-    public String getTime(){
-        return time;
-    }
-    public int getseat_no(){
-        return seat_no;
-    }
-    public String getPrice(){
-        return price;
+    public String getP_id(){ return p_id; }
+    public int[] getSelectedSeats(){
+        return selectedSeats;
     }
 
     public void setBooking_id(String booking_id){
         this.booking_id = booking_id;
     }
+    public void setPayment_id(String payment_id){
+        this.payment_id = payment_id;
+    }
     public void setSchedule_id(String schedule_id){
         this.schedule_id = schedule_id;
     }
-    public void setRoute_id(String route_id){this.route_id = route_id; }
-    public void setdate(String date){ this.date = date; }
-    public void settime(String time){ this.time = time; }
-    public void setseat_no(int seat_no){ this.seat_no = seat_no; }
-    public void setPrice(String price){
-        this.price = price;
+    public void setP_id(String p_id){
+        this.p_id = p_id;
     }
+    public void setSelectedSeats(int[] selectedSeats){ this.selectedSeats = selectedSeats; }
 }
 

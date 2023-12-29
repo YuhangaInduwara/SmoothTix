@@ -1,10 +1,18 @@
-// import { url } from '../../../js/url.js';
-
 let currentPage = 1;
 const pageSize = 3;
 let allData = [];
+let price_per_ride = 0;
+const seatsPerRow = 5;
+const rows = 10;
+const totalSeats = rows * seatsPerRow;
+const availableSeats = Array.from({ length: totalSeats }, (_, index) => index + 1);
+let selectedSeats = [];
+let totalPrice = 0;
+let seatAvailabilityArray = [];
 
-const url = 'http://localhost:2000/SmoothTix_war_exploded';
+let booking_p_id = "P0030";
+let booking_schedule_id = "";
+
 function fetchAllData() {
     fetch(`${ url }/scheduleController`, {
         method: 'GET',
@@ -123,7 +131,7 @@ function displayDataAsScheduleTiles(data) {
                     <h1>Rs. ${item.price_per_ride}</h1>
                 </div>
                 <div class="addBookingBtn">
-                    <button class="button" onclick="openSeatAvailability('${item.schedule_id}')">Book Seat</button>
+                    <button class="button" onclick="openSeatSelection('${item.schedule_id}', '${item.start}', '${item.destination}', '${item.date}', '${item.time}', '${item.available_seats}', '${item.price_per_ride}')">Book Seat</button>
                 </div>
             </div>
         `;
@@ -169,61 +177,199 @@ function searchData() {
         });
 }
 
-function openSeatAvailability(scheduleId) {
-    console.log(scheduleId);
-    document.getElementById("seat_selection").style.display = "block";
+function openSeatSelection(schedule_id, start, destination, date, time, available_seats, price) {
+    document.getElementById("seat_selection").style.display = "flex";
     document.getElementById("overlay").style.display = "block";
-}
+    document.getElementById("seat_selection_route").textContent = start + " - " + destination;
+    document.getElementById("seat_selection_date").textContent = date;
+    document.getElementById("seat_selection_time").textContent = time;
+    document.getElementById("seat_selection_seat_count").textContent = available_seats;
+    document.getElementById("seat_selection_price").textContent = price;
+    price_per_ride = parseInt(price, 10);
+    booking_schedule_id = schedule_id;
 
-function closeSeatAvailability() {
-    document.getElementById("seat_selection").style.display = "none";
-    document.getElementById("overlay").style.display = "none";
-}
-
-const busContainer = document.getElementById('bus-container');
-generateSeats(11, 5);
-
-function generateSeats(numRows, numCols) {
-    let seatNumber = 1;
-
-    for (let row = 1; row <= numRows; row++) {
-        for (let col = 1; col <= numCols; col++) {
-            console.log(row + "  " + col)
-
-            if (col === 3 && row !== numRows) {
-                const emptySeat = document.createElement('div');
-                emptySeat.className = 'empty-seat';
-                busContainer.appendChild(emptySeat);
-                console.log("test "+row + "  " + col)
+    fetch(`${ url }/seatAvailabilityController?schedule_id=${schedule_id}`,{
+        method: "GET",
+        headers: {
+            'Content-Type': 'application/json'
+        },
+    })
+        .then(response =>{
+            if(response.ok){
+                return response.json();
             }
             else{
-                const seat = document.createElement('div');
-                seat.className = 'seat';
-                seat.setAttribute('data-row', row);
-                seat.setAttribute('data-col', col);
-                seat.setAttribute('data-seat-number', seatNumber);
-                seat.addEventListener('click', toggleSeat);
-                busContainer.appendChild(seat);
-                seatNumber++;
+                console.error("Error" + err);
             }
+        })
+        .then(parsedResponse => {
+            seatAvailabilityArray = parsedResponse.map(seatInfo => seatInfo.availability);
+            updateSeatMap();
+        })
+}
+
+function closeSeatSelection() {
+    document.getElementById("seat_selection").style.display = "none";
+    document.getElementById("overlay").style.display = "none";
+    price_per_ride = 0;
+}
+
+function updateBookingDetails() {
+    const selectedSeatsElement = document.getElementById('selected-seats');
+    const totalPriceElement = document.getElementById('total-price');
+
+    selectedSeatsElement.textContent = selectedSeats.length === 0 ? 'None' : selectedSeats.join(', ');
+    totalPriceElement.textContent = totalPrice;
+}
+
+function toggleSeat(seatNumber) {
+    const seatIndex = selectedSeats.indexOf(seatNumber);
+
+    if (seatIndex === -1) {
+        selectedSeats.push(seatNumber);
+        totalPrice += price_per_ride;
+    } else {
+        selectedSeats.splice(seatIndex, 1);
+        totalPrice -= price_per_ride;
+    }
+
+    updateBookingDetails();
+    updateSeatMap();
+}
+
+function updateSeatMap() {
+    const seatMapElement = document.getElementById('seat-map');
+    seatMapElement.innerHTML = '';
+    for (let rowNumber = 1; rowNumber <= rows; rowNumber++) {
+        const rowElement = document.createElement('div');
+        rowElement.classList.add('row');
+        for (let seatIndex = 1; seatIndex <= seatsPerRow; seatIndex++) {
+            const seatNumber = (rowNumber - 1) * seatsPerRow + seatIndex;
+            const isAvailable = seatAvailabilityArray[seatNumber - 1];
+            const seatElement = document.createElement('div');
+            seatElement.classList.add('seat');
+
+            if (isAvailable === '1') {
+                seatElement.textContent = seatNumber;
+                seatElement.addEventListener('click', () => toggleSeat(seatNumber));
+                if (selectedSeats.includes(seatNumber)) {
+                    seatElement.classList.add('selected');
+                }
+            } else {
+                seatElement.style.backgroundColor = 'red';
+                seatElement.style.color = 'white';
+                seatElement.textContent = seatNumber;
+                seatElement.classList.add('unavailable');
+                seatElement.setAttribute('disabled', 'true');
+            }
+
+            rowElement.appendChild(seatElement);
         }
+
+        seatMapElement.appendChild(rowElement);
     }
 }
 
-function toggleSeat() {
-    this.classList.toggle('selected');
+function payment() {
+    document.getElementById("payment").style.display = "flex";
+    document.getElementById("overlay").style.display = "block";
+}
+function closePayment() {
+    document.getElementById("payment").style.display = "none";
+    document.getElementById("overlay").style.display = "none";
 }
 
-function getSelectedSeats() {
-    const selectedSeats = document.querySelectorAll('.seat.selected');
-    return Array.from(selectedSeats).map(seat => ({
-        row: parseInt(seat.getAttribute('data-row')),
-        col: parseInt(seat.getAttribute('data-col')),
-        seatNumber: parseInt(seat.getAttribute('data-seat-number'))
-    }));
+function pay() {
+    // if (selectedSeats.length === 0) {
+    //     alert('Please select at least one seat.');
+    // } else {
+    //     alert(`Payment successful!\nSelected Seats: ${selectedSeats.join(', ')}\nTotal Price: $${totalPrice}`);
+    // }
+    const currentDate = new Date();
+
+    const year = currentDate.getFullYear();
+    const month = currentDate.getMonth() + 1;
+    const day = currentDate.getDate();
+    const hours = currentDate.getHours();
+    const minutes = currentDate.getMinutes();
+    const seconds = currentDate.getSeconds();
+    const formattedDateTime = `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
+
+    console.log("Current Date and Time:", formattedDateTime);
+    const paymentDetails = {
+        date_time: formattedDateTime,
+        amount:totalPrice,
+    };
+
+    const jsonData = JSON.stringify(paymentDetails);
+
+    fetch(`${ url }/paymentController`,{
+        method: "POST",
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: jsonData
+    })
+        .then(response =>{
+            if(response.ok){
+                return response.json();
+            }
+            else{
+                console.error("Error" + err);
+            }
+        })
+        .then(parsedResponse => {
+            console.log(parsedResponse);
+            const payment_id = parsedResponse.payment_id;
+            // const seat_no = selectedSeats;
+            addBooking(booking_schedule_id, booking_p_id, payment_id, selectedSeats);
+        })
 }
 
-function bookSelectedSeats() {
-    const selectedSeats = getSelectedSeats();
-    console.log('Selected Seats:', selectedSeats);
+function addBooking(schedule_id, p_id, payment_id, selectedSeats) {
+    const bookingDetails = {
+        schedule_id: schedule_id,
+        p_id: p_id,
+        payment_id: payment_id,
+        selectedSeats: selectedSeats,
+    };
+
+    const jsonData = JSON.stringify(bookingDetails);
+
+    fetch(`${ url }/bookingController`,{
+        method: "POST",
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: jsonData
+    })
+        .then(response =>{
+            if(response.ok){
+                return response.json();
+            }
+            else{
+                console.error("Error" + err);
+            }
+        })
+        .then(parsedResponse => {
+            const booking_id = parsedResponse.booking_id;
+            const p_id = parsedResponse.p_id;
+            const email = parsedResponse.email;
+
+            console.log("booking_id: " + booking_id + "p_id: " + p_id + "email: " + email);
+            fetch(`${ url }/mailController?email=${email}&pId=${p_id}&bookingId=${booking_id}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+            })
+                .then(response => {
+                    if (response.ok) {
+                        console.log("Successful")
+                    } else {
+                        console.log("Unsuccessful: " + response)
+                    }
+                })
+        })
 }
+

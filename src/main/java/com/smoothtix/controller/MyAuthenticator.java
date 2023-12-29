@@ -1,7 +1,7 @@
 package com.smoothtix.controller;
 
-import jakarta.mail.Authenticator;
-import jakarta.mail.PasswordAuthentication;
+import javax.mail.Authenticator;
+import javax.mail.PasswordAuthentication;
 
 public class MyAuthenticator extends Authenticator {
     private final String username;

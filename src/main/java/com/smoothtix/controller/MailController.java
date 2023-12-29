@@ -1,31 +1,38 @@
 package com.smoothtix.controller;
 
-import jakarta.mail.*;
-import jakarta.mail.internet.InternetAddress;
-import jakarta.mail.internet.MimeMessage;
-import jakarta.servlet.ServletException;
-import jakarta.servlet.http.HttpServlet;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
+import javax.mail.*;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeMessage;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Properties;
 
 public class MailController extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        // Sender's email address
-        final String fromEmail = "yuhanga2001@gmail.com";
-        // Sender's password
-        final String password = "YiAss@2001";
-        // Recipient's email address
-        String toEmail = request.getParameter("toEmail");
-        System.out.println(toEmail);
+        final String fromEmail = "smoothtix@gmail.com";
+        final String password = "ikwc nnnq rguk hexc";
 
-        // Email subject and message
-        String subject = "Test Subject";
-        String message = "This is a test message from your Java servlet.";
+        String bookingId = request.getParameter("bookingId");
+        String email = request.getParameter("email");
 
-        // Set the properties
+        String subject = "Your Booking Details";
+        String apiUrl = "https://chart.googleapis.com/chart";
+        String parameters = String.format(
+                "cht=qr&chs=300x300&choe=UTF-8&chl=%s",
+                java.net.URLEncoder.encode(bookingId, "UTF-8")
+        );
+        String qrCodeUrl = apiUrl + "?" + parameters;
+        String message = "You have placed your booking successfully. Your booking number is " + bookingId + ". Thank you for joining with SmoothTix";
+
+        String htmlContent = "<html><body>";
+        htmlContent += "<p>" + message + "</p>";
+        htmlContent += "<img src='" + qrCodeUrl + "' alt='QR Code'/>";
+        htmlContent += "</body></html>";
+
         Properties props = new Properties();
         props.put("mail.smtp.auth", "true");
         props.put("mail.smtp.starttls.enable", "true");
@@ -34,32 +41,24 @@ public class MailController extends HttpServlet {
         props.put("mail.debug", "true");
         props.put("mail.debug.auth", "true");
         props.put("mail.smtp.socketFactory.port", "465");
-        props.put("mail.smtp.socketFactory.class", "jakarta.net.ssl.SSLSocketFactory");
-        // Create a Session object
+        props.put("mail.smtp.socketFactory.class", "javax.net.ssl.SSLSocketFactory");
 
         Session session = Session.getInstance(props, new Authenticator() {
             protected PasswordAuthentication getPasswordAuthentication() {
-                System.out.println("Hello1");
                 return new PasswordAuthentication(fromEmail, password);
             }
         });
 
         try {
-            // Create a MimeMessage object
             Message mimeMessage = new MimeMessage(session);
             mimeMessage.setFrom(new InternetAddress(fromEmail));
-            mimeMessage.setRecipients(Message.RecipientType.TO, InternetAddress.parse(toEmail));
+            mimeMessage.setRecipients(Message.RecipientType.TO, InternetAddress.parse(email));
             mimeMessage.setSubject(subject);
-            mimeMessage.setText(message);
-            System.out.println("Hello3");
-            // Send the email
+            mimeMessage.setContent(htmlContent, "text/html");
             Transport.send(mimeMessage);
-            System.out.println("Email sent successfully");
-        } catch (MessagingException e) {
-            // Log the exception (consider using a logging framework)
-            e.printStackTrace();
 
-            // Send an error response
+        } catch (MessagingException e) {
+            e.printStackTrace();
             response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             response.getWriter().write("Error sending email");
             System.out.println("Error");

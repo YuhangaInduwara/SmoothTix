@@ -236,11 +236,15 @@ a{
 }
 
 .tile_button:hover{
-    background-color: #FF010177
+    background-color: rgba(250, 0, 0, 0.47);
 }
 
 .button{
 width: 140px; height: 40px; border: none; border-radius: 20px; background: #EA2427; color: #fff; font-size: 16px; cursor: pointer;}
+
+.button:hover{
+    background-color: rgba(250, 0, 0, 0.47);
+}
 
 select {
     padding: 10px;
@@ -262,25 +266,6 @@ select::after {
     top: 50%;
     right: 10px;
     transform: translateY(-50%);
-}
-
-.seat_selection{
-    display: none;
-    background: #ffffff;
-    border-radius: 10px;
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
-    z-index: 1000;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    text-align: center;
-    padding: 50px;
-    gap:40px;
-    margin: 0;
 }
 
 .overlay {
@@ -353,4 +338,164 @@ select::after {
 
 .addBookingBtn{
     margin-top: auto; margin-bottom: auto;
+}
+
+#seat-map {
+    border: 2px solid #333;
+    padding: 10px;
+    max-width: 600px;
+    box-sizing: border-box;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+.row {
+    display: flex;
+    flex-direction: row;
+}
+
+.seat {
+    width: 30px;
+    height: 30px;
+    margin: 5px;
+    cursor: pointer;
+    background-color: #b3b3b3;
+    border: 1px solid #999;
+    display: inline-block;
+    text-align: center;
+    line-height: 30px;
+}
+.seat.selected {
+    background-color: #5cb85c;
+    color: white;
+    border: 1px solid #4cae4c;
+}
+#booking-details {
+    margin-top: 20px;
+}
+
+#seat-map {
+    border: 2px solid #333;
+    padding: 10px;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.seat {
+    width: 30px;
+    height: 30px;
+    margin: 5px;
+    cursor: pointer;
+    background-color: #b3b3b3;
+    border: 1px solid #999;
+    display: inline-block;
+    text-align: center;
+    line-height: 30px;
+}
+
+.seat.selected {
+    background-color: #5cb85c;
+    color: white;
+    border: 1px solid #4cae4c;
+}
+
+.seat:hover{
+    background-color: #cccccc;
+}
+
+.seat_selection{
+    display: none;
+    background: #ffffff;
+    border-radius: 10px;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+    z-index: 1000;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 50px;
+    gap:40px;
+    margin: 0;
+}
+
+.payment{
+    display: none;
+    background: #ffffff;
+    border-radius: 10px;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+    z-index: 1000;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 50px;
+    gap:40px;
+    margin: 0;
+    width: 1000px;
+    height: 500px;
+}
+
+
+
+
+
+/* Base styles */
+
+body {
+    margin: 0;
+    background-color: white;
+    max-height: 100vh;
+}
+
+/* ... (rest of your styles) ... */
+
+/* Media Queries */
+
+/* Small screens (phones) */
+@media only screen and (max-width: 600px) {
+    .dashboard {
+        flex-direction: column; /* Stack items vertically on small screens */
+    }
+
+    .sidebar {
+        width: 100%; /* Full width on small screens */
+        margin: 0; /* Remove margins on small screens */
+    }
+
+    /* Add more specific styles for small screens if needed */
+}
+
+/* Medium screens (tablets) */
+@media only screen and (min-width: 601px) and (max-width: 1024px) {
+    /* Adjust styles for medium-sized screens */
+}
+
+/* Large screens (desktops) */
+@media only screen and (min-width: 1025px) {
+    /* Adjust styles for large screens */
+}
+
+/* Extra-large screens (large desktops, TVs) */
+@media only screen and (min-width: 1441px) {
+    /* Adjust styles for extra-large screens */
+}
+
+/* Landscape orientation */
+@media only screen and (orientation: landscape) {
+    /* Adjust styles for landscape orientation */
+}
+
+/* Portrait orientation */
+@media only screen and (orientation: portrait) {
+    /* Adjust styles for portrait orientation */
 }

@@ -41,10 +41,23 @@
         </div>
     </div>
     <div class="seat_selection" id="seat_selection">
-        <div class="bus-container" id="bus-container">
-            <!-- Seats will be dynamically generated here -->
+        <div id="seat-map"></div>
+        <div id="booking-details">
+            <h1>Booking Details</h1>
+            <h3>Route: <span id="seat_selection_route"></span></h3>
+            <h3>Date: <span id="seat_selection_date"></span></h3>
+            <h3>Time: <span id="seat_selection_time"></span></h3>
+            <h3>Available seats: <span id="seat_selection_seat_count"></span></h3>
+            <h3>Price per seat: <span id="seat_selection_price"></span></h3>
+            <p>Selected Seats: <span id="selected-seats">None</span></p>
+            <p>Total Price: Rs.<span id="total-price">0</span></p>
+            <button class="button" onclick="payment()">Pay Now</button>
+            <button class="button" onclick="closeSeatSelection()">Cancel</button>
         </div>
-        <button onclick="bookSelectedSeats()">Book Selected Seats</button>
+    </div>
+    <div id="payment" class="payment">
+        <button class="button" onclick="pay()">Pay Now</button>
+        <button class="button" onclick="closePayment()">Back</button>
     </div>
     <div class="content_container">
         <div class="navbar">
@@ -112,7 +125,7 @@
         </div>
     </div>
 </div>
-<!--<script type="module" src="../js/passenger_dashboard_bookASeat.js"></script>-->
+<script src="../../../js/url.js"></script>
 <script src="../js/passenger_dashboard_bookASeat.js"></script>
 </body>
 </html>

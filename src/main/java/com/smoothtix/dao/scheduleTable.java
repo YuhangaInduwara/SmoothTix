@@ -68,6 +68,8 @@ public class scheduleTable {
                 "    seat_availability sa ON s.schedule_id = sa.schedule_id \n" +
                 "JOIN\n" +
                 "    route r_end ON b.route_id = r_end.route_id\n" +
+                "WHERE\n" +
+                "    sa.availability = true\n" +
                 "GROUP BY\n" +
                 "    s.schedule_id, r_start.start, r_end.destination, s.date_time, r_start.price_per_ride, b.reg_no;");
         ResultSet rs = pst.executeQuery();
