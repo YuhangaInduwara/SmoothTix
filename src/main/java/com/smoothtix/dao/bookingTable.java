@@ -4,6 +4,7 @@ import com.smoothtix.database.dbConnection;
 import com.smoothtix.model.Booking;
 
 import java.sql.*;
+import java.util.Arrays;
 
 public class bookingTable {
     public static String insert(Booking booking) throws SQLException, ClassNotFoundException {

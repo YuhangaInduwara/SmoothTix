@@ -137,55 +137,60 @@ a{
 .search_box{
     flex: 1;
     display: flex;
-    /*gap: 5px;*/
-    justify-content: flex-end;
-    transition: transform 0.1s;
-}
-
-.search {
-    background-color: rgba(176, 176, 176, 0.4);
-    padding: 7px;
-    border-radius: 10px;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-}
-
-.search:hover{
-    transform: scale(1.1);
-}
-
-.search_input {
-    border: none;
-    background: transparent;
-    outline: none;
-    width: 100%;
-    color: #000000;
-    font-size: 16px;
-    margin-left: 5px;
-}
-
-.search_img {
-    width: 20px;
-    height: 20px;
-    opacity: 0.7;
-    cursor: pointer;
-    margin-right: 5px;
-}
-
-.search_img:hover {
-    opacity: 1.5;
-}
-
-.search_box {
     margin: 20px;
+    /*height: 40px;*/
+    /*gap: 5px;*/
+    /*justify-content: flex-end;*/
+    /*transition: transform 0.1s;*/
 }
+
+/*.search {*/
+/*    background-color: rgba(176, 176, 176, 0.4);*/
+/*    padding: 7px;*/
+/*    border-radius: 10px;*/
+/*    display: flex;*/
+/*    align-items: center;*/
+/*    gap: 10px;*/
+/*}*/
+
+/*.search:hover{*/
+/*    transform: scale(1.1);*/
+/*}*/
+
+/*.search_input {*/
+/*    border: none;*/
+/*    background: transparent;*/
+/*    outline: none;*/
+/*    width: 100%;*/
+/*    color: #000000;*/
+/*    font-size: 16px;*/
+/*    margin-left: 5px;*/
+/*}*/
+
+/*.search_img {*/
+/*    width: 20px;*/
+/*    height: 20px;*/
+/*    opacity: 0.7;*/
+/*    cursor: pointer;*/
+/*    margin-right: 5px;*/
+/*}*/
+
+/*.search_img:hover {*/
+/*    opacity: 1.5;*/
+/*}*/
 
 #searchButton {
     background: none;
     border: none;
     padding: 0;
     cursor: pointer;
+}
+
+#datePicker,
+#startTimePicker,
+#endTimePicker{
+    padding: 10px;
+    font-size: 16px; border: 1px solid #ccc; border-radius: 5px; width: 150px; background-color: #fff;
 }
 
 #page_control,
@@ -305,15 +310,20 @@ select::after {
 }
 
 .schedule_tiles{
-    background: linear-gradient(90deg, rgba(255, 1, 1, 0.47) -10%, rgba(26, 1, 2, 0) 100%); width: 97%; display: flex; flex-direction: column; justify-content: space-between; align-items: center; border-radius: 10px;height:150px;
+    border: 1px solid #cccccc;
+    box-shadow: 0 0 5px rgba(0.1, 0.1, 0.1, 0.1);
+    background-color: white; width: 97%; display: flex; flex-direction: column; justify-content: space-between; align-items: center; border-radius: 10px; height:150px;
+    /*background: linear-gradient(90deg, rgba(255, 1, 1, 0.47) -10%, rgba(26, 1, 2, 0) 100%); width: 97%; display: flex; flex-direction: column; justify-content: space-between; align-items: center; border-radius: 10px;height:150px;*/
 }
 
 .schedule_element_row1{
-    display: flex; flex-direction: row; justify-content: center; gap: 180px; width: 100%; margin-top: 1px;
+    display: flex; flex-direction: row; justify-content: space-between; width: 95%; margin-top: 1px; margin-left: 40px; margin-right: 40px;
+    /*gap: 100px;*/
 }
 
 .schedule_element_row2{
-    display: flex; flex-direction: row; width: 100% ;justify-content: center; gap: 270px; align-content: center; margin-bottom: 30px; margin-top: -10px;
+    display: flex; flex-direction: row; width: 95% ;justify-content: space-between;
+    margin: -10px 40px 30px;
 }
 
 .price{
@@ -321,7 +331,10 @@ select::after {
 }
 
 .busRegNo{
-    background-color: #ff3333 ;width:  170px;display:flex;justify-content:center;align-items:center;height: 65px; border-radius: 10px; margin-top: 15px;
+    border: 1px solid #cccccc;
+    /*box-shadow: 0 0 10px rgba(0.1, 0.1, 0.1, 0.1);*/
+    background-color: white;
+    width:  170px;display:flex;justify-content:center;align-items:center;height: 65px; border-radius: 10px; margin-top: 15px;
 }
 
 .seatAvailability{
@@ -424,7 +437,7 @@ select::after {
     margin: 0;
 }
 
-.payment{
+.paymentContainer{
     display: none;
     background: #ffffff;
     border-radius: 10px;
@@ -441,15 +454,170 @@ select::after {
     padding: 50px;
     gap:40px;
     margin: 0;
-    width: 1000px;
+    width: 900px;
     height: 500px;
+}
+
+.seat_map{
+    display: flex;
+    flex-direction: column;
+}
+
+.seat_map h1{
+    margin-top: -10px;
+}
+
+.alertBody,
+.flagAlertBody,
+.deleteAlertBody{
+    width: 512px;
+    height: 246px;
+    background: #ffffff;
+    border-radius: 10px;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+    z-index: 1000;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 50px;
+    gap:40px;
+    display: none;
+}
+
+.alertImg {
+    width: 80px;
+    margin-bottom: 40px;
+}
+
+.alertMsgSuccess,
+.alertMsgFail {
+    font-size: 25px;
+    font-family: Times New Roman, serif;
+    font-weight: 700;
+    line-height: 1.5;
+    word-wrap: break-word;
+    margin-bottom: 40px;
+}
+
+.alertMsgSuccess{
+    color: #109046;
+}
+
+.alertMsgFail{
+    color: #ff0202;
+}
+
+.okButton {
+    width: 150px;
+    height: 40px;
+    border: none;
+    border-radius: 20px;
+    background: #EA2427;
+    color: #fff;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background 0.3s ease;
+}
+
+.okButton:hover {
+    background: #D1191D;
+}
+
+#container {
+    display: flex;
+    width: 80%;
+    height: 80%;
+    border: 1px solid #ccc;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+#schedule {
+    flex: 1;
+    padding: 20px;
+}
+
+#payment {
+    flex: 1;
+    padding: 20px;
+}
+
+.paymentContainer {
+    text-align: center;
+}
+
+.button {
+    padding: 10px;
+    margin: 5px;
+    cursor: pointer;
+}
+
+#vertical-line {
+    border-left: 2px solid #cccccc;
+    height: 100%;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 20px;
+    align-items: flex-start;
+    gap:5px;
+    padding-top: 5px;
+}
+
+label {
+    font-weight: bold;
+}
+
+.form-control{
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+}
+
+.required {
+    color: red;
+}
+
+.form-parallel{
+    display: flex;
+    flex-direction: row;
+    gap: 30px;
+}
+
+.button_group{
+    display: flex;
+    flex-direction: row;
+    gap: 20px;
+    margin-top: 30px;
+    justify-content: center;
+    align-items: center;
+}
+
+.cardOption,
+.cardOptions{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+}
+
+.cardImg{
+    width: 50px;
 }
 
 
 
 
 
-/* Base styles */
+
 
 body {
     margin: 0;

@@ -39,7 +39,7 @@ public class BookingController extends HttpServlet {
                 busDataArray.put(bookingData);
             }
 
-            out.println(busDataArray.toString()); // Send JSON data as a response
+            out.println(busDataArray);
             response.setStatus(HttpServletResponse.SC_OK);
         }catch (Exception e) {
             e.printStackTrace();

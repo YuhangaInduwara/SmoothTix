@@ -13,6 +13,21 @@ let seatAvailabilityArray = [];
 let booking_p_id = "P0030";
 let booking_schedule_id = "";
 
+// if(isAuthenticated()){
+//     const jwtToken = localStorage.getItem('jwtToken');
+//     if(jwtToken){
+//         const decodedToken = decodeJWT(jwtToken);
+//         const p_id = decodedToken.p_id;
+//         booking_p_id = decodedToken.p_id;
+//     }
+//     else{
+//         window.location.href = 'http://localhost:2000/SmoothTix_war_exploded/Pages/login/html/login.html';
+//     }
+// }
+// else{
+//     window.location.href = 'http://localhost:2000/SmoothTix_war_exploded/Pages/login/html/login.html';
+// }
+
 function fetchAllData() {
     fetch(`${ url }/scheduleController`, {
         method: 'GET',
@@ -177,41 +192,76 @@ function searchData() {
         });
 }
 
-function openSeatSelection(schedule_id, start, destination, date, time, available_seats, price) {
-    document.getElementById("seat_selection").style.display = "flex";
+function openAlert(text, alertBody){
+    if(alertBody === "alertFail"){
+        document.getElementById("alertMsg").textContent = text;
+    }
+    else{
+        document.getElementById("alertMsgSuccess").textContent = text;
+    }
+    document.getElementById(alertBody).style.display = "block";
     document.getElementById("overlay").style.display = "block";
-    document.getElementById("seat_selection_route").textContent = start + " - " + destination;
-    document.getElementById("seat_selection_date").textContent = date;
-    document.getElementById("seat_selection_time").textContent = time;
-    document.getElementById("seat_selection_seat_count").textContent = available_seats;
-    document.getElementById("seat_selection_price").textContent = price;
-    price_per_ride = parseInt(price, 10);
-    booking_schedule_id = schedule_id;
+}
 
-    fetch(`${ url }/seatAvailabilityController?schedule_id=${schedule_id}`,{
-        method: "GET",
-        headers: {
-            'Content-Type': 'application/json'
-        },
-    })
-        .then(response =>{
-            if(response.ok){
-                return response.json();
-            }
-            else{
-                console.error("Error" + err);
-            }
+function closeAlert(){
+    const alertSuccess = document.getElementById("alertSuccess");
+    const alertFail = document.getElementById("alertFail");
+    if(alertSuccess.style.display === "block" && alertFail.style.display === "block"){
+        alertSuccess.style.display = "none";
+        alertFail.style.display = "none";
+    }
+    else if(alertSuccess.style.display === "block"){
+        alertSuccess.style.display = "none";
+    }
+    else if(alertFail.style.display === "block"){
+        alertFail.style.display = "none";
+    }
+    document.getElementById("overlay").style.display = "none";
+}
+
+function openSeatSelection(schedule_id, start, destination, date, time, available_seats, price) {
+    console.log(available_seats)
+    if(parseInt(available_seats, 10) === 0){
+        openAlert( "Sorry! All seats are booked.", "alertFail");
+    }
+    else{
+        document.getElementById("seat_selection").style.display = "flex";
+        document.getElementById("overlay").style.display = "block";
+        document.getElementById("seat_selection_route").textContent = start + " - " + destination;
+        document.getElementById("seat_selection_date").textContent = date;
+        document.getElementById("seat_selection_time").textContent = time;
+        document.getElementById("seat_selection_seat_count").textContent = available_seats;
+        document.getElementById("seat_selection_price").textContent = price;
+        price_per_ride = parseInt(price, 10);
+        booking_schedule_id = schedule_id;
+
+        fetch(`${ url }/seatAvailabilityController?schedule_id=${schedule_id}`,{
+            method: "GET",
+            headers: {
+                'Content-Type': 'application/json'
+            },
         })
-        .then(parsedResponse => {
-            seatAvailabilityArray = parsedResponse.map(seatInfo => seatInfo.availability);
-            updateSeatMap();
-        })
+            .then(response =>{
+                if(response.ok){
+                    return response.json();
+                }
+                else{
+                    console.error("Error" + err);
+                }
+            })
+            .then(parsedResponse => {
+                seatAvailabilityArray = parsedResponse.map(seatInfo => seatInfo.availability);
+                updateSeatMap();
+            })
+    }
 }
 
 function closeSeatSelection() {
     document.getElementById("seat_selection").style.display = "none";
     document.getElementById("overlay").style.display = "none";
     price_per_ride = 0;
+    selectedSeats = [];
+    totalPrice = 0;
 }
 
 function updateBookingDetails() {
@@ -255,36 +305,42 @@ function updateSeatMap() {
                 if (selectedSeats.includes(seatNumber)) {
                     seatElement.classList.add('selected');
                 }
-            } else {
+            } else if (isAvailable === '0') {
                 seatElement.style.backgroundColor = 'red';
                 seatElement.style.color = 'white';
                 seatElement.textContent = seatNumber;
                 seatElement.classList.add('unavailable');
                 seatElement.setAttribute('disabled', 'true');
+            } else{
+                seatElement.style.backgroundColor = 'red';
+                seatElement.style.color = 'white';
+                seatElement.textContent = 'X';
+                seatElement.classList.add('unavailable');
+                seatElement.setAttribute('disabled', 'true');
             }
-
             rowElement.appendChild(seatElement);
         }
-
         seatMapElement.appendChild(rowElement);
     }
 }
 
 function payment() {
-    document.getElementById("payment").style.display = "flex";
-    document.getElementById("overlay").style.display = "block";
+    if(totalPrice <= 0){
+        openAlert( "Please,select at least one seat!", "alertFail");
+    }
+    else{
+        document.getElementById('selected-seats-payment').textContent = selectedSeats.length === 0 ? 'None' : selectedSeats.join(', ');
+        document.getElementById('total-price-payment').textContent = totalPrice;
+        document.getElementById("paymentContainer").style.display = "flex";
+        document.getElementById("overlay").style.display = "block";
+    }
 }
 function closePayment() {
-    document.getElementById("payment").style.display = "none";
+    document.getElementById("paymentContainer").style.display = "none";
     document.getElementById("overlay").style.display = "none";
 }
 
 function pay() {
-    // if (selectedSeats.length === 0) {
-    //     alert('Please select at least one seat.');
-    // } else {
-    //     alert(`Payment successful!\nSelected Seats: ${selectedSeats.join(', ')}\nTotal Price: $${totalPrice}`);
-    // }
     const currentDate = new Date();
 
     const year = currentDate.getFullYear();
@@ -348,16 +404,18 @@ function addBooking(schedule_id, p_id, payment_id, selectedSeats) {
                 return response.json();
             }
             else{
+                closeConfirmAlert();
+                openAlert("Your booking was unsuccessful!", "alertFail");
                 console.error("Error" + err);
             }
         })
         .then(parsedResponse => {
             const booking_id = parsedResponse.booking_id;
-            const p_id = parsedResponse.p_id;
             const email = parsedResponse.email;
+            const bookedSeats = selectedSeats.join(', ');
 
-            console.log("booking_id: " + booking_id + "p_id: " + p_id + "email: " + email);
-            fetch(`${ url }/mailController?email=${email}&pId=${p_id}&bookingId=${booking_id}`, {
+            console.log("booking_id: " + booking_id + "p_id: " + p_id + "email: " + email + "seats: " + bookedSeats)
+            fetch(`${ url }/mailController?email=${email}&schedule_id=${schedule_id}&p_id=${p_id}&bookingId=${booking_id}&price=${totalPrice}&bookedSeats=${bookedSeats}`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -366,10 +424,26 @@ function addBooking(schedule_id, p_id, payment_id, selectedSeats) {
                 .then(response => {
                     if (response.ok) {
                         console.log("Successful")
+                        closeConfirmAlert();
+                        closePayment();
+                        closeSeatSelection();
+                        openAlert("Your booking was successful!", "alertSuccess");
                     } else {
                         console.log("Unsuccessful: " + response)
+                        closeConfirmAlert();
+                        openAlert("Your booking was unsuccessful!", "alertFail");
                     }
                 })
         })
 }
 
+function openConfirmAlert(){
+    document.getElementById('confirmationMsg').textContent = "Are you sure to pay?";
+    document.getElementById("confirmationAlert").style.display = "block";
+    document.getElementById("overlay").style.display = "block";
+}
+
+function closeConfirmAlert(){
+    document.getElementById("confirmationAlert").style.display = "none";
+    document.getElementById("overlay").style.display = "none";
+}

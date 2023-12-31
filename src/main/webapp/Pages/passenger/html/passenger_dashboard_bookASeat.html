@@ -41,7 +41,24 @@
         </div>
     </div>
     <div class="seat_selection" id="seat_selection">
-        <div id="seat-map"></div>
+        <div>
+            <div>
+                <div class="seat" style="background-color: #b3b3b3"></div>
+                <h4>Available</h4>
+            </div>
+            <div>
+                <div class="seat" style="background-color: #5cb85c"></div>
+                <h4>Selected</h4>
+            </div>
+            <div>
+                <div class="seat" style="background-color: #ff0000"></div>
+                <h4>Booked</h4>
+            </div>
+        </div>
+        <div class="seat_map">
+            <h1 >Select Seats</h1>
+            <div id="seat-map"></div>
+        </div>
         <div id="booking-details">
             <h1>Booking Details</h1>
             <h3>Route: <span id="seat_selection_route"></span></h3>
@@ -51,13 +68,89 @@
             <h3>Price per seat: <span id="seat_selection_price"></span></h3>
             <p>Selected Seats: <span id="selected-seats">None</span></p>
             <p>Total Price: Rs.<span id="total-price">0</span></p>
-            <button class="button" onclick="payment()">Pay Now</button>
-            <button class="button" onclick="closeSeatSelection()">Cancel</button>
+            <div style="display: flex; flex-direction: row; gap:10px">
+                <button class="button" onclick="closeSeatSelection()">Cancel</button>
+                <button class="button" onclick="payment()">Pay Now</button>
+            </div>
         </div>
     </div>
-    <div id="payment" class="payment">
-        <button class="button" onclick="pay()">Pay Now</button>
-        <button class="button" onclick="closePayment()">Back</button>
+    <div id="paymentContainer" class="paymentContainer">
+        <div id="schedule">
+            <h1>Booking Details</h1>
+            <h3>Selected Seats: <span id="selected-seats-payment"></span></h3>
+            <h3>Total Price: Rs.<span id="total-price-payment"></span></h3>
+            <div style="border: 1px solid #cccccc; padding: 15px;">
+                <p style="color: black; margin: 0; padding: 0;">
+                    <span style="color: #ff0006">Please note: If you need to cancel or update your booking, it must be done before three hours from the departure time.</span>
+                    <br>If you delete before:
+                    <br>- 3 hours: No charge
+                    <br>- 2 hours: 1% charge
+                    <br>- 1 hour: 5% charge
+                    <br>- Not checked in: 100% charge
+                </p>
+                <label style="margin: 0; padding: 0;">
+                    <input type="checkbox" id="declaration"><label style="margin: 0; padding: 0;">I agree with it</label>
+                </label>
+            </div>
+
+        </div>
+        <div id="vertical-line"></div>
+        <div id="payment">
+            <h1>Payment Details</h1>
+            <div>
+                <div class="form-group">
+                    <label>Card Type<span class="required">*</span></label>
+                    <div class="cardOptions">
+                        <div class="cardOption">
+                            <label for="visaCard"></label><input type="radio" name="visaCard" id="visaCard" required>
+                            <img src="../../../images/cardImages/visaCard.png" class="cardImg" alt="visa">
+                        </div>
+                        <div class="cardOption">
+                            <label for="masterCard"></label><input type="radio" name="masterCard" id="masterCard" required>
+                            <img src="../../../images/cardImages/masterCard.png" class="cardImg" alt="visa">
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="cardNo">Card Number<span class="required">*</span></label>
+                    <input type="number" name="cardNo" id="cardNo" class="form-control" placeholder="XXXXXXXXXX" required>
+                </div>
+                <div class="form-parallel">
+                    <div class="form-group">
+                        <label for="expMonth">Expiration Month<span class="required">*</span></label>
+                        <input type="number" name="expMonth" id="expMonth" class="form-control" placeholder="MM" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="expYear">Expiration Year<span class="required">*</span></label>
+                        <input type="number" name="expYear" id="expYear" class="form-control" placeholder="YYYY" required>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="cvn">CVN<span class="required">*</span></label>
+                    <input type="number" name="cvn" id="cvn" class="form-control" placeholder="XXXX" required>
+                </div>
+            </div>
+            <div class="button_group">
+                <button class="button" onclick="closePayment()">Back</button>
+                <button class="button" onclick="openConfirmAlert()">Pay Now</button>
+            </div>
+        </div>
+    </div>
+    <div class="alertBody" id="confirmationAlert">
+        <img src="../../../images/Alert_icons/Alert_icon.png" class="alertImg" alt="confirm">
+        <div class="alertMsgFail" id="confirmationMsg"></div>
+        <button class="okButton" onclick="closeConfirmAlert()" style="margin-right: 20px">Cancel</button>
+        <button class="okButton" onclick="pay()">Yes</button>
+    </div>
+    <div class="alertBody" id="alertSuccess">
+        <img src="../../../images/Alert_icons/Success_icon.png" class="alertImg" alt="success">
+        <div class="alertMsgSuccess" id="alertMsgSuccess"></div>
+        <button class="okButton" onclick="closeAlert()">Ok</button>
+    </div>
+    <div class="alertBody" id="alertFail">
+        <img src="../../../images/Alert_icons/Error_icon.png" class="alertImg" alt="fail">
+        <div class="alertMsgFail" id="alertMsg"></div>
+        <button class="okButton" onclick="closeAlert()">Ok</button>
     </div>
     <div class="content_container">
         <div class="navbar">
@@ -98,15 +191,15 @@
                     </div>
                 </div>
                 <div class="search_box">
-                    <input type="date" id="datePicker" style="padding: 10px; font-size: 16px; border: 1px solid #ccc; border-radius: 5px; width: 150px; background-color: #fff;">
+                    <label for="datePicker"></label><input type="date" id="datePicker">
                 </div>
                 <div class="search_box">
                     <label for="startTimePicker">Start time From</label>
-                    <input type="time" id="startTimePicker" style="padding: 10px; font-size: 16px; border: 1px solid #ccc; border-radius: 5px; width: 150px; background-color: #fff;">
+                    <input type="time" id="startTimePicker">
                 </div>
                 <div class="search_box" style="gap: 10px">
                     <label for="endTimePicker">Start time To</label>
-                    <input type="time" id="endTimePicker" style="padding: 10px; font-size: 16px; border: 1px solid #ccc; border-radius: 5px; width: 150px; background-color: #fff;">
+                    <input type="time" id="endTimePicker">
                 </div>
                 <div class="search_box">
                     <button class="button" onclick="searchData()">Search</button>
@@ -126,6 +219,7 @@
     </div>
 </div>
 <script src="../../../js/url.js"></script>
+<script src="../../../js/auth.js"></script>
 <script src="../js/passenger_dashboard_bookASeat.js"></script>
 </body>
 </html>

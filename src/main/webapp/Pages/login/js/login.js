@@ -39,6 +39,29 @@
 //         });
 // }
 
+// if(isAuthenticated()){
+//     const jwtToken = localStorage.getItem('jwtToken');
+//     const decodedToken = decodeJWT(jwtToken);
+//
+//     const privilege_level = decodedToken.user_role;
+//     if (privilege_level === 1) {
+//         window.location.href = 'http://localhost:2000/SmoothTix_war_exploded/Pages/administrator/html/admin_dashboard_home.html';
+//     } else if (privilege_level === 2) {
+//         window.location.href = 'http://localhost:2000/SmoothTix_war_exploded/Pages/timekeeper/html/timekpr_dashboard_home.html';
+//     } else if (privilege_level === 3) {
+//         window.location.href = 'http://localhost:2000/SmoothTix_war_exploded/Pages/busemployee/html/owner_dashboard_home.html';
+//     } else if (privilege_level === 4) {
+//         window.location.href = 'http://localhost:2000/SmoothTix_war_exploded/Pages/busemployee/html/driver_dashboard_home.html';
+//     } else if (privilege_level === 5) {
+//         window.location.href = 'http://localhost:2000/SmoothTix_war_exploded/Pages/busemployee/html/conductor_dashboard_home.html';
+//     } else if (privilege_level === 6) {
+//         window.location.href = '../../passenger/html/passenger_dashboard_home.html';
+//     }
+// }
+// else{
+//     console.log("Unauthenticated")
+// }
+
 function isValidNIC(nic) {
     const nicRegex = /^(\d{9}[vV]|\d{12})$/;
     return nicRegex.test(nic);
@@ -80,6 +103,7 @@ document.getElementById("loginForm").addEventListener("submit", function(event) 
     })
         .then(response => {
             if (response.ok) {
+                // console.log(response)
                 return response.json();
             } else {
                 return response.json()
@@ -92,6 +116,7 @@ document.getElementById("loginForm").addEventListener("submit", function(event) 
         })
         .then(parsedResponse => {
             const jwtToken = parsedResponse.token;
+            const decodedToken = decodeJWT(jwtToken);
             localStorage.setItem('jwtToken', jwtToken);
             let user_role = parsedResponse.user_role;
             openAlertSuccess(user_role)
@@ -101,6 +126,8 @@ document.getElementById("loginForm").addEventListener("submit", function(event) 
             console.error('Error:', error);
         });
 });
+
+
 
 function openAlertSuccess(user_role) {
     if (user_role === 1) {
