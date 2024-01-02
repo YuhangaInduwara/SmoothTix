@@ -1,17 +1,11 @@
 package com.smoothtix.controller;
 
 import com.google.gson.Gson;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
-import com.smoothtix.dao.busTable;
 import com.smoothtix.dao.routeTable;
-import com.smoothtix.dao.timeKprTable;
-import com.smoothtix.model.Bus;
 import com.smoothtix.model.Route;
-import jakarta.servlet.http.HttpServlet;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -31,12 +25,12 @@ public class RouteController extends HttpServlet {
         try {
             ResultSet rs;
 
-//            if(route_id == null){
+            if(route_id == null){
                 rs = routeTable.getAll();
-//            }
-//            else{
-//                rs = routeTable.get(route_id);
-//            }
+            }
+            else{
+                rs = routeTable.get(route_id);
+            }
 
             while (rs.next()) {
                 JSONObject routeData = new JSONObject();
@@ -79,22 +73,49 @@ public class RouteController extends HttpServlet {
         }
     }
 
-//    @Override
-//    protected void doDelete(HttpServletRequest request, HttpServletResponse response) {
-//        response.setContentType("text/json");
-//
-//        try {
-//            String timekpr_id = request.getHeader("timekpr_id");
-//            int deleteSuccess = timeKprTable.delete(timekpr_id);
-//
-//            if (deleteSuccess >= 1) {
-//                response.setStatus(HttpServletResponse.SC_OK);
-//            } else {
-//                response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-//            }
-//        } catch (Exception e) {
-//            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-//        }
-//    }
+    @Override
+    protected void doPut(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        response.setContentType("text/html");
+        PrintWriter out = response.getWriter();
+
+        try {
+            Gson gson = new Gson();
+
+            String route_id = request.getHeader("route_id");
+
+            BufferedReader reader = request.getReader();
+            Route route = gson.fromJson(reader, Route.class);
+
+
+            int updateSuccess = routeTable.update(route_id, route);
+
+            if (updateSuccess >= 1) {
+                response.setStatus(HttpServletResponse.SC_OK);
+            } else {
+                response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @Override
+    protected void doDelete(HttpServletRequest request, HttpServletResponse response) {
+        response.setContentType("text/json");
+
+        try {
+            String route_id = request.getHeader("route_id");
+            int deleteSuccess = routeTable.delete(route_id);
+
+            if (deleteSuccess >= 1) {
+                response.setStatus(HttpServletResponse.SC_OK);
+            } else {
+                response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+            }
+        } catch (Exception e) {
+            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+        }
+    }
 
 }

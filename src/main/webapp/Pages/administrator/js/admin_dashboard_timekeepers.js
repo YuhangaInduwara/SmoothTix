@@ -37,7 +37,6 @@ function updatePage(page) {
     tableBody.innerHTML = "";
     displayDataAsTable(dataToShow);
     updatePageNumber(currentPage);
-
 }
 
 function updatePageNumber(page) {
@@ -51,6 +50,7 @@ const nextPageIcon = document.getElementById("nextPageIcon");
 nextPageIcon.addEventListener("click", () => changePage(currentPage));
 
 function changePage(newPage) {
+    console.log(currentPage + "  " + newPage)
     if (currentPage !== newPage) {
         currentPage = Math.max(1, newPage);
         updatePage(currentPage, false);
@@ -61,7 +61,6 @@ function displayDataAsTable(data) {
     const tableBody = document.querySelector("#dataTable tbody");
     const rowCount = data.length;
     let existingData = {};
-    console.log(rowCount)
     if(rowCount === 0){
         const noDataRow = document.createElement("tr");
         noDataRow.innerHTML = `<td colspan="6">No data available</td>`;

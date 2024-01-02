@@ -3,10 +3,10 @@ package com.smoothtix.controller;
 import com.google.gson.Gson;
 import com.smoothtix.dao.passengerTable;
 import com.smoothtix.model.Passenger;
-import jakarta.servlet.ServletException;
-import jakarta.servlet.http.HttpServlet;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -23,12 +23,18 @@ public class PassengerController extends HttpServlet {
         JSONArray passengerDataArray = new JSONArray();
         String p_id = request.getHeader("p_id");
         String flag = request.getHeader("flag");
+        String nic = request.getParameter("nic");
         String privilege_level = request.getHeader("privilege_level");
         try {
             ResultSet rs = null;
             if(p_id == null){
                 if(flag == null){
-                    rs = passengerTable.getAll();
+                    if(nic == null){
+                        rs = passengerTable.getAll();
+                    }
+                    else{
+                        rs = passengerTable.getBy_nic(nic);
+                    }
                 }
                 else{
                     if(privilege_level == null){
@@ -55,7 +61,7 @@ public class PassengerController extends HttpServlet {
                 passengerDataArray.put(passengerData);
             }
 
-            out.println(passengerDataArray.toString()); // Send JSON data as a response
+            out.println(passengerDataArray.toString());
             response.setStatus(HttpServletResponse.SC_OK);
         }catch (Exception e) {
             e.printStackTrace();

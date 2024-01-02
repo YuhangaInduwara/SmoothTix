@@ -120,7 +120,7 @@ function updateRow(bus_id){
     const urlParams = new URLSearchParams(window.location.search);
 
     document.getElementById("header_bus_id").innerHTML = bus_id
-0
+
     fetch('../../../busController', {
         method: 'GET',
         headers: {
