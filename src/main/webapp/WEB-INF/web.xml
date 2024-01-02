@@ -136,4 +136,22 @@
     <servlet-name>MailController</servlet-name>
     <url-pattern>/mailController</url-pattern>
   </servlet-mapping>
+
+  <servlet>
+    <servlet-name>SeatAvailabilityController</servlet-name>
+    <servlet-class>com.smoothtix.controller.SeatAvailabilityController</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>SeatAvailabilityController</servlet-name>
+    <url-pattern>/seatAvailabilityController</url-pattern>
+  </servlet-mapping>
+
+  <servlet>
+    <servlet-name>PaymentController</servlet-name>
+    <servlet-class>com.smoothtix.controller.PaymentController</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>PaymentController</servlet-name>
+    <url-pattern>/paymentController</url-pattern>
+  </servlet-mapping>
 </web-app>

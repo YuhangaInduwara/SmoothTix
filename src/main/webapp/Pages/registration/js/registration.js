@@ -17,14 +17,60 @@ nicInput.addEventListener("change", function() {
         nicError.textContent = "Please enter a valid NIC number.";
         nicError.style.display = "block";
     } else {
-        nicInput.setCustomValidity("");
-        nicError.textContent = "";
-        nicError.style.display = "none";
+        fetch(`${ url }/passengerController?nic=${document.getElementById("nic").value}`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        })
+            .then(response => {
+                if (response.ok) {
+                    console.log(response)
+                    return response.json();
+                } else {
+                    return response.json()
+                        .then(data => {
+                            throw new Error("Login failed");
+                        });
+                }
+            })
+            .then(parsedResponse => {
+                console.log(parsedResponse)
+                if(parsedResponse.length === 0){
+                    nicInput.setCustomValidity("");
+                    nicError.textContent = "";
+                    nicError.style.display = "none";
+                }
+                else{
+                    nicInput.setCustomValidity("This nic is already exist.");
+                    nicError.textContent = "This nic is already exist.";
+                    nicError.style.display = "block";
+                }
+            })
+
+            .catch(error => {
+                console.error('Error:', error);
+            });
+
     }
 });
 
 const emailInput = document.getElementById("email");
+const confirmPasswordInput = document.getElementById("password_confirm");
+const confirmPasswordInputError = document.getElementById("password_confirm_error");
 const emailError = document.getElementById("emailError");
+
+confirmPasswordInput.addEventListener("change", function() {
+    if (document.getElementById("password").value !== document.getElementById("password_confirm").value) {
+        confirmPasswordInput.setCustomValidity("Password should be matched.");
+        confirmPasswordInputError.textContent = "Password should be matched.";
+        confirmPasswordInputError.style.display = "block";
+    } else {
+        confirmPasswordInput.setCustomValidity("");
+        confirmPasswordInputError.textContent = "";
+        confirmPasswordInputError.style.display = "none";
+    }
+});
 
 emailInput.addEventListener("change", function() {
     if (!isValidEmail(emailInput.value)) {
@@ -55,7 +101,7 @@ document.getElementById("regForm").addEventListener("submit", function(event) {
         email: email,
         password: password,
     };
-    console.log(userData)
+    // console.log(userData)
     const jsonData = JSON.stringify(userData);
 
     fetch('/SmoothTix_war_exploded/registerController', {
