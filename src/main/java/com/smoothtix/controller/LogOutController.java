@@ -1,18 +1,10 @@
 package com.smoothtix.controller;
 
-import com.google.gson.Gson;
-import com.smoothtix.dao.passengerTable;
-import com.smoothtix.model.Login;
-import jakarta.servlet.ServletException;
-import jakarta.servlet.http.HttpServlet;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
-import jakarta.servlet.http.HttpSession;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.sql.ResultSet;
 
 public class LogOutController extends HttpServlet {
     @Override

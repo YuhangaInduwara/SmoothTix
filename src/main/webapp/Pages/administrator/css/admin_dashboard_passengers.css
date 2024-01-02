@@ -304,7 +304,9 @@ a{
     background-color: rgba(255, 1, 1, 0.32);
 }
 
-.alertBody {
+.alertBody,
+.flagAlertBody,
+.deleteAlertBody{
     width: 512px;
     height: 246px;
     background: #ffffff;
@@ -315,13 +317,13 @@ a{
     transform: translate(-50%, -50%);
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
     z-index: 1000;
-    display: none;
     flex-direction: column;
     justify-content: center;
     align-items: center;
     text-align: center;
     padding: 50px;
     gap:40px;
+    display: none;
 }
 
 .alertImg {
@@ -429,7 +431,7 @@ tbody tr:hover {
 #flag_page_control{
     width: calc(100% - 20px);
     height: 40px;
-    display: flex;
+    display: none;
     justify-content: flex-end;
     align-items: center;
     margin-top: 10px;

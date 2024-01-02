@@ -5,7 +5,6 @@ public class Schedule {
     String date;
     String route_id;
     String start;
-
     String destination;
     String start_time;
     String end_time;
