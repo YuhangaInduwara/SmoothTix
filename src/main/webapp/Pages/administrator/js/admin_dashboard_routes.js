@@ -115,10 +115,10 @@ function displayDataAsTable(data) {
             <td>${item.manufact_year}</td>
             <td>
                 <span class="icon-container">
-                    <i onclick="updateRow('${item.bus_id}')"><img src="../../../images/vector_icons/update_icon.png" alt="update" class="action_icon"></i>
+                    <i onclick="updateRow('${item.route_id}')"><img src="../../../images/vector_icons/update_icon.png" alt="update" class="action_icon"></i>
                 </span>
                 <span class="icon-container" style="margin-left: 1px;">
-                    <i onclick="deleteRow('${item.bus_id}')"><img src="../../../images/vector_icons/delete_icon.png" alt="delete" class="action_icon"></i>
+                    <i onclick="deleteRow('${item.route_id}')"><img src="../../../images/vector_icons/delete_icon.png" alt="delete" class="action_icon"></i>
                 </span>
             </td>
         `;
@@ -158,8 +158,8 @@ document.getElementById("busRegForm").addEventListener("submit", function(event)
     })
         .then(response => {
             if (response.ok) {
-                // closeForm_add();
-                // openAlertSuccess("Successfully Added!");
+                closeForm_add();
+                openAlertSuccess("Successfully Added!");
                 console.log("Success")
             } else{
                 // return response.json()
@@ -217,7 +217,110 @@ function createForm() {
     formContainer_update.appendChild(form_update.cloneNode(true));
 }
 
+function updateRow(route_id){
+    openForm_update();
 
+    let existingData = {};
 
+    const urlParams = new URLSearchParams(window.location.search);
+
+    document.getElementById("header_bus_id").innerHTML = route_id
+
+    fetch('../../../routeController', {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+            'route_id': route_id
+        },
+    })
+        .then(response => {
+            if (response.ok) {
+                response.json().then(data => {
+                    existingData = data[0];
+                    console.log(existingData)
+                    document.getElementById("update_route_no").value = existingData.route_no;
+                    document.getElementById("update_start").value = existingData.start;
+                    document.getElementById("update_destination").value = existingData.destination;
+                    document.getElementById("update_distance").value = existingData.distance;
+                    document.getElementById("update_price_per_ride").value = existingData.price_per_ride;
+                });
+            } else if (response.status === 401) {
+                console.log('Unauthorized');
+            } else {
+                console.error('Error:', response.status);
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
+
+    document.getElementById("busUpdateForm").addEventListener("submit", function(event) {
+        event.preventDefault();
+
+        const route_no = document.getElementById("update_route_no").value;
+        const start = document.getElementById("update_start").value;
+        const destination = document.getElementById("update_destination").value;
+        const distance = document.getElementById("update_distance").value;
+        const price_per_ride = document.getElementById("update_price_per_ride").value;
+
+        const updatedData = {
+            route_no: route_no,
+            start: start,
+            destination: destination,
+            distance: distance,
+            price_per_ride: price_per_ride,
+        };
+
+        const jsonData = JSON.stringify(updatedData);
+
+        fetch(`/SmoothTix_war_exploded/routeController`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+                'route_id': route_id
+            },
+            body: jsonData
+        })
+            .then(response => {
+                if (response.ok) {
+                    closeForm_update();
+                    openAlertSuccess();
+                } else if (response.status === 401) {
+                    openAlertFail(response.status);
+                    console.log('Update unsuccessful');
+                } else {
+                    openAlertFail(response.status);
+                    console.error('Error:', response.status);
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+    });
+}
+
+function deleteRow(route_id){
+    fetch(`/SmoothTix_war_exploded/routeController`, {
+        method: 'DELETE',
+        headers: {
+            'Content-Type': 'application/json',
+            'route_id': route_id
+        },
+    })
+        .then(response => {
+            if (response.ok) {
+                openAlertSuccess();
+            } else if (response.status === 401) {
+                openAlertFail(response.status);
+                console.log('Delete unsuccessful');
+            } else {
+                openAlertFail(response.status);
+                console.error('Error:', response.status);
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
+}
 
 
