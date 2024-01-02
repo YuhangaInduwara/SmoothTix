@@ -11,10 +11,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Time;
 import java.util.Properties;
 
 public class MailController extends HttpServlet {
@@ -30,8 +28,11 @@ public class MailController extends HttpServlet {
         String p_id = request.getParameter("p_id");
         String schedule_id = request.getParameter("schedule_id");
         String passengerName = "User";
-        String date = "2024/01/04";
-        String time = "09:45";
+        String date = "";
+        String time = "";
+        String start = "";
+        String destination = "";
+        String busRegNo = "";
 
         try {
             ResultSet rs1 = passengerTable.getBy_p_id(p_id);
@@ -51,6 +52,18 @@ public class MailController extends HttpServlet {
                 System.out.println("No schedule found for schedule_id: " + schedule_id);
             }
 
+            ResultSet rs3 = scheduleTable.getByRouteByScheduleId(schedule_id);
+            if (rs3.next()) {
+                start = String.valueOf(rs3.getString("start"));
+                destination = String.valueOf(rs3.getString("destination"));
+                busRegNo = String.valueOf(rs3.getString("reg_no"));
+                System.out.println(start);
+                System.out.println(destination);
+                System.out.println(busRegNo);
+            } else {
+                System.out.println("No schedule found for schedule_id: " + schedule_id);
+            }
+
             String subject = "Your Booking Details";
             String apiUrl = "https://chart.googleapis.com/chart";
             String parameters = String.format(
@@ -62,11 +75,13 @@ public class MailController extends HttpServlet {
                     "We are delighted to inform you that your booking for the upcoming journey has been successfully confirmed. Your travel details are as follows:<br/><br/>" +
                     "Date of Journey: " + date + "<br/>" +
                     "Departure Time: " + time + "<br/>" +
-                    "From: [Departure Location]<br/>" +
-                    "To: [Destination]<br/>" +
+                    "Bus: " + busRegNo + "<br/>" +
+                    "From: " + start + " <br/>" +
+                    "To: " + destination + "<br/>" +
                     "Booking Reference Number: " + bookingId + "<br/>" +
                     "Reserved seat/seats: " + bookedSeats + "<br/>" +
-                    "Please find attached your QR code for this booking. This QR code will serve as your electronic ticket, so please ensure that you have it readily available on your mobile device when boarding.<br/><br/>";
+                    "Reservation cost: Rs." + price + ".00<br/>" +
+                    "Please find attached QR code for this booking. This QR code will serve as your electronic ticket, so please ensure that you have it readily available on your mobile device when boarding.<br/><br/>";
             System.out.println(message);
             String footer = "We appreciate your trust in our services and wish you a pleasant journey. Thank you for choosing SmoothTix.<br/><br/>" +
                     "Safe travels!<br/><br/>" +

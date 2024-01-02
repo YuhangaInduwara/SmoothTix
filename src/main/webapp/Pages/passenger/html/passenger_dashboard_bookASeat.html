@@ -102,15 +102,18 @@
                     <label>Card Type<span class="required">*</span></label>
                     <div class="cardOptions">
                         <div class="cardOption">
-                            <label for="visaCard"></label><input type="radio" name="visaCard" id="visaCard" required>
-                            <img src="../../../images/cardImages/visaCard.png" class="cardImg" alt="visa">
+                            <input type="radio" name="cardType" id="visaCard">
+                            <label for="visaCard" class="cardOptionVisa"></label>
+                            <img src="../../../images/cardImages/visaCard.png" class="cardImg" alt="Visa">
                         </div>
                         <div class="cardOption">
-                            <label for="masterCard"></label><input type="radio" name="masterCard" id="masterCard" required>
-                            <img src="../../../images/cardImages/masterCard.png" class="cardImg" alt="visa">
+                            <input type="radio" name="cardType" id="masterCard">
+                            <label for="masterCard" class="cardOptionMaster"></label>
+                            <img src="../../../images/cardImages/masterCard.png" class="cardImg" alt="MasterCard">
                         </div>
                     </div>
                 </div>
+
                 <div class="form-group">
                     <label for="cardNo">Card Number<span class="required">*</span></label>
                     <input type="number" name="cardNo" id="cardNo" class="form-control" placeholder="XXXXXXXXXX" required>
@@ -217,6 +220,10 @@
             </div>
         </div>
     </div>
+    <div id="loading-spinner" >
+        <div class="spinner"></div>
+    </div>
+
 </div>
 <script src="../../../js/url.js"></script>
 <script src="../../../js/auth.js"></script>

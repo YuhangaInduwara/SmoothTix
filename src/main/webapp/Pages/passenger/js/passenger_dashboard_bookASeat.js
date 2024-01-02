@@ -4,29 +4,26 @@ let allData = [];
 let price_per_ride = 0;
 const seatsPerRow = 5;
 const rows = 10;
-const totalSeats = rows * seatsPerRow;
-const availableSeats = Array.from({ length: totalSeats }, (_, index) => index + 1);
 let selectedSeats = [];
 let totalPrice = 0;
 let seatAvailabilityArray = [];
-
 let booking_p_id = "P0030";
 let booking_schedule_id = "";
+const errorMessages = {};
 
-// if(isAuthenticated()){
-//     const jwtToken = localStorage.getItem('jwtToken');
-//     if(jwtToken){
-//         const decodedToken = decodeJWT(jwtToken);
-//         const p_id = decodedToken.p_id;
-//         booking_p_id = decodedToken.p_id;
-//     }
-//     else{
-//         window.location.href = 'http://localhost:2000/SmoothTix_war_exploded/Pages/login/html/login.html';
-//     }
-// }
-// else{
-//     window.location.href = 'http://localhost:2000/SmoothTix_war_exploded/Pages/login/html/login.html';
-// }
+if(isAuthenticated()){
+    const jwtToken = localStorage.getItem('jwtToken');
+    if(jwtToken){
+        const decodedToken = decodeJWT(jwtToken);
+        booking_p_id = decodedToken.p_id;
+    }
+    else{
+        window.location.href = `${url}/Pages/login/html/login.html`;
+    }
+}
+else{
+    window.location.href = `${url}/Pages/login/html/login.html`;
+}
 
 function fetchAllData() {
     fetch(`${ url }/scheduleController`, {
@@ -185,7 +182,6 @@ function searchData() {
             scheduleList.innerHTML = "";
             allData = data;
             updatePage(currentPage);
-            // displayDataAsScheduleTiles(data);
         })
         .catch(error => {
             console.error('Error:', error);
@@ -220,7 +216,6 @@ function closeAlert(){
 }
 
 function openSeatSelection(schedule_id, start, destination, date, time, available_seats, price) {
-    console.log(available_seats)
     if(parseInt(available_seats, 10) === 0){
         openAlert( "Sorry! All seats are booked.", "alertFail");
     }
@@ -257,17 +252,18 @@ function openSeatSelection(schedule_id, start, destination, date, time, availabl
 }
 
 function closeSeatSelection() {
-    document.getElementById("seat_selection").style.display = "none";
-    document.getElementById("overlay").style.display = "none";
     price_per_ride = 0;
     selectedSeats = [];
     totalPrice = 0;
+    updateBookingDetails()
+    document.getElementById("seat_selection").style.display = "none";
+    document.getElementById("overlay").style.display = "none";
+    resetPaymentDetails();
 }
 
 function updateBookingDetails() {
     const selectedSeatsElement = document.getElementById('selected-seats');
     const totalPriceElement = document.getElementById('total-price');
-
     selectedSeatsElement.textContent = selectedSeats.length === 0 ? 'None' : selectedSeats.join(', ');
     totalPriceElement.textContent = totalPrice;
 }
@@ -286,6 +282,43 @@ function toggleSeat(seatNumber) {
     updateBookingDetails();
     updateSeatMap();
 }
+
+// function updateSeatMap() {
+//     const seatMapElement = document.getElementById('seat-map');
+//     seatMapElement.innerHTML = '';
+//     for (let rowNumber = 1; rowNumber <= rows; rowNumber++) {
+//         const rowElement = document.createElement('div');
+//         rowElement.classList.add('row');
+//         for (let seatIndex = 1; seatIndex <= seatsPerRow; seatIndex++) {
+//             const seatNumber = (rowNumber - 1) * seatsPerRow + seatIndex;
+//             const isAvailable = seatAvailabilityArray[seatNumber - 1];
+//             const seatElement = document.createElement('div');
+//             seatElement.classList.add('seat');
+//
+//             if (isAvailable === '1') {
+//                 seatElement.textContent = seatNumber;
+//                 seatElement.addEventListener('click', () => toggleSeat(seatNumber));
+//                 if (selectedSeats.includes(seatNumber)) {
+//                     seatElement.classList.add('selected');
+//                 }
+//             } else if (isAvailable === '0') {
+//                 seatElement.style.backgroundColor = 'red';
+//                 seatElement.style.color = 'white';
+//                 seatElement.textContent = seatNumber;
+//                 seatElement.classList.add('unavailable');
+//                 seatElement.setAttribute('disabled', 'true');
+//             } else{
+//                 seatElement.style.backgroundColor = 'red';
+//                 seatElement.style.color = 'white';
+//                 seatElement.textContent = 'X';
+//                 seatElement.classList.add('unavailable');
+//                 seatElement.setAttribute('disabled', 'true');
+//             }
+//             rowElement.appendChild(seatElement);
+//         }
+//         seatMapElement.appendChild(rowElement);
+//     }
+// }
 
 function updateSeatMap() {
     const seatMapElement = document.getElementById('seat-map');
@@ -335,12 +368,15 @@ function payment() {
         document.getElementById("overlay").style.display = "block";
     }
 }
+
 function closePayment() {
     document.getElementById("paymentContainer").style.display = "none";
     document.getElementById("overlay").style.display = "none";
 }
 
 function pay() {
+    closeConfirmAlert();
+    document.getElementById('loading-spinner').style.display = 'block';
     const currentDate = new Date();
 
     const year = currentDate.getFullYear();
@@ -377,7 +413,6 @@ function pay() {
         .then(parsedResponse => {
             console.log(parsedResponse);
             const payment_id = parsedResponse.payment_id;
-            // const seat_no = selectedSeats;
             addBooking(booking_schedule_id, booking_p_id, payment_id, selectedSeats);
         })
 }
@@ -405,6 +440,7 @@ function addBooking(schedule_id, p_id, payment_id, selectedSeats) {
             }
             else{
                 closeConfirmAlert();
+                document.getElementById('loading-spinner').style.display = 'none';
                 openAlert("Your booking was unsuccessful!", "alertFail");
                 console.error("Error" + err);
             }
@@ -424,13 +460,16 @@ function addBooking(schedule_id, p_id, payment_id, selectedSeats) {
                 .then(response => {
                     if (response.ok) {
                         console.log("Successful")
+                        document.getElementById('loading-spinner').style.display = 'none';
+                        openAlert("Your booking was successful!", "alertSuccess");
                         closeConfirmAlert();
                         closePayment();
                         closeSeatSelection();
-                        openAlert("Your booking was successful!", "alertSuccess");
+                        resetPaymentDetails();
                     } else {
                         console.log("Unsuccessful: " + response)
                         closeConfirmAlert();
+                        document.getElementById('loading-spinner').style.display = 'none';
                         openAlert("Your booking was unsuccessful!", "alertFail");
                     }
                 })
@@ -438,12 +477,113 @@ function addBooking(schedule_id, p_id, payment_id, selectedSeats) {
 }
 
 function openConfirmAlert(){
-    document.getElementById('confirmationMsg').textContent = "Are you sure to pay?";
-    document.getElementById("confirmationAlert").style.display = "block";
-    document.getElementById("overlay").style.display = "block";
+    const isValid = validatePayment();
+
+    if (isValid) {
+        // If validation passes, show confirmation alert or proceed with further actions
+        document.getElementById('confirmationMsg').textContent = "Are you sure to pay?";
+        document.getElementById("confirmationAlert").style.display = "block";
+        document.getElementById("overlay").style.display = "block";
+    }
 }
 
 function closeConfirmAlert(){
     document.getElementById("confirmationAlert").style.display = "none";
     document.getElementById("overlay").style.display = "none";
 }
+
+function showAlert(inputElement, message) {
+    if (!errorMessages[inputElement.id]) {
+        const alertBox = document.createElement("div");
+        alertBox.className = "alert";
+        alertBox.innerHTML = message;
+
+        inputElement.parentNode.insertBefore(alertBox, inputElement.nextSibling);
+
+        errorMessages[inputElement.id] = true;
+
+        setTimeout(function () {
+            alertBox.parentNode.removeChild(alertBox);
+            errorMessages[inputElement.id] = false;
+        }, 3000);
+    }
+}
+
+document.querySelectorAll('.cardOptionVisa').forEach(function (label) {
+    label.addEventListener('click', function () {
+        document.getElementById("visaCard").checked = true;
+        document.getElementById("masterCard").checked = false;
+    });
+});
+
+document.querySelectorAll('.cardOptionMaster').forEach(function (label) {
+    label.addEventListener('click', function () {
+        document.getElementById("visaCard").checked = false;
+        document.getElementById("masterCard").checked = true;
+    });
+});
+
+function validatePayment() {
+    const visaCardChecked = document.getElementById("visaCard").checked;
+    const masterCardChecked = document.getElementById("masterCard").checked;
+
+    if (!visaCardChecked && !masterCardChecked) {
+        showAlert(document.querySelector(".cardOptions"), "Please select a card type.");
+        return false;
+    }
+
+    const cardNumber = document.getElementById("cardNo").value;
+    if (!cardNumber || cardNumber.length !== 10 || isNaN(cardNumber)) {
+        showAlert(document.querySelector("label[for='cardNo']"), "Please enter a valid 10-digit card number.");
+        return false;
+    }
+
+    const expMonth = document.getElementById("expMonth").value;
+    if (!expMonth || expMonth.length !== 2 || isNaN(expMonth) || parseInt(expMonth) < 1 || parseInt(expMonth) > 12) {
+        showAlert(document.querySelector("label[for='expMonth']"), "Please enter a valid 2-digit expiration month.");
+        return false;
+    }
+
+    const expYear = document.getElementById("expYear").value;
+    if (!expYear || expYear.length !== 4 || isNaN(expYear) || parseInt(expYear) < new Date().getFullYear()) {
+        showAlert(document.querySelector("label[for='expYear']"), "Please enter a valid 4-digit expiration year.");
+        return false;
+    }
+
+    const cvn = document.getElementById("cvn").value;
+    if (!cvn || cvn.length !== 4 || isNaN(cvn)) {
+        showAlert(document.querySelector("label[for='cvn']"), "Please enter a valid 4-digit CVN.");
+        return false;
+    }
+
+    const agreementCheckbox = document.getElementById("declaration");
+    if (!agreementCheckbox.checked) {
+        showAlert(agreementCheckbox, "Please agree to the terms and conditions.");
+        return false;
+    }
+
+    const cardType = visaCardChecked ? "Visa" : "MasterCard";
+    const paymentData = {
+            cardType: cardType,
+            cardNumber: cardNumber,
+            expMonth: expMonth,
+            expYear: expYear,
+            cvn: cvn,
+            agreement: agreementCheckbox.checked
+        };
+
+        console.log(paymentData)
+
+    return true;
+}
+
+function resetPaymentDetails() {
+    document.getElementById("visaCard").checked = false;
+    document.getElementById("masterCard").checked = false;
+    document.getElementById("cardNo").value = "";
+    document.getElementById("expMonth").value = "";
+    document.getElementById("expYear").value = "";
+    document.getElementById("cvn").value = "";
+    document.getElementById("declaration").checked = false;
+}
+

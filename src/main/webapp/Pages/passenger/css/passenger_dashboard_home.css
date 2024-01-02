@@ -2,6 +2,9 @@ body{
     margin:0;
     background-color: white;
     max-height: 100vh;
+    background-image:url('../../../images/welcome.png');background-size: cover;
+    background-repeat: no-repeat;
+    /*background-position: center; height: 100vh; width: 100vh*/
 }
 
 .dashboard{
@@ -97,8 +100,10 @@ a{
     flex: 1;
     display: flex;
     flex-direction: column;
-    background-color: white;
-    height: 86vh;
+    /*background-color: white;*/
+    /*background-image:url('../../../images/welcome.png');background-size: cover;*/
+    /*background-repeat: no-repeat;*/
+    /*background-position: center; height: 100vh; width: 100vh*/
 }
 
 .navbar{
