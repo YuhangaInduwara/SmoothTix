@@ -1,5 +1,5 @@
 function fetchAllData() {
-    fetch('../../../conductorController', {
+    fetch('/SmoothTix_war_exploded/conductorController', {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json'
@@ -141,7 +141,7 @@ function updateRow(conductor_id){
 
         const jsonData = JSON.stringify(updatedData);
 
-        fetch(`../../../conductorController`, {
+        fetch('../../../conductorController', {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',
