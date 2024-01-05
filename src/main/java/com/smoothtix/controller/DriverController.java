@@ -1,40 +1,53 @@
-//package com.smoothtix.controller;
-//
-//import com.google.gson.Gson;
-//import com.smoothtix.dao.driverTable;
-//import com.smoothtix.model.Driver;
-//import jakarta.servlet.ServletException;
-//import jakarta.servlet.annotation.WebServlet;
-//import jakarta.servlet.http.HttpServlet;
-//import jakarta.servlet.http.HttpServletRequest;
-//import jakarta.servlet.http.HttpServletResponse;
-//import org.json.JSONArray;
-//import org.json.JSONObject;
-//
-//import java.io.BufferedReader;
-//import java.io.IOException;
-//import java.io.PrintWriter;
-//import java.sql.ResultSet;
-//
-//@WebServlet(name = "driverController", value = "/driverController")
-//public class DriverController extends HttpServlet {
-//    @Override
-//    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-//        response.setContentType("text/html");
-//        PrintWriter out = response.getWriter();
-//        JSONArray driverDataArray = new JSONArray();
-//
-//        String driver_id = request.getHeader("driver_id");
-//
-//        try {
-//            ResultSet rs = null;
-//            if(driver_id == null){
-//                rs = driverTable.getAll();
-//            }
-//            else{
+package com.smoothtix.controller;
+
+import com.google.gson.Gson;
+import com.smoothtix.dao.conductorTable;
+import com.smoothtix.dao.passengerTable;
+import com.smoothtix.model.Conductor;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.sql.ResultSet;
+
+public class DriverController extends HttpServlet {
+    @Override
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        response.setContentType("text/html");
+        PrintWriter out = response.getWriter();
+        JSONArray driverDataArray = new JSONArray();
+
+        String driver_id = request.getHeader("driver_id");
+        String p_id = request.getHeader("p_id");
+        System.out.println("hello: " + p_id);
+
+        try {
+            ResultSet rs = null;
+            if(driver_id == null){
+                if(p_id == null){
+//                    rs = driverTable.getAll();
+                }
+                else{
+                    rs = passengerTable.getDriver_id(p_id);
+                    if(rs.next()){
+                        String driver_id_p_id = rs.getString("driver_id");
+                        System.out.println("hello: " + driver_id_p_id);
+                        out.println(driver_id_p_id); // Send JSON data as a response
+                    }
+
+                }
+
+            }
+            else{
 //                rs = driverTable.get(driver_id);
-//            }
-//
+            }
+
 //            while (rs.next()) {
 //                JSONObject busData = new JSONObject();
 //                driverData.put("driver_id", rs.getString("driver_id"));
@@ -49,15 +62,16 @@
 //
 //                driverDataArray.put(driverData);
 //            }
-//
+
 //            out.println(driverDataArray.toString()); // Send JSON data as a response
-//            response.setStatus(HttpServletResponse.SC_OK);
-//        }catch (Exception e) {
-//            e.printStackTrace();
-//            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-//        }
-//    }
-//
+
+            response.setStatus(HttpServletResponse.SC_OK);
+        }catch (Exception e) {
+            e.printStackTrace();
+            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+        }
+    }
+
 //    @Override
 //    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 //        response.setContentType("text/html");
@@ -127,5 +141,5 @@
 //            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
 //        }
 //    }
-//
-//}
+
+}

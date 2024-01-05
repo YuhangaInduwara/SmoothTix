@@ -81,6 +81,7 @@ public class LoginController extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         response.setContentType("application/json");
         PrintWriter out = response.getWriter();
+        System.out.println("hello");
 
         try {
             String authHeader = request.getHeader("Authorization");
@@ -99,6 +100,7 @@ public class LoginController extends HttpServlet {
                     userData.put("nic", claims.getBody().getSubject());
                     userData.put("user_role", claims.getBody().get("user_role"));
                     userData.put("p_id", claims.getBody().get("p_id"));
+                    System.out.println(claims.getBody().get("p_id"));
 
                     out.print(userData);
                     response.setStatus(HttpServletResponse.SC_OK);

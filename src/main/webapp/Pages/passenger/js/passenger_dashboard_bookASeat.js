@@ -407,6 +407,7 @@ function pay() {
                 return response.json();
             }
             else{
+                openAlert("Your booking was unsuccessful!" + err, "alertFail");
                 console.error("Error" + err);
             }
         })
@@ -423,6 +424,7 @@ function addBooking(schedule_id, p_id, payment_id, selectedSeats) {
         p_id: p_id,
         payment_id: payment_id,
         selectedSeats: selectedSeats,
+        status: false,
     };
 
     const jsonData = JSON.stringify(bookingDetails);
@@ -441,7 +443,7 @@ function addBooking(schedule_id, p_id, payment_id, selectedSeats) {
             else{
                 closeConfirmAlert();
                 document.getElementById('loading-spinner').style.display = 'none';
-                openAlert("Your booking was unsuccessful!", "alertFail");
+                openAlert("Your booking was unsuccessful!" + err, "alertFail");
                 console.error("Error" + err);
             }
         })
@@ -467,6 +469,8 @@ function addBooking(schedule_id, p_id, payment_id, selectedSeats) {
                         closeSeatSelection();
                         resetPaymentDetails();
                     } else {
+                        deleteBooking(booking_id);
+                        deletePayment(payment_id);
                         console.log("Unsuccessful: " + response)
                         closeConfirmAlert();
                         document.getElementById('loading-spinner').style.display = 'none';
@@ -474,6 +478,44 @@ function addBooking(schedule_id, p_id, payment_id, selectedSeats) {
                     }
                 })
         })
+}
+
+function deleteBooking(booking_id){
+    fetch(`${ url }/bookingController?booking_id=${booking_id}`, {
+        method: 'DELETE',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+    })
+        .then(response => {
+            if (response.ok) {
+
+            } else {
+                console.error('Error:', response.status);
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
+}
+
+function deletePayment(payment_id){
+    fetch(`${ url }/bookingController?payment_id=${payment_id}`, {
+        method: 'DELETE',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+    })
+        .then(response => {
+            if (response.ok) {
+
+            } else {
+                console.error('Error:', response.status);
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
 }
 
 function openConfirmAlert(){
