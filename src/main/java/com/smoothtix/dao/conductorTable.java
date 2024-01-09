@@ -1,13 +1,9 @@
 package com.smoothtix.dao;
 
 import com.smoothtix.database.dbConnection;
-import com.smoothtix.model.Bus;
 import com.smoothtix.model.Conductor;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 
 public class conductorTable {
     public static int insert(Conductor conductor) throws SQLException, ClassNotFoundException {

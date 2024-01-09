@@ -34,6 +34,8 @@ public class passengerTable {
         return "P" + String.format("%04d", nextPassengerID);
     }
 
+
+
     public static ResultSet getBy_p_id(String p_id) throws SQLException, ClassNotFoundException {
         Connection con = dbConnection.initializeDatabase();
         PreparedStatement pst = con.prepareStatement("SELECT * FROM passenger WHERE p_id=?");

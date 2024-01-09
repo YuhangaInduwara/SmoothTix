@@ -1,5 +1,5 @@
 function fetchAllData() {
-    fetch('../../../busprofileController', {
+    fetch('/SmoothTix_war_exploded/busprofileController', {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json'
