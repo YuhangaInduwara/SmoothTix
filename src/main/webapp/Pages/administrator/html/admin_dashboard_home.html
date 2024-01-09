@@ -8,119 +8,121 @@
     <link rel="icon" type="image/x-icon" href="../../../images/favicon/favicon.png">
 </head>
 <body>
-<div class="dashboard">
-    <div class="sidebar">
-        <div class="site_logo">
-            <img src="../../../images/logo.png" alt="site_logo" class="site_logo_img">
-            <p class="site_logo_caption">Your Ticket to a Smooth Travel</p>
+    <div class="dashboard">
+        <div class="sidebar">
+            <div class="site_logo">
+                <img src="../../../images/logo.png" alt="site_logo" class="site_logo_img">
+                <p class="site_logo_caption">Your Ticket to a Smooth Travel</p>
+            </div>
+            <div>
+                <div class="sidebar_element_main">
+                    <a href="./admin_dashboard_home.html"><img src="../../../images/vector_icons/home.png" alt="home" class="sidebar_img"></a>
+                    <a href="./admin_dashboard_home.html">Home</a>
+                </div>
+                <div class="sidebar_element">
+                    <a href="./admin_dashboard_passengers.html"><img src="../../../images/vector_icons/passenger.png" alt="passenger" class="sidebar_img"></a>
+                    <a href="./admin_dashboard_passengers.html">Passengers</a>
+                </div>
+                <div class="sidebar_element">
+                    <a href="./admin_dashboard_timekeepers.html"><img src="../../../images/vector_icons/timeKeeper.png" alt="timeKeeper" class="sidebar_img"></a>
+                    <a href="./admin_dashboard_timekeepers.html">Timekeepers</a>
+                </div>
+                <div class="sidebar_element">
+                    <a href="./admin_dashboard_drivers.html"><img src="../../../images/vector_icons/driver.png" alt="driver" class="sidebar_img"></a>
+                    <a href="./admin_dashboard_drivers.html">Drivers</a>
+                </div>
+                <div class="sidebar_element">
+                    <a href="./admin_dashboard_conductors.html"><img src="../../../images/vector_icons/conductor.png" alt="conductor" class="sidebar_img"></a>
+                    <a href="./admin_dashboard_conductors.html">Conductors</a>
+                </div>
+                <div class="sidebar_element">
+                    <a href="./admin_dashboard_buses.html"><img src="../../../images/vector_icons/bus.png" alt="bus" class="sidebar_img"></a>
+                    <a href="./admin_dashboard_buses.html">Buses</a>
+                </div>
+                <div class="sidebar_element">
+                    <a href="./admin_dashboard_routes.html"><img src="../../../images/vector_icons/route.png" alt="route" class="sidebar_img"></a>
+                    <a href="./admin_dashboard_routes.html">Routes</a>
+                </div>
+                <div class="sidebar_element">
+                    <a href="./admin_dashboard_reports.html"><img src="../../../images/vector_icons/report.png" alt="report" class="sidebar_img"></a>
+                    <a href="./admin_dashboard_reports.html">Reports</a>
+                </div>
+                <div class="sidebar_element">
+                    <a href="../../passenger/html/passenger_dashboard_home.html"><img src="../../../images/vector_icons/login.png" alt="login" class="sidebar_img"></a>
+                    <a href="../../passenger/html/passenger_dashboard_home.html">Login as a Passenger</a>
+                </div>
+                <div class="sidebar_element">
+                    <a href="../../login/html/login.html" onclick="logout(); return false;"><img src="../../../images/vector_icons/logout.png" alt="logout" class="sidebar_img"></a>
+                    <button id="logoutButton" style="background: none; border: none; padding: 0; text-decoration: none; cursor: pointer;" ><a href="" onclick="logout(); return false;">Logout</a></button>
+                </div>
+            </div>
         </div>
-        <div>
-            <div class="sidebar_element_main">
-                <a href="./admin_dashboard_home.html"><img src="../../../images/vector_icons/home.png" alt="home" class="sidebar_img"></a>
-                <a href="./admin_dashboard_home.html">Home</a>
-            </div>
-            <div class="sidebar_element">
-                <a href="./admin_dashboard_passengers.html"><img src="../../../images/vector_icons/passenger.png" alt="passenger" class="sidebar_img"></a>
-                <a href="./admin_dashboard_passengers.html">Passengers</a>
-            </div>
-            <div class="sidebar_element">
-                <a href="./admin_dashboard_timekeepers.html"><img src="../../../images/vector_icons/timeKeeper.png" alt="timeKeeper" class="sidebar_img"></a>
-                <a href="./admin_dashboard_timekeepers.html">Timekeepers</a>
-            </div>
-            <div class="sidebar_element">
-                <a href="./admin_dashboard_drivers.html"><img src="../../../images/vector_icons/driver.png" alt="driver" class="sidebar_img"></a>
-                <a href="./admin_dashboard_drivers.html">Drivers</a>
-            </div>
-            <div class="sidebar_element">
-                <a href="./admin_dashboard_conductors.html"><img src="../../../images/vector_icons/conductor.png" alt="conductor" class="sidebar_img"></a>
-                <a href="./admin_dashboard_conductors.html">Conductors</a>
-            </div>
-            <div class="sidebar_element">
-                <a href="./admin_dashboard_buses.html"><img src="../../../images/vector_icons/bus.png" alt="bus" class="sidebar_img"></a>
-                <a href="./admin_dashboard_buses.html">Buses</a>
-            </div>
-            <div class="sidebar_element">
-                <a href="./admin_dashboard_routes.html"><img src="../../../images/vector_icons/route.png" alt="route" class="sidebar_img"></a>
-                <a href="./admin_dashboard_routes.html">Routes</a>
-            </div>
-            <div class="sidebar_element">
-                <a href="./admin_dashboard_reports.html"><img src="../../../images/vector_icons/report.png" alt="report" class="sidebar_img"></a>
-                <a href="./admin_dashboard_reports.html">Reports</a>
-            </div>
-            <div class="sidebar_element">
-                <a href="../../passenger/html/passenger_dashboard_home.html"><img src="../../../images/vector_icons/login.png" alt="login" class="sidebar_img"></a>
-                <a href="../../passenger/html/passenger_dashboard_home.html">Login as a Passenger</a>
-            </div>
-            <div class="sidebar_element">
-                <a href="../../login/html/login.html"><img src="../../../images/vector_icons/logout.png" alt="logout" class="sidebar_img"></a>
-                <button id="logoutButton" style="background: none; border: none; padding: 0; text-decoration: none; cursor: pointer;"><a href="">Logout</a></button>
-            </div>
-        </div>
-    </div>
 
-    <div class="content_container">
-        <div class="navbar">
-            <div class="page_name">
-                <h1>Home</h1>
-            </div>
-            <div class="user_profile">
-                <h3 id="userName">Username</h3>
-                <img src="../../../images/vector_icons/user.png" alt="userimage" class="user_img">
-            </div>
-        </div>
-        <div class="body_content">
-            <div class="tile_grid">
-                <div class="raw_1">
-                    <a href="./admin_dashboard_passengers.html">
-                        <div class="tile">
-                            <h1>No. of Registered Passengers</h1>
-                            <h1 class="count">13</h1>
-                            <img src="../../../images/vector_icons/passenger.png" alt="passenger" class="sidebar_img">
-                        </div>
-                    </a>
-                    <a href="./admin_dashboard_timekeepers.html">
-                        <div class="tile" >
-                            <h1>No. of Registered TimeKeepers</h1>
-                            <h1 class="count">5</h1>
-                            <img src="../../../images/vector_icons/timeKeeper.png" alt="owner" class="sidebar_img">
-                        </div>
-                    </a>
-                    <a href="./admin_dashboard_buses.html">
-                        <div class="tile">
-                            <h1>No. of Registered Buses</h1>
-                            <h1 class="count">10</h1>
-                            <img src="../../../images/vector_icons/bus.png" alt="bus" class="sidebar_img">
-                        </div>
-                    </a>
+        <div class="content_container">
+            <div class="navbar">
+                <div class="page_name">
+                    <h1>Home</h1>
                 </div>
-                <div class="raw_2">
-                    <a href="./admin_dashboard_drivers.html">
-                        <div class="tile">
-                            <h1>No. of Registered Drivers</h1>
-                            <h1 class="count">4</h1>
-                            <img src="../../../images/vector_icons/driver.png" alt="driver" class="sidebar_img">
-                        </div>
-                    </a>
-                    <a href="./admin_dashboard_conductors.html">
-                        <div class="tile">
-                            <h1>No. of Registered Conductors</h1>
-                            <h1 class="count">5</h1>
-                            <img src="../../../images/vector_icons/conductor.png" alt="conductor" class="sidebar_img">
-                        </div>
-                    </a>
-                    <a href="./admin_dashboard_routes.html">
-                        <div class="tile">
-                            <h1>No. of Registered Routes</h1>
-                            <h1 class="count">3</h1>
-                            <img src="../../../images/vector_icons/route.png" alt="route" class="sidebar_img">
-                        </div>
-                    </a>
+                <div class="user_profile">
+                    <h3 id="userName">Username</h3>
+                    <img src="../../../images/vector_icons/user.png" alt="userimage" class="user_img">
+                </div>
+            </div>
+            <div class="body_content">
+                <div class="tile_grid">
+                    <div class="raw_1">
+                        <a href="./admin_dashboard_passengers.html">
+                            <div class="tile">
+                                <h1>No. of Registered Passengers</h1>
+                                <h1 class="count">13</h1>
+                                <img src="../../../images/vector_icons/passenger.png" alt="passenger" class="sidebar_img">
+                            </div>
+                        </a>
+                        <a href="./admin_dashboard_timekeepers.html">
+                            <div class="tile" >
+                                <h1>No. of Registered TimeKeepers</h1>
+                                <h1 class="count">5</h1>
+                                <img src="../../../images/vector_icons/timeKeeper.png" alt="owner" class="sidebar_img">
+                            </div>
+                        </a>
+                        <a href="./admin_dashboard_buses.html">
+                            <div class="tile">
+                                <h1>No. of Registered Buses</h1>
+                                <h1 class="count">10</h1>
+                                <img src="../../../images/vector_icons/bus.png" alt="bus" class="sidebar_img">
+                            </div>
+                        </a>
+                    </div>
+                    <div class="raw_2">
+                        <a href="./admin_dashboard_drivers.html">
+                            <div class="tile">
+                                <h1>No. of Registered Drivers</h1>
+                                <h1 class="count">4</h1>
+                                <img src="../../../images/vector_icons/driver.png" alt="driver" class="sidebar_img">
+                            </div>
+                        </a>
+                        <a href="./admin_dashboard_conductors.html">
+                            <div class="tile">
+                                <h1>No. of Registered Conductors</h1>
+                                <h1 class="count">5</h1>
+                                <img src="../../../images/vector_icons/conductor.png" alt="conductor" class="sidebar_img">
+                            </div>
+                        </a>
+                        <a href="./admin_dashboard_routes.html">
+                            <div class="tile">
+                                <h1>No. of Registered Routes</h1>
+                                <h1 class="count">3</h1>
+                                <img src="../../../images/vector_icons/route.png" alt="route" class="sidebar_img">
+                            </div>
+                        </a>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
-<script src="../js/admin_dashboard_home.js"></script>
+    <script src="../../../js/url.js"></script>
+    <script src="../../../js/auth.js"></script>
+    <script src="../js/admin_dashboard_home.js"></script>
 </body>
 </html>
 

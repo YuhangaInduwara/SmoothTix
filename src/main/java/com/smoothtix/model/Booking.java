@@ -1,17 +1,20 @@
 package com.smoothtix.model;
 
+
 public class Booking {
     String booking_id;
     String payment_id;
     String schedule_id;
     String p_id;
+    Boolean status;
     int[] selectedSeats;
 
 
-    public Booking(String payment_id, String schedule_id, String p_id, int[] selectedSeats){
+    public Booking(String payment_id, String schedule_id, String p_id, Boolean status, int[] selectedSeats){
         this.payment_id = payment_id;
         this.p_id = p_id;
         this.schedule_id = schedule_id;
+        this.status = status;
         this.selectedSeats = selectedSeats;
     }
 
@@ -23,6 +26,7 @@ public class Booking {
     }
     public String getSchedule_id(){ return schedule_id; }
     public String getP_id(){ return p_id; }
+    public Boolean getStatus(){ return status; }
     public int[] getSelectedSeats(){
         return selectedSeats;
     }
@@ -38,6 +42,9 @@ public class Booking {
     }
     public void setP_id(String p_id){
         this.p_id = p_id;
+    }
+    public void setStatus(Boolean status){
+        this.status = status;
     }
     public void setSelectedSeats(int[] selectedSeats){ this.selectedSeats = selectedSeats; }
 }

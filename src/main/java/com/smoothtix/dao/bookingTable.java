@@ -2,6 +2,7 @@ package com.smoothtix.dao;
 
 import com.smoothtix.database.dbConnection;
 import com.smoothtix.model.Booking;
+import com.smoothtix.model.Bus;
 
 import java.sql.*;
 import java.util.Arrays;
@@ -9,12 +10,13 @@ import java.util.Arrays;
 public class bookingTable {
     public static String insert(Booking booking) throws SQLException, ClassNotFoundException {
         Connection con = dbConnection.initializeDatabase();
-        PreparedStatement pst1 = con.prepareStatement("insert into booking(booking_id, payment_id, schedule_id, p_id) values (?,?,?,?)");
+        PreparedStatement pst1 = con.prepareStatement("insert into booking(booking_id, payment_id, schedule_id, p_id, status) values (?,?,?,?,?)");
         String booking_id = generateBookingID();
         pst1.setString(1, booking_id);
         pst1.setString(2, booking.getPayment_id());
         pst1.setString(3, booking.getSchedule_id());
         pst1.setString(4, booking.getP_id());
+        pst1.setBoolean(5, booking.getStatus());
         int rawCount1 = pst1.executeUpdate();
         if(rawCount1 >= 0){
             for (int seat : booking.getSelectedSeats()) {
@@ -62,33 +64,44 @@ public class bookingTable {
         return "BK" + String.format("%04d", nextBookingID);
     }
 
-//    private static String generateOwnerID(String owner_nic) throws SQLException, ClassNotFoundException {
-//        Connection con = dbConnection.initializeDatabase();
-//        PreparedStatement pst = con.prepareStatement("SELECT owner_id FROM owner WHERE owner_nic=?");
-//        pst.setString(1,owner_nic);
-//        ResultSet rs = pst.executeQuery();
-//
-//        if (rs.next()) {
-//            return rs.getString("owner_id");
-//        }
-//        else{
-//            String query = "SELECT MAX(CAST(SUBSTRING(owner_id, 2) AS SIGNED)) + 1 AS next_owner_id FROM owner";
-//            Statement stmt = con.createStatement();
-//            ResultSet rs_new = ((Statement) stmt).executeQuery(query);
-//
-//            int nextOwnerID = 1;
-//            if (rs_new.next()) {
-//                nextOwnerID = rs_new.getInt("next_owner_id");
-//            }
-//            return "Owner" + String.format("%03d", nextOwnerID);
-//        }
-//    }
-
-
     public static ResultSet getAll() throws SQLException, ClassNotFoundException {
         Connection con = dbConnection.initializeDatabase();
         PreparedStatement pst = con.prepareStatement("SELECT * FROM booking");
         ResultSet rs = pst.executeQuery();
         return rs;
+    }
+
+    // schedule_id, booking id, from, to, date, time, status, price, seat no, bus
+    // schedule -
+    public static ResultSet getByP_id(String p_id) throws SQLException, ClassNotFoundException {
+        Connection con = dbConnection.initializeDatabase();
+        PreparedStatement pst = con.prepareStatement("SELECT * FROM booking WHERE p_id=?");
+        pst.setString(1,p_id);
+        ResultSet rs = pst.executeQuery();
+        return rs;
+    }
+
+//    public static int update(String booking_id, Booking booking) throws SQLException, ClassNotFoundException {
+//        Connection con = dbConnection.initializeDatabase();
+//        PreparedStatement pst = con.prepareStatement("UPDATE booking SET owner_id=?, route=?, engineNo=?, chassisNo=?, noOfSeats=?, manufact_year=?, brand=?, model=? WHERE bus_id=?");
+//        pst.setString(1,booking.getOwner_nic());
+//        pst.setString(2,booking.getRoute());
+//        pst.setString(3,booking.getEngineNo());
+//        pst.setString(4,booking.getChassisNo());
+//        pst.setInt(5,booking.getNoOfSeats());
+//        pst.setString(6,booking.getManufact_year());
+//        pst.setString(7,booking.getBrand());
+//        pst.setString(8,booking.getModel());
+//        pst.setString(9,booking_id);
+//        int rawCount = pst.executeUpdate();
+//        return rawCount;
+//    }
+
+    public static int delete(String booking_id) throws SQLException, ClassNotFoundException {
+        Connection con = dbConnection.initializeDatabase();
+        PreparedStatement pst = con.prepareStatement("DELETE FROM booking WHERE booking_id = ?");
+        pst.setString(1,booking_id);
+        int rawCount = pst.executeUpdate();
+        return rawCount;
     }
 }

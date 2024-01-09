@@ -16,9 +16,15 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.security.Key;
 import java.sql.ResultSet;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.HashSet;
+import java.util.Objects;
+import java.util.Set;
 
 public class LoginController extends HttpServlet {
     private static final Key SECRET_KEY = Keys.secretKeyFor(SignatureAlgorithm.HS256);
+    private final Set<String> blacklistedTokens = new HashSet<>();
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -37,6 +43,10 @@ public class LoginController extends HttpServlet {
                 String hashedPassword = resultset.getString("password");
                 int privilege_level = resultset.getInt("privilege_level");
 
+                LocalDateTime currentDateTime = LocalDateTime.now();
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+                String formattedDateTime = currentDateTime.format(formatter);
+
                 if (!resultset.getBoolean("flag")) {
                     if (PasswordHash.checkPassword(plainPassword, hashedPassword)) {
                         // Generate JWT token
@@ -45,6 +55,7 @@ public class LoginController extends HttpServlet {
                                 .claim("user_name", resultset.getString("first_name") + " " + resultset.getString("last_name"))
                                 .claim("user_role", privilege_level)
                                 .claim("p_id", resultset.getString("p_id"))
+                                .claim("date_time", formattedDateTime)
                                 .signWith(SignatureAlgorithm.HS256, SECRET_KEY)
                                 .compact();
                         response.setHeader("Authorization", "Bearer " + jwtToken);
@@ -77,32 +88,42 @@ public class LoginController extends HttpServlet {
         }
     }
 
-    @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        response.setContentType("application/json");
-        PrintWriter out = response.getWriter();
-
+@Override
+protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    response.setContentType("application/json");
+    PrintWriter out = response.getWriter();
+    String action = request.getParameter("action");
+    System.out.println(action);
+    if(Objects.equals(action, "validate")){
         try {
             String authHeader = request.getHeader("Authorization");
 
             if (authHeader != null && authHeader.startsWith("Bearer ")) {
                 String jwtToken = authHeader.substring(7);
-
+                if (blacklistedTokens.contains(jwtToken)) {
+                    System.out.println("hello2");
+                    response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                    out.write("{\"error\": \"Unauthorized - Token has been blacklisted!\"}");
+                    return;
+                }
                 try {
                     Jws<Claims> claims = Jwts.parser()
                             .setSigningKey(SECRET_KEY) // Set your secret key
                             .build()
                             .parseClaimsJws(jwtToken);
-
+                    System.out.println(claims);
                     JSONObject userData = new JSONObject();
                     userData.put("user_name", claims.getBody().get("user_name"));
                     userData.put("nic", claims.getBody().getSubject());
                     userData.put("user_role", claims.getBody().get("user_role"));
                     userData.put("p_id", claims.getBody().get("p_id"));
+                    userData.put("date_time", claims.getBody().get("date_time"));
+                    System.out.println(claims.getBody().get("p_id"));
 
                     out.print(userData);
                     response.setStatus(HttpServletResponse.SC_OK);
                 } catch (Exception e) {
+                    System.out.println("hello3");
                     response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
                     out.write("{\"error\": \"Unauthorized - Invalid token!\"}");
                 }
@@ -115,5 +136,25 @@ public class LoginController extends HttpServlet {
             response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             out.write("{\"error\": \"Internal Server Error\"}");
         }
+    }
+    else if(Objects.equals(action, "logout")) {
+        String authHeader = request.getHeader("Authorization");
+
+        if (authHeader != null && authHeader.startsWith("Bearer ")) {
+            String jwtToken = authHeader.substring(7);
+            addToBlacklist(jwtToken);
+
+            response.setStatus(HttpServletResponse.SC_OK);
+            return;
+        }
+        out.write("{\"error\": \"Invalid Request!\"}");
+        response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+    } else{
+        out.write("{\"error\": \"Invalid Request!\"}");
+        response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+    }
+}
+    private void addToBlacklist(String token) {
+        blacklistedTokens.add(token);
     }
 }

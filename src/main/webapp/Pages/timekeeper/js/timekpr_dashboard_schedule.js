@@ -324,36 +324,34 @@ function createForm() {
 const searchInput = document.getElementById("searchInput");
 searchInput.addEventListener("keyup", searchData);
 
-// Handle search
 function searchData() {
-   const tableBody = document.querySelector("#dataTable tbody");
-   tableBody.innerHTML = "";
+    const start = document.getElementById('dropdown_start').value;
+    const destination = document.getElementById('dropdown_destination').value;
+    const date = document.getElementById('datePicker').value;
+    const startTime = document.getElementById('startTimePicker').value;
+    const endTime = document.getElementById('endTimePicker').value;
+    console.log("start: " + start + " destination: " + destination + " date: " + date + " startTime: " + startTime + " endTime: " + endTime);
 
-   const searchTerm = document.getElementById("searchInput").value;
-
-   if (searchTerm.trim() === "") {
-       fetchAllData();
-       return;
-   }
-
-   fetch('../../../scheduleController', {
-       method: 'GET',
-       headers: {
-           'Content-Type': 'application/json',
-           'schedule_id': searchTerm
-       },
-   })
-       .then(response => {
-           if (response.ok) {
-               return response.json();
-           } else {
-               console.error('Error:', response.status);
-           }
-       })
-       .then(data => {
-           displayDataAsTable(data);
-       })
-       .catch(error => {
-           console.error('Error:', error);
-       });
+    fetch(`${ url }/scheduleController?start=${start}&destination=${destination}&date=${date}&startTime=${startTime}&endTime=${endTime}`, {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+    })
+        .then(response => {
+            if (response.ok) {
+                return response.json();
+            } else {
+                console.error('Error:', response.status);
+            }
+        })
+        .then(data => {
+            const scheduleList = document.getElementById("schedule_list");
+            scheduleList.innerHTML = "";
+            allData = data;
+            updatePage(currentPage);
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
 }
