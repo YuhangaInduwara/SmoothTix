@@ -18,18 +18,7 @@
                 <a href="./driver_dashboard_home.html"><img src="../../../images/vector_icons/home.png" alt="home" class="sidebar_img"></a>
                 <a href="./driver_dashboard_home.html">Home</a>
             </div>
-            <div class="sidebar_element">
-                <a href="driver_dashboard_busprofile.html"><img src="../../../images/vector_icons/user.png" alt="Bus_profile" class="sidebar_img"></a>
-                <a href="driver_dashboard_busprofile.html">Bus Profile</a>
-            </div>
-            <div class="sidebar_element">
-                <a href="./driver_dashboard_location.html"><img src="../../../images/vector_icons/location.png" alt="location" class="sidebar_img"></a>
-                <a href="./driver_dashboard_location.html">Location</a>
-            </div>
-            <div class="sidebar_element">
-                <a href="./driver_dashboard_reports.html"><img src="../../../images/vector_icons/report.png" alt="report" class="sidebar_img"></a>
-                <a href="./driver_dashboard_reports.html">Reports</a>
-            </div>
+
             <div class="sidebar_element">
                 <a href="./driver_dashboard_ratings.html"><img src="../../../images/vector_icons/review.png" alt="ratings" class="sidebar_img"></a>
                 <a href="./driver_dashboard_ratings.html">Ratings</a>
@@ -56,40 +45,46 @@
             </div>
         </div>
         <div class="body_content">
-            <div class="tile_grid">
-                <div class="raw_1">
-                    <a href="./driver_dashboard_busprofile.html">
-                        <div class="tile" >
-                            <h1>Bus Profile</h1>
-                            <img src="../../../images/vector_icons/user.png" alt="owner" class="sidebar_img">
+            <div class="functions">
+                <div class="overlay" id="overlay"></div>
+
+                <div class="form">
+                    <form class="passenger_form" id="passengerUpdateForm">
+                        <div class="passenger_form_header">
+                            <h2>Update <span id="header_nic"></span> Details</h2>
                         </div>
-                    </a>
-                    <a href="./driver_dashboard_ratings.html">
-                        <div class="tile">
-                            <h1>Ratings</h1>
-                            <img src="../../../images/vector_icons/review.png" alt="bus" class="sidebar_img">
+                        <div id="formContainer_update"></div>
+                        <div class="passenger_form_footer">
+                            <button type="button" class="bus_form_button" onclick="closeForm_update()">Close</button>
+                            <input type="submit" class="passenger_form_button" value="Update">
                         </div>
-                    </a>
+                    </form>
                 </div>
-                <div class="raw_2">
-                    <a href="./driver_dashboard_location.html">
-                        <div class="tile">
-                            <h1>Location</h1>
-                            <img src="../../../images/vector_icons/location.png" alt="conductor" class="sidebar_img">
-                        </div>
-                    </a>
-                    <a href="./driver_dashboard_reports.html">
-                        <div class="tile">
-                            <h1>Reports</h1>
-                            <img src="../../../images/vector_icons/report.png" alt="route" class="sidebar_img">
-                        </div>
-                    </a>
+
+                <div class="alertBody" id="successAlert">
+                    <img src="../../../images/Alert_icons/Success_icon.png" class="alertImg" alt="success">
+                    <div class="alertMsgSuccess">Operation Successful!</div>
+                    <button class="okButton" onclick="closeAlertSuccess()">Ok</button>
+                </div>
+
+                <div class="alertBody" id="failAlert">
+                    <img src="../../../images/Alert_icons/Error_icon.png" class="alertImg" alt="fail">
+                    <div class="alertMsgFail" id="failMsg"></div>
+                    <button class="okButton" onclick="closeAlertFail()">Ok</button>
+                </div>
+
+            </div>
+            <div class="list" style="border: 1px solid #000; width: 450px; margin: auto; padding: 0 20px 20px 20px; background-color: #f4f4f4; text-align: center; border-radius: 10px;">
+                <h2 style="color: #333; font-size: 30px">Driver Information</h2>
+                <div class="dataList" id="dataList" style="list-style: none; padding: 0; text-align: center; font-size: 25px">
+                    <!-- List items will be inserted here -->
                 </div>
             </div>
+
+
         </div>
     </div>
 </div>
-<script src="../js/owner_dashboard_home.js"></script>
+<script src="../js/driver_dashboard_home.js.js"></script>
 </body>
 </html>
-
