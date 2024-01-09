@@ -46,6 +46,19 @@ public class scheduleTable {
         return rs;
     }
 
+    public static ResultSet getByRouteByScheduleId(String schedule_id) throws SQLException, ClassNotFoundException {
+        Connection con = dbConnection.initializeDatabase();
+        PreparedStatement pst = con.prepareStatement("SELECT r.start, r.destination, b.reg_no\n" +
+                "FROM schedule s\n" +
+                "JOIN bus_profile bp ON s.bus_profile_id = bp.bus_profile_id\n" +
+                "JOIN bus b ON bp.bus_id = b.bus_id\n" +
+                "JOIN route r ON b.route_id = r.route_id\n" +
+                "WHERE s.schedule_id = ?;");
+        pst.setString(1,schedule_id);
+        ResultSet rs = pst.executeQuery();
+        return rs;
+    }
+
     public static ResultSet getAll() throws SQLException, ClassNotFoundException {
         Connection con = dbConnection.initializeDatabase();
         PreparedStatement pst = con.prepareStatement("SELECT\n" +
@@ -68,6 +81,8 @@ public class scheduleTable {
                 "    seat_availability sa ON s.schedule_id = sa.schedule_id \n" +
                 "JOIN\n" +
                 "    route r_end ON b.route_id = r_end.route_id\n" +
+                "WHERE\n" +
+                "    sa.availability = true\n" +
                 "GROUP BY\n" +
                 "    s.schedule_id, r_start.start, r_end.destination, s.date_time, r_start.price_per_ride, b.reg_no;");
         ResultSet rs = pst.executeQuery();

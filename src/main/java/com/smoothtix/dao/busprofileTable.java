@@ -3,11 +3,7 @@ package com.smoothtix.dao;
 import com.smoothtix.database.dbConnection;
 import com.smoothtix.model.Busprofile;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-
+import java.sql.*;
 public class busprofileTable {
     public static int insert(Busprofile busprofile) throws SQLException, ClassNotFoundException {
         Connection con = dbConnection.initializeDatabase();

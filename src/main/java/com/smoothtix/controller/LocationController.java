@@ -5,10 +5,10 @@ import com.smoothtix.dao.locationTable;
 import com.smoothtix.dao.scheduleTable;
 import com.smoothtix.model.Location;
 import com.smoothtix.model.Schedule;
-import jakarta.servlet.ServletException;
-import jakarta.servlet.http.HttpServlet;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
