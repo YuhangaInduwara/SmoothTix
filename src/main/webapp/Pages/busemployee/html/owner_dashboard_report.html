@@ -67,8 +67,87 @@
                 <img src="../../../images/vector_icons/user.png" alt="userimage" class="user_img">
             </div>
         </div>
+        <div class="body_content">
+
+            <div class="functions">
+                <div class="search_box">
+                    <div>
+                        <label>
+                            <select id="dropdown_start" name="timePeriod">
+                                <option value="" disabled selected>Time Period</option>
+                                <option value="Week">Within a Week</option>
+                                <option value="Month">Within a Month</option>
+                                <option value="Year">Within a Year</option>
+                            </select>
+                        </label>
+                    </div>
+                </div>
+                <div class="search_box">
+                    <div>
+                        <label>
+                            <select id="dropdown_destination" name="reportType">
+                                <option value="" disabled selected>Report Type</option>
+                                <option value="Revenue">Revenue</option>
+                                <option value="Bookings">Bookings</option>
+                            </select>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="search_box">
+                    <input type="text" id="busId" name="busId" placeholder="Enter Bus Id">
+                </div>
+                <div class="search_box">
+                    <input type="text" id="routeId" name="routeId" placeholder="Enter Route ID">
+                </div>
+
+                <div class="search_box">
+                    <button class="button" onclick="searchData()">Generate Report</button>
+                </div>
+            </div>
+
+            <div id="reportContainer">
+                <h2> Report</h2>
+                <div id="reportTitle"></div>
+                <div id="reportContent"></div>
+            </div>
+            <!--<div class="schedule_list" id="schedule_list">
+
+            </div>-->
+            <div id="page_control">
+                <span id="prevPageIcon" onclick="changePage(currentPage - 1)"><img class="arrow_img" src="../../../images/vector_icons/arrow_left.png" alt="arrow_left"></span>
+                <span id="currentPageNumber" class="currentPageNumber">1</span>
+                <span class="currentPageNumber">/</span>
+                <span id="noOfPages" class="currentPageNumber">1</span>
+                <span id="nextPageIcon" onclick="changePage(currentPage + 1)"> <img class="arrow_img" src="../../../images/vector_icons/arrow_right.png" alt="arrow_right"></span>
+            </div>
+
+
+        </div>
     </div>
 </div>
-<script src="../js/owner_dashboard_home.js"></script>
+<script src="../js/owner_dashboard_report.js"></script>
 </body>
 </html>
+
+<!--<body>
+
+<form id="reportForm">
+    <label for="startDate">Start Date:</label>
+    <input type="date" id="startDate" name="startDate">
+
+    <label for="endDate">End Date:</label>
+    <input type="date" id="endDate" name="endDate">
+
+    <button type="button" onclick="generateReport()">Generate Report</button>
+</form>
+
+<div id="reportContainer">
+    // The generated report will be displayed here
+    <h2>Correspondent Report</h2>
+    <div id="reportContent"></div>
+</div>
+
+
+</body>
+</html>-->

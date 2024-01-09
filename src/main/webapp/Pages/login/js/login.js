@@ -1,30 +1,43 @@
-function checkSessionStatus() {
-    fetch("../../../checkSessionController")
-        .then(response => {
-            if (response.status === 200) {
-                return response.json();
-            } else {
-                window.location.href = "http://localhost:2000/SmoothTix_war_exploded/Pages/login/html/login.html"
-            }
-        })
-        .then(data => {
-            const privilege_level = data.user_role;
-            if (privilege_level === 1) {
-                window.location.href = 'http://localhost:2000/SmoothTix_war_exploded/Pages/administrator/html/admin_dashboard_home.html';
-            } else if (privilege_level === 2) {
-                window.location.href = 'http://localhost:2000/SmoothTix_war_exploded/Pages/timekeeper/html/timekpr_dashboard_home.html';
-            } else if (privilege_level === 3) {
-                window.location.href = 'http://localhost:2000/SmoothTix_war_exploded/Pages/busemployee/html/owner_dashboard_home.html';
-            } else if (privilege_level === 4) {
-                window.location.href = 'http://localhost:2000/SmoothTix_war_exploded/Pages/busemployee/html/driver_dashboard_home.html';
-            } else if (privilege_level === 5) {
-                window.location.href = 'http://localhost:2000/SmoothTix_war_exploded/Pages/busemployee/html/conductor_dashboard_home.html';
-            } else if (privilege_level === 6) {
-                window.location.href = '../../passenger/html/passenger_dashboard_home.html';
-            }
-        });
-}
-
+// makeAuthenticatedRequest()
+//
+// function makeAuthenticatedRequest() {
+//     const jwtToken = localStorage.getItem('jwtToken');
+//
+//     const headers = {
+//         'Content-Type': 'application/json',
+//         'Authorization': `Bearer ${jwtToken}`,
+//     };
+//
+//     fetch('/SmoothTix_war_exploded/loginController', {
+//         method: 'GET',
+//         headers: headers,
+//     })
+//         .then(response => {
+//             if (!response.ok) {
+//                 throw new Error('Network response was not ok');
+//             }
+//             return response.json();
+//         })
+//         .then(data => {
+//             const privilege_level = data.user_role;
+//             if (privilege_level === 1) {
+//                 window.location.href = 'http://localhost:2000/SmoothTix_war_exploded/Pages/administrator/html/admin_dashboard_home.html';
+//             } else if (privilege_level === 2) {
+//                 window.location.href = 'http://localhost:2000/SmoothTix_war_exploded/Pages/timekeeper/html/timekpr_dashboard_home.html';
+//             } else if (privilege_level === 3) {
+//                 window.location.href = 'http://localhost:2000/SmoothTix_war_exploded/Pages/busemployee/html/owner_dashboard_home.html';
+//             } else if (privilege_level === 4) {
+//                 window.location.href = 'http://localhost:2000/SmoothTix_war_exploded/Pages/busemployee/html/driver_dashboard_home.html';
+//             } else if (privilege_level === 5) {
+//                 window.location.href = 'http://localhost:2000/SmoothTix_war_exploded/Pages/busemployee/html/conductor_dashboard_home.html';
+//             } else if (privilege_level === 6) {
+//                 window.location.href = '../../passenger/html/passenger_dashboard_home.html';
+//             }
+//         })
+//         .catch(error => {
+//             console.error('Error during authenticated request:', error);
+//         });
+// }
 
 function isValidNIC(nic) {
     const nicRegex = /^(\d{9}[vV]|\d{12})$/;
@@ -78,6 +91,24 @@ document.getElementById("loginForm").addEventListener("submit", function(event) 
             }
         })
         .then(parsedResponse => {
+            const mail = "yuhanga2001@gmail.com"
+            fetch(`/SmoothTix_war_exploded/mailController?toEmail=${mail}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+            })
+                .then(response => {
+                    if (response.ok) {
+                        console.log("Successful")
+                    } else {
+                        console.log("Unsuccessful: " + response)
+                    }
+                })
+
+
+            const jwtToken = parsedResponse.token;
+            localStorage.setItem('jwtToken', jwtToken);
             let user_role = parsedResponse.user_role;
             openAlertSuccess(user_role)
         })
@@ -121,3 +152,5 @@ function closeAlertFail() {
     document.getElementById("loginFail").style.display = "none";
     document.getElementById("overlay").style.display = "none";
 }
+
+

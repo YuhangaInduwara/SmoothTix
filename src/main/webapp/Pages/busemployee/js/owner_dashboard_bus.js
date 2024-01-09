@@ -34,6 +34,7 @@ function displayDataAsTable(data) {
             <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
             <td>${item.bus_id}</td>
             <td>${item.owner_id}</td>
+            <td>${item.route}</td>
             <td>${item.engineNo}</td>
             <td>${item.chassisNo}</td>
             <td>${item.noOfSeats}</td>
@@ -60,6 +61,7 @@ document.getElementById("busRegForm").addEventListener("submit", function(event)
 
     const bus_id = document.getElementById("add_bus_id").value;
     const owner_id = document.getElementById("add_owner_id").value;
+    const route = document.getElementById("add_route").value;
     const engineNo = document.getElementById("add_engineNo").value;
     const chassisNo = document.getElementById("add_chassisNo").value;
     const noOfSeats = document.getElementById("add_noOfSeats").value;
@@ -70,6 +72,7 @@ document.getElementById("busRegForm").addEventListener("submit", function(event)
     const userData = {
         bus_id: bus_id,
         owner_id: owner_id,
+        route:route,
         engineNo: engineNo,
         chassisNo: chassisNo,
         noOfSeats: noOfSeats,
@@ -129,6 +132,7 @@ function updateRow(bus_id){
 
                     document.getElementById("update_bus_id").value = existingData.bus_id;
                     document.getElementById("update_owner_id").value = existingData.owner_id;
+                    document.getElementById("update_route").value = existingData.route;
                     document.getElementById("update_engineNo").value = existingData.engineNo;
                     document.getElementById("update_chassisNo").value = existingData.chassisNo;
                     document.getElementById("update_noOfSeats").value = existingData.noOfSeats;
@@ -151,6 +155,7 @@ function updateRow(bus_id){
 
         const bus_id = document.getElementById("update_bus_id").value;
         const owner_id = document.getElementById("update_owner_id").value;
+        const route = document.getElementById("update_route").value;
         const engineNo = document.getElementById("update_engineNo").value;
         const chassisNo = document.getElementById("update_chassisNo").value;
         const noOfSeats = document.getElementById("update_noOfSeats").value;
@@ -161,6 +166,7 @@ function updateRow(bus_id){
         const updatedData = {
             bus_id: bus_id,
             owner_id: owner_id,
+            route:route,
             engineNo: engineNo,
             chassisNo: chassisNo,
             noOfSeats: noOfSeats,
@@ -294,6 +300,10 @@ function createForm() {
             <div class="form_div">
                 <label for="owner_id" class="bus_form_title">Owner NIC <span class="reg_form_require">*</span></label>
                 <input type="text" name="owner_id" id="owner_id" class="form_data" placeholder="Enter Owner NIC" required="required" />
+            </div>
+            <div class="form_div">
+                 <label for="route" class="bus_form_title">Route<span class="reg_form_require">*</span></label>
+                 <input type="text" name="route" id="route" class="form_data" placeholder="Enter Route" required="required" />
             </div>
             <div class="form_div">
                 <label for="engineNo" class="bus_form_title">Engine No <span class="bus_form_require">*</span></label>
