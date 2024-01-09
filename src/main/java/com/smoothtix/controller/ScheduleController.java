@@ -44,6 +44,7 @@ public class ScheduleController extends HttpServlet {
                     scheduleData.put("schedule_id", rs.getString("schedule_id"));
                     scheduleData.put("reg_no", rs.getString("reg_no"));
                     scheduleData.put("start", rs.getString("start"));
+                    scheduleData.put("route_no", rs.getString("route_no"));
                     scheduleData.put("destination", rs.getString("destination"));
                     scheduleData.put("date", rs.getDate("date_time"));
                     scheduleData.put("time", rs.getTime("date_time"));

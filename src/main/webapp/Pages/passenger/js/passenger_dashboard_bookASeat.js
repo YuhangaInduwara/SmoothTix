@@ -11,19 +11,19 @@ let booking_p_id = "P0030";
 let booking_schedule_id = "";
 const errorMessages = {};
 
-if(isAuthenticated()){
-    const jwtToken = localStorage.getItem('jwtToken');
-    if(jwtToken){
-        const decodedToken = decodeJWT(jwtToken);
-        booking_p_id = decodedToken.p_id;
-    }
-    else{
-        window.location.href = `${url}/Pages/login/html/login.html`;
-    }
-}
-else{
-    window.location.href = `${url}/Pages/login/html/login.html`;
-}
+// if(isAuthenticated()){
+//     const jwtToken = localStorage.getItem('jwtToken');
+//     if(jwtToken){
+//         const decodedToken = decodeJWT(jwtToken);
+//         booking_p_id = decodedToken.p_id;
+//     }
+//     else{
+//         window.location.href = `${url}/Pages/login/html/login.html`;
+//     }
+// }
+// else{
+//     window.location.href = `${url}/Pages/login/html/login.html`;
+// }
 
 function fetchAllData() {
     fetch(`${ url }/scheduleController`, {
@@ -136,6 +136,9 @@ function displayDataAsScheduleTiles(data) {
                 </div>
             </div>
             <div class="schedule_element_row2">
+                <div class="routeNo">
+                    <h1 id="busRegNo">${item.route_no}</h1>
+                </div>
                 <div>
                     <h1>Departure Time: ${item.time}</h1>
                 </div>
@@ -522,7 +525,6 @@ function openConfirmAlert(){
     const isValid = validatePayment();
 
     if (isValid) {
-        // If validation passes, show confirmation alert or proceed with further actions
         document.getElementById('confirmationMsg').textContent = "Are you sure to pay?";
         document.getElementById("confirmationAlert").style.display = "block";
         document.getElementById("overlay").style.display = "block";
@@ -575,8 +577,8 @@ function validatePayment() {
     }
 
     const cardNumber = document.getElementById("cardNo").value;
-    if (!cardNumber || cardNumber.length !== 10 || isNaN(cardNumber)) {
-        showAlert(document.querySelector("label[for='cardNo']"), "Please enter a valid 10-digit card number.");
+    if (!cardNumber || cardNumber.length !== 16 || isNaN(cardNumber)) {
+        showAlert(document.querySelector("label[for='cardNo']"), "Please enter a valid 16-digit card number.");
         return false;
     }
 
@@ -588,12 +590,12 @@ function validatePayment() {
 
     const expYear = document.getElementById("expYear").value;
     if (!expYear || expYear.length !== 4 || isNaN(expYear) || parseInt(expYear) < new Date().getFullYear()) {
-        showAlert(document.querySelector("label[for='expYear']"), "Please enter a valid 4-digit expiration year.");
+        showAlert(document.querySelector("label[for='expYear']"), "Please enter a valid 3-digit expiration year.");
         return false;
     }
 
     const cvn = document.getElementById("cvn").value;
-    if (!cvn || cvn.length !== 4 || isNaN(cvn)) {
+    if (!cvn || cvn.length !== 3 || isNaN(cvn)) {
         showAlert(document.querySelector("label[for='cvn']"), "Please enter a valid 4-digit CVN.");
         return false;
     }
