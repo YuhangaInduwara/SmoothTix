@@ -7,23 +7,24 @@ const rows = 10;
 let selectedSeats = [];
 let totalPrice = 0;
 let seatAvailabilityArray = [];
-let booking_p_id = "P0030";
+let booking_p_id = "P0035";
 let booking_schedule_id = "";
 const errorMessages = {};
 
-if(isAuthenticated()){
-    const jwtToken = localStorage.getItem('jwtToken');
-    if(jwtToken){
-        const decodedToken = decodeJWT(jwtToken);
-        booking_p_id = decodedToken.p_id;
-    }
-    else{
-        window.location.href = `${url}/Pages/login/html/login.html`;
-    }
-}
-else{
-    window.location.href = `${url}/Pages/login/html/login.html`;
-}
+//if(isAuthenticated()){
+//    const jwtToken = localStorage.getItem('jwtToken');
+//    if(jwtToken){
+//        const decodedToken = decodeJWT(jwtToken);
+//        booking_p_id = decodedToken.p_id;
+//        console.log(booking_p_id)
+//    }
+//    else{
+//        window.location.href = `${url}/Pages/login/html/login.html`;
+//    }
+//}
+//else{
+//    window.location.href = `${url}/Pages/login/html/login.html`;
+//}
 
 function fetchAllData() {
     fetch(`${ url }/scheduleController`, {

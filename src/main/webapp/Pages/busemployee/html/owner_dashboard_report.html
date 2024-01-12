@@ -34,10 +34,10 @@
                 <a href="./owner_dashboard_conductor.html"><img src="../../../images/vector_icons/conductor.png" alt="conductor" class="sidebar_img"></a>
                 <a href="./owner_dashboard_conductor.html">Conductor</a>
             </div>
-            <div class="sidebar_element">
+            <!--<div class="sidebar_element">
                 <a href="./owner_dashboard_location.html"><img src="../../../images/vector_icons/location.png" alt="location" class="sidebar_img"></a>
                 <a href="./owner_dashboard_location.html">Location</a>
-            </div>
+            </div>-->
             <div class="sidebar_element_main">
                 <a href="./owner_dashboard_report.html"><img src="../../../images/vector_icons/report.png" alt="report" class="sidebar_img"></a>
                 <a href="./owner_dashboard_report.html">Reports</a>
@@ -95,10 +95,16 @@
                 </div>
 
                 <div class="search_box">
-                    <input type="text" id="busId" name="busId" placeholder="Enter Bus Id">
-                </div>
-                <div class="search_box">
-                    <input type="text" id="routeId" name="routeId" placeholder="Enter Route ID">
+                    <div>
+                        <label>
+                            <select id="dropdown_busId" name="busId">
+                                <option value="" disabled selected>Bus Id</option>
+                                <option value="B001">B001</option>
+                                <option value="B002">B002</option>
+                                <option value="B003">B003</option>
+                            </select>
+                        </label>
+                    </div>
                 </div>
 
                 <div class="search_box">
@@ -107,7 +113,7 @@
             </div>
 
             <div id="reportContainer">
-                <h2> Report</h2>
+
                 <div id="reportTitle"></div>
                 <div id="reportContent"></div>
             </div>
@@ -150,4 +156,5 @@
 
 
 </body>
-</html>-->
+</html>
+//<img src="../../../images/abc.png" alt="Report Image">-->

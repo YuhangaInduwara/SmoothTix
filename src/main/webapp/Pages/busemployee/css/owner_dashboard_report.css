@@ -151,6 +151,18 @@ a{
   border-radius: 5px;
 }
 
+#reportTitle{
+  font-weight: bold;
+  font-size: 25px;
+}
+
+#reportContainer{
+  border: 1px solid black;
+  border-radius: 3px;
+  margin: 25px;
+  padding: 10px;
+}
+
 
 #page_control,
 #flag_page_control{
