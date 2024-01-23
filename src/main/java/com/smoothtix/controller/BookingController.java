@@ -57,7 +57,9 @@ public class BookingController extends HttpServlet {
 
             BufferedReader reader = request.getReader();
             Booking booking = gson.fromJson(reader, Booking.class);
+            System.out.println(booking.getP_id());
             String jsonResponse = bookingTable.insert(booking);
+
 
             if (!jsonResponse.equals("Unsuccessful")) {
 
