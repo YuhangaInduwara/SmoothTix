@@ -54,6 +54,7 @@ public class driverTable {
 //public class driverTable {
 //    public static int insert(Driver driver) throws SQLException, ClassNotFoundException {
 
+
 //        Connection con = dbConnection.initializeDatabase();
 //        PreparedStatement pst = con.prepareStatement("insert into driver(driver_id, passenger_id, license_no, name, nic, mobile, email, points) values (?,?,?,?,?,?,?,?)");
 //        pst.setString(1,generateDriverID());
@@ -126,6 +127,24 @@ public class driverTable {
 //        con.close();
         return rs;
     }
+
+//    public static ResultSet get(String driver_id) throws SQLException, ClassNotFoundException {
+//        Connection con = dbConnection.initializeDatabase();
+//        PreparedStatement pst = con.prepareStatement("SELECT * FROM driver WHERE driver_id=?");
+//        pst.setString(1,driver_id);
+//        ResultSet rs = pst.executeQuery();
+////        con.close();
+//        return rs;
+//    }
+//
+//    public static ResultSet getAll() throws SQLException, ClassNotFoundException {
+//        Connection con = dbConnection.initializeDatabase();
+//        PreparedStatement pst = con.prepareStatement("SELECT * FROM driver");
+//        ResultSet rs = pst.executeQuery();
+////        con.close();
+//        return rs;
+//    }
+
 //
 //    public static int update(String driver_id, Driver driver) throws SQLException, ClassNotFoundException {
 //        Connection con = dbConnection.initializeDatabase();
@@ -142,6 +161,7 @@ public class driverTable {
 //        pst.setString(9,driver_id);
 //        int rawCount = pst.executeUpdate();
 //        con.close();
+
 
 //        return rs;
 //    }
@@ -174,6 +194,7 @@ public class driverTable {
     }
 }
 
+
 //        return rawCount;
 //    }
 //
@@ -186,4 +207,5 @@ public class driverTable {
 //        return rawCount;
 //    }
 
+//}
 

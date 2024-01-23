@@ -53,7 +53,10 @@ function update(p_id){
     openForm_update();
 
     let existingData = {};
+<<<<<<< HEAD
+=======
 
+>>>>>>> c333b2a71d12dd2077ce963f3a05bd52fc34fa01
 
     const urlParams = new URLSearchParams(window.location.search);
 
@@ -68,13 +71,19 @@ function update(p_id){
             if (response.ok) {
                 response.json().then(data => {
                     existingData = data[0];
+<<<<<<< HEAD
+                    console.log("existingData:", existingData);
+                     document.getElementById("header_nic").innerHTML = existingData.first_name;
+
+                    document.getElementById("update_first_name").value = existingData.first_name;
+                    document.getElementById("update_last_name").value = existingData.last_name;
+=======
                     document.getElementById("header_nic").innerHTML = existingData.first_name + " " + existingData.last_name + "'s";
                     document.getElementById("update_fname").value = existingData.first_name;
                     document.getElementById("update_lname").value = existingData.last_name;
+>>>>>>> c333b2a71d12dd2077ce963f3a05bd52fc34fa01
                     document.getElementById("update_nic").value = existingData.nic;
-                    document.getElementById("update_mobileNo").value = existingData.mobileNo;
                     document.getElementById("update_email").value = existingData.email;
-                    document.getElementById("update_password").value = 123;
                 });
             } else if (response.status === 401) {
                 console.log('Unauthorized');
@@ -89,20 +98,16 @@ function update(p_id){
     document.getElementById("passengerUpdateForm").addEventListener("submit", function(event) {
         event.preventDefault();
 
-        const fname = document.getElementById("update_fname").value;
-        const lname = document.getElementById("update_lname").value;
+        const first_name = document.getElementById("update_first_name").value;
+        const last_name = document.getElementById("update_last_name").value;
         const nic = document.getElementById("update_nic").value;
-        const mobileNo = document.getElementById("update_mobileNo").value;
         const email = document.getElementById("update_email").value;
-        const password = document.getElementById("update_password").value;
 
         const updatedData = {
-            fname: fname,
-            lname: lname,
+            first_name: first_name,
+            last_name: last_name,
             nic: nic,
-            mobileNo: mobileNo,
             email: email,
-            password: password,
         };
 
         const jsonData = JSON.stringify(updatedData);
@@ -111,14 +116,14 @@ function update(p_id){
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',
-                'nic': nic
+                'p_id': p_id
             },
             body: jsonData
         })
             .then(response => {
                 if (response.ok) {
-                    closeForm_update();
                     openAlertSuccess();
+                    closeForm_update();
                 } else if (response.status === 401) {
                     openAlertFail(response.status);
                     console.log('Update unsuccessful');
@@ -208,28 +213,20 @@ function createForm() {
         <div class="passenger_form_left">
 
             <div class="form_div">
-                <label for="fname" class="passenger_form_title">First name <span class="passenger_form_require">*</span></label>
-                <input type="text" name="fname" id="fname" class="form_data" placeholder="Enter first name" required="required" />
+                <label for="first_name" class="passenger_form_title">First name <span class="passenger_form_require">*</span></label>
+                <input type="text" name="first_name" id="first_name" class="form_data" placeholder="Enter first name" required="required" />
             </div>
            <div class="form_div">
-                <label for="lname" class="passenger_form_title">Last name <span class="passenger_form_require">*</span></label>
-                <input type="text" name="lname" id="lname" class="form_data" placeholder="Enter last name" required="required" />
+                <label for="last_name" class="passenger_form_title">Last name <span class="passenger_form_require">*</span></label>
+                <input type="text" name="last_name" id="last_name" class="form_data" placeholder="Enter last name" required="required" />
            </div>
            <div class="form_div">
                 <label for="nic" class="passenger_form_title">NIC <span class="passenger_form_require">*</span></label>
                 <input type="text" name="nic" id="nic" class="form_data" placeholder="Enter NIC" required="required" />
            </div>
            <div class="form_div">
-                <label for="mobileNo" class="passenger_form_title">Mobile no <span class="passenger_form_require">*</span></label>
-                <input type="text" name="mobileNo" id="mobileNo" class="form_data" placeholder="Enter mobile no" required="required" />
-           </div>
-           <div class="form_div">
                 <label for="email" class="passenger_form_title">Email <span class="passenger_form_require">*</span></label>
                 <input type="text" name="email" id="email" class="form_data" placeholder="Enter email" required="required" />
-           </div>
-           <div class="form_div">
-                <label for="password" class="passenger_form_title">Password <span class="passenger_form_require">*</span></label>
-                <input type="password" name="password" id="password" class="form_data" placeholder="Enter password" required="required" />
            </div>
 
         </div>
