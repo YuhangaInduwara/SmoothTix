@@ -1,14 +1,13 @@
 package com.smoothtix.controller;
 
 import com.google.gson.Gson;
-import com.smoothtix.dao.conductorTable;
-import com.smoothtix.dao.passengerTable;
-import com.smoothtix.model.Conductor;
+import com.smoothtix.dao.driverTable;
+import com.smoothtix.model.Driver;
 import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -146,7 +145,4 @@ public class DriverController extends HttpServlet {
     }
 
 }
-
-
-
 }
