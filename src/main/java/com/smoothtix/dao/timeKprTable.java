@@ -79,6 +79,13 @@ public class timeKprTable {
         return pst.executeQuery();
     }
 
+    public static ResultSet get_by_p_id(String p_id) throws SQLException, ClassNotFoundException {
+        Connection con = dbConnection.initializeDatabase();
+        PreparedStatement pst = con.prepareStatement("SELECT * FROM timekeeper WHERE p_id=?");
+        pst.setString(1,p_id);
+        return pst.executeQuery();
+    }
+
 
     public static int delete(String timekpr_id) throws SQLException, ClassNotFoundException {
         Connection con = dbConnection.initializeDatabase();

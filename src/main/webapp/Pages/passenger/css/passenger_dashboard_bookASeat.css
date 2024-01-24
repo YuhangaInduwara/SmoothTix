@@ -613,15 +613,20 @@ label {
     width: 50px;
 }
 
-.form-group1 {
-    position: relative;
-}
+/*.alert {*/
+/*    position: absolute;*/
+/*    top: 100%;*/
+/*    margin-bottom: 10px;*/
+/*}*/
 
-.alert {
-    position: absolute;
-    top: 100%;
-    margin-bottom: 10px;
-}
+/*.alert {*/
+/*    background-color: #ffdddd;*/
+/*    color: #ff0000;*/
+/*    padding: 8px;*/
+/*    margin-top: 5px;*/
+/*    font-size: 14px;*/
+/*    border-radius: 4px;*/
+/*}*/
 
 .alert {
     background-color: #ffdddd;

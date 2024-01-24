@@ -1,8 +1,4 @@
-<<<<<<< HEAD
-=======
 
-
->>>>>>> f09315cfbd28407d7638b0099ffb0e187081eb71
 package com.smoothtix.dao;
 
 import com.smoothtix.database.dbConnection;
@@ -11,21 +7,19 @@ import com.smoothtix.model.Driver;
 import java.sql.*;
 
 public class driverTable {
-<<<<<<< HEAD
-=======
+
     public static int insert(Driver driver) throws SQLException, ClassNotFoundException {
         Connection con = dbConnection.initializeDatabase();
-        PreparedStatement pst = con.prepareStatement("insert into driver(driver_id, passenger_id, license_no, name, nic, mobile, email, points) values (?,?,?,?,?,?,?,?)");
+        PreparedStatement pst = con.prepareStatement("insert into driver(driver_id, p_id, license_no, name, nic, mobile, email, points) values (?,?,?,?,?,?,?,?)");
         pst.setString(1,generateDriverID());
 //        pst.setString(2,generateDriverID(driver.getDriver_id()));
-        pst.setString(2,driver.getDriver_id());
-        pst.setString(3,driver.getPassenger_id());
-        pst.setString(4,driver.getLicence_no());
-        pst.setString(5,driver.getName());
-        pst.setString(6,driver.getNic());
-        pst.setString(7,driver.getMobile());
-        pst.setString(8,driver.getEmail());
-        pst.setString(9,driver.getPoints());
+        pst.setString(2,driver.getPassenger_id());
+        pst.setString(3,driver.getLicence_no());
+        pst.setString(4,driver.getName());
+        pst.setString(5,driver.getNic());
+        pst.setString(6,driver.getMobile());
+        pst.setString(7,driver.getEmail());
+        pst.setString(8,driver.getPoints());
         int rawCount = pst.executeUpdate();
         con.close();
         return rawCount;
@@ -57,7 +51,7 @@ public class driverTable {
 //import java.sql.*;
 //
 //public class driverTable {
->>>>>>> f09315cfbd28407d7638b0099ffb0e187081eb71
+
 //    public static int insert(Driver driver) throws SQLException, ClassNotFoundException {
 
 //        Connection con = dbConnection.initializeDatabase();
@@ -191,9 +185,3 @@ public class driverTable {
 //        con.close();
 //        return rawCount;
 //    }
-<<<<<<< HEAD
-}
-=======
-
-
->>>>>>> f09315cfbd28407d7638b0099ffb0e187081eb71

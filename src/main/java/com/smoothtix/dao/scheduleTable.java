@@ -66,6 +66,7 @@ public class scheduleTable {
                 "    r_start.start AS start, \n" +
                 "    r_end.destination AS destination,\n" +
                 "    s.date_time, \n" +
+                "    s.status, \n" +
                 "    r_start.price_per_ride, \n" +
                 "    COUNT(sa.seat_no) AS available_seats, \n" +
                 "    b.reg_no, \n" +

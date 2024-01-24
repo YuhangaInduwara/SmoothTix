@@ -71,6 +71,7 @@ public class MailController extends HttpServlet {
                     java.net.URLEncoder.encode(bookingId, "UTF-8")
             );
             String qrCodeUrl = apiUrl + "?" + parameters;
+            System.out.println(qrCodeUrl);
             String message = "Dear " + passengerName + ",<br/><br/>" +
                     "We are delighted to inform you that your booking for the upcoming journey has been successfully confirmed. Your travel details are as follows:<br/><br/>" +
                     "Date of Journey: " + date + "<br/>" +
