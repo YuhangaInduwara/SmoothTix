@@ -37,29 +37,6 @@ public class busTable {
         return "B" + String.format("%03d", nextBusID);
     }
 
-//    private static String generateOwnerID(String owner_nic) throws SQLException, ClassNotFoundException {
-//        Connection con = dbConnection.initializeDatabase();
-//        PreparedStatement pst = con.prepareStatement("SELECT owner_id FROM owner WHERE owner_nic=?");
-//        pst.setString(1,owner_nic);
-//        ResultSet rs = pst.executeQuery();
-//
-//        if (rs.next()) {
-//            return rs.getString("owner_id");
-//        }
-//        else{
-//            String query = "SELECT MAX(CAST(SUBSTRING(owner_id, 2) AS SIGNED)) + 1 AS next_owner_id FROM owner";
-//            Statement stmt = con.createStatement();
-//            ResultSet rs_new = ((Statement) stmt).executeQuery(query);
-//
-//            int nextOwnerID = 1;
-//            if (rs_new.next()) {
-//                nextOwnerID = rs_new.getInt("next_owner_id");
-//            }
-//            return "Owner" + String.format("%03d", nextOwnerID);
-//        }
-//    }
-
-
     public static ResultSet get(String bus_id) throws SQLException, ClassNotFoundException {
         Connection con = dbConnection.initializeDatabase();
         PreparedStatement pst = con.prepareStatement("SELECT * FROM bus WHERE bus_id=?");
