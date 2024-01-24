@@ -107,7 +107,7 @@
   </servlet>
   <servlet-mapping>
     <servlet-name>TimeKeeperController</servlet-name>
-    <url-pattern>/timeKprController</url-pattern>
+    <url-pattern>/timekeeperController</url-pattern>
   </servlet-mapping>
 
   <servlet>

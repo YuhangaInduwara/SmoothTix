@@ -55,6 +55,7 @@ public class ScheduleController extends HttpServlet {
                     scheduleData.put("adjusted_time", formattedTime);
                     scheduleData.put("price_per_ride", rs.getDouble("price_per_ride"));
                     scheduleData.put("available_seats", rs.getInt("available_seats"));
+                    scheduleData.put("status", rs.getInt("status"));
                     scheduleDataArray.put(scheduleData);
                 }
                 if(start != null || destination != null || date != null || startTime != null || endTime != null){

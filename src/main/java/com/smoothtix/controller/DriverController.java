@@ -2,9 +2,9 @@ package com.smoothtix.controller;
 
 import com.google.gson.Gson;
 import com.smoothtix.dao.driverTable;
+import com.smoothtix.dao.passengerTable;
 import com.smoothtix.model.Driver;
 import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -31,7 +31,7 @@ public class DriverController extends HttpServlet {
             ResultSet rs = null;
             if(driver_id == null){
                 if(p_id == null){
-//                    rs = driverTable.getAll();
+                    rs = driverTable.getAll();
                 }
                 else{
                     rs = passengerTable.getDriver_id(p_id);
@@ -42,11 +42,10 @@ public class DriverController extends HttpServlet {
                     }
 
                 }
-
             }
-            else{
-                rs = driverTable.getAll();
-            }
+//            else{
+//                rs = driverTable.getAll();
+//            }
             else{
                 rs = driverTable.get(driver_id);
             }
@@ -61,7 +60,6 @@ public class DriverController extends HttpServlet {
                 driverData.put("mobile", rs.getString("mobile"));
                 driverData.put("email", rs.getString("email"));
                 driverData.put("points", rs.getString("points"));
-
 
                 driverDataArray.put(driverData);
             }
@@ -144,5 +142,4 @@ public class DriverController extends HttpServlet {
         }
     }
 
-}
 }

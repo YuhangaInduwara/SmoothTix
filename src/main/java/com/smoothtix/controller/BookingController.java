@@ -50,7 +50,7 @@ public class BookingController extends HttpServlet {
                     bookingDataArray.put(bookingData);
                 }
             }
-
+            System.out.println(bookingDataArray);
             out.println(bookingDataArray);
             response.setStatus(HttpServletResponse.SC_OK);
         }catch (Exception e) {

@@ -103,6 +103,13 @@ a{
 }
 
 .page_name{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    gap: 10px;
+}
+
+.page_name h1{
     margin-left: 25px;
     font-family: Times New Roman, serif;
 }

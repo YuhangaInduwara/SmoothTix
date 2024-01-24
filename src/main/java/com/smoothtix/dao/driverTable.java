@@ -10,17 +10,16 @@ public class driverTable {
 
     public static int insert(Driver driver) throws SQLException, ClassNotFoundException {
         Connection con = dbConnection.initializeDatabase();
-        PreparedStatement pst = con.prepareStatement("insert into driver(driver_id, passenger_id, license_no, name, nic, mobile, email, points) values (?,?,?,?,?,?,?,?)");
+        PreparedStatement pst = con.prepareStatement("insert into driver(driver_id, p_id, license_no, name, nic, mobile, email, points) values (?,?,?,?,?,?,?,?)");
         pst.setString(1,generateDriverID());
 //        pst.setString(2,generateDriverID(driver.getDriver_id()));
-        pst.setString(2,driver.getDriver_id());
-        pst.setString(3,driver.getPassenger_id());
-        pst.setString(4,driver.getLicence_no());
-        pst.setString(5,driver.getName());
-        pst.setString(6,driver.getNic());
-        pst.setString(7,driver.getMobile());
-        pst.setString(8,driver.getEmail());
-        pst.setString(9,driver.getPoints());
+        pst.setString(2,driver.getPassenger_id());
+        pst.setString(3,driver.getLicence_no());
+        pst.setString(4,driver.getName());
+        pst.setString(5,driver.getNic());
+        pst.setString(6,driver.getMobile());
+        pst.setString(7,driver.getEmail());
+        pst.setString(8,driver.getPoints());
         int rawCount = pst.executeUpdate();
         con.close();
         return rawCount;
@@ -60,23 +59,6 @@ public class driverTable {
         return rs;
     }
 
-
-    public static ResultSet get(String driver_id) throws SQLException, ClassNotFoundException {
-        Connection con = dbConnection.initializeDatabase();
-        PreparedStatement pst = con.prepareStatement("SELECT * FROM driver WHERE driver_id=?");
-        pst.setString(1,driver_id);
-        ResultSet rs = pst.executeQuery();
-//        con.close();
-        return rs;
-    }
-
-    public static ResultSet getAll() throws SQLException, ClassNotFoundException {
-        Connection con = dbConnection.initializeDatabase();
-        PreparedStatement pst = con.prepareStatement("SELECT * FROM driver");
-        ResultSet rs = pst.executeQuery();
-//        con.close();
-        return rs;
-    }
 
     public static int update(String driver_id, Driver driver) throws SQLException, ClassNotFoundException {
         Connection con = dbConnection.initializeDatabase();

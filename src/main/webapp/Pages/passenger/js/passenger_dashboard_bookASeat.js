@@ -11,19 +11,19 @@ let booking_p_id = "P0035";
 let booking_schedule_id = "";
 const errorMessages = {};
 
-// if(isAuthenticated()){
-//     const jwtToken = localStorage.getItem('jwtToken');
-//     if(jwtToken){
-//         const decodedToken = decodeJWT(jwtToken);
-//         booking_p_id = decodedToken.p_id;
-//     }
-//     else{
-//         window.location.href = `${url}/Pages/login/html/login.html`;
-//     }
-// }
-// else{
-//     window.location.href = `${url}/Pages/login/html/login.html`;
-// }
+if(isAuthenticated()){
+    const jwtToken = localStorage.getItem('jwtToken');
+    if(jwtToken){
+        const decodedToken = decodeJWT(jwtToken);
+        booking_p_id = decodedToken.p_id;
+    }
+    else{
+        window.location.href = `${url}/Pages/login/html/login.html`;
+    }
+}
+else{
+    window.location.href = `${url}/Pages/login/html/login.html`;
+}
 
 function fetchAllData() {
     fetch(`${ url }/scheduleController`, {
@@ -446,7 +446,7 @@ function addBooking(schedule_id, p_id, payment_id, selectedSeats) {
             else{
                 closeConfirmAlert();
                 document.getElementById('loading-spinner').style.display = 'none';
-                openAlert("Your booking was unsuccessful!" + err, "alertFail");
+                openAlert("Your booking was unsuccessful!", "alertFail");
                 console.error("Error" + err);
             }
         })
@@ -589,14 +589,14 @@ function validatePayment() {
     }
 
     const expYear = document.getElementById("expYear").value;
-    if (!expYear || expYear.length !== 4 || isNaN(expYear) || parseInt(expYear) < new Date().getFullYear()) {
-        showAlert(document.querySelector("label[for='expYear']"), "Please enter a valid 3-digit expiration year.");
+    if (!expYear || expYear.length !== 2 || isNaN(expYear) || parseInt(expYear) + 2000 < new Date().getFullYear()) {
+        showAlert(document.querySelector("label[for='expYear']"), "Please enter a valid 2-digit expiration year.");
         return false;
     }
 
     const cvn = document.getElementById("cvn").value;
     if (!cvn || cvn.length !== 3 || isNaN(cvn)) {
-        showAlert(document.querySelector("label[for='cvn']"), "Please enter a valid 4-digit CVN.");
+        showAlert(document.querySelector("label[for='cvn']"), "Please enter a valid 3-digit CVN.");
         return false;
     }
 
