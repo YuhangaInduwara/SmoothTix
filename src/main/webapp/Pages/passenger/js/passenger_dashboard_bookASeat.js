@@ -7,7 +7,7 @@ const rows = 10;
 let selectedSeats = [];
 let totalPrice = 0;
 let seatAvailabilityArray = [];
-let booking_p_id = "P0030";
+let booking_p_id = "P0035";
 let booking_schedule_id = "";
 const errorMessages = {};
 

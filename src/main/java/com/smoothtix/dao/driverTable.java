@@ -41,6 +41,7 @@ public class driverTable {
         return "B" + String.format("%03d", nextDriverID);
     }
 
+<<<<<<< HEAD
 //    private static String generateOwnerID(String owner_nic) throws SQLException, ClassNotFoundException {
 
 //package com.smoothtix.dao;
@@ -109,6 +110,8 @@ public class driverTable {
 //        }
 //    }
 
+=======
+>>>>>>> 936f233c8815c47150290d8fa2ec6668d048f6ea
 
     public static ResultSet get(String driver_id) throws SQLException, ClassNotFoundException {
         Connection con = dbConnection.initializeDatabase();
@@ -127,24 +130,23 @@ public class driverTable {
         return rs;
     }
 
-//    public static int update(String driver_id, Driver driver) throws SQLException, ClassNotFoundException {
-//        Connection con = dbConnection.initializeDatabase();
-//        PreparedStatement pst = con.prepareStatement("UPDATE driver SET driver_id=?, passenger_id=?, license_no=?, name=?, nic=?, mobile=?, email=?, points=? WHERE driver_id=?");
-////        pst.setString(1,generateOwnerID(driver.getOwner_nic()));
-//        pst.setString(1,driver.getDriver_id());
-//        pst.setString(2,driver.getPassenger_id());
-//        pst.setString(3,driver.getLicense_no());
-//        pst.setString(4,driver.getName());
-//        pst.setInt(5,driver.getNic());
-//        pst.setString(6,driver.getMobile());
-//        pst.setString(7,driver.getEmail());
-//        pst.setString(8,driver.getPoints());
-//        pst.setString(9,driver_id);
-//        int rawCount = pst.executeUpdate();
-//        con.close();
 
-//        return rs;
-//    }
+    public static ResultSet get(String driver_id) throws SQLException, ClassNotFoundException {
+        Connection con = dbConnection.initializeDatabase();
+        PreparedStatement pst = con.prepareStatement("SELECT * FROM driver WHERE driver_id=?");
+        pst.setString(1,driver_id);
+        ResultSet rs = pst.executeQuery();
+//        con.close();
+        return rs;
+    }
+
+    public static ResultSet getAll() throws SQLException, ClassNotFoundException {
+        Connection con = dbConnection.initializeDatabase();
+        PreparedStatement pst = con.prepareStatement("SELECT * FROM driver");
+        ResultSet rs = pst.executeQuery();
+//        con.close();
+        return rs;
+    }
 
     public static int update(String driver_id, Driver driver) throws SQLException, ClassNotFoundException {
         Connection con = dbConnection.initializeDatabase();
@@ -173,6 +175,7 @@ public class driverTable {
         return rawCount;
     }
 }
+<<<<<<< HEAD
 
 //        return rawCount;
 //    }
@@ -185,3 +188,5 @@ public class driverTable {
 //        con.close();
 //        return rawCount;
 //    }
+=======
+>>>>>>> 936f233c8815c47150290d8fa2ec6668d048f6ea
