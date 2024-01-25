@@ -22,7 +22,6 @@ public class TimeKeeperController extends HttpServlet {
         JSONArray passengerDataArray = new JSONArray();
         String p_id = request.getParameter("p_id");
         String timekpr_id = request.getHeader("timekpr_id");
-        System.out.println(p_id);
 
         try {
             ResultSet rs;
@@ -46,7 +45,6 @@ public class TimeKeeperController extends HttpServlet {
                 timeKprData.put("reign", rs.getString("reign"));
                 passengerDataArray.put(timeKprData);
             }
-            System.out.println(passengerDataArray);
             out.println(passengerDataArray);
             response.setStatus(HttpServletResponse.SC_OK);
         } catch (Exception e) {
@@ -67,7 +65,9 @@ public class TimeKeeperController extends HttpServlet {
             if (jsonElement.isJsonObject()) {
                 JsonObject jsonObject = jsonElement.getAsJsonObject();
                 String nic = jsonObject.get("nic").getAsString();
-                result = timeKprTable.insert(nic);
+                String reign = jsonObject.get("reign").getAsString();
+                result = timeKprTable.insert(nic, reign);
+                System.out.println(nic);
             } else{
                 return;
             }
