@@ -4,8 +4,9 @@ import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import com.smoothtix.dao.driverTable;
 import com.smoothtix.dao.timeKprTable;
+import com.smoothtix.dao.driverTable;
+import com.smoothtix.dao.passengerTable;
 import com.smoothtix.model.Driver;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -28,11 +29,29 @@ public class DriverController extends HttpServlet {
 
         String driver_id = request.getHeader("driver_id");
 
+        String p_id = request.getHeader("p_id");
+        System.out.println("hello: " + p_id);
+
+
         try {
             ResultSet rs = null;
             if(driver_id == null){
                 rs = driverTable.getAll();
             }
+                if(p_id == null){
+                    rs = driverTable.getAll();
+                }
+                else{
+                    rs = passengerTable.getDriver_id(p_id);
+                    if(rs.next()){
+                        String driver_id_p_id = rs.getString("driver_id");
+                        System.out.println("hello: " + driver_id_p_id);
+                        out.println(driver_id_p_id); // Send JSON data as a response
+                    }
+
+                }
+            }
+
             else{
                 rs = driverTable.get(driver_id);
             }
@@ -43,6 +62,7 @@ public class DriverController extends HttpServlet {
                 driverData.put("p_id", rs.getString("p_id"));
 //                driverData.put("license_no", rs.getString("license_no"));
 //                driverData.put("review_points", rs.getFloat("review_points"));
+            
 
                 driverDataArray.put(driverData);
             }
@@ -150,7 +170,6 @@ public class DriverController extends HttpServlet {
         try {
             String driver_id = request.getHeader("driver_id");
             int deleteSuccess = driverTable.delete(driver_id);
-            System.out.println(driver_id);
             if (deleteSuccess >= 1) {
                 response.setStatus(HttpServletResponse.SC_OK);
             } else {
@@ -163,3 +182,4 @@ public class DriverController extends HttpServlet {
     }
 
 }
+

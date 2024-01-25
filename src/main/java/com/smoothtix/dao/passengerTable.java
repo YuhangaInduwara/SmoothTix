@@ -34,6 +34,8 @@ public class passengerTable {
         return "P" + String.format("%04d", nextPassengerID);
     }
 
+
+
     public static ResultSet getBy_p_id(String p_id) throws SQLException, ClassNotFoundException {
         Connection con = dbConnection.initializeDatabase();
         PreparedStatement pst = con.prepareStatement("SELECT * FROM passenger WHERE p_id=?");
@@ -60,6 +62,13 @@ public class passengerTable {
         Connection con = dbConnection.initializeDatabase();
         PreparedStatement pst = con.prepareStatement("SELECT * FROM passenger WHERE nic=?");
         pst.setString(1,nic);
+        return pst.executeQuery();
+    }
+
+    public static ResultSet getDriver_id(String p_id) throws SQLException, ClassNotFoundException {
+        Connection con = dbConnection.initializeDatabase();
+        PreparedStatement pst = con.prepareStatement("SELECT driver_id FROM driver WHERE p_id=?");
+        pst.setString(1,p_id);
         return pst.executeQuery();
     }
 

@@ -1,12 +1,12 @@
-let p_id = ""
+let driver_id = ""
 // Fetch all data from the database
 function fetchAllData() {
 
-    fetch('../../../passengerController', {
+    fetch('../../../driverController', {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json',
-            'p_id': p_id
+            'driver_id': driver_id
         },
     })
         .then(response => {
@@ -34,13 +34,17 @@ function displayDataAsParagraphs(data) {
          paragraph.classList.add("dataParagraph");
 
         paragraph.innerHTML = `
-            <p class="data_box"><strong>First Name:</strong> ${item.first_name}</p>
-            <p class="data_box"><strong>Last Name:</strong> ${item.last_name}</p>
-            <p class="data_box"><strong>NIC:</strong> ${item.nic}</p>
+            <p class="data_box"><strong>Driver ID:</strong> ${item.driver_id}</p>
+            <p class="data_box"><strong>Passenger ID:</strong> ${item.passenger_id}</p>
+            <p class="data_box"><strong>Licecse number:</strong> ${item.licence_no}</p>
+            <p class="data_box"><strong>Name:</strong> ${item.name}</p>
+            <p class="data_box"><strong>NIC Name:</strong> ${item.nic}</p>
+            <p class="data_box"><strong>Mobile Number:</strong> ${item.mobile}</p>
             <p class="data_box"><strong>Email:</strong> ${item.email}</p>
+            <p class="data_box"><strong>Points:</strong> ${item.points}</p>
 
             <div class="editDeleteButtons">
-             <button class="okButton" onclick="update('${item.p_id}')" style="margin-right: 10px; margin-left: 10px">Edit</button>
+             <button class="okButton" onclick="update('${item.driver_id}')" style="display: center; margin-right: 10px; margin-left: 10px">Edit</button>
              <button class="okButton" onclick="deleteEntity('${item.nic}')">Delete</button>
            </div>
         `;
@@ -49,41 +53,37 @@ function displayDataAsParagraphs(data) {
     });
 }
 
-function update(p_id){
+function update(driver_id){
     openForm_update();
 
     let existingData = {};
-<<<<<<< HEAD
-=======
 
->>>>>>> c333b2a71d12dd2077ce963f3a05bd52fc34fa01
 
     const urlParams = new URLSearchParams(window.location.search);
 
-    fetch('../../../passengerController', {
+    document.getElementById("header_nic").innerHTML = existingData.first_name;
+
+    fetch('../../../driverController', {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json',
-            'p_id': p_id
+            'driver_id': driver_id
         },
     })
         .then(response => {
             if (response.ok) {
                 response.json().then(data => {
                     existingData = data[0];
-<<<<<<< HEAD
                     console.log("existingData:", existingData);
-                     document.getElementById("header_nic").innerHTML = existingData.first_name;
 
-                    document.getElementById("update_first_name").value = existingData.first_name;
-                    document.getElementById("update_last_name").value = existingData.last_name;
-=======
-                    document.getElementById("header_nic").innerHTML = existingData.first_name + " " + existingData.last_name + "'s";
-                    document.getElementById("update_fname").value = existingData.first_name;
-                    document.getElementById("update_lname").value = existingData.last_name;
->>>>>>> c333b2a71d12dd2077ce963f3a05bd52fc34fa01
+                    document.getElementById("update_driver_id").value = existingData.driver_id;
+                    document.getElementById("update_passenger_id").value = existingData.passenger_id;
+                    document.getElementById("update_licence_no").value = existingData.licence_no;
+                    document.getElementById("update_name").value = existingData.name;
                     document.getElementById("update_nic").value = existingData.nic;
+                    document.getElementById("update_mobile").value = existingData.mobile;
                     document.getElementById("update_email").value = existingData.email;
+                    document.getElementById("update_points").value = existingData.points;
                 });
             } else if (response.status === 401) {
                 console.log('Unauthorized');
@@ -98,32 +98,40 @@ function update(p_id){
     document.getElementById("passengerUpdateForm").addEventListener("submit", function(event) {
         event.preventDefault();
 
-        const first_name = document.getElementById("update_first_name").value;
-        const last_name = document.getElementById("update_last_name").value;
+        const driver_id = document.getElementById("update_driver_id").value;
+        const passenger_id = document.getElementById("update_passenger_id").value;
+        const licence_no = document.getElementById("update_licence_no").value;
+        const name = document.getElementById("update_name").value;
         const nic = document.getElementById("update_nic").value;
+        const mobile = document.getElementById("update_mobile").value;
         const email = document.getElementById("update_email").value;
+        const points = document.getElementById("update_points").value;
 
         const updatedData = {
-            first_name: first_name,
-            last_name: last_name,
+            driver_id: driver_id,
+            passenger_id: passenger_id,
+            licence_no: licence_no,
+            name: name,
             nic: nic,
+            mobile: mobile,
             email: email,
+            points: points,
         };
 
         const jsonData = JSON.stringify(updatedData);
 
-        fetch(`../../../passengerController`, {
+        fetch(`../../../driverController`, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',
-                'p_id': p_id
+                'nic': nic
             },
             body: jsonData
         })
             .then(response => {
                 if (response.ok) {
-                    openAlertSuccess();
                     closeForm_update();
+                    openAlertSuccess();
                 } else if (response.status === 401) {
                     openAlertFail(response.status);
                     console.log('Update unsuccessful');
@@ -139,7 +147,7 @@ function update(p_id){
 }
 
 function deleteEntity(nic){
-    fetch(`../../../passengerController`, {
+    fetch(`../../../driverController`, {
         method: 'DELETE',
         headers: {
             'Content-Type': 'application/json',
@@ -176,7 +184,7 @@ function openForm_update() {
 function closeForm_update() {
     document.getElementById("passengerUpdateForm").style.display = "none";
     document.getElementById("overlay").style.display = "none";
-    window.location.href = "../html/passenger_dashboard_aboutMe.html";
+    window.location.href = "../html/driver_dashboard_home.html";
 }
 
 function openAlertSuccess() {
@@ -199,7 +207,7 @@ function closeAlertSuccess() {
 function closeAlertFail() {
     document.getElementById("failAlert").style.display = "none";
     document.getElementById("overlay").style.display = "none";
-    window.location.href = "./passenger_dashboard_aboutMe.html";
+    window.location.href = "./driver_dashboard_home.html";
 }
 
 function createForm() {
@@ -213,20 +221,36 @@ function createForm() {
         <div class="passenger_form_left">
 
             <div class="form_div">
-                <label for="first_name" class="passenger_form_title">First name <span class="passenger_form_require">*</span></label>
-                <input type="text" name="first_name" id="first_name" class="form_data" placeholder="Enter first name" required="required" />
+                <label for="driver_id" class="passenger_form_title">Driver Id <span class="passenger_form_require">*</span></label>
+                <input type="text" name="driver_id" id="driver_id" class="form_data" placeholder="Enter Driver ID" required="required" />
             </div>
            <div class="form_div">
-                <label for="last_name" class="passenger_form_title">Last name <span class="passenger_form_require">*</span></label>
-                <input type="text" name="last_name" id="last_name" class="form_data" placeholder="Enter last name" required="required" />
+                <label for="passenger_id" class="passenger_form_title">Passenger ID <span class="passenger_form_require">*</span></label>
+                <input type="text" name="passenger_id" id="passenger_id" class="form_data" placeholder="Enter Passenger ID" required="required" />
            </div>
            <div class="form_div">
-                <label for="nic" class="passenger_form_title">NIC <span class="passenger_form_require">*</span></label>
-                <input type="text" name="nic" id="nic" class="form_data" placeholder="Enter NIC" required="required" />
+                <label for="licence_no" class="passenger_form_title">License No <span class="passenger_form_require">*</span></label>
+                <input type="text" name="licence_no" id="licence_no" class="form_data" placeholder="Enter License no" required="required" />
            </div>
            <div class="form_div">
-                <label for="email" class="passenger_form_title">Email <span class="passenger_form_require">*</span></label>
-                <input type="text" name="email" id="email" class="form_data" placeholder="Enter email" required="required" />
+                <label for="name" class="passenger_form_title">Name<span class="passenger_form_require">*</span></label>
+                <input type="text" name="name" id="name" class="form_data" placeholder="Enter name" required="required" />
+           </div>
+           <div class="form_div">
+                <label for="nic" class="passenger_form_title">Nic<span class="passenger_form_require">*</span></label>
+                <input type="text" name="nic" id="nic" class="form_data" placeholder="Enter nic" required="required" />
+           </div>
+           <div class="form_div">
+                <label for="mobile" class="passenger_form_title">Mobile number<span class="passenger_form_require">*</span></label>
+                <input type="text" name="mobile" id="mobile" class="form_data" placeholder="Enter mobile number" required="required" />
+           </div>
+           <div class="form_div">
+                <label for="email" class="passenger_form_title">Email<span class="passenger_form_require">*</span></label>
+                <input type="text" name="email" id="email" class="form_data" placeholder="Enter Email" required="required" />
+           </div>
+           <div class="form_div">
+                 <label for="points" class="passenger_form_title">Points <span class="passenger_form_require">*</span></label>
+                 <input type="text" name="points" id="points" class="form_data" placeholder="Enter points" required="required" />
            </div>
 
         </div>
@@ -247,22 +271,22 @@ function createForm() {
 //searchInput.addEventListener("keyup", searchData);
 
 
-function checkSessionStatus() {
-    fetch("../../../checkSessionController")
-        .then(response => {
-            if (response.status === 200) {
-                return response.json();
-            } else {
-                window.location.href = "http://localhost:2000/SmoothTix_war_exploded/Pages/login/html/login.html"
-            }
-        })
-        .then(data => {
-            p_id = data.p_id;
-            fetchAllData();
-        });
-}
-
-window.onload = function() {
-    checkSessionStatus(); // Call the function when the page loads
-    setInterval(checkSessionStatus, 60000); // Set up periodic checks
-};
+//function checkSessionStatus() {
+//    fetch("../../../checkSessionController")
+//        .then(response => {
+//            if (response.status === 200) {
+//                return response.json();
+//            } else {
+//                window.location.href = "http://localhost:2000/SmoothTix_war_exploded/Pages/login/html/login.html"
+//            }
+//        })
+//        .then(data => {
+//            p_id = data.p_id;
+//            fetchAllData();
+//        });
+//}
+//
+//window.onload = function() {
+//    checkSessionStatus(); // Call the function when the page loads
+//    setInterval(checkSessionStatus, 60000); // Set up periodic checks
+//};

@@ -1,3 +1,4 @@
+
 package com.smoothtix.dao;
 
 import com.smoothtix.database.dbConnection;
@@ -71,6 +72,41 @@ public class driverTable {
         return "D" + String.format("%04d", nextdriverID);
     }
 
+
+    public static int insert(Driver driver) throws SQLException, ClassNotFoundException {
+        Connection con = dbConnection.initializeDatabase();
+        PreparedStatement pst = con.prepareStatement("insert into driver(driver_id, p_id, license_no, name, nic, mobile, email, points) values (?,?,?,?,?,?,?,?)");
+        pst.setString(1,generateDriverID());
+//        pst.setString(2,generateDriverID(driver.getDriver_id()));
+        pst.setString(2,driver.getPassenger_id());
+        pst.setString(3,driver.getLicence_no());
+        pst.setString(4,driver.getName());
+        pst.setString(5,driver.getNic());
+        pst.setString(6,driver.getMobile());
+        pst.setString(7,driver.getEmail());
+        pst.setString(8,driver.getPoints());
+        int rawCount = pst.executeUpdate();
+        con.close();
+        return rawCount;
+    }
+
+    private static String generateDriverID() throws SQLException, ClassNotFoundException {
+        Connection con = dbConnection.initializeDatabase();
+        String query = "SELECT MAX(CAST(SUBSTRING(driver_id, 2) AS SIGNED)) + 1 AS next_driver_id FROM driver";
+        Statement stmt = con.createStatement();
+        ResultSet rs = ((Statement) stmt).executeQuery(query);
+
+        int nextDriverID = 1;
+        if (rs.next()) {
+            nextDriverID = rs.getInt("next_driver_id");
+        }
+
+        con.close();
+
+        return "B" + String.format("%03d", nextDriverID);
+    }
+
+
     public static ResultSet get(String driver_id) throws SQLException, ClassNotFoundException {
         Connection con = dbConnection.initializeDatabase();
         PreparedStatement pst = con.prepareStatement("SELECT * FROM driver WHERE driver_id=?");
@@ -95,6 +131,27 @@ public class driverTable {
         pst.setString(5,driver_id);
 
         int rawCount = pst.executeUpdate();
+
+//        con.close();
+        return rs;
+    }
+
+
+    public static int update(String driver_id, Driver driver) throws SQLException, ClassNotFoundException {
+        Connection con = dbConnection.initializeDatabase();
+        PreparedStatement pst = con.prepareStatement("UPDATE driver SET driver_id=?, passenger_id=?, license_no=?, name=?, nic=?, mobile=?, email=?, points=? WHERE driver_id=?");
+//        pst.setString(1,generateOwnerID(driver.getDriver_id()));
+        pst.setString(1,driver.getDriver_id());
+        pst.setString(2,driver.getPassenger_id());
+        pst.setString(3,driver.getLicence_no());
+        pst.setString(4,driver.getName());
+        pst.setString(5,driver.getNic());
+        pst.setString(6,driver.getMobile());
+        pst.setString(7,driver.getEmail());
+        pst.setString(8,driver.getPoints());
+        pst.setString(9,driver_id);
+        int rawCount = pst.executeUpdate();
+        con.close();
         return rawCount;
     }
 
@@ -117,3 +174,10 @@ public class driverTable {
             return 0;
         }
     }}
+        PreparedStatement pst = con.prepareStatement("DELETE FROM driver WHERE driver_id = ?");
+        pst.setString(1,driver_id);
+        int rawCount = pst.executeUpdate();
+        con.close();
+        return rawCount;
+    }
+}

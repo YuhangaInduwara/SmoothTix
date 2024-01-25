@@ -43,6 +43,15 @@ function displayDataAsTable(data) {
             <td>${item.reveiw_points}</td>
 
              <td>
+
+            <td>${item.route}</td>
+            <td>${item.engineNo}</td>
+            <td>${item.chassisNo}</td>
+            <td>${item.noOfSeats}</td>
+            <td>${item.manufact_year}</td>
+            <td>${item.brand}</td>
+            <td>${item.model}</td>
+            <td>
                 <span class="icon-container">
                     <i onclick="updateRow('${item.bus_id}')"><img src="../../../images/vector_icons/update_icon.png" alt="update" class="action_icon"></i>
                 </span>
@@ -70,6 +79,14 @@ document.getElementById("busRegForm").addEventListener("submit", function(event)
     const no_of_Seats = document.getElementById("add_no_of_Seats").value;
     const reveiw_points = document.getElementById("add_reveiw_points").value;
 
+    const route = document.getElementById("add_route").value;
+    const engineNo = document.getElementById("add_engineNo").value;
+    const chassisNo = document.getElementById("add_chassisNo").value;
+    const noOfSeats = document.getElementById("add_noOfSeats").value;
+    const manufact_year = document.getElementById("add_manufact_year").value;
+    const brand = document.getElementById("add_brand").value;
+    const model = document.getElementById("add_model").value;
+
     const userData = {
         bus_id: bus_id,
         owner_id: owner_id,
@@ -77,6 +94,13 @@ document.getElementById("busRegForm").addEventListener("submit", function(event)
         route_id: route_id,
         no_of_Seats: no_of_Seats,
         reveiw_points: reveiw_points,
+        route:route,
+        engineNo: engineNo,
+        chassisNo: chassisNo,
+        noOfSeats: noOfSeats,
+        manufact_year: manufact_year,
+        brand: brand,
+        model: model
     };
     console.log(userData)
     const jsonData = JSON.stringify(userData);
@@ -134,6 +158,13 @@ function updateRow(bus_id){
                     document.getElementById("update_route_id").value = existingData.route_id;
                     document.getElementById("update_no_of_Seats").value = existingData.no_of_Seats;
                     document.getElementById("update_reveiw_points").value = existingData.reveiw_points;
+                    document.getElementById("update_route").value = existingData.route;
+                    document.getElementById("update_engineNo").value = existingData.engineNo;
+                    document.getElementById("update_chassisNo").value = existingData.chassisNo;
+                    document.getElementById("update_noOfSeats").value = existingData.noOfSeats;
+                    document.getElementById("update_manufact_year").value = existingData.manufact_year;
+                    document.getElementById("update_brand").value = existingData.brand;
+                    document.getElementById("update_model").value = existingData.model;
                 });
             } else if (response.status === 401) {
                 console.log('Unauthorized');
@@ -155,6 +186,14 @@ function updateRow(bus_id){
         const no_of_Seats = document.getElementById("update_no_of_Seats").value;
         const reveiw_points = document.getElementById("update_reveiw_points").value;
 
+        const route = document.getElementById("update_route").value;
+        const engineNo = document.getElementById("update_engineNo").value;
+        const chassisNo = document.getElementById("update_chassisNo").value;
+        const noOfSeats = document.getElementById("update_noOfSeats").value;
+        const manufact_year = document.getElementById("update_manufact_year").value;
+        const brand = document.getElementById("update_brand").value;
+        const model = document.getElementById("update_model").value;
+
         const updatedData = {
             bus_id: bus_id,
             owner_id: owner_id,
@@ -162,6 +201,13 @@ function updateRow(bus_id){
             route_id: route_id,
             no_of_Seats: no_of_Seats,
             reveiw_points: reveiw_points,
+            route:route,
+            engineNo: engineNo,
+            chassisNo: chassisNo,
+            noOfSeats: noOfSeats,
+            manufact_year: manufact_year,
+            brand: brand,
+            model: model
         };
 
         const jsonData = JSON.stringify(updatedData);
@@ -293,6 +339,16 @@ function createForm() {
             <div class="form_div">
                 <label for="reg_no" class="bus_form_title">Registration No <span class="bus_form_require">*</span></label>
                 <input type="text" name="reg_no" id="reg_no" class="form_data" placeholder="Enter Registration No" required="required" />
+                 <label for="route" class="bus_form_title">Route<span class="reg_form_require">*</span></label>
+                 <input type="text" name="route" id="route" class="form_data" placeholder="Enter Route" required="required" />
+            </div>
+            <div class="form_div">
+                <label for="engineNo" class="bus_form_title">Engine No <span class="bus_form_require">*</span></label>
+                <input type="text" name="engineNo" id="engineNo" class="form_data" placeholder="Enter Engine No" required="required" />
+            </div>
+            <div class="form_div">
+                <label for="chassisNo" class="bus_form_title">Chassis No <span class="bus_form_require">*</span></label>
+                <input type="text" name="chassisNo" id="chassisNo" class="form_data" placeholder="Enter Chassis No" required="required" />
             </div>
         </div>
         <div class="bus_form_right">
