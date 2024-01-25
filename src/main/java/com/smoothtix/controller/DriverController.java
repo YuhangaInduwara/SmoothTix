@@ -4,7 +4,6 @@ import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import com.smoothtix.dao.timeKprTable;
 import com.smoothtix.dao.driverTable;
 import com.smoothtix.dao.passengerTable;
 import com.smoothtix.model.Driver;
@@ -13,12 +12,11 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.json.JSONArray;
-import org.json.JSONObject;
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 
 public class DriverController extends HttpServlet {
     @Override
@@ -48,31 +46,13 @@ public class DriverController extends HttpServlet {
                         System.out.println("hello: " + driver_id_p_id);
                         out.println(driver_id_p_id); // Send JSON data as a response
                     }
-
                 }
-            }
-
-            else{
-                rs = driverTable.get(driver_id);
-            }
-
-            while (rs.next()) {
-                JSONObject driverData = new JSONObject();
-                driverData.put("driver_id", rs.getString("driver_id"));
-                driverData.put("p_id", rs.getString("p_id"));
-//                driverData.put("license_no", rs.getString("license_no"));
-//                driverData.put("review_points", rs.getFloat("review_points"));
-            
-
-                driverDataArray.put(driverData);
-            }
-
-            out.println(driverDataArray.toString()); // Send JSON data as a response
-            response.setStatus(HttpServletResponse.SC_OK);
-        }catch (Exception e) {
-            e.printStackTrace();
-            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            } catch (SQLException ex) {
+            throw new RuntimeException(ex);
+        } catch (ClassNotFoundException ex) {
+            throw new RuntimeException(ex);
         }
+
     }
 
     @Override
