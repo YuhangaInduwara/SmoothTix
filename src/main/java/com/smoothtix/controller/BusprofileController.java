@@ -39,10 +39,9 @@ public class BusprofileController extends HttpServlet {
             while (rs.next()) {
                 JSONObject busprofileData = new JSONObject();
                 busprofileData.put("busprofile_id", rs.getString("busprofile_id"));
+                busprofileData.put("bus_id", rs.getString("bus_id"));
                 busprofileData.put("driver_id", rs.getString("driver_id"));
                 busprofileData.put("conductor_id", rs.getString("conductor_id"));
-                busprofileData.put("noOfSeats", rs.getInt("noOfSeats"));
-                busprofileData.put("route", rs.getString("route"));
 
                 busprofileDataArray.put(busprofileData);
             }

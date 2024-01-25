@@ -75,6 +75,15 @@
   </servlet-mapping>
 
   <servlet>
+    <servlet-name>DriverController</servlet-name>
+    <servlet-class>com.smoothtix.controller.DriverController</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>DriverController</servlet-name>
+    <url-pattern>/driverController</url-pattern>
+  </servlet-mapping>
+
+  <servlet>
     <servlet-name>LogOutController</servlet-name>
     <servlet-class>com.smoothtix.controller.LogOutController</servlet-class>
   </servlet>
