@@ -1,6 +1,10 @@
 package com.smoothtix.controller;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
+import com.smoothtix.dao.timeKprTable;
 import com.smoothtix.dao.driverTable;
 import com.smoothtix.dao.passengerTable;
 import com.smoothtix.model.Driver;
@@ -24,12 +28,16 @@ public class DriverController extends HttpServlet {
         JSONArray driverDataArray = new JSONArray();
 
         String driver_id = request.getHeader("driver_id");
+
         String p_id = request.getHeader("p_id");
         System.out.println("hello: " + p_id);
+
 
         try {
             ResultSet rs = null;
             if(driver_id == null){
+                rs = driverTable.getAll();
+            }
                 if(p_id == null){
                     rs = driverTable.getAll();
                 }
@@ -43,9 +51,7 @@ public class DriverController extends HttpServlet {
 
                 }
             }
-//            else{
-//                rs = driverTable.getAll();
-//            }
+
             else{
                 rs = driverTable.get(driver_id);
             }
@@ -53,13 +59,10 @@ public class DriverController extends HttpServlet {
             while (rs.next()) {
                 JSONObject driverData = new JSONObject();
                 driverData.put("driver_id", rs.getString("driver_id"));
-                driverData.put("passenger_id", rs.getString("passenger_id"));
-                driverData.put("license_no", rs.getString("license_no"));
-                driverData.put("name", rs.getString("name"));
-                driverData.put("nic", rs.getString("nic"));
-                driverData.put("mobile", rs.getString("mobile"));
-                driverData.put("email", rs.getString("email"));
-                driverData.put("points", rs.getString("points"));
+                driverData.put("p_id", rs.getString("p_id"));
+//                driverData.put("license_no", rs.getString("license_no"));
+//                driverData.put("review_points", rs.getFloat("review_points"));
+            
 
                 driverDataArray.put(driverData);
             }
@@ -73,26 +76,63 @@ public class DriverController extends HttpServlet {
     }
 
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        response.setContentType("text/html");
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws  IOException {
+        response.setContentType("text/json");
         PrintWriter out = response.getWriter();
 
-        try {
-            Gson gson = new Gson();
-
+       try {
+//            Gson gson = new Gson();
+//
             BufferedReader reader = request.getReader();
-            Driver driver = gson.fromJson(reader, Driver.class);
-            int registrationSuccess = driverTable.insert(driver);
+            JsonElement jsonElement = JsonParser.parseReader(reader);
+//            Driver driver = gson.fromJson(reader, Driver.class);
+//            int registrationSuccess = driverTable.insert(driver);
+//
+//            if (registrationSuccess >= 1) {
+//                response.setStatus(HttpServletResponse.SC_OK);
+//            } else {
+//                response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+//            }
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+//        }
+            int result;
 
-            if (registrationSuccess >= 1) {
+            if (jsonElement.isJsonObject()) {
+                JsonObject jsonObject = jsonElement.getAsJsonObject();
+                String p_id = jsonObject.get("p_id").getAsString();
+                result = driverTable.insert(p_id);
+            } else{
+                return;
+            }
+
+            if(result == 0){
+                out.write("{\"error\": \"Incorrect p_id!\"}");
+                response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+            }
+            else if(result == 1){
                 response.setStatus(HttpServletResponse.SC_OK);
-            } else {
+            }
+            else if(result == 2){
+                out.write("{\"error\": \"An unauthorized person!\"}");
+                response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+            }
+            else if(result == 3){
+                out.write("{\"error\": \"The user is already a Driver!\"}");
+                response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+            }
+            else if(result == 4){
+                out.write("{\"error\": \"The user is holding an another role!\"}");
+                response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+            }
+            else{
                 response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
             }
         } catch (Exception e) {
-            e.printStackTrace();
             response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
         }
+
     }
 
     @Override
@@ -130,7 +170,6 @@ public class DriverController extends HttpServlet {
         try {
             String driver_id = request.getHeader("driver_id");
             int deleteSuccess = driverTable.delete(driver_id);
-
             if (deleteSuccess >= 1) {
                 response.setStatus(HttpServletResponse.SC_OK);
             } else {
@@ -143,3 +182,4 @@ public class DriverController extends HttpServlet {
     }
 
 }
+

@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Drivers</title>
+    <link rel="icon" type="image/x-icon" href="../../../images/favicon/favicon.png">
     <link rel="stylesheet" type="text/css" href="../css/owner_dashboard_drivers.css">
 </head>
 <body>
@@ -70,7 +71,7 @@
         <div class="body_content">
             <div class="functions">
                 <div class="add-new">
-                    <button class="add-new-button" onclick="openFlagged()">Add Driver</button>
+                    <button class="add-new-button" onclick="openForm_add()">Add Driver</button>
                 </div>
                 <div class="overlay" id="overlay"></div>
                 <div class="body_content">
@@ -110,6 +111,15 @@
                     </div>
                 </div>
                 <div class="search_box">
+                    <div class="search" style="margin-right: 10px">
+                        <label>
+                            <select class="search_input" id="searchSelect">
+                                <option value="" disabled selected>Search by</option>
+                                <option value="driver_id">Driver ID</option>
+                                <option value="p_id">Passenger ID</option>
+                            </select>
+                        </label>
+                    </div>
                     <div class="search">
                         <label>
                             <input class="search_input" type="text" placeholder="Search" id="searchInput">
@@ -126,6 +136,8 @@
                     <tr>
                         <th>Driver ID</th>
                         <th>Passenger ID</th>
+                        <th>Driving license No.</th>
+                        <th>Review Points</th>
                         <th>Driving licence No.</th>
                         <th>Name</th>
                         <th>NIC</th>
@@ -139,14 +151,21 @@
 
                     </tbody>
                 </table>
-<!--                <div class="page_control" id="page_control">-->
-<!--                    <img class="arrow_img" src="../../../images/vector_icons/arrow_left.png" alt="arrow_left">-->
-<!--                    <img class="arrow_img" src="../../../images/vector_icons/arrow_right.png" alt="arrow_right">-->
-<!--                </div>-->
+                <div id="page_control">
+                    <span id="prevPageIcon" onclick="changePage(currentPage - 1)"><img class="arrow_img" src="../../../images/vector_icons/arrow_left.png" alt="arrow_left"></span>
+                    <span id="currentPageNumber" class="currentPageNumber">1</span>
+                    <span id="nextPageIcon" onclick="changePage(currentPage + 1)"> <img class="arrow_img" src="../../../images/vector_icons/arrow_right.png" alt="arrow_right"></span>
+                </div>
+                <div class="alertBody" id="confirmAlert">
+                    <img src="../../../images/Alert_icons/Alert_icon.png" class="alertImg" alt="confirm">
+                    <div class="alertMsgSuccess" style="color: #ff0202">Are you sure to delete: <span id="deleteUser"></span>?</div>
+                    <button class="okButton" onclick="closeAlert()" style="margin-right: 20px">Cancel</button>
+                    <button class="okButton" onclick="deleteRow()" >Yes</button>
+                </div>
             </div>
         </div>
     </div>
 </div>
-<script src="../js/owner_dashboard_home.js"></script>
+<script src="../js/owner_dashboard_drivers.js"></script>
 </body>
 </html>

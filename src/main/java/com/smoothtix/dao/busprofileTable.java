@@ -7,12 +7,12 @@ import java.sql.*;
 public class busprofileTable {
     public static int insert(Busprofile busprofile) throws SQLException, ClassNotFoundException {
         Connection con = dbConnection.initializeDatabase();
-        PreparedStatement pst = con.prepareStatement("insert into busprofile(busprofile_id, driver_id, conductor_id, noOfSeats, route) values (?,?,?,?,?)");
+        PreparedStatement pst = con.prepareStatement("insert into busprofile(busprofile_id, bus_id , driver_id, conductor_id) values (?,?,?,?)");
         pst.setString(1,busprofile.getBusprofile_id());
+        pst.setString(4,busprofile.getBus_id());
         pst.setString(2,busprofile.getDriver_id());
         pst.setString(3,busprofile.getConductor_id());
-        pst.setInt(4,busprofile.getNoOfSeats());
-        pst.setString(5,busprofile.getRoute());
+
         int rawCount = pst.executeUpdate();
         return rawCount;
     }
@@ -34,13 +34,12 @@ public class busprofileTable {
 
     public static int update(String busprofile_id, Busprofile busprofile) throws SQLException, ClassNotFoundException {
         Connection con = dbConnection.initializeDatabase();
-        PreparedStatement pst = con.prepareStatement("UPDATE busprofile SET busprofile_id=?, driver_id=?, conductor_id=?, noOfSeats=?, route=? WHERE busprofile_id=?");
+        PreparedStatement pst = con.prepareStatement("UPDATE busprofile SET busprofile_id=?, bus_id=? , driver_id=?, conductor_id=? WHERE busprofile_id=?");
         pst.setString(1,busprofile.getBusprofile_id());
+        pst.setString(4,busprofile.getBus_id());
         pst.setString(2,busprofile.getDriver_id());
         pst.setString(3,busprofile.getConductor_id());
-        pst.setInt(4,busprofile.getNoOfSeats());
-        pst.setString(5,busprofile.getRoute());
-        pst.setString(6,busprofile_id);
+        pst.setString(5,busprofile_id);
         int rawCount = pst.executeUpdate();
         return rawCount;
     }

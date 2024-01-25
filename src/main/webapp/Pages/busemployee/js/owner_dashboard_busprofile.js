@@ -32,11 +32,9 @@ function displayDataAsTable(data) {
         row.innerHTML = `
             <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
             <td>${item.busprofile_id}</td>
+            <td>${item.bus_id}</td>
             <td>${item.driver_id}</td>
             <td>${item.conductor_id}</td>
-            <td>${item.noOfSeats}</td>
-            <td>${item.route}</td>
-
             <td>
                 <span class="icon-container">
                     <i onclick="updateRow('${item.busprofile_id}')"><img src="../../../images/vector_icons/update_icon.png" alt="update" class="action_icon"></i>
@@ -56,21 +54,21 @@ document.getElementById("busprofileRegForm").addEventListener("submit", function
     event.preventDefault();
 
     const busprofile_id = document.getElementById("add_busprofile_id").value;
+    const bus_id = document.getElementById("add_bus_id").value;
     const driver_id = document.getElementById("add_driver_id").value;
     const conductor_id = document.getElementById("add_conductor_id").value;
-    const noOfSeats = document.getElementById("add_noOfSeats").value;
-    const route = document.getElementById("add_route").value;
+
     const userData = {
         busprofile_id: busprofile_id,
+        bus_id: bus_id,
         driver_id: driver_id,
         conductor_id: conductor_id,
-        noOfSeats: noOfSeats,
-        route: route,
+
     };
     console.log(userData)
     const jsonData = JSON.stringify(userData);
 
-    fetch('../../../busprofileController', {
+    fetch('/SmoothTix_war_exploded/busprofileController', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
@@ -104,7 +102,7 @@ function updateRow(busprofile_id){
 
     document.getElementById("header_busprofile_id").innerHTML = busprofile_id
 
-    fetch('../../../busprofileController', {
+    fetch('/SmoothTix_war_exploded/busprofileController', {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json',
@@ -118,10 +116,10 @@ function updateRow(busprofile_id){
                     console.log("existingData:", existingData);
 
                     document.getElementById("update_busprofile_id").value = existingData.busprofile_id;
+                    document.getElementById("update_bus_id").value = existingData.bus_id;
                     document.getElementById("update_driver_id").value = existingData.driver_id;
                     document.getElementById("update_conductor_id").value = existingData.conductor_id;
-                    document.getElementById("update_noOfSeats").value = existingData.noOfSeats;
-                    document.getElementById("update_route").value = existingData.route;
+
                 });
             } else if (response.status === 401) {
                 console.log('Unauthorized');
@@ -137,23 +135,20 @@ function updateRow(busprofile_id){
         event.preventDefault();
 
         const busprofile_id = document.getElementById("update_busprofile_id").value;
+        const bus_id = document.getElementById("update_bus_id").value;
         const driver_id = document.getElementById("update_driver_id").value;
         const conductor_id = document.getElementById("update_conductor_id").value;
-        const noOfSeats = document.getElementById("update_noOfSeats").value;
-        const route = document.getElementById("update_route").value;
 
         const updatedData = {
             busprofile_id: busprofile_id,
+            bus_id: bus_id,
             driver_id: driver_id,
             conductor_id: conductor_id,
-            noOfSeats: noOfSeats,
-            route: route,
-
         };
 
         const jsonData = JSON.stringify(updatedData);
 
-        fetch(`../../../busprofileController`, {
+    fetch('/SmoothTix_war_exploded/busprofileController', {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',
@@ -181,7 +176,7 @@ function updateRow(busprofile_id){
 
 // Handle delete
 function deleteRow(busprofile_id){
-    fetch(`../../../busprofileController`, {
+    fetch('/SmoothTix_war_exploded/busprofileController', {
         method: 'DELETE',
         headers: {
             'Content-Type': 'application/json',
@@ -281,12 +276,8 @@ function createForm() {
                 <input type="text" name="conductor_id" id="conductor_id" class="form_data" placeholder="Enter Conductor ID" required="required" />
             </div>
             <div class="form_div">
-                <label for="noOfSeats" class="busprofile_form_title">No of Seats<span class="busprofile_form_require">*</span></label>
-                <input type="number" name="noOfSeats" id="noOfSeats" class="form_data" placeholder="Enter No of Seats" required="required" />
-            </div>
-            <div class="form_div">
-                <label for="route" class="busprofile_form_title">Route <span class="busprofile_form_require">*</span></label>
-                <input type="text" name="route" id="route" class="form_data" placeholder="Enter Route" required="required" />
+                <label for="bus_id" class="busprofile_form_title">Bus Id <span class="busprofile_form_require">*</span></label>
+                <input type="text" name="bus_id" id="bus_id" class="form_data" placeholder="Enter Bus Id" required="required" />
             </div>
         </div>
         `;
@@ -316,7 +307,7 @@ function searchData() {
         return;
     }
 
-    fetch('../../../busprofileController', {
+    fetch('/SmoothTix_war_exploded/busprofileController', {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json',
