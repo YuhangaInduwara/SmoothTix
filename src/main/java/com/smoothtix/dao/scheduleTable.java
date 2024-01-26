@@ -61,30 +61,32 @@ public class scheduleTable {
 
     public static ResultSet getAll() throws SQLException, ClassNotFoundException {
         Connection con = dbConnection.initializeDatabase();
-        PreparedStatement pst = con.prepareStatement("SELECT\n" +
-                "    s.schedule_id,\n" +
-                "    r_start.start AS start,\n" +
+        PreparedStatement pst = con.prepareStatement("SELECT \n" +
+                "    s.schedule_id, \n" +
+                "    r_start.start AS start, \n" +
                 "    r_end.destination AS destination,\n" +
-                "    s.date_time,\n" +
-                "    r_start.price_per_ride,\n" +
-                "    COUNT(sa.seat_no) AS available_seats,\n" +
-                "    b.reg_no\n" +
-                "FROM\n" +
-                "    schedule s\n" +
-                "JOIN\n" +
-                "    bus_profile bp ON s.bus_profile_id = bp.bus_profile_id\n" +
-                "JOIN\n" +
-                "    bus b ON bp.bus_id = b.bus_id\n" +
-                "JOIN\n" +
-                "    route r_start ON b.route_id = r_start.route_id\n" +
-                "JOIN\n" +
+                "    s.date_time, \n" +
+                "    s.status, \n" +
+                "    r_start.price_per_ride, \n" +
+                "    COUNT(sa.seat_no) AS available_seats, \n" +
+                "    b.reg_no, \n" +
+                "    r_start.route_no -- Include the route number from the route table\n" +
+                "FROM \n" +
+                "    schedule s \n" +
+                "JOIN \n" +
+                "    bus_profile bp ON s.bus_profile_id = bp.bus_profile_id \n" +
+                "JOIN \n" +
+                "    bus b ON bp.bus_id = b.bus_id \n" +
+                "JOIN \n" +
+                "    route r_start ON b.route_id = r_start.route_id \n" +
+                "JOIN \n" +
                 "    seat_availability sa ON s.schedule_id = sa.schedule_id \n" +
-                "JOIN\n" +
-                "    route r_end ON b.route_id = r_end.route_id\n" +
-                "WHERE\n" +
-                "    sa.availability = true\n" +
-                "GROUP BY\n" +
-                "    s.schedule_id, r_start.start, r_end.destination, s.date_time, r_start.price_per_ride, b.reg_no;");
+                "JOIN \n" +
+                "    route r_end ON b.route_id = r_end.route_id \n" +
+                "WHERE \n" +
+                "    sa.availability = true \n" +
+                "GROUP BY \n" +
+                "    s.schedule_id, r_start.start, r_end.destination, s.date_time, r_start.price_per_ride, b.reg_no, r_start.route_no;");
         ResultSet rs = pst.executeQuery();
         return rs;
     }

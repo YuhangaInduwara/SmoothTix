@@ -5,7 +5,7 @@ const pageSize = 10;
 let allData = [];
 
 function fetchAllData() {
-    fetch('/SmoothTix_war_exploded/timeKprController', {
+    fetch(`${ url }/timekeeperController`, {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json',
@@ -20,6 +20,7 @@ function fetchAllData() {
         })
         .then(data => {
             allData = data;
+            console.log(allData)
             updatePage(currentPage);
         })
         .catch(error => {
@@ -76,7 +77,7 @@ function displayDataAsTable(data) {
         row.innerHTML = `
         `;
 
-        fetch('../../../passengerController', {
+        fetch(`${ url }/passengerController`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
@@ -89,7 +90,7 @@ function displayDataAsTable(data) {
                         existingData = data[0];
                         row.innerHTML = `
                             <td>${item.timekpr_id}</td>
-                            <td>${existingData.p_id}</td>
+                            <td>${item.reign}</td>
                             <td>${existingData.first_name} ${existingData.last_name}</td>
                             <td>${existingData.nic}</td>
                             <td>${existingData.email}</td>
@@ -121,11 +122,14 @@ function renderPageControl(){
 document.getElementById("busRegForm").addEventListener("submit", function(event) {
     event.preventDefault();
     const nic = document.getElementById("add_nic").value;
+    const reign = document.getElementById("add_reign").value;
+    console.log(nic)
     const userData = {
         nic: nic,
+        reign: reign,
     };
     const jsonData = JSON.stringify(userData);
-    fetch('../../../timeKprController', {
+    fetch(`${ url }/timekeeperController`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
@@ -141,7 +145,7 @@ document.getElementById("busRegForm").addEventListener("submit", function(event)
                     .then(data => {
                         const error_msg = data.error;
                         openAlertFail(error_msg);
-                        throw new Error("Login failed");
+                        throw new Error("Failed");
                     });
             }
         })
@@ -164,6 +168,10 @@ function createForm() {
                 <input type="text" name="nic" id="nic" class="form_data" placeholder="Enter NIC" required="required" oninput="showSuggestions(event)"/>
                 <ul id="nic_suggestions" class="autocomplete-list"></ul>
             </div>
+            <div class="form_div">
+                <label for="reign" class="bus_form_title">Bus Stand<span class="bus_form_require">*</span></label>
+                <input type="text" name="reign" id="reign" class="form_data" placeholder="Enter the Bus Stand" required="required"/>
+            </div>
         </div>
         `;
 
@@ -179,7 +187,7 @@ function showSuggestions(event) {
     const input = event.target;
     const inputValue = input.value.toUpperCase();
     const suggestionsContainer = document.getElementById(`autocomplete-container`);
-    fetch('/SmoothTix_war_exploded/passengerController', {
+    fetch(`${ url }/passengerController`, {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json',
@@ -228,7 +236,7 @@ function showSuggestions(event) {
 }
 
 function deleteRow(){
-    fetch(`/SmoothTix_war_exploded/timeKprController`, {
+    fetch(`${ url }/timekeeperController`, {
         method: 'DELETE',
         headers: {
             'Content-Type': 'application/json',
@@ -274,7 +282,7 @@ function searchData() {
         return;
     }
 
-    fetch('/SmoothTix_war_exploded/timeKprController', {
+    fetch(`${ url }/timekeeperController`, {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json',

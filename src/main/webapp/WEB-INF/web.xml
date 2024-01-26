@@ -57,21 +57,21 @@
   </servlet-mapping>
 
   <servlet>
-    <servlet-name>CheckSessionController</servlet-name>
-    <servlet-class>com.smoothtix.controller.CheckSessionController</servlet-class>
-  </servlet>
-  <servlet-mapping>
-    <servlet-name>CheckSessionController</servlet-name>
-    <url-pattern>/checkSessionController</url-pattern>
-  </servlet-mapping>
-
-  <servlet>
     <servlet-name>ConductorController</servlet-name>
     <servlet-class>com.smoothtix.controller.ConductorController</servlet-class>
   </servlet>
   <servlet-mapping>
     <servlet-name>ConductorController</servlet-name>
     <url-pattern>/conductorController</url-pattern>
+  </servlet-mapping>
+
+  <servlet>
+    <servlet-name>DriverController</servlet-name>
+    <servlet-class>com.smoothtix.controller.DriverController</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>DriverController</servlet-name>
+    <url-pattern>/driverController</url-pattern>
   </servlet-mapping>
 
   <servlet>
@@ -107,7 +107,7 @@
   </servlet>
   <servlet-mapping>
     <servlet-name>TimeKeeperController</servlet-name>
-    <url-pattern>/timeKprController</url-pattern>
+    <url-pattern>/timekeeperController</url-pattern>
   </servlet-mapping>
 
   <servlet>
@@ -154,4 +154,5 @@
     <servlet-name>PaymentController</servlet-name>
     <url-pattern>/paymentController</url-pattern>
   </servlet-mapping>
+
 </web-app>

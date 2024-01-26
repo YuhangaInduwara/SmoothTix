@@ -4,15 +4,13 @@ public class Busprofile {
     String busprofile_id;
     String driver_id;
     String conductor_id;
-    int noOfSeats;
-    String route;
+    String bus_id;
 
-    public Busprofile(String busprofile_id, String driver_id, String conductor_id, int noOfSeats, String route){
+    public Busprofile(String busprofile_id, String driver_id, String conductor_id, String bus_id){
         this.busprofile_id = busprofile_id;
         this.driver_id = driver_id;
         this.conductor_id = conductor_id;
-        this.noOfSeats = noOfSeats;
-        this.route = route;
+        this.bus_id = bus_id;
     }
 
     public String getBusprofile_id(){
@@ -24,11 +22,8 @@ public class Busprofile {
     public String getConductor_id(){
         return conductor_id;
     }
-    public int getNoOfSeats(){
-        return noOfSeats;
-    }
-    public String getRoute(){
-        return route;
+    public String getBus_id(){
+        return bus_id;
     }
 
 
@@ -41,12 +36,8 @@ public class Busprofile {
     public void setConductor_id(String conductor_id){
         this.conductor_id = conductor_id;
     }
-    public void setNoOfSeats(int noOfSeats){
-        this.noOfSeats = noOfSeats;
-    }
-
-    public void setRoute(String route){
-        this.route = route;
+    public void setBus_id(String bus_id){
+        this.bus_id = bus_id;
     }
 
 }

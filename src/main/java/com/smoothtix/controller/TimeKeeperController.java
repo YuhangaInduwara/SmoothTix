@@ -20,13 +20,19 @@ public class TimeKeeperController extends HttpServlet {
         response.setContentType("text/json");
         PrintWriter out = response.getWriter();
         JSONArray passengerDataArray = new JSONArray();
+        String p_id = request.getParameter("p_id");
         String timekpr_id = request.getHeader("timekpr_id");
 
         try {
             ResultSet rs;
 
             if(timekpr_id == null){
-                rs = timeKprTable.getAll();
+                if(p_id == null){
+                    rs = timeKprTable.getAll();
+                }
+                else{
+                    rs = timeKprTable.get_by_p_id(p_id);
+                }
             }
             else{
                 rs = timeKprTable.get(timekpr_id);
@@ -36,9 +42,9 @@ public class TimeKeeperController extends HttpServlet {
                 JSONObject timeKprData = new JSONObject();
                 timeKprData.put("timekpr_id", rs.getString("timekpr_id"));
                 timeKprData.put("p_id", rs.getString("p_id"));
+                timeKprData.put("reign", rs.getString("reign"));
                 passengerDataArray.put(timeKprData);
             }
-
             out.println(passengerDataArray);
             response.setStatus(HttpServletResponse.SC_OK);
         } catch (Exception e) {
@@ -59,7 +65,9 @@ public class TimeKeeperController extends HttpServlet {
             if (jsonElement.isJsonObject()) {
                 JsonObject jsonObject = jsonElement.getAsJsonObject();
                 String nic = jsonObject.get("nic").getAsString();
-                result = timeKprTable.insert(nic);
+                String reign = jsonObject.get("reign").getAsString();
+                result = timeKprTable.insert(nic, reign);
+                System.out.println(nic);
             } else{
                 return;
             }

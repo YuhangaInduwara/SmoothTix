@@ -55,65 +55,94 @@
         <div class="navbar">
             <div class="page_name">
                 <h1>Schedules</h1>
+                <div class="add-new">
+                    <button class="add-new-button" onclick="openForm_add()">Add New Schedule</button>
+                </div>
             </div>
             <div class="user_profile">
                 <h3>Username</h3>
                 <img src="../../../images/vector_icons/user.png" alt="userimage" class="user_img">
             </div>
         </div>
+        <div class="overlay" id="overlay"></div>
         <div class="body_content">
+<!--            <div class="add-new">-->
+<!--                <button class="add-new-button" onclick="openForm_add()">Add New Schedule</button>-->
+<!--            </div>-->
+            <div class="form">
+                <form class="bus_form" id="busRegForm">
+                    <div class="bus_form_header">
+                        <h2>Add New Schedule</h2>
+                    </div>
+                    <div id="formContainer_add"></div>
+                    <div class="bus_form_footer">
+                        <button type="button" class="bus_form_button" onclick="closeForm_add()">Close</button>
+                        <input type="submit" class="bus_form_button" value="Add" id="busRegFormSubmit">
+                    </div>
+                </form>
+            </div>
+            <div class="form">
+                <form class="bus_form" id="busUpdateForm">
+                    <div class="bus_form_header">
+                        <h2>Update Schedule <span id="header_schedule_id"></span> Details</h2>
+                    </div>
+                    <div id="formContainer_update"></div>
+                    <div class="bus_form_footer">
+                        <button type="button" class="bus_form_button" onclick="closeForm_update()">Close</button>
+                        <input type="submit" class="bus_form_button" value="Update">
+                    </div>
+                </form>
+            </div>
+            <div class="alertBody" id="successAlert">
+                <img src="../../../images/Alert_icons/Success_icon.png" class="alertImg" alt="success">
+                <div class="alertMsgSuccess">Operation Successful!</div>
+                <button class="okButton" onclick="closeAlertSuccess()">Ok</button>
+            </div>
+            <div class="alertBody" id="failAlert">
+                <img src="../../../images/Alert_icons/Error_icon.png" class="alertImg" alt="fail">
+                <div class="alertMsgFail" id="failMsg"></div>
+                <button class="okButton" onclick="closeAlertFail()">Ok</button>
+            </div>
             <div class="functions">
-                <div class="add-new">
-                    <button class="add-new-button" onclick="openForm_add()">Add New Schedule</button>
-                    <button class="generate-schedule-button" >Generate Schedule</button>
+                <div class="search_box">
+                    <div>
+                        <label>
+                            <select id="dropdown_start">
+                                <option value="" disabled selected>From</option>
+                                <option value="Colombo">Colombo</option>
+                                <option value="Galle">Galle</option>
+                                <option value="Matara">Matara</option>
+                                <option value="Hambantota">Hambantota</option>
+                            </select>
+                        </label>
+                    </div>
                 </div>
-
-                <div class="overlay" id="overlay"></div>
-                <div class="body_content">
-                    <div class="form">
-                        <form class="bus_form" id="busRegForm">
-                            <div class="bus_form_header">
-                                <h2>Add New Schedule</h2>
-                            </div>
-                            <div id="formContainer_add"></div>
-                            <div class="bus_form_footer">
-                                <button type="button" class="bus_form_button" onclick="closeForm_add()">Close</button>
-                                <input type="submit" class="bus_form_button" value="Add" id="busRegFormSubmit">
-                            </div>
-                        </form>
-                    </div>
-                    <div class="form">
-                        <form class="bus_form" id="busUpdateForm">
-                            <div class="bus_form_header">
-                                <h2>Update <span id="header_bus_id"></span> Details</h2>
-                            </div>
-                            <div id="formContainer_update"></div>
-                            <div class="bus_form_footer">
-                                <button type="button" class="bus_form_button" onclick="closeForm_update()">Close</button>
-                                <input type="submit" class="bus_form_button" value="Update">
-                            </div>
-                        </form>
-                    </div>
-                    <div class="alertBody" id="successAlert">
-                        <img src="../../../images/Alert_icons/Success_icon.png" class="alertImg" alt="success">
-                        <div class="alertMsg">Successfully Added !</div>
-                        <button class="okButton" onclick="closeAlertSuccess()">Ok</button>
-                    </div>
-                    <div class="alertBody" id="failAlert">
-                        <img src="../../../images/Alert_icons/Error_icon.png" class="alertImg" alt="fail">
-                        <div class="alertMsg">New Bus Adding Failed !</div>
-                        <button class="okButton" onclick="closeAlertFail()">Ok</button>
+                <div class="search_box" >
+                    <div>
+                        <label>
+                            <select id="dropdown_destination">
+                                <option value="" disabled selected>To</option>
+                                <option value="Colombo">Colombo</option>
+                                <option value="Galle">Galle</option>
+                                <option value="Matara">Matara</option>
+                                <option value="Hambantota">Hambantota</option>
+                            </select>
+                        </label>
                     </div>
                 </div>
                 <div class="search_box">
-                    <div class="search">
-                        <label>
-                            <input class="search_input" type="text" placeholder="Search" id="searchInput">
-                        </label>
-                        <button id="searchButton" onclick="searchData()">
-                            <img src="../../../images/vector_icons/search_icon.png" alt="Search" class="search_img">
-                        </button>
-                    </div>
+                    <label for="datePicker"></label><input type="date" id="datePicker">
+                </div>
+                <div class="search_box">
+                    <label for="startTimePicker">Start time From</label>
+                    <input type="time" id="startTimePicker">
+                </div>
+                <div class="search_box" style="gap: 10px">
+                    <label for="endTimePicker">Start time To</label>
+                    <input type="time" id="endTimePicker">
+                </div>
+                <div class="search_box">
+                    <button class="button" onclick="searchData()">Search</button>
                 </div>
             </div>
             <div>
@@ -121,23 +150,34 @@
                     <thead>
                     <tr>
                         <th>Schedule ID</th>
-                        <th>Date</th>
-                        <th>Route ID</th>
+                        <th>Bus Registration No</th>
+                        <th>Route No</th>
                         <th>Start</th>
                         <th>Destination</th>
-                        <th>Start Time</th>
-                        <th>End Time</th>
+                        <th>Date</th>
+                        <th>Time</th>
+                        <th>Price Per Ride</th>
+                        <th>Available Seats</th>
+                        <th>Status</th>
                         <th>Actions</th>
-
                     </tr>
                     </thead>
                     <tbody>
                     </tbody>
                 </table>
             </div>
+            <div id="page_control">
+                <span id="prevPageIcon" onclick="changePage(currentPage - 1)"><img class="arrow_img" src="../../../images/vector_icons/arrow_left.png" alt="arrow_left"></span>
+                <span id="currentPageNumber" class="currentPageNumber">1</span>
+                <span class="currentPageNumber">/</span>
+                <span id="noOfPages" class="currentPageNumber">1</span>
+                <span id="nextPageIcon" onclick="changePage(currentPage + 1)"> <img class="arrow_img" src="../../../images/vector_icons/arrow_right.png" alt="arrow_right"></span>
+            </div>
         </div>
     </div>
 </div>
+<script src="../../../js/url.js"></script>
+<script src="../../../js/auth.js"></script>
 <script src="../js/timekpr_dashboard_schedule.js"></script>
 </body>
 </html>
