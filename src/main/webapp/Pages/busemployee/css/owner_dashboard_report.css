@@ -163,6 +163,19 @@ a{
   padding: 10px;
 }
 
+#reportContent{
+  display: flex;
+  flex-wrap: wrap;
+}
+
+#reportContent p{
+            flex: 1 1 calc(33.33% - 20px); /* Adjust the width based on your preference */
+            margin: 10px;
+            color:#B62B15;
+            padding: 10px;
+            box-sizing: border-box;
+        }
+
 
 #page_control,
 #flag_page_control{
