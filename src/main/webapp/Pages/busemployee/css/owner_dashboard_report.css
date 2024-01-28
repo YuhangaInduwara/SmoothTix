@@ -155,26 +155,49 @@ a{
   font-weight: bold;
   font-size: 25px;
 }
+#reportPadding{
+  font-weight: bold;
+}
 
 #reportContainer{
   border: 1px solid black;
   border-radius: 3px;
   margin: 25px;
   padding: 10px;
+  text-align: center;
 }
 
 #reportContent{
   display: flex;
   flex-wrap: wrap;
+  background:#F0EDED;
 }
 
 #reportContent p{
-            flex: 1 1 calc(33.33% - 20px); /* Adjust the width based on your preference */
+            flex: 1 1 calc(33.33% - 20px);
             margin: 10px;
-            color:#B62B15;
+            color:#F50D0D;
             padding: 10px;
             box-sizing: border-box;
         }
+
+/*  table */
+.table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+.table th, .table td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: left;
+}
+
+.table th {
+    background-color: #f2f2f2;
+}
+
 
 
 #page_control,
@@ -223,7 +246,9 @@ a{
 
 
 .button{
-width: 140px; height: 40px; border: none; border-radius: 20px; background: #EA2427; color: #fff; font-size: 16px; cursor: pointer;}
+width: 140px; height: 30px; border: none; border-radius: 10px; background: #EA2427; color: #fff; font-size: 16px; cursor: pointer;}
+.button_02{
+width: 140px; height: 30px; border: none; border-radius: 10px; background: #EA2427; color: #fff; font-size: 16px; cursor: pointer;}
 
 select {
     padding: 10px;
