@@ -80,24 +80,14 @@
                                 <h2>Add New Bus Profile</h2>
                             </div>
                             <div id="formContainer_add"></div>
+                            <div id="autocomplete-container"></div>
                             <div class="busprofile_form_footer">
                                 <button type="button" class="busprofile_form_button" onclick="closeForm_add()">Close</button>
                                 <input type="submit" class="busprofile_form_button" value="Add" id="busprofileRegFormSubmit">
                             </div>
                         </form>
                     </div>
-                    <div class="form">
-                        <form class="busprofile_form" id="busprofileUpdateForm">
-                            <div class="busprofile_form_header">
-                                <h2>Update <span id="header_busprofile_id"></span> Details</h2>
-                            </div>
-                            <div id="formContainer_update"></div>
-                            <div class="busprofile_form_footer">
-                                <button type="button" class="busprofile_form_button" onclick="closeForm_update()">Close</button>
-                                <input type="submit" class="busprofile_form_button" value="Update">
-                            </div>
-                        </form>
-                    </div>
+
                     <div class="alertBody" id="successAlert">
                         <img src="../../../images/Alert_icons/Success_icon.png" class="alertImg" alt="success">
                         <div class="alertMsgSuccess">Operation Successful!</div>
@@ -110,6 +100,17 @@
                     </div>
                 </div>
                 <div class="search_box">
+                    <div class="search" style="margin-right: 10px">
+                        <label>
+                            <select class="search_input" id="searchSelect">
+                                <option value="" disabled selected>Search by</option>
+                                <option value="busprofile_id">Busprofile ID</option>
+                                <option value="bus_id">Bus ID</option>
+                                <option value="driver_id">Driver ID</option>
+                                <option value="conductor_id">Conductor ID</option>
+                            </select>
+                        </label>
+                    </div>
                     <div class="search">
                         <label>
                             <input class="search_input" type="text" placeholder="Search" id="searchInput">
@@ -135,14 +136,23 @@
 
                 </tbody>
             </table>
-            <div class="page_control" id="page_control">
-                <img class="arrow_img" src="../../../images/vector_icons/arrow_left.png" alt="arrow_left">
-                <img class="arrow_img" src="../../../images/vector_icons/arrow_right.png" alt="arrow_right">
+            <div id="page_control">
+                <span id="prevPageIcon" onclick="changePage(currentPage - 1)"><img class="arrow_img" src="../../../images/vector_icons/arrow_left.png" alt="arrow_left"></span>
+                <span id="currentPageNumber" class="currentPageNumber">1</span>
+                <span id="nextPageIcon" onclick="changePage(currentPage + 1)"> <img class="arrow_img" src="../../../images/vector_icons/arrow_right.png" alt="arrow_right"></span>
+            </div>
+            <div class="alertBody" id="confirmAlert">
+                <img src="../../../images/Alert_icons/Alert_icon.png" class="alertImg" alt="confirm">
+                <div class="alertMsgSuccess" style="color: #ff0202">Are you sure to delete: <span id="deleteUser"></span>?</div>
+                <button class="okButton" onclick="closeAlert()" style="margin-right: 20px">Cancel</button>
+                <button class="okButton" onclick="deleteRow()" >Yes</button>
             </div>
         </div>
     </div>
 </div>
 </div>
+<script src="../../../js/url.js"></script>
+<script src="../../../js/auth.js"></script>
 <script src="../js/owner_dashboard_busprofile.js"></script>
 </body>
 </html>
