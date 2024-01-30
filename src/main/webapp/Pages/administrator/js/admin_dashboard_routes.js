@@ -112,7 +112,7 @@ function displayDataAsTable(data) {
             <td>${item.destination}</td>
             <td>${item.distance}</td>
             <td>${item.price_per_ride}</td>
-            <td>${item.manufact_year}</td>
+            <td>${item.number_of_buses}</td>
             <td>
                 <span class="icon-container">
                     <i onclick="updateRow('${item.route_id}')"><img src="../../../images/vector_icons/update_icon.png" alt="update" class="action_icon"></i>
@@ -160,15 +160,15 @@ document.getElementById("busRegForm").addEventListener("submit", function(event)
             if (response.ok) {
                 closeForm_add();
                 openAlertSuccess("Successfully Added!");
-                console.log("Success")
+                console.log("Success");
             } else{
-                // return response.json()
-                //     .then(data => {
-                //         const error_msg = data.error;
-                //         openAlertFail(error_msg);
-                //         throw new Error("Login failed");
-                //     });
-                console.error("error")
+                return response.json()
+                    .then(data => {
+                        const error_msg = data.error;
+                        console.log(error_msg)
+                        openAlertFail(error_msg);
+                        throw new Error("Insertion failed");
+                    });
             }
         })
         .catch(error => {
@@ -244,8 +244,6 @@ function updateRow(route_id){
                     document.getElementById("update_distance").value = existingData.distance;
                     document.getElementById("update_price_per_ride").value = existingData.price_per_ride;
                 });
-            } else if (response.status === 401) {
-                console.log('Unauthorized');
             } else {
                 console.error('Error:', response.status);
             }
@@ -284,13 +282,15 @@ function updateRow(route_id){
             .then(response => {
                 if (response.ok) {
                     closeForm_update();
-                    openAlertSuccess();
-                } else if (response.status === 401) {
-                    openAlertFail(response.status);
-                    console.log('Update unsuccessful');
-                } else {
-                    openAlertFail(response.status);
-                    console.error('Error:', response.status);
+                    openAlertSuccess("Successfully updated!");
+                }else {
+                    return response.json()
+                        .then(data => {
+                            const error_msg = data.error;
+                            console.log(error_msg)
+                            openAlertFail(error_msg);
+                            throw new Error("Update failed");
+                        });
                 }
             })
             .catch(error => {
@@ -309,7 +309,7 @@ function deleteRow(route_id){
     })
         .then(response => {
             if (response.ok) {
-                openAlertSuccess();
+                openAlertSuccess("Successfully deleted!");
             } else if (response.status === 401) {
                 openAlertFail(response.status);
                 console.log('Delete unsuccessful');
@@ -323,4 +323,25 @@ function deleteRow(route_id){
         });
 }
 
+function openAlertSuccess(msg) {
+    document.getElementById("alertMsgSuccess").textContent = msg;
+    document.getElementById("successAlert").style.display = "block";
+    document.getElementById("overlay").style.display = "block";
+}
 
+function openAlertFail(error_msg) {
+    document.getElementById("failMsg").textContent = error_msg;
+    document.getElementById("failAlert").style.display = "block";
+    document.getElementById("overlay").style.display = "block";
+}
+
+function closeAlertSuccess() {
+    document.getElementById("successAlert").style.display = "none";
+    document.getElementById("overlay").style.display = "none";
+    window.location.href = `${url}/Pages/administrator/html/admin_dashboard_routes.html`;
+}
+
+function closeAlertFail() {
+    document.getElementById("failAlert").style.display = "none";
+    document.getElementById("overlay").style.display = "none";
+}

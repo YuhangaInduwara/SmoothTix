@@ -27,21 +27,34 @@ public class RouteController extends HttpServlet {
 
             if(route_id == null){
                 rs = routeTable.getAll();
+                while (rs.next()) {
+                    JSONObject routeData = new JSONObject();
+                    routeData.put("route_id", rs.getString("route_id"));
+                    routeData.put("route_no", rs.getString("route_no"));
+                    routeData.put("start", rs.getString("start"));
+                    routeData.put("destination", rs.getString("destination"));
+                    routeData.put("distance", rs.getString("distance"));
+                    routeData.put("price_per_ride", rs.getString("price_per_ride"));
+                    routeData.put("number_of_buses", rs.getString("number_of_buses"));
+                    System.out.println(routeData);
+                    passengerDataArray.put(routeData);
+                }
             }
             else{
                 rs = routeTable.get(route_id);
+                while (rs.next()) {
+                    JSONObject routeData = new JSONObject();
+                    routeData.put("route_id", rs.getString("route_id"));
+                    routeData.put("route_no", rs.getString("route_no"));
+                    routeData.put("start", rs.getString("start"));
+                    routeData.put("destination", rs.getString("destination"));
+                    routeData.put("distance", rs.getString("distance"));
+                    routeData.put("price_per_ride", rs.getString("price_per_ride"));
+                    System.out.println(routeData);
+                    passengerDataArray.put(routeData);
+                }
             }
 
-            while (rs.next()) {
-                JSONObject routeData = new JSONObject();
-                routeData.put("route_id", rs.getString("route_id"));
-                routeData.put("route_no", rs.getString("route_no"));
-                routeData.put("start", rs.getString("start"));
-                routeData.put("destination", rs.getString("destination"));
-                routeData.put("distance", rs.getString("distance"));
-                routeData.put("price_per_ride", rs.getString("price_per_ride"));
-                passengerDataArray.put(routeData);
-            }
 
             out.println(passengerDataArray);
             response.setStatus(HttpServletResponse.SC_OK);
@@ -60,11 +73,21 @@ public class RouteController extends HttpServlet {
 
             BufferedReader reader = request.getReader();
             Route route = gson.fromJson(reader, Route.class);
-            int registrationSuccess = routeTable.insert(route);
+            int insertionSuccess = routeTable.insert(route);
 
-            if (registrationSuccess >= 1) {
+            if(insertionSuccess == 100){
+                out.write("{\"error\": \"The route number is already exist!\"}");
+                response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+            }
+            else if(insertionSuccess == 101){
+                out.write("{\"error\": \"A route with the same start and destination is already exist!\"}");
+                response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+            }
+            else if (insertionSuccess >= 1) {
+                out.write("{\"error\": \"Route added successfully!\"}");
                 response.setStatus(HttpServletResponse.SC_OK);
-            } else {
+            }
+            else {
                 response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
             }
         } catch (Exception e) {
@@ -89,9 +112,19 @@ public class RouteController extends HttpServlet {
 
             int updateSuccess = routeTable.update(route_id, route);
 
-            if (updateSuccess >= 1) {
+            if(updateSuccess == 100){
+                out.write("{\"error\": \"The route number is already exist!\"}");
+                response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+            }
+            else if(updateSuccess == 101){
+                out.write("{\"error\": \"A route with the same start and destination is already exist!\"}");
+                response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+            }
+            else if (updateSuccess >= 1) {
+                out.write("{\"error\": \"Route added successfully!\"}");
                 response.setStatus(HttpServletResponse.SC_OK);
-            } else {
+            }
+            else {
                 response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
             }
         } catch (Exception e) {

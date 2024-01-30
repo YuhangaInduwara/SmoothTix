@@ -348,16 +348,16 @@ function createForm() {
     var form= `
         <div class="bus_form_left">
             <div class="form_div">
-                <label for="owner_nic" class="bus_form_title">Owner NIC <span class="bus_form_require">*</span></label>
-                <input type="text" name="owner_nic" id="owner_nic" class="form_data" placeholder="Enter Owner NIC" required="required" />
+                <label for="destination" class="bus_form_title">Destination <span class="bus_form_require">*</span></label>
+                <input type="text" name="destination" id="destination" class="form_data" placeholder="Enter Destination" required="required" />
             </div>
             <div class="form_div">
-                <label for="route" class="bus_form_title">Route <span class="bus_form_require">*</span></label>
-                <input type="text" name="route" id="route" class="form_data" placeholder="Enter Route" required="required" />
+                <label for="date" class="bus_form_title">Date <span class="bus_form_require">*</span></label>
+                <input type="date" name="date" id="date" class="form_data" placeholder="Enter Date" required="required" />
             </div>
             <div class="form_div">
-                <label for="engineNo" class="bus_form_title">Engine No <span class="bus_form_require">*</span></label>
-                <input type="text" name="engineNo" id="engineNo" class="form_data" placeholder="Enter Engine No" required="required" />
+                <label for="time" class="bus_form_title">Time <span class="bus_form_require">*</span></label>
+                <input type="time" name="time" id="time" class="form_data" placeholder="Enter Time" required="required" />
             </div>
         </div>
         `;

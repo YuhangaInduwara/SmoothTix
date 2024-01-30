@@ -10,7 +10,6 @@ isAuthenticated().then(result => {
     }
 });
 
-console.log("Test4")
 function isValidNIC(nic) {
     const nicRegex = /^(\d{9}[vV]|\d{12})$/;
     return nicRegex.test(nic);
