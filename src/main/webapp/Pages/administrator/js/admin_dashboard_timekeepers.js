@@ -90,7 +90,7 @@ function displayDataAsTable(data) {
                         existingData = data[0];
                         row.innerHTML = `
                             <td>${item.timekpr_id}</td>
-                            <td>${item.reign}</td>
+                            <td>${item.stand}</td>
                             <td>${existingData.first_name} ${existingData.last_name}</td>
                             <td>${existingData.nic}</td>
                             <td>${existingData.email}</td>
@@ -122,11 +122,11 @@ function renderPageControl(){
 document.getElementById("busRegForm").addEventListener("submit", function(event) {
     event.preventDefault();
     const nic = document.getElementById("add_nic").value;
-    const reign = document.getElementById("add_reign").value;
+    const stand = document.getElementById("add_stand").value;
     console.log(nic)
     const userData = {
         nic: nic,
-        reign: reign,
+        stand: stand,
     };
     const jsonData = JSON.stringify(userData);
     fetch(`${ url }/timekeeperController`, {
@@ -169,8 +169,8 @@ function createForm() {
                 <ul id="nic_suggestions" class="autocomplete-list"></ul>
             </div>
             <div class="form_div">
-                <label for="reign" class="bus_form_title">Bus Stand<span class="bus_form_require">*</span></label>
-                <input type="text" name="reign" id="reign" class="form_data" placeholder="Enter the Bus Stand" required="required"/>
+                <label for="stand" class="bus_form_title">Bus Stand<span class="bus_form_require">*</span></label>
+                <input type="text" name="stand" id="stand" class="form_data" placeholder="Enter the Bus Stand" required="required"/>
             </div>
         </div>
         `;
