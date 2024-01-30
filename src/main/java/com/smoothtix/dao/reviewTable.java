@@ -1,10 +1,10 @@
-//package com.smoothtix.dao;
-//
-//import com.smoothtix.database.dbConnection;
-//import com.smoothtix.model.Review;
-//
-//import java.sql.*;
-//
+package com.smoothtix.dao;
+
+import com.smoothtix.database.dbConnection;
+import com.smoothtix.model.Review;
+
+import java.sql.*;git add .
+
 //public class reviewTable {
 //    public static String insert(Review review) throws SQLException, ClassNotFoundException {
 //        Connection con = dbConnection.initializeDatabase();
