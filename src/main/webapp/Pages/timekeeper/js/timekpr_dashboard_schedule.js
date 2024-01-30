@@ -1,6 +1,6 @@
 let p_id = "P0009";
 let timeKeeper_id = "";
-let timeKeeper_reign= "";
+let timeKeeper_stand= "";
 let currentPage = 1;
 const pageSize = 10;
 let allData = [];
@@ -124,9 +124,8 @@ function displayDataAsTable(data) {
     }
 
     data.forEach(item => {
-        if(item.start.toLowerCase() === timeKeeper_reign || item.destination.toLowerCase() === timeKeeper_reign){
+        if(item.start.toLowerCase() === timeKeeper_stand || item.destination.toLowerCase() === timeKeeper_stand){
             const row = document.createElement("tr");
-            console.log(item.schedule_id)
             row.innerHTML = `
                 <td>${item.schedule_id}</td>
                 <td>${item.reg_no}</td>
