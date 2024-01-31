@@ -6,7 +6,7 @@ import com.smoothtix.model.Passenger;
 import java.sql.*;
 
 public class timeKprTable {
-    public static int insert(String nic, String reign) throws SQLException, ClassNotFoundException {
+    public static int insert(String nic, String stand) throws SQLException, ClassNotFoundException {
         Connection con = dbConnection.initializeDatabase();
         PreparedStatement pst = con.prepareStatement("SELECT * FROM passenger WHERE nic=?");
         pst.setString(1, nic);
@@ -24,10 +24,10 @@ public class timeKprTable {
                     return 4;
                 }
                 else if(rs.getInt("privilege_level") == 6){
-                    PreparedStatement ps = con.prepareStatement("insert into timekeeper(timekpr_id, p_id,reign) values (?,?,?)");
+                    PreparedStatement ps = con.prepareStatement("insert into timekeeper(timekpr_id, p_id,stand) values (?,?,?)");
                     ps.setString(1, generate_timekpr_id());
                     ps.setString(2, rs.getString("p_id"));
-                    ps.setString(3, reign);
+                    ps.setString(3, stand);
                     Passenger passenger = new Passenger (rs.getString("p_id"), 2);
                     int success = passengerTable.updatePrivilegeLevel(rs.getString("p_id"), passenger);
                     if(success == 1){
@@ -77,6 +77,7 @@ public class timeKprTable {
     public static ResultSet getAll() throws SQLException, ClassNotFoundException {
         Connection con = dbConnection.initializeDatabase();
         PreparedStatement pst = con.prepareStatement("SELECT * FROM timekeeper");
+        System.out.println("hello4");
         return pst.executeQuery();
     }
 
