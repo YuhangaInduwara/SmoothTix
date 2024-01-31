@@ -4,71 +4,9 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Book a Seat</title>
-  <link rel="stylesheet" type="text/css" href="../css/passenger_dashboard_myBookings_moreinfo.css">
+  <link rel="stylesheet" type="text/css" href="../css/passenger_dashboard_addReview.css">
   <link rel="icon" type="image/x-icon" href="../../../images/favicon/favicon.png">
-  <style>
 
-        .container {
-            max-width: 600px;
-            margin: 40px auto;
-            background-color: #fff;
-            padding: 20px;
-            border-radius: 5px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
-        }
-
-        h2 {
-            text-align: center;
-            color: #333;
-        }
-
-        label {
-            display: block;
-            font-weight: bold;
-            margin-top: 10px;
-        }
-
-        input[type="text"],
-        input[type="email"] {
-            width: 100%;
-            padding: 10px;
-            margin-top: 5px;
-            margin-bottom: 15px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-        }
-
-        select {
-            width: 100%;
-            padding: 10px;
-            margin-top: 5px;
-            margin-bottom: 15px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-        }
-
-        textarea {
-            width: 100%;
-            padding: 10px;
-            margin-top: 5px;
-            margin-bottom: 15px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-        }
-
-        button {
-            background-color: #3498db;
-            color: #fff;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-
-        button:hover {
-            background-color: #2679b5;
-        }
-    </style>
 </head>
 <body>
 <div class="dashboard">
@@ -115,12 +53,19 @@
     </div>
     <div class="body_content" style="max-height:87vh">
       <div class="functions">
+        <div class="overlay" id="overlay">
+          <div class="alertBody" id="alertSuccess">
+            <img src="../../../images/Alert_icons/Success_icon.png" class="alertImg" alt="success">
+<!--            <div class="alertMsgSuccess" id="alertMsgSuccess"></div>-->
+            <button class="okButton" onclick="closeAlert()">Ok</button>
+          </div>
+        </div>
       </div>
       <div class="container">
         <h2>Review Your Journey</h2>
         <form>
-          <label for="rating">Rate for Driving</label>
-          <select id="rating" name="rating" required>
+          <label for="driverRating">Rate for Driving</label>
+          <select id="driverRating" name="driverRating" required>
             <option value="5">5 stars</option>
             <option value="4">4 stars</option>
             <option value="3">3 stars</option>
@@ -128,8 +73,8 @@
             <option value="1">1 star</option>
           </select>
 
-          <label for="rating">Rate for the Bus</label>
-          <select name="rating" required>
+          <label for="busRating">Rate for the Bus</label>
+          <select id="busRating" name="busRating" required>
             <option value="5">5 stars</option>
             <option value="4">4 stars</option>
             <option value="3">3 stars</option>
@@ -137,8 +82,8 @@
             <option value="1">1 star</option>
           </select>
 
-          <label for="rating">Rate for Conductor Support</label>
-          <select name="rating" required>
+          <label for="conductorRating">Rate for Conductor Support</label>
+          <select id="conductorRating" name="conductorRating" required>
             <option value="5">5 stars</option>
             <option value="4">4 stars</option>
             <option value="3">3 stars</option>
@@ -149,13 +94,14 @@
           <label for="comments">Comments:</label>
           <textarea id="comments" name="comments" rows="4"></textarea>
 
-          <button type="submit">Submit Review</button>
+          <button type="submit" onclick="submitReview()">Submit Review</button>
         </form>
       </div>
     </div>
   </div>
 </div>
 </div>
+<script src="../js/passenger_dashboard_review.js"></script>
 </body>
 </html>
 
