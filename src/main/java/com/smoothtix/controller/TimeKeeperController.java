@@ -31,7 +31,6 @@ public class TimeKeeperController extends HttpServlet {
                 if(p_id == null){
                     System.out.println("hello3");
                     rs = timeKprTable.getAll();
-                    System.out.println(rs.getString("reign"));
                 }
                 else{
                     rs = timeKprTable.get_by_p_id(p_id);

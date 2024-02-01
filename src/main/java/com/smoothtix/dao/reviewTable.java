@@ -3,7 +3,7 @@ package com.smoothtix.dao;
 import com.smoothtix.database.dbConnection;
 import com.smoothtix.model.Review;
 
-import java.sql.*;git add .
+import java.sql.*;
 
 //public class reviewTable {
 //    public static String insert(Review review) throws SQLException, ClassNotFoundException {
