@@ -336,6 +336,12 @@ function createForm() {
     formContainer_update.appendChild(form_update.cloneNode(true)); // Clone the form
 }
 
+const searchSelect = document.getElementById("searchSelect");
+searchSelect.addEventListener("change", (event) => {
+    searchOption = event.target.value;
+    console.log(searchOption)
+});
+
 // Attach the searchData function to the keyup event of the search input field
 const searchInput = document.getElementById("searchInput");
 searchInput.addEventListener("keyup", searchData);
@@ -356,7 +362,7 @@ function searchData() {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json',
-            'bus_profile_id': searchTerm
+            [searchOption]: searchTerm
         },
     })
         .then(response => {

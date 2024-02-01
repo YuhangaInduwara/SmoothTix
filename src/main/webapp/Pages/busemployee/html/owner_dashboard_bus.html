@@ -111,6 +111,15 @@
                     </div>
                 </div>
                 <div class="search_box">
+                    <div class="search" style="margin-right: 10px">
+                        <label>
+                            <select class="search_input" id="searchSelect">
+                                <option value="" disabled selected>Search by</option>
+                                <option value="bus_id">Bus ID</option>
+                                <option value="reg_no">Registration Number</option>
+                            </select>
+                        </label>
+                    </div>
                     <div class="search">
                         <label>
                             <input class="search_input" type="text" placeholder="Search" id="searchInput">
@@ -129,9 +138,6 @@
                         <th>Owner ID</th>
                         <th>Registration Number</th>
                         <th>Route ID</th>
-                        <th>Route</th>
-                        <th>Engine Number</th>
-                        <th>Chassis Number</th>
                         <th>Number of Seats</th>
                         <th>Review Points</th>
                         <th>Actions</th>
@@ -141,14 +147,23 @@
 
                     </tbody>
                 </table>
-                <div class="page_control" id="page_control">
-                    <img class="arrow_img" src="../../../images/vector_icons/arrow_left.png" alt="arrow_left">
-                    <img class="arrow_img" src="../../../images/vector_icons/arrow_right.png" alt="arrow_right">
+                <div id="page_control">
+                    <span id="prevPageIcon" onclick="changePage(currentPage - 1)"><img class="arrow_img" src="../../../images/vector_icons/arrow_left.png" alt="arrow_left"></span>
+                    <span id="currentPageNumber" class="currentPageNumber">1</span>
+                    <span id="nextPageIcon" onclick="changePage(currentPage + 1)"> <img class="arrow_img" src="../../../images/vector_icons/arrow_right.png" alt="arrow_right"></span>
+                </div>
+                <div class="alertBody" id="confirmAlert">
+                    <img src="../../../images/Alert_icons/Alert_icon.png" class="alertImg" alt="confirm">
+                    <div class="alertMsgSuccess" style="color: #ff0202">Are you sure to delete: <span id="deleteUser"></span>?</div>
+                    <button class="okButton" onclick="closeAlert()" style="margin-right: 20px">Cancel</button>
+                    <button class="okButton" onclick="deleteRow()" >Yes</button>
                 </div>
             </div>
         </div>
     </div>
 </div>
+<script src="../../../js/url.js"></script>
+<script src="../../../js/auth.js"></script>
 <script src="../js/owner_dashboard_bus.js"></script>
 </body>
- </html>
+</html>
