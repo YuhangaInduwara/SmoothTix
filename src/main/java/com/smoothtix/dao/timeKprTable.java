@@ -77,7 +77,7 @@ public class timeKprTable {
     public static ResultSet getAll() throws SQLException, ClassNotFoundException {
         Connection con = dbConnection.initializeDatabase();
         PreparedStatement pst = con.prepareStatement("SELECT * FROM timekeeper");
-        System.out.println("hello4");
+
         return pst.executeQuery();
     }
 

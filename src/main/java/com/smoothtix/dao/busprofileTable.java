@@ -5,49 +5,49 @@ import com.smoothtix.model.Busprofile;
 
 import java.sql.*;
 public class busprofileTable {
-    public static int insert(Busprofile busprofile) throws SQLException, ClassNotFoundException {
+    public static int insert(Busprofile bus_profile) throws SQLException, ClassNotFoundException {
         Connection con = dbConnection.initializeDatabase();
-        PreparedStatement pst = con.prepareStatement("insert into busprofile(busprofile_id, bus_id , driver_id, conductor_id) values (?,?,?,?)");
-        pst.setString(1,busprofile.getBusprofile_id());
-        pst.setString(4,busprofile.getBus_id());
-        pst.setString(2,busprofile.getDriver_id());
-        pst.setString(3,busprofile.getConductor_id());
+        PreparedStatement pst = con.prepareStatement("insert into bus_profile(bus_profile_id, bus_id , driver_id, conductor_id) values (?,?,?,?)");
+        pst.setString(1,bus_profile.getBusprofile_id());
+        pst.setString(2,bus_profile.getBus_id());
+        pst.setString(3,bus_profile.getDriver_id());
+        pst.setString(4,bus_profile.getConductor_id());
 
         int rawCount = pst.executeUpdate();
         return rawCount;
     }
 
-    public static ResultSet get(String busprofile_id) throws SQLException, ClassNotFoundException {
+    public static ResultSet get(String bus_profile_id) throws SQLException, ClassNotFoundException {
         Connection con = dbConnection.initializeDatabase();
-        PreparedStatement pst = con.prepareStatement("SELECT * FROM busprofile WHERE busprofile_id=?");
-        pst.setString(1,busprofile_id);
+        PreparedStatement pst = con.prepareStatement("SELECT * FROM bus_profile WHERE bus_profile_id=?");
+        pst.setString(1,bus_profile_id);
         ResultSet rs = pst.executeQuery();
         return rs;
     }
 
     public static ResultSet getAll() throws SQLException, ClassNotFoundException {
         Connection con = dbConnection.initializeDatabase();
-        PreparedStatement pst = con.prepareStatement("SELECT * FROM busprofile");
+        PreparedStatement pst = con.prepareStatement("SELECT * FROM bus_profile");
         ResultSet rs = pst.executeQuery();
         return rs;
     }
 
-    public static int update(String busprofile_id, Busprofile busprofile) throws SQLException, ClassNotFoundException {
+    public static int update(String bus_profile_id, Busprofile bus_profile) throws SQLException, ClassNotFoundException {
         Connection con = dbConnection.initializeDatabase();
-        PreparedStatement pst = con.prepareStatement("UPDATE busprofile SET busprofile_id=?, bus_id=? , driver_id=?, conductor_id=? WHERE busprofile_id=?");
-        pst.setString(1,busprofile.getBusprofile_id());
-        pst.setString(4,busprofile.getBus_id());
-        pst.setString(2,busprofile.getDriver_id());
-        pst.setString(3,busprofile.getConductor_id());
-        pst.setString(5,busprofile_id);
+        PreparedStatement pst = con.prepareStatement("UPDATE bus_profile SET bus_profile_id=?, bus_id=? , driver_id=?, conductor_id=? WHERE bus_profile_id=?");
+        pst.setString(1,bus_profile.getBusprofile_id());
+        pst.setString(2,bus_profile.getBus_id());
+        pst.setString(3,bus_profile.getDriver_id());
+        pst.setString(4,bus_profile.getConductor_id());
+        pst.setString(5,bus_profile_id);
         int rawCount = pst.executeUpdate();
         return rawCount;
     }
 
-    public static int delete(String busprofile_id) throws SQLException, ClassNotFoundException {
+    public static int delete(String bus_profile_id) throws SQLException, ClassNotFoundException {
         Connection con = dbConnection.initializeDatabase();
-        PreparedStatement pst = con.prepareStatement("DELETE FROM busprofile WHERE busprofile_id = ?");
-        pst.setString(1,busprofile_id);
+        PreparedStatement pst = con.prepareStatement("DELETE FROM bus_profile WHERE bus_profile_id = ?");
+        pst.setString(1,bus_profile_id);
         int rawCount = pst.executeUpdate();
         return rawCount;
     }
