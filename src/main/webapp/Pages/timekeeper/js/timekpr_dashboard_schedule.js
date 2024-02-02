@@ -25,18 +25,18 @@ function getTimeKeeperData(){
             console.log(data)
             data.forEach(item =>{
                 timeKeeper_id = item.timekpr_id;
-                timeKeeper_reign = item.reign;
+                timeKeeper_stand = item.stand;
             })
 
-            console.log(timeKeeper_id + " " + timeKeeper_reign);
-            fetchAllData(timeKeeper_reign);
+            console.log(timeKeeper_id + " " + timeKeeper_stand);
+            fetchAllData(timeKeeper_stand);
         })
         .catch(error => {
             console.error('Error:', error);
         });
 }
 //?reign=${timeKeeper_reign}
-function fetchAllData(timeKeeper_reign) {
+function fetchAllData(timeKeeper_stand) {
     fetch(`${ url }/scheduleController`, {
         method: 'GET',
         headers: {
@@ -349,6 +349,7 @@ function createForm() {
             <div class="form_div">
                 <label for="destination" class="bus_form_title">Destination <span class="bus_form_require">*</span></label>
                 <input type="text" name="destination" id="destination" class="form_data" placeholder="Enter Destination" required="required" />
+                <ul id="autocomplete-list" class="autocomplete-list"></ul>
             </div>
             <div class="form_div">
                 <label for="date" class="bus_form_title">Date <span class="bus_form_require">*</span></label>
@@ -368,6 +369,60 @@ function createForm() {
 
     formContainer_add.appendChild(form_add.cloneNode(true)); // Clone the form
     formContainer_update.appendChild(form_update.cloneNode(true)); // Clone the form
+
+    showSuggestions({ target: document.getElementById('add_destination') });
+}
+
+// Function to handle the autocomplete logic
+function showSuggestions(event) {
+    const input = event.target;
+    const inputValue = input.value.toUpperCase();
+    const suggestionsContainer = document.getElementById(`autocomplete-container`);
+    fetch(`${ url }/routeController?request_data=stand_list`, {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+    })
+        .then(response => {
+            if (response.ok) {
+                return response.json();
+            } else {
+                console.error('Error:', response.status);
+                throw new Error(`HTTP error! Status: ${response.status}`);
+            }
+        })
+        .then(data => {
+            const suggestions = data.map(item => item.stand_list);
+            // suggestionsContainer.innerHTML = '';
+            const filteredSuggestions = suggestions.filter(suggestion =>
+                suggestion.toUpperCase().includes(inputValue)
+            );
+            console.log(filteredSuggestions)
+            suggestionsContainer.style.maxHeight = '200px';
+            suggestionsContainer.style.overflowY = 'auto';
+            suggestionsContainer.style.width = '100%';
+            suggestionsContainer.style.left = `18px`;
+            if (filteredSuggestions.length === 0) {
+                const errorMessage = document.createElement('li');
+                errorMessage.textContent = 'No suggestions found';
+                suggestionsContainer.appendChild(errorMessage);
+            } else {
+                filteredSuggestions.forEach(suggestion => {
+                    const listItem = document.createElement('li');
+                    listItem.classList.add('autocomplete-list-item');
+                    listItem.textContent = suggestion;
+                    listItem.addEventListener('click', () => {
+                        input.value = suggestion;
+                        suggestionsContainer.innerHTML = '';
+                    });
+                    suggestionsContainer.appendChild(listItem);
+                });
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
 }
 
 // // Fetch all data from the database

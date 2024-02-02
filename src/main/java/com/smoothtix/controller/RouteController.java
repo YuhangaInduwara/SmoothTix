@@ -13,31 +13,42 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.ResultSet;
+import java.util.Objects;
 
 public class RouteController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
         response.setContentType("text/json");
         PrintWriter out = response.getWriter();
-        JSONArray passengerDataArray = new JSONArray();
+        JSONArray routeDataArray = new JSONArray();
         String route_id = request.getHeader("route_id");
-
+        String request_data = request.getParameter("request_data");
         try {
             ResultSet rs;
-
             if(route_id == null){
-                rs = routeTable.getAll();
-                while (rs.next()) {
-                    JSONObject routeData = new JSONObject();
-                    routeData.put("route_id", rs.getString("route_id"));
-                    routeData.put("route_no", rs.getString("route_no"));
-                    routeData.put("start", rs.getString("start"));
-                    routeData.put("destination", rs.getString("destination"));
-                    routeData.put("distance", rs.getString("distance"));
-                    routeData.put("price_per_ride", rs.getString("price_per_ride"));
-                    routeData.put("number_of_buses", rs.getString("number_of_buses"));
-                    System.out.println(routeData);
-                    passengerDataArray.put(routeData);
+                if(request_data == null){
+                    rs = routeTable.getAll();
+                    while (rs.next()) {
+                        JSONObject routeData = new JSONObject();
+                        routeData.put("route_id", rs.getString("route_id"));
+                        routeData.put("route_no", rs.getString("route_no"));
+                        routeData.put("start", rs.getString("start"));
+                        routeData.put("destination", rs.getString("destination"));
+                        routeData.put("distance", rs.getString("distance"));
+                        routeData.put("price_per_ride", rs.getString("price_per_ride"));
+                        routeData.put("number_of_buses", rs.getString("number_of_buses"));
+                        System.out.println(routeData);
+                        routeDataArray.put(routeData);
+                    }
+                }
+                else if (Objects.equals(request_data, "stand_list")){
+                    rs = routeTable.getStands();
+                    while (rs.next()) {
+                        JSONObject routeData = new JSONObject();
+                        routeData.put("stand_list", rs.getString("stand_list"));
+                        System.out.println(routeData);
+                        routeDataArray.put(routeData);
+                    }
                 }
             }
             else{
@@ -51,12 +62,10 @@ public class RouteController extends HttpServlet {
                     routeData.put("distance", rs.getString("distance"));
                     routeData.put("price_per_ride", rs.getString("price_per_ride"));
                     System.out.println(routeData);
-                    passengerDataArray.put(routeData);
+                    routeDataArray.put(routeData);
                 }
             }
-
-
-            out.println(passengerDataArray);
+            out.println(routeDataArray);
             response.setStatus(HttpServletResponse.SC_OK);
         } catch (Exception e) {
             response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
