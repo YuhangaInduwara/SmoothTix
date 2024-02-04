@@ -59,9 +59,14 @@ public class routeTable {
         return pst.executeQuery();
     }
 
-    public static ResultSet getStands(String route_id) throws SQLException, ClassNotFoundException {
+    public static ResultSet getStands() throws SQLException, ClassNotFoundException {
         Connection con = dbConnection.initializeDatabase();
-        PreparedStatement pst = con.prepareStatement("SELECT start FROM route UNION SELECT destination FROM route;");
+        PreparedStatement pst = con.prepareStatement("SELECT stand_list\n" +
+                "FROM (\n" +
+                "    SELECT start AS stand_list FROM route\n" +
+                "    UNION\n" +
+                "    SELECT destination AS stand_list FROM route\n" +
+                ") AS subquery;");
         return pst.executeQuery();
     }
 
