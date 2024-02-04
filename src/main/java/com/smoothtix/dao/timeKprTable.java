@@ -24,12 +24,12 @@ public class timeKprTable {
                     return 4;
                 }
                 else if(rs.getInt("privilege_level") == 6){
-                    PreparedStatement ps = con.prepareStatement("insert into timekeeper(timekpr_id, p_id,stand) values (?,?,?)");
+                    PreparedStatement ps = con.prepareStatement("insert into timekeeper(timekpr_id, nic,stand) values (?,?,?)");
                     ps.setString(1, generate_timekpr_id());
-                    ps.setString(2, rs.getString("p_id"));
+                    ps.setString(2, rs.getString("nic"));
                     ps.setString(3, stand);
-                    Passenger passenger = new Passenger (rs.getString("p_id"), 2);
-                    int success = passengerTable.updatePrivilegeLevel(rs.getString("p_id"), passenger);
+                    Passenger passenger = new Passenger (rs.getString("nic"), 2);
+                    int success = passengerTable.updatePrivilegeLevel(rs.getString("nic"), passenger);
                     if(success == 1){
                         return ps.executeUpdate();
                     }

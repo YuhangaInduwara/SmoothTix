@@ -20,7 +20,9 @@ function fetchAllData() {
             }
         })
         .then(data => {
-            displayDataAsTable(data);
+            allData = data;
+            console.log(allData)
+            updatePage(currentPage);
         })
         .catch(error => {
             console.error('Error:', error);
@@ -60,30 +62,60 @@ function updatePage(page) {
 function displayDataAsTable(data) {
       const tableBody = document.querySelector("#dataTable tbody");
       const rowCount = data.length;
-      if(rowCount >=10){
-          renderPageControl()
-      }
+      let existingData = {};
+          if(rowCount === 0){
+              const noDataRow = document.createElement("tr");
+              noDataRow.innerHTML = `<td colspan="6">No data available</td>`;
+              tableBody.appendChild(noDataRow);
+              return;
+          }
+          if(rowCount >= 10){
+              renderPageControl()
+          }
 
     data.forEach(item => {
         const row = document.createElement("tr");
 
         row.innerHTML = `
-            <td>${item.bus_id}</td>
-            <td>${item.owner_id}</td>
-            <td>${item.reg_no}</td>
-            <td>${item.route_id}</td>
-            <td>${item.no_of_Seats}</td>
-            <td>${item.reveiw_points}</td>
-            <td>
-                <span class="icon-container">
-                    <i onclick="updateRow('${item.bus_id}')"><img src="../../../images/vector_icons/update_icon.png" alt="update" class="action_icon"></i>
-                </span>
-                <span class="icon-container" style="margin-left: 1px;">
-                    <i onclick="openFlagConfirm('${item.bus_id}')"><img src="../../../images/vector_icons/delete_icon.png" alt="delete" class="action_icon"></i>
-                </span>
-            </td>
         `;
 
+        fetch(`${ url }/passengerController`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'p_id': item.p_id,
+            },
+        })
+            .then(response => {
+                if (response.ok) {
+                    response.json().then(data => {
+                        existingData = data[0];
+                        row.innerHTML = `
+                            <td>${item.bus_id}</td>
+                            <td>${item.owner_id}</td>
+                            <td>${item.reg_no}</td>
+                            <td>${item.route_id}</td>
+                            <td>${item.no_of_Seats}</td>
+                            <td>${item.reveiw_points}</td>
+                            <td>
+                                <span class="icon-container">
+                                    <i onclick="updateRow('${item.bus_id}')"><img src="../../../images/vector_icons/update_icon.png" alt="update" class="action_icon"></i>
+                                </span>
+                                <span class="icon-container" style="margin-left: 1px;">
+                                    <i onclick="openFlagConfirm('${item.bus_id}')"><img src="../../../images/vector_icons/delete_icon.png" alt="delete" class="action_icon"></i>
+                                </span>
+                            </td>
+                        `;
+                    });
+                } else if (response.status === 401) {
+                    console.log('Unauthorized');
+                } else {
+                    console.error('Error:', response.status);
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
         tableBody.appendChild(row);
     });
 }
@@ -125,13 +157,14 @@ document.getElementById("busRegForm").addEventListener("submit", function(event)
         .then(response => {
             if (response.ok) {
                 closeForm_add();
-                openAlertSuccess();
-            } else if (response.status === 401) {
-                openAlertFail(response.status);
-                console.log('Registration unsuccessful');
-            } else {
-                openAlertFail(response.status);
-                console.error('Error:', response.status);
+                openAlertSuccess("Successfully Added!");
+            } else{
+                return response.json()
+                    .then(data => {
+                        const error_msg = data.error;
+                        openAlertFail(error_msg);
+                        throw new Error("Failed");
+                    });
             }
         })
         .catch(error => {
@@ -236,20 +269,23 @@ function deleteRow(bus_id){
             'bus_id': bus_id
         },
     })
-        .then(response => {
-            if (response.ok) {
-                openAlertSuccess();
-            } else if (response.status === 401) {
-                openAlertFail(response.status);
-                console.log('Delete unsuccessful');
-            } else {
-                openAlertFail(response.status);
-                console.error('Error:', response.status);
-            }
-        })
-        .catch(error => {
-            console.error('Error:', error);
-        });
+       .then(response => {
+           if (response.ok) {
+               closeAlert();
+               openAlertSuccess("Successfully Deleted!");
+           } else if (response.status === 401) {
+               closeAlert();
+               openAlertFail(response.status);
+               console.log('Delete unsuccessful');
+           } else {
+               openAlertFail(response.status);
+               closeAlert();
+               console.error('Error:', response.status);
+           }
+       })
+       .catch(error => {
+           console.error('Error:', error);
+       });
 }
 
 function openForm_add() {
@@ -285,26 +321,42 @@ function closeForm_update() {
 }
 
 function openAlertSuccess() {
+    bus_id = "";
     document.getElementById("successAlert").style.display = "block";
     document.getElementById("overlay").style.display = "block";
 }
 
 function closeAlertSuccess() {
+    bus_id = "";
     document.getElementById("successAlert").style.display = "none";
     document.getElementById("overlay").style.display = "none";
     window.location.href = "../html/owner_dashboard_bus.html";
 }
 
 function openAlertFail(response) {
+    bus_id = "";
     document.getElementById("failMsg").innerHTML = "Operation failed (" + response + ")";
     document.getElementById("failAlert").style.display = "block";
     document.getElementById("overlay").style.display = "block";
 }
 
 function closeAlertFail() {
+    bus_id = "";
     document.getElementById("failAlert").style.display = "none";
     document.getElementById("overlay").style.display = "none";
     window.location.href = "../html/owner_dashboard_bus.html";
+}
+function openFlagConfirm(bus_id){
+    bus_id = bus_id;
+    document.getElementById("confirmAlert").style.display = "block";
+    document.getElementById("overlay").style.display = "block";
+    document.getElementById("deleteUser").textContent = bus_id;
+}
+
+function closeAlert(){
+    bus_id = "";
+    document.getElementById("confirmAlert").style.display = "none";
+    document.getElementById("overlay").style.display = "none";
 }
 
 // Create the add and update forms
