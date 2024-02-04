@@ -108,32 +108,32 @@ public class DriverController extends HttpServlet {
         }
     }
 
-//    @Override
-//    protected void doPut(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-//        response.setContentType("text/html");
-//        PrintWriter out = response.getWriter();
-//
-//        try {
-//            Gson gson = new Gson();
-//
-//            String driver_id = request.getHeader("driver_id");
-//
-//            BufferedReader reader = request.getReader();
-//            Driver driver = gson.fromJson(reader, Driver.class);
-//
-//
-//            int updateSuccess = driverTable.update(driver_id, driver);
-//
-//            if (updateSuccess >= 1) {
-//                response.setStatus(HttpServletResponse.SC_OK);
-//            } else {
-//                response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-//            }
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-//        }
-//    }
+    @Override
+    protected void doPut(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        response.setContentType("text/html");
+        PrintWriter out = response.getWriter();
+
+        try {
+            Gson gson = new Gson();
+
+            String driver_id = request.getHeader("driver_id");
+
+            BufferedReader reader = request.getReader();
+            Driver driver = gson.fromJson(reader, Driver.class);
+
+
+            int updateSuccess = driverTable.update(driver_id, driver);
+
+            if (updateSuccess >= 1) {
+                response.setStatus(HttpServletResponse.SC_OK);
+            } else {
+                response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+        }
+    }
 
     @Override
     protected void doDelete(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

@@ -17,7 +17,7 @@ public class driverTable {
                 } else if (rs.getInt("privilege_level") == 1 || rs.getInt("privilege_level") == 2 || rs.getInt("privilege_level") == 3 || rs.getInt("privilege_level") == 5) {
                     return 4;
                 } else if (rs.getInt("privilege_level") == 6) {
-                    PreparedStatement ps = con.prepareStatement("insert into driver(driver_id, p_id,license_no , review_points) values (?,?,?,?)");
+                    PreparedStatement ps = con.prepareStatement("insert into driver(driver_id, p_id,license_no ,review_points) values (?,?,?,?)");
                     ps.setString(1, generate_driver_id());
                     ps.setString(2, rs.getString("p_id"));
                     ps.setString(3, rs.getString("license_no"));
@@ -80,19 +80,17 @@ public class driverTable {
         return rs;
     }
 
-//    public static int update(String driver_id, Driver driver) throws SQLException, ClassNotFoundException {
-//        Connection con = dbConnection.initializeDatabase();
-//        PreparedStatement pst = con.prepareStatement("UPDATE driver SET driver_id=?, license_no=? ,review_points=? WHERE driver_id=?");
-//        pst.setString(1,driver.getDriver_id());
-//        pst.setString(2,driver.getLicence_no());
-//        pst.setFloat(3,driver.getPoints());
-//        pst.setString(4,driver_id);
-//
-//        int rawCount = pst.executeUpdate();
-//
-//        con.close();
-//        return rawCount;
-//    }
+    public static int update(String driver_id, Driver driver) throws SQLException, ClassNotFoundException {
+        Connection con = dbConnection.initializeDatabase();
+        PreparedStatement pst = con.prepareStatement("UPDATE driver SET driver_id=?, license_no=? ,review_points=? WHERE driver_id=?");
+        pst.setString(1,driver.getDriver_id());
+        pst.setString(2,driver.getLicence_no());
+        pst.setFloat(3,driver.getPoints());
+        pst.setString(4,driver_id);
+
+        int rawCount = pst.executeUpdate();
+        return rawCount;
+    }
 
 
 

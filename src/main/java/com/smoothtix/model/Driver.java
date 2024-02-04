@@ -24,10 +24,7 @@ public class Driver {
     public void setDriver_id(String driver_id){
         this.driver_id = driver_id;
     }
-    public void setPassenger_id(String passenger_id){
-        this.p_id = passenger_id;
-    }
-    public void setLicence_no(String licence_no){this.license_no = licence_no; }
+    public void setLicence_no(String license_no){this.license_no = license_no; }
     public void setPoints(Float review_points){
         this.review_points = review_points;
     }
