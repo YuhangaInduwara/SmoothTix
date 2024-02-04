@@ -23,7 +23,6 @@ public class TimeKeeperController extends HttpServlet {
         String p_id = request.getParameter("p_id");
         String timekpr_id = request.getHeader("timekpr_id");
 
-
         try {
             ResultSet rs;
 
