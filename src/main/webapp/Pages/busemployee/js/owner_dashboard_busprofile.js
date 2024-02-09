@@ -88,10 +88,19 @@ function displayDataAsTable(data) {
                             <i onclick="deleteRow('${item.bus_profile_id}')"><img src="../../../images/vector_icons/delete_icon.png" alt="delete" class="action_icon"></i>
                         </span>
                     </td>
+                   <td>
+                       <button class="feasible-schedule-btn" onclick="redirectToFeasibleSchedule('${item.bus_id}')">Feasible Schedule</button>
+                   </td>
                 `;
         tableBody.appendChild(row);
     });
 }
+
+function redirectToFeasibleSchedule(busProfileId) {
+    window.location.href = `feasible_schedule.html?busProfileId=${busProfileId}`;
+}
+
+
 function renderPageControl(){
     document.getElementById("page_control").style.display = "flex";
 }
