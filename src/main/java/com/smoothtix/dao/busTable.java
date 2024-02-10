@@ -49,6 +49,13 @@ public class busTable {
         return rs;
     }
 
+    public static ResultSet get_by_reg_no(String reg_no) throws SQLException, ClassNotFoundException {
+        Connection con = dbConnection.initializeDatabase();
+        PreparedStatement pst = con.prepareStatement("SELECT * FROM bus WHERE reg_no=?");
+        pst.setString(1,reg_no);
+        return pst.executeQuery();
+    }
+
     public static int update(String bus_id, Bus bus) throws SQLException, ClassNotFoundException {
         Connection con = dbConnection.initializeDatabase();
         PreparedStatement pst = con.prepareStatement("UPDATE bus SET owner_id=?, reg_no=?, route_id=?, no_of_Seats=?, reveiw_points=? WHERE bus_id=?");

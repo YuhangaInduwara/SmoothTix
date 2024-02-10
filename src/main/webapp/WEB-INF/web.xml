@@ -155,4 +155,22 @@
     <url-pattern>/paymentController</url-pattern>
   </servlet-mapping>
 
+  <servlet>
+    <servlet-name>ReviewController</servlet-name>
+    <servlet-class>com.smoothtix.controller.ReviewController</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>ReviewController</servlet-name>
+    <url-pattern>/reviewController</url-pattern>
+  </servlet-mapping>
+
+  <servlet>
+    <servlet-name>FeasibilityController</servlet-name>
+    <servlet-class>com.smoothtix.controller.FeasibilityController</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>FeasibilityController</servlet-name>
+    <url-pattern>/FeasibilityController</url-pattern>
+  </servlet-mapping>
+
 </web-app>

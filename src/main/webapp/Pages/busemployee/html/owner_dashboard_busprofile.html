@@ -72,18 +72,30 @@
                 <div class="add-new">
                     <button class="add-new-button" onclick="openForm_add()">Add New Bus Profile</button>
                 </div>
+
                 <div class="overlay" id="overlay"></div>
                 <div class="body_content">
                     <div class="form">
                         <form class="busprofile_form" id="busprofileRegForm">
                             <div class="busprofile_form_header">
-                                <h2>Add New Bus Profile</h2>
+                                <h2>New Bus Profile</h2>
                             </div>
                             <div id="formContainer_add"></div>
-                            <div id="autocomplete-container"></div>
                             <div class="busprofile_form_footer">
                                 <button type="button" class="busprofile_form_button" onclick="closeForm_add()">Close</button>
                                 <input type="submit" class="busprofile_form_button" value="Add" id="busprofileRegFormSubmit">
+                            </div>
+                        </form>
+                    </div>
+                    <div class="form">
+                        <form class="busprofile_form" id="busprofileUpdateForm">
+                            <div class="busprofile_form_header">
+                                <h2>Update <span id="header_bus_profile_id"></span> Details</h2>
+                            </div>
+                            <div id="formContainer_update"></div>
+                            <div class="busprofile_form_footer">
+                                <button type="button" class="busprofile_form_button" onclick="closeForm_update()">Close</button>
+                                <input type="submit" class="busprofile_form_button" value="Update">
                             </div>
                         </form>
                     </div>
@@ -104,7 +116,7 @@
                         <label>
                             <select class="search_input" id="searchSelect">
                                 <option value="" disabled selected>Search by</option>
-                                <option value="busprofile_id">Busprofile ID</option>
+                                <option value="bus_profile_id">Busprofile ID</option>
                                 <option value="bus_id">Bus ID</option>
                                 <option value="driver_id">Driver ID</option>
                                 <option value="conductor_id">Conductor ID</option>
@@ -130,6 +142,7 @@
                     <th>Driver ID</th>
                     <th>Conductor ID</th>
                     <th>Actions</th>
+                    <th>Feasible Schedule</th>
                 </tr>
                 </thead>
                 <tbody>

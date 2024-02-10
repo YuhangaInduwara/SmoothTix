@@ -180,7 +180,7 @@ function createForm() {
     const formContainer_add = document.getElementById('formContainer_add');
 
     formContainer_add.appendChild(form_add.cloneNode(true));
-    showSuggestions({ target: document.getElementById('add_nic') });
+    showSuggestions({ target: document.getElementById('nic_suggestions') });
 }
 
 function showSuggestions(event) {

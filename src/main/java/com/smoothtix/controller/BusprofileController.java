@@ -25,20 +25,20 @@ public class BusprofileController extends HttpServlet {
         PrintWriter out = response.getWriter();
         JSONArray busprofileDataArray = new JSONArray();
 
-        String busprofile_id = request.getHeader("busprofile_id");
+        String bus_profile_id = request.getHeader("bus_profile_id");
 
         try {
             ResultSet rs = null;
-            if(busprofile_id == null){
+            if(bus_profile_id == null){
                 rs = busprofileTable.getAll();
             }
             else{
-                rs = busprofileTable.get(busprofile_id);
+                rs = busprofileTable.get(bus_profile_id);
             }
 
             while (rs.next()) {
                 JSONObject busprofileData = new JSONObject();
-                busprofileData.put("busprofile_id", rs.getString("busprofile_id"));
+                busprofileData.put("bus_profile_id", rs.getString("bus_profile_id"));
                 busprofileData.put("bus_id", rs.getString("bus_id"));
                 busprofileData.put("driver_id", rs.getString("driver_id"));
                 busprofileData.put("conductor_id", rs.getString("conductor_id"));
@@ -85,13 +85,13 @@ public class BusprofileController extends HttpServlet {
         try {
             Gson gson = new Gson();
 
-            String busprofile_id = request.getHeader("busprofile_id");
+            String bus_profile_id = request.getHeader("bus_profile_id");
 
             BufferedReader reader = request.getReader();
             Busprofile busprofile = gson.fromJson(reader, Busprofile.class);
 
 
-            int updateSuccess = busprofileTable.update(busprofile_id, busprofile);
+            int updateSuccess = busprofileTable.update(bus_profile_id, busprofile);
 
             if (updateSuccess >= 1) {
                 response.setStatus(HttpServletResponse.SC_OK);
@@ -110,8 +110,8 @@ public class BusprofileController extends HttpServlet {
         PrintWriter out = response.getWriter();
 
         try {
-            String busprofile_id = request.getHeader("busprofile_id");
-            int deleteSuccess = busprofileTable.delete(busprofile_id);
+            String bus_profile_id = request.getHeader("bus_profile_id");
+            int deleteSuccess = busprofileTable.delete(bus_profile_id);
 
             if (deleteSuccess >= 1) {
                 response.setStatus(HttpServletResponse.SC_OK);
