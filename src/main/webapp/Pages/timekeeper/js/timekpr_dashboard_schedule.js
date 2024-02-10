@@ -348,8 +348,8 @@ function createForm() {
         <div class="bus_form_left">
             <div class="form_div">
                 <label for="destination" class="bus_form_title">Destination <span class="bus_form_require">*</span></label>
-                <input type="text" name="destination" id="destination" class="form_data" placeholder="Enter Destination" required="required" />
-                <ul id="autocomplete-list" class="autocomplete-list"></ul>
+                <input type="text" name="destination" id="destination" class="form_data" placeholder="Enter Destination" required="required" oninput="showSuggestions(event)"/>
+                <ul id="nic_suggestions" class="autocomplete-list"></ul>
             </div>
             <div class="form_div">
                 <label for="date" class="bus_form_title">Date <span class="bus_form_require">*</span></label>
@@ -394,7 +394,7 @@ function showSuggestions(event) {
         })
         .then(data => {
             const suggestions = data.map(item => item.stand_list);
-            // suggestionsContainer.innerHTML = '';
+            suggestionsContainer.innerHTML = '';
             const filteredSuggestions = suggestions.filter(suggestion =>
                 suggestion.toUpperCase().includes(inputValue)
             );
