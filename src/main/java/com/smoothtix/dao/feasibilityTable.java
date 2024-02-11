@@ -2,21 +2,38 @@ package com.smoothtix.dao;
 
 import com.smoothtix.database.dbConnection;
 import com.smoothtix.model.Feasibility;
+import com.smoothtix.model.Busprofile;
 
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 
 public class feasibilityTable {
-    public static int insert(Feasibility feasible_schedule) throws SQLException, ClassNotFoundException {
-        Connection con = dbConnection.initializeDatabase();
-        try (PreparedStatement statement = con.prepareStatement(
-                "INSERT INTO feasible_schedule (bus_id, date, time_range, availability) VALUES (?, ?, ?, ?)")) {
-            statement.setString(1, feasible_schedule.getBusId());
-            statement.setString(2, feasible_schedule.getDate());
-            statement.setString(3, feasible_schedule.getTimeRange());
-            statement.setString(4, feasible_schedule.getAvailability());
 
-            int rawCount = statement.executeUpdate();
-            return rawCount;
-        }
+    public static int insert(Feasibility feasibility) throws SQLException, ClassNotFoundException {
+        Connection con = dbConnection.initializeDatabase();
+        PreparedStatement pst = con.prepareStatement("INSERT INTO feasible_schedule(bus_id, date, time_range, availability) VALUES (?, ?, ?, ?)");
+        pst.setString(1, feasibility.getBus_id());
+        pst.setDate(2, feasibility.getDate());
+        pst.setString(3, feasibility.getTime_range());
+        pst.setInt(4, feasibility.getAvailability());
+
+        int rawCount = pst.executeUpdate();
+        return rawCount;
+    }
+
+    public static ResultSet get(String bus_id) throws SQLException, ClassNotFoundException {
+        Connection con = dbConnection.initializeDatabase();
+        PreparedStatement pst = con.prepareStatement("SELECT * FROM bus_profile WHERE bus_id = ?");
+        pst.setString(1, bus_id);
+        ResultSet rs = pst.executeQuery();
+        return rs;
+    }
+    public static ResultSet getAll() throws SQLException, ClassNotFoundException {
+        Connection con = dbConnection.initializeDatabase();
+        PreparedStatement pst = con.prepareStatement("SELECT * FROM bus_profile");
+        ResultSet rs = pst.executeQuery();
+        return rs;
     }
 }

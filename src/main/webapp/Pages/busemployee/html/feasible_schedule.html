@@ -71,49 +71,27 @@
             </div>
         </div>
         <div class="body_content">
-            <form id="feasibleScheduleForm">
-                <label for="busId">Bus ID:</label>
-                <input type="text" id="busId" name="busId" required>
+            <div class="form-container">
+                <h2>Feasible Schedule Form</h2>
+                <form id="feasibleScheduleForm">
+                    <label for="bus_id">Bus ID:</label>
+                    <span id="bus_id"></span>
 
-                <label for="date">Date:</label>
-                <input type="date" id="date" name="date" required>
+                    <label for="date">Date:</label>
+                    <input type="date" id="date" name="date" required>
 
-                <label for="timeRange">Time Range:</label>
-                <select id="timeRange" name="timeRange" required>
-                    <option value="0-1">12:00 AM - 1:00 AM</option>
-                    <option value="1-2">1:00 AM - 2:00 AM</option>
-                    <option value="2-3">2:00 AM - 3:00 AM</option>
-                    <option value="3-4">3:00 AM - 4:00 AM</option>
-                    <option value="4-5">4:00 AM - 5:00 AM</option>
-                    <option value="5-6">5:00 AM - 6:00 AM</option>
-                    <option value="6-7">6:00 AM - 7:00 AM</option>
-                    <option value="7-8">7:00 AM - 8:00 AM</option>
-                    <option value="8-9">8:00 AM - 9:00 AM</option>
-                    <option value="9-10">9:00 AM - 10:00 AM</option>
-                    <option value="10-11">10:00 AM - 11:00 AM</option>
-                    <option value="11-12">11:00 AM - 12:00 PM</option>
-                    <option value="12-13">12:00 PM - 1:00 PM</option>
-                    <option value="13-14">1:00 PM - 2:00 PM</option>
-                    <option value="14-15">2:00 PM - 3:00 PM</option>
-                    <option value="15-16">3:00 PM - 4:00 PM</option>
-                    <option value="16-17">4:00 PM - 5:00 PM</option>
-                    <option value="17-18">5:00 PM - 6:00 PM</option>
-                    <option value="18-19">6:00 PM - 7:00 PM</option>
-                    <option value="19-20">7:00 PM - 8:00 PM</option>
-                    <option value="20-21">8:00 PM - 9:00 PM</option>
-                    <option value="21-22">9:00 PM - 10:00 PM</option>
-                    <option value="22-23">10:00 PM - 11:00 PM</option>
-                    <option value="23-0">11:00 PM - 12:00 AM</option>
-                </select>
+                    <label for="time_range">Time Range:</label>
+                    <input type="text" id="time_range" name="time_range" required>
 
-                <label for="availability">Availability:</label>
-                <select id="availability" name="availability" required>
-                    <option value="available">Available</option>
-                    <option value="notAvailable">Not Available</option>
-                </select>
+                    <label for="availability">Availability:</label>
+                    <select id="availability" name="availability" required>
+                        <option value="1">Available</option>
+                        <option value="0">Not Available</option>
+                    </select>
 
-                <button type="submit">Submit</button>
-            </form>
+                    <button type="submit">Submit</button>
+                </form>
+            </div>
         </div>
 
     </div>
