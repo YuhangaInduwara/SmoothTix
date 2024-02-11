@@ -78,6 +78,12 @@ public class passengerTable {
         return pst.executeQuery();
     }
 
+    public static ResultSet counter() throws SQLException, ClassNotFoundException {
+        Connection con = dbConnection.initializeDatabase();
+        PreparedStatement pst = con.prepareStatement("SELECT COUNT(*) AS record_count FROM passenger WHERE flag=false");
+        return pst.executeQuery();
+    }
+
     public static int update(String p_id, Passenger passenger) throws SQLException, ClassNotFoundException {
         Connection con = dbConnection.initializeDatabase();
         PreparedStatement pst = con.prepareStatement("UPDATE passenger SET first_name=?, last_name=?, nic=?, email=? WHERE p_id=?");

@@ -80,6 +80,12 @@ public class driverTable {
         return rs;
     }
 
+    public static ResultSet counter() throws SQLException, ClassNotFoundException {
+        Connection con = dbConnection.initializeDatabase();
+        PreparedStatement pst = con.prepareStatement("SELECT COUNT(*) AS record_count FROM driver");
+        return pst.executeQuery();
+    }
+
     public static int update(String driver_id, Driver driver) throws SQLException, ClassNotFoundException {
         Connection con = dbConnection.initializeDatabase();
         PreparedStatement pst = con.prepareStatement("UPDATE driver SET driver_id=?, license_no=? ,review_points=? WHERE driver_id=?");

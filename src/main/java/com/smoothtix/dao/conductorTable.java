@@ -31,6 +31,12 @@ public class conductorTable {
         return rs;
     }
 
+    public static ResultSet counter() throws SQLException, ClassNotFoundException {
+        Connection con = dbConnection.initializeDatabase();
+        PreparedStatement pst = con.prepareStatement("SELECT COUNT(*) AS record_count FROM conductor");
+        return pst.executeQuery();
+    }
+
     public static int update(String conductor_id, Conductor conductor) throws SQLException, ClassNotFoundException {
         Connection con = dbConnection.initializeDatabase();
         PreparedStatement pst = con.prepareStatement("UPDATE conductor SET conductor_id=?, p_id=?, review_points=? WHERE conductor_id=?");

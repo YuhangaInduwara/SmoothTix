@@ -89,6 +89,12 @@ public class routeTable {
         return pst.executeQuery();
     }
 
+    public static ResultSet counter() throws SQLException, ClassNotFoundException {
+        Connection con = dbConnection.initializeDatabase();
+        PreparedStatement pst = con.prepareStatement("SELECT COUNT(*) AS record_count FROM route");
+        return pst.executeQuery();
+    }
+
     public static int update(String route_id, Route route) throws SQLException, ClassNotFoundException {
         Connection con = dbConnection.initializeDatabase();
         PreparedStatement ps1 = con.prepareStatement("SELECT * FROM route WHERE route_no=?");

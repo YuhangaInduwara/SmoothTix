@@ -147,6 +147,7 @@ protected void doGet(HttpServletRequest request, HttpServletResponse response) t
             response.setStatus(HttpServletResponse.SC_OK);
             return;
         }
+        System.out.println(blacklistedTokens);
         out.write("{\"error\": \"Invalid Request!\"}");
         response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
     } else{
