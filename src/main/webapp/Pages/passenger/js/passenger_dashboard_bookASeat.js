@@ -7,23 +7,10 @@ const rows = 10;
 let selectedSeats = [];
 let totalPrice = 0;
 let seatAvailabilityArray = [];
-let booking_p_id = "P0035";
 let booking_schedule_id = "";
 const errorMessages = {};
 
-if(isAuthenticated()){
-    const jwtToken = localStorage.getItem('jwtToken');
-    if(jwtToken){
-        const decodedToken = decodeJWT(jwtToken);
-        booking_p_id = decodedToken.p_id;
-    }
-    else{
-        window.location.href = `${url}/Pages/login/html/login.html`;
-    }
-}
-else{
-    window.location.href = `${url}/Pages/login/html/login.html`;
-}
+isAuthenticated();
 
 function fetchAllData() {
     fetch(`${ url }/scheduleController`, {
@@ -417,7 +404,7 @@ function pay() {
         .then(parsedResponse => {
             console.log(parsedResponse);
             const payment_id = parsedResponse.payment_id;
-            addBooking(booking_schedule_id, booking_p_id, payment_id, selectedSeats);
+            addBooking(booking_schedule_id, session_p_id, payment_id, selectedSeats);
         })
 }
 

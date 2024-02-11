@@ -49,6 +49,12 @@ public class busTable {
         return rs;
     }
 
+    public static ResultSet counter() throws SQLException, ClassNotFoundException {
+        Connection con = dbConnection.initializeDatabase();
+        PreparedStatement pst = con.prepareStatement("SELECT COUNT(*) AS record_count FROM bus");
+        return pst.executeQuery();
+    }
+
     public static ResultSet get_by_reg_no(String reg_no) throws SQLException, ClassNotFoundException {
         Connection con = dbConnection.initializeDatabase();
         PreparedStatement pst = con.prepareStatement("SELECT * FROM bus WHERE reg_no=?");
