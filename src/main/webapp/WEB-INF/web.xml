@@ -170,7 +170,7 @@
   </servlet>
   <servlet-mapping>
     <servlet-name>FeasibilityController</servlet-name>
-    <url-pattern>/FeasibilityController</url-pattern>
+    <url-pattern>/feasibilityController</url-pattern>
   </servlet-mapping>
 
   <servlet>

@@ -96,8 +96,18 @@ function displayDataAsTable(data) {
     });
 }
 
-function redirectToFeasibleSchedule(busProfileId) {
-    window.location.href = `feasible_schedule.html?busProfileId=${busProfileId}`;
+function redirectToFeasibleSchedule(busId) {
+    // Check if busId is not null or undefined before storing in localStorage
+    if (busId) {
+        // Store bus_id in localStorage
+        localStorage.setItem('selectedBusId', busId);
+
+        // Redirect to feasible_schedule.html or trigger the necessary actions
+        window.location.href = '../html/feasible_schedule.html';
+    } else {
+        console.error('Invalid bus_id:', busId);
+        // Handle the case where bus_id is null or undefined
+    }
 }
 
 
