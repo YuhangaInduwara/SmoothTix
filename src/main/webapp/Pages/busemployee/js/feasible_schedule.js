@@ -2,7 +2,6 @@ function goBack() {
     window.history.back();
 }
 
-
 document.addEventListener("DOMContentLoaded", function () {
     // Retrieve bus_id from local storage
     const busId = localStorage.getItem('selectedBusId');
@@ -13,7 +12,6 @@ document.addEventListener("DOMContentLoaded", function () {
         document.getElementById('bus_id').innerText = busId;
     }
 });
-
 
 document.addEventListener("DOMContentLoaded", function () {
     const form = document.getElementById('feasibleScheduleForm');

@@ -2,7 +2,6 @@ package com.smoothtix.dao;
 
 import com.smoothtix.database.dbConnection;
 import com.smoothtix.model.Feasibility;
-import com.smoothtix.model.Busprofile;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
