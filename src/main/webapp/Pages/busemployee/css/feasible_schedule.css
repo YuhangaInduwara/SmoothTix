@@ -1,26 +1,22 @@
 body {
     margin: 0;
-    background-color: white;
-    max-height: 100vh;
-    font-family: 'Times New Roman', serif;
+    background-color: #f5f5f5;
+    font-family: 'Arial', sans-serif;
 }
 
 .dashboard {
     display: flex;
-    flex-direction: row;
 }
 
-.sidebar{
+.sidebar {
     background-color: #cccccc;
+    color: #fff;
     display: flex;
     flex-direction: column;
     width: 240px;
-    height: 97vh;
-    margin-top: 10px;
-    margin-bottom: 10px;
-    margin-left: 10px;
+    min-height: 100vh;
     border-radius: 10px;
-    box-shadow: 0 0 10px rgba(0.1, 0.1, 0.1, 0.1);
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
 .site_logo{
@@ -42,13 +38,15 @@ body {
 
 .sidebar_element {
     display: flex;
-    flex-direction: row;
+    flex-grow: 1;
     align-items: center;
-    gap: 15px;
     text-decoration: none;
-    padding-top: 10px;
-    padding-left: 20px;
+    padding: 10px 20px;
     transition: transform 0.3s;
+}
+
+.sidebar_element + .sidebar_element {
+    margin-top: 10px; /* Adjust the top margin between elements */
 }
 
 .sidebar_element:hover{
@@ -88,9 +86,12 @@ a {
     display: flex;
     flex-direction: column;
     background-color: white;
-    height: 86vh;
+    min-height: 100vh;
 }
-
+.functions{
+    display: flex;
+    flex-direction: row;
+}
 .navbar {
     display: flex;
     flex-direction: row;
@@ -136,17 +137,94 @@ a {
     height: 20px;
     margin-right: 5px;
 }
+.alertBody {
+    width: 512px;
+    height: 246px;
+    background: #ffffff;
+    border-radius: 10px;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+    z-index: 1000;
+    display: none;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 50px;
+    gap:40px;
+}
+
+.alertImg {
+    width: 80px;
+    margin-bottom: 40px;
+}
+.overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 999;
+}
+.fail-alert-container {
+    display: none;
+}
+.show-alert {
+    display: flex;
+}
+.alertMsgSuccess,
+.alertMsgFail {
+    font-size: 25px;
+    font-family: Times New Roman, serif;
+    font-weight: 700;
+    line-height: 1.5;
+    word-wrap: break-word;
+    margin-bottom: 40px;
+}
+
+.alertMsgSuccess{
+    color: #109046;
+}
+
+.alertMsgFail{
+    color: #ff0202;
+}
+
+.okButton {
+    width: 150px;
+    height: 40px;
+    border: none;
+    border-radius: 20px;
+    background: #EA2427;
+    color: #fff;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background 0.3s ease;
+}
+
+.okButton:hover {
+    background: #D1191D;
+}
 
 label {
-    margin-top: 10px;
     font-weight: bold;
+    margin-bottom: 5px;
+    display: block;
+    font-size: 16px;
+    color: #333;
 }
 
 input, select {
-    padding: 10px;
+    padding: 12px;
     margin: 5px 0;
     border: 1px solid #ccc;
     border-radius: 5px;
+    font-size: 14px;
 }
 
 button {
@@ -174,4 +252,53 @@ form {
 
 button:hover {
     background-color: #45a049;
+}
+.checkbox-group {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr); /* 6 checkboxes per row */
+    gap: 10px; /* Adjust the gap between checkboxes as needed */
+}
+
+input[type="checkbox"] {
+    display: none; /* Hide the actual checkboxes */
+}
+
+label {
+    background-color: #fff;
+    border: 1px solid #ccc;
+    padding: 15px;
+    margin: 5px;
+    cursor: pointer;
+    text-align: center;
+    border-radius: 5px;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+input[type="checkbox"]:checked + label {
+    background-color: #e53935;
+    color: #fff;
+}
+
+label[for="bus_profile_id"] {
+    display: block;
+    text-align: center;
+    margin: 10px auto;
+}
+label[for="availability"],
+label[for="date"], {
+    display: block;
+    text-align: center;
+    margin: 10px auto;
+}
+#bus_profile_id{
+    display: block;
+    margin: 0 auto;
+    width:3%;
+}
+
+#availability,
+#date{
+    display: block;
+    margin: 0 auto;
+    width:20%;
 }

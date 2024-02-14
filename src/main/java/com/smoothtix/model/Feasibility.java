@@ -3,32 +3,32 @@ package com.smoothtix.model;
 import java.sql.Date;
 
 public class Feasibility {
-    private String bus_id;
+    private String bus_profile_id;
     private Date date;
     private String time_range;
     private int availability;
 
     public String toString() {
         return "Feasibility{" +
-                "bus_id='" + bus_id + '\'' +
+                "bus_profile_id='" + bus_profile_id + '\'' +
                 ", date=" + date +
                 ", time_range='" + time_range + '\'' +
                 ", availability=" + availability +
                 '}';
     }
-    public Feasibility(String bus_id, Date date, String time_range, int availability) {
-        this.bus_id = bus_id;
+    public Feasibility(String bus_profile_id, Date date, String time_range, int availability) {
+        this.bus_profile_id = bus_profile_id;
         this.date = date;
         this.time_range = time_range;
         this.availability = availability;
     }
 
     public String getBus_id() {
-        return bus_id;
+        return bus_profile_id;
     }
 
     public void setBus_id(String bus_id) {
-        this.bus_id = bus_id;
+        this.bus_profile_id = bus_profile_id;
     }
 
     public Date getDate() {
