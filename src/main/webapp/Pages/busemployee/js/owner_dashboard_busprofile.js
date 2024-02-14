@@ -89,23 +89,23 @@ function displayDataAsTable(data) {
                         </span>
                     </td>
                    <td>
-                       <button class="feasible-schedule-btn" onclick="redirectToFeasibleSchedule('${item.bus_id}')">Feasible Schedule</button>
+                       <button class="feasible-schedule-btn" onclick="redirectToFeasibleSchedule('${item.bus_profile_id}')">Feasible Schedule</button>
                    </td>
                 `;
         tableBody.appendChild(row);
     });
 }
 
-function redirectToFeasibleSchedule(busId) {
+function redirectToFeasibleSchedule(bus_profile_id) {
     // Check if busId is not null or undefined before storing in localStorage
-    if (busId) {
+    if (bus_profile_id) {
         // Store bus_id in localStorage
-        localStorage.setItem('selectedBusId', busId);
+        localStorage.setItem('selectedBusId', bus_profile_id);
 
         // Redirect to feasible_schedule.html or trigger the necessary actions
         window.location.href = '../html/feasible_schedule.html';
     } else {
-        console.error('Invalid bus_id:', busId);
+        console.error('Invalid bus_profile_id:', bus_profile_id);
         // Handle the case where bus_id is null or undefined
     }
 }
