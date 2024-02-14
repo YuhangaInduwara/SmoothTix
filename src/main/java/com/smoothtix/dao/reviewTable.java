@@ -15,7 +15,7 @@ public class reviewTable {
 //        pst.setString(1, review_id);
 //        pst.setString(2, point_id);
 //        pst.setString(3, busProfile_id);
-        pst.setString(4, review.getComments());
+//        pst.setString(4, review.getComments());
 
         int rawCount = pst.executeUpdate();
         if(rawCount >= 0){
@@ -27,7 +27,8 @@ public class reviewTable {
 
 //    public static String generateReviewID() throws SQLException{
 //
-//
+//        Connection con = dbConnection.initializeDatabase();
+//        PreparedStatement pst = con.prepareStatement("SELECT ");
 //        return "RV" + bookingID.subString(2);
 //    }
 

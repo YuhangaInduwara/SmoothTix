@@ -1,3 +1,18 @@
+if(isAuthenticated()){
+   const jwtToken = localStorage.getItem('jwtToken');
+   if(jwtToken){
+       const decodedToken = decodeJWT(jwtToken);
+       booking_p_id = decodedToken.p_id;
+   }
+   else{
+       window.location.href = `${url}/Pages/login/html/login.html`;
+   }
+}
+else{
+   window.location.href = `${url}/Pages/login/html/login.html`;
+}
+
+
 function submitReview() {
     const drivingRating = document.getElementById("driverRating").value;
     const busRating = document.getElementById("busRating").value;
