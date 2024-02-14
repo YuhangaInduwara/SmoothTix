@@ -46,7 +46,8 @@ public class bookingTable {
                 return "{\"booking_id\":\"" + booking_id + "\", \"p_id\":\"" + booking.getP_id() + "\", \"email\":\"" + rs.getString("email") + "\"}";
             } else {
                 return "Unsuccessful";
-            }        }
+            }
+        }
         return "Unsuccessful";
     }
 
