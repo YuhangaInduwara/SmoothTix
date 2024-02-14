@@ -72,6 +72,12 @@ public class bookingTable {
         return rs;
     }
 
+//    public static ResultSet counter() throws SQLException, ClassNotFoundException {
+//        Connection con = dbConnection.initializeDatabase();
+//        PreparedStatement pst = con.prepareStatement("SELECT COUNT(*) AS record_count FROM booking");
+//        return pst.executeQuery();
+//    }
+
     // schedule_id, booking id, from, to, date, time, status, price, seat no, bus
     // schedule -
     public static ResultSet getByP_id(String p_id) throws SQLException, ClassNotFoundException {

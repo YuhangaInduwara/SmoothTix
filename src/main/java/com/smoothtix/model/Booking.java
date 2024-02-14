@@ -9,7 +9,6 @@ public class Booking {
     Boolean status;
     int[] selectedSeats;
 
-
     public Booking(String payment_id, String schedule_id, String p_id, Boolean status, int[] selectedSeats){
         this.payment_id = payment_id;
         this.p_id = p_id;

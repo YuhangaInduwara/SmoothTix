@@ -170,7 +170,16 @@
   </servlet>
   <servlet-mapping>
     <servlet-name>FeasibilityController</servlet-name>
-    <url-pattern>/FeasibilityController</url-pattern>
+    <url-pattern>/feasibilityController</url-pattern>
+  </servlet-mapping>
+
+  <servlet>
+    <servlet-name>ItemCountController</servlet-name>
+    <servlet-class>com.smoothtix.controller.ItemCountController</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>ItemCountController</servlet-name>
+    <url-pattern>/itemCountController</url-pattern>
   </servlet-mapping>
 
 </web-app>

@@ -1,10 +1,11 @@
-body{
-    margin:0;
+body {
+    margin: 0;
     background-color: white;
     max-height: 100vh;
+    font-family: 'Times New Roman', serif;
 }
 
-.dashboard{
+.dashboard {
     display: flex;
     flex-direction: row;
 }
@@ -73,22 +74,16 @@ body{
     transform: scale(1.1);
 }
 
-a{
+a {
     text-decoration: none;
     color: #000;
-    text-align: center;
-    font-family: Times New Roman, serif;
-    font-size: 15px;
-    font-style: normal;
-    font-weight: 700;
-    line-height: 20px;
 }
 
-.sidebar_img{
+.sidebar_img {
     width: 40px;
 }
 
-.content_container{
+.content_container {
     flex: 1;
     display: flex;
     flex-direction: column;
@@ -96,19 +91,18 @@ a{
     height: 86vh;
 }
 
-.navbar{
+.navbar {
     display: flex;
     flex-direction: row;
     align-items: center;
 }
 
-.page_name{
+.page_name {
     margin-left: 25px;
-    font-family: Times New Roman, serif;
 }
 
-.user_profile{
-    flex:1;
+.user_profile {
+    flex: 1;
     display: flex;
     flex-direction: row;
     align-items: center;
@@ -117,42 +111,30 @@ a{
     width: 100%;
 }
 
-.user_img{
+.user_img {
     width: 40px;
     border-radius: 100%;
     margin-right: 20px;
 }
 
 .back-btn {
-     display: flex;
-     align-items: center;
-     cursor: pointer;
-     padding: 10px;
-     transition: transform 0.3s;
-     margin-left: 10px;
- }
-
- .back-btn:hover {
-     background-color: #f0f0f0; /* Change the background color on hover */
-     border-radius: 5px;
- }
-
- .arrow_img {
-     width: 20px; /* Adjust the width as needed */
-     height: 20px; /* Adjust the height as needed */
-     margin-right: 5px; /* Adjust the margin as needed */
- }
-/* Add this to your existing CSS or create a new style block in your HTML head */
-
-.body_content {
-    padding: 20px;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    padding: 10px;
+    transition: transform 0.3s;
+    margin-left: 10px;
 }
 
-form {
-    display: flex;
-    flex-direction: column;
-    max-width: 400px;
-    margin: 0 auto;
+.back-btn:hover {
+    background-color: #f0f0f0;
+    border-radius: 5px;
+}
+
+.arrow_img {
+    width: 20px;
+    height: 20px;
+    margin-right: 5px;
 }
 
 label {
@@ -168,13 +150,26 @@ input, select {
 }
 
 button {
-    background-color: #4CAF50;
+    background-color: rgb(255, 0, 0);
     color: white;
     padding: 10px;
     border: none;
     border-radius: 5px;
     cursor: pointer;
     transition: background-color 0.3s;
+}
+
+.form-container {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
 }
 
 button:hover {

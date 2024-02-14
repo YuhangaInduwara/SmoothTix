@@ -70,7 +70,7 @@ public class scheduleTable {
                 "    r_start.price_per_ride, \n" +
                 "    COUNT(sa.seat_no) AS available_seats, \n" +
                 "    b.reg_no, \n" +
-                "    r_start.route_no -- Include the route number from the route table\n" +
+                "    r_start.route_no \n" +
                 "FROM \n" +
                 "    schedule s \n" +
                 "JOIN \n" +

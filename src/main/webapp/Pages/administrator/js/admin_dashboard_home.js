@@ -1,43 +1,37 @@
-isAuthenticated().then(result => {
-    if (result === true) {
-        const jwtToken = localStorage.getItem('jwtToken');
-        const decodedToken = decodeJWT(jwtToken);
-        const privilege_level = decodedToken.user_role;
-        // console.log(privilege_level)
-        // changePage(privilege_level)
-    } else {
-        console.log('Unauthenticated');
-        window.location.href = `${url}/Pages/login/html/login.html`;
-    }
-});
+isAuthenticated();
 
-
-function logout(){
-    const jwtToken = localStorage.getItem('jwtToken');
-
-    if (!jwtToken) {
-        console.log("No session is created!")
-    }
-
-    const headers = {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${jwtToken}`,
-    };
-
-    fetch('/SmoothTix_war_exploded/loginController?action=logout', {
+function updateCount(request_table, targetElement) {
+    fetch(`${url}/itemCountController?request_table=${request_table}`, {
         method: 'GET',
-        headers: headers,
+        headers: {
+            'Content-Type': 'application/json'
+        },
     })
         .then(response => {
-            if(response.ok){
-                window.location.href = `${url}/Pages/login/html/login.html`;
-            }
-            else{
-                console.log("Logout failed: " + err);
+            if (response.ok) {
+                return response.json();
+            } else {
+                console.error('Error:', response.status);
             }
         })
+        .then(data => {
+            data.forEach(item => {
+                targetElement.textContent = item.record_count;
+            })
+        })
         .catch(error => {
-            console.error('Error in logout:', error);
+            console.error('Fetch error:', error);
         });
 }
+
+updateCount("passenger", document.getElementById("passenger_count"));
+updateCount("timekeeper", document.getElementById("timekeeper_count"));
+updateCount("bus", document.getElementById("bus_count"));
+updateCount("driver", document.getElementById("driver_count"));
+updateCount("conductor", document.getElementById("conductor_count"));
+updateCount("route", document.getElementById("route_count"));
+
+
+
+
 
