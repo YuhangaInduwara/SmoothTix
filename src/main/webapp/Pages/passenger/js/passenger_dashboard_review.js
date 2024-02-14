@@ -1,16 +1,4 @@
-if(isAuthenticated()){
-   const jwtToken = localStorage.getItem('jwtToken');
-   if(jwtToken){
-       const decodedToken = decodeJWT(jwtToken);
-       booking_p_id = decodedToken.p_id;
-   }
-   else{
-       window.location.href = `${url}/Pages/login/html/login.html`;
-   }
-}
-else{
-   window.location.href = `${url}/Pages/login/html/login.html`;
-}
+isAuthenticated();
 
 
 function submitReview() {
