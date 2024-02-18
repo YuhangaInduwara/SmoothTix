@@ -68,7 +68,7 @@ public class TimeKeeperController extends HttpServlet {
                 String nic = jsonObject.get("nic").getAsString();
                 String stand = jsonObject.get("stand").getAsString();
                 result = timeKprTable.insert(nic, stand);
-                System.out.println(nic);
+                System.out.println(stand);
             } else{
                 return;
             }
