@@ -7,7 +7,7 @@ let normalData = [];
 let flagData = [];
 let normalDataSearch = [];
 let flagDataSearch = [];
-let searchOption = '';
+let searchOption = 'p_id';
 
 isAuthenticated();
 

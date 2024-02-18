@@ -1,8 +1,9 @@
 let timeKpr_id = "";
-let searchOption = "timekpr_id";
 let currentPage = 1;
 const pageSize = 10;
 let allData = [];
+let dataSearch = [];
+let searchOption = 'timekpr_id';
 
 function fetchAllData() {
     fetch(`${ url }/timekeeperController`, {
@@ -21,7 +22,7 @@ function fetchAllData() {
         .then(data => {
             allData = data;
             console.log(allData)
-            updatePage(currentPage);
+            updatePage(currentPage, false);
         })
         .catch(error => {
             console.error('Error:', error);
@@ -30,11 +31,20 @@ function fetchAllData() {
 
 fetchAllData();
 
-function updatePage(page) {
+function updatePage(page, search) {
     const startIndex = (page - 1) * pageSize;
     const endIndex = startIndex + pageSize;
-    let dataToShow= allData.slice(startIndex, endIndex);
     const tableBody = document.querySelector("#dataTable tbody");
+
+    let dataToShow = [];
+    if(search){
+        console.log("hello: " + dataSearch)
+        dataToShow = dataSearch.slice(startIndex, endIndex);
+    }
+    else{
+        dataToShow = allData.slice(startIndex, endIndex);
+    }
+
     tableBody.innerHTML = "";
     displayDataAsTable(dataToShow);
     updatePageNumber(currentPage);
@@ -129,6 +139,8 @@ document.getElementById("busRegForm").addEventListener("submit", function(event)
         stand: stand,
     };
     const jsonData = JSON.stringify(userData);
+    console.log("test: "+jsonData)
+
     fetch(`${ url }/timekeeperController`, {
         method: 'POST',
         headers: {
@@ -165,12 +177,13 @@ function createForm() {
         <div class="bus_form_left">
             <div class="form_div">
                 <label for="nic" class="bus_form_title">NIC<span class="bus_form_require">*</span></label>
-                <input type="text" name="nic" id="nic" class="form_data" placeholder="Enter NIC" required="required" oninput="showSuggestions(event)"/>
+                <input type="text" name="nic" id="nic" class="form_data" placeholder="Enter NIC" required="required" oninput="showSuggestions1(event)"/>
                 <ul id="nic_suggestions" class="autocomplete-list"></ul>
             </div>
             <div class="form_div">
                 <label for="stand" class="bus_form_title">Bus Stand<span class="bus_form_require">*</span></label>
-                <input type="text" name="stand" id="stand" class="form_data" placeholder="Enter the Bus Stand" required="required"/>
+                <input type="text" name="stand" id="stand" class="form_data" placeholder="Enter the Bus Stand" required="required" oninput="showSuggestions2(event)"/>
+                <ul id="stand_suggestions" class="autocomplete-list"></ul>
             </div>
         </div>
         `;
@@ -180,13 +193,16 @@ function createForm() {
     const formContainer_add = document.getElementById('formContainer_add');
 
     formContainer_add.appendChild(form_add.cloneNode(true));
-    showSuggestions({ target: document.getElementById('nic_suggestions') });
+    showSuggestions1({ target: document.getElementById('nic_suggestions') });
+    showSuggestions2({ target: document.getElementById('stand_suggestions') });
+    // showSuggestions1({ target: document.getElementById('add_nic') });
+    // showSuggestions2({ target: document.getElementById('add_stand') });
 }
 
-function showSuggestions(event) {
+function showSuggestions1(event) {
     const input = event.target;
     const inputValue = input.value.toUpperCase();
-    const suggestionsContainer = document.getElementById(`autocomplete-container`);
+    const suggestionsContainer = document.getElementById(`autocomplete-container1`);
     fetch(`${ url }/passengerController`, {
         method: 'GET',
         headers: {
@@ -235,6 +251,57 @@ function showSuggestions(event) {
         });
 }
 
+function showSuggestions2(event) {
+    const input = event.target;
+    const inputValue = input.value.toUpperCase();
+    const suggestionsContainer = document.getElementById(`autocomplete-container2`);
+    fetch(`${ url }/routeController?request_data=stand_list`, {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+    })
+        .then(response => {
+            if (response.ok) {
+                return response.json();
+            } else {
+                console.error('Error:', response.status);
+                throw new Error(`HTTP error! Status: ${response.status}`);
+            }
+        })
+        .then(data => {
+            const suggestions = data.map(item => item.stand_list);
+            suggestionsContainer.innerHTML = '';
+            const filteredSuggestions = suggestions.filter(suggestion =>
+                suggestion.toUpperCase().includes(inputValue)
+            );
+            console.log(filteredSuggestions)
+            suggestionsContainer.style.maxHeight = '200px';
+            suggestionsContainer.style.overflowY = 'auto';
+            suggestionsContainer.style.width = '100%';
+            suggestionsContainer.style.left = `18px`;
+            if (filteredSuggestions.length === 0) {
+                const errorMessage = document.createElement('li');
+                errorMessage.textContent = 'No suggestions found';
+                suggestionsContainer.appendChild(errorMessage);
+            } else {
+                filteredSuggestions.forEach(suggestion => {
+                    const listItem = document.createElement('li');
+                    listItem.classList.add('autocomplete-list-item');
+                    listItem.textContent = suggestion;
+                    listItem.addEventListener('click', () => {
+                        input.value = suggestion;
+                        suggestionsContainer.innerHTML = '';
+                    });
+                    suggestionsContainer.appendChild(listItem);
+                });
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
+}
+
 function deleteRow(){
     fetch(`${ url }/timekeeperController`, {
         method: 'DELETE',
@@ -256,48 +323,6 @@ function deleteRow(){
                 closeAlert();
                 console.error('Error:', response.status);
             }
-        })
-        .catch(error => {
-            console.error('Error:', error);
-        });
-}
-
-const searchSelect = document.getElementById("searchSelect");
-searchSelect.addEventListener("change", (event) => {
-    searchOption = event.target.value;
-    console.log(searchOption)
-});
-
-const searchInput = document.getElementById("searchInput");
-searchInput.addEventListener("keyup", searchData);
-
-function searchData() {
-    const tableBody = document.querySelector("#dataTable tbody");
-    tableBody.innerHTML = "";
-
-    const searchTerm = document.getElementById("searchInput").value;
-
-    if (searchTerm.trim() === "") {
-        fetchAllData();
-        return;
-    }
-
-    fetch(`${ url }/timekeeperController`, {
-        method: 'GET',
-        headers: {
-            'Content-Type': 'application/json',
-            [searchOption]: searchTerm
-        },
-    })
-        .then(response => {
-            if (response.ok) {
-                return response.json();
-            } else {
-                console.error('Error:', response.status);
-            }
-        })
-        .then(data => {
-            displayDataAsTable(data);
         })
         .catch(error => {
             console.error('Error:', error);
@@ -371,3 +396,22 @@ function closeAlert(){
     document.getElementById("confirmAlert").style.display = "none";
     document.getElementById("overlay").style.display = "none";
 }
+
+const searchInput = document.getElementById("searchInput");
+searchInput.addEventListener("keyup", searchData);
+
+function searchData() {
+    const searchTerm = document.getElementById("searchInput").value;
+    const search = searchTerm.toLowerCase();
+
+    dataSearch = allData.filter(user =>
+        user[searchOption].toLowerCase().includes(search)
+    );
+
+    updatePage(currentPage, true);
+}
+
+const searchSelect = document.getElementById("searchSelect");
+searchSelect.addEventListener("change", (event) => {
+    searchOption = event.target.value;
+});
