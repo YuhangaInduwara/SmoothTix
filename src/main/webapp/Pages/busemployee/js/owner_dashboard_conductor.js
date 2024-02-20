@@ -1,5 +1,5 @@
 function fetchAllData() {
-    fetch('/SmoothTix_war_exploded/conductorController', {
+    fetch(`${url}/conductorController`, {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json'
@@ -64,7 +64,7 @@ document.getElementById("conductorForm").addEventListener("submit", function(eve
     console.log(userData)
     const jsonData = JSON.stringify(userData);
 
-    fetch('../../../conductorController', {
+    fetch(`${url}/conductorController`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
@@ -98,7 +98,7 @@ function updateRow(conductor_id){
 
     document.getElementById("header_conductor_id").innerHTML = conductor_id
 
-    fetch('../../../conductorController', {
+    fetch(`${url}/conductorController`, {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json',
@@ -141,7 +141,7 @@ function updateRow(conductor_id){
 
         const jsonData = JSON.stringify(updatedData);
 
-        fetch('../../../conductorController', {
+    fetch(`${url}/conductorController`, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',
@@ -171,7 +171,7 @@ function updateRow(conductor_id){
 function deleteRow(conductor_id){
     console.log(conductor_id)
     console.log("hello")
-    fetch(`../../../conductorController`, {
+    fetch(`${url}/conductorController`, {
         method: 'DELETE',
         headers: {
             'Content-Type': 'application/json',
@@ -298,7 +298,7 @@ function searchData() {
         return;
     }
 
-    fetch('../../../conductorController', {
+    fetch(`${url}/conductorController`, {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json',

@@ -15,7 +15,7 @@ public class Driver {
 
     public String getDriver_id(){ return driver_id; }
     public String getPassenger_id(){ return p_id; }
-    public String getLicence_no(){ return license_no; }
+    public String getLicense_no(){ return license_no; }
     public Float getPoints(){
         return review_points;
     }
@@ -24,7 +24,7 @@ public class Driver {
     public void setDriver_id(String driver_id){
         this.driver_id = driver_id;
     }
-    public void setLicence_no(String license_no){this.license_no = license_no; }
+    public void setLicense_no(String license_no){this.license_no = license_no; }
     public void setPoints(Float review_points){
         this.review_points = review_points;
     }
