@@ -1,3 +1,5 @@
+isAuthenticated();
+
 fetch('../../../bookingController', {
     method: 'GET',
     headers: {
