@@ -3,60 +3,60 @@ let session_user_role = '6';
 let session_user_name = 'UserName';
 
 function isAuthenticated() {
-    // if(!(window.location.href.includes("login.html"))){
-    //     const jwtToken = localStorage.getItem('jwtToken');
-    //
-    //     if (!jwtToken) {
-    //         window.location.href = `${url}/Pages/login/html/login.html`;
-    //     }
-    //
-    //     const headers = {
-    //         'Content-Type': 'application/json',
-    //         'Authorization': `Bearer ${jwtToken}`,
-    //     };
-    //
-    //     fetch('/SmoothTix_war_exploded/loginController?action=validate', {
-    //         method: 'GET',
-    //         headers: headers,
-    //     })
-    //         .then(response => {
-    //             console.log(response)
-    //             if(response.ok){
-    //                 const decodedToken = decodeJWT(jwtToken);
-    //                 session_p_id = decodedToken.p_id;
-    //                 session_user_role = decodedToken.user_role;
-    //                 session_user_name = decodedToken.user_name;
-    //
-    //                 document.getElementById("userName").textContent = session_user_name;
-    //
-    //                 if(window.location.href.includes("administrator") && session_user_role !== 1){
-    //                     changePage(session_user_role);
-    //                 }
-    //                 else if(window.location.href.includes("timekpr") && session_user_role !== 2){
-    //                     changePage(session_user_role);
-    //                 }
-    //                 else if(window.location.href.includes("owner") && session_user_role !== 3){
-    //                     changePage(session_user_role);
-    //                 }
-    //                 else if(window.location.href.includes("driver") && session_user_role !== 4){
-    //                     changePage(session_user_role);
-    //                 }
-    //                 else if(window.location.href.includes("conductor") && session_user_role !== 5){
-    //                     changePage(session_user_role);
-    //                 }
-    //                 // else if(window.location.href.includes("passenger") && session_user_role !== 6){
-    //                 //     changePage(session_user_role);
-    //                 // }
-    //             }
-    //             else{
-    //                 window.location.href = `${url}/Pages/login/html/login.html`;
-    //             }
-    //         })
-    //         .catch(error => {
-    //             console.error('Error in isAuthenticated:', error);
-    //             window.location.href = `${url}/Pages/login/html/login.html`;
-    //         });
-    // }
+     if(!(window.location.href.includes("login.html"))){
+         const jwtToken = localStorage.getItem('jwtToken');
+
+         if (!jwtToken) {
+             window.location.href = `${url}/Pages/login/html/login.html`;
+         }
+
+         const headers = {
+             'Content-Type': 'application/json',
+             'Authorization': `Bearer ${jwtToken}`,
+         };
+
+         fetch('/SmoothTix_war_exploded/loginController?action=validate', {
+             method: 'GET',
+             headers: headers,
+         })
+             .then(response => {
+                 console.log(response)
+                 if(response.ok){
+                     const decodedToken = decodeJWT(jwtToken);
+                     session_p_id = decodedToken.p_id;
+                     session_user_role = decodedToken.user_role;
+                     session_user_name = decodedToken.user_name;
+
+                     document.getElementById("userName").textContent = session_user_name;
+
+                     if(window.location.href.includes("administrator") && session_user_role !== 1){
+                         changePage(session_user_role);
+                     }
+                     else if(window.location.href.includes("timekpr") && session_user_role !== 2){
+                         changePage(session_user_role);
+                     }
+                     else if(window.location.href.includes("owner") && session_user_role !== 3){
+                         changePage(session_user_role);
+                     }
+                     else if(window.location.href.includes("driver") && session_user_role !== 4){
+                         changePage(session_user_role);
+                     }
+                     else if(window.location.href.includes("conductor") && session_user_role !== 5){
+                         changePage(session_user_role);
+                     }
+                     // else if(window.location.href.includes("passenger") && session_user_role !== 6){
+                     //     changePage(session_user_role);
+                     // }
+                 }
+                 else{
+                     window.location.href = `${url}/Pages/login/html/login.html`;
+                 }
+             })
+             .catch(error => {
+                 console.error('Error in isAuthenticated:', error);
+                 window.location.href = `${url}/Pages/login/html/login.html`;
+             });
+     }
 }
 
 function decodeJWT(token) {
