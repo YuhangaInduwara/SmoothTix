@@ -20,17 +20,17 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.SQLOutput;
 
 public class DriverController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        response.setContentType("text/html");
+        response.setContentType("text/json");
         PrintWriter out = response.getWriter();
         JSONArray passengerDataArray = new JSONArray();
 
         String driver_id = request.getHeader("driver_id");
         String p_id = request.getHeader("p_id");
-        System.out.println("hello: " + p_id);
 
         try {
             ResultSet rs;
@@ -80,7 +80,7 @@ public class DriverController extends HttpServlet {
                 String license_no = jsonObject.get("license_no").getAsString();
                 Float review_points = jsonObject.get("review_points").getAsFloat();
                 result = driverTable.insert(p_id, license_no, review_points);
-                System.out.println(p_id);
+                System.out.println(result);
             } else{
                 return;
             }
@@ -110,7 +110,7 @@ public class DriverController extends HttpServlet {
 
     @Override
     protected void doPut(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        response.setContentType("text/html");
+        response.setContentType("text/json");
         PrintWriter out = response.getWriter();
 
         try {
@@ -136,20 +136,21 @@ public class DriverController extends HttpServlet {
     }
 
     @Override
-    protected void doDelete(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        response.setContentType("text/html");
-        PrintWriter out = response.getWriter();
+    protected void doDelete(HttpServletRequest request, HttpServletResponse response) {
+        response.setContentType("text/json");
 
         try {
             String driver_id = request.getHeader("driver_id");
             int deleteSuccess = driverTable.delete(driver_id);
+            System.out.println(driver_id);
             if (deleteSuccess >= 1) {
+                System.out.println(deleteSuccess);
                 response.setStatus(HttpServletResponse.SC_OK);
             } else {
+                System.out.println(deleteSuccess);
                 response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
             }
         } catch (Exception e) {
-            e.printStackTrace();
             response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
         }
     }
