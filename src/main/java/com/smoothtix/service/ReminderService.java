@@ -17,17 +17,14 @@ public class ReminderService {
 
     public static void main(String[] args) {
         ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
-        System.out.println("Remainder: ");
 
-        scheduler.scheduleAtFixedRate(() -> {
-            try {
-                System.out.println("helooooo1");
-                sendReminderEmails();
-            } catch (SQLException | ClassNotFoundException e) {
-                System.out.println("helooooo");
-                throw new RuntimeException(e);
-            }
-        }, 0, 1, TimeUnit.DAYS);
+//        scheduler.scheduleAtFixedRate(() -> {
+//            try {
+//                sendReminderEmails();
+//            } catch (SQLException | ClassNotFoundException e) {
+//                throw new RuntimeException(e);
+//            }
+//        }, 0, 1, TimeUnit.DAYS);
     }
 
     private static void sendReminderEmails() throws SQLException, ClassNotFoundException {

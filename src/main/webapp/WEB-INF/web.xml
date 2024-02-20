@@ -182,11 +182,6 @@
     <url-pattern>/itemCountController</url-pattern>
   </servlet-mapping>
 
-<<<<<<< HEAD
-  <listener>
-    <listener-class>com.smoothtix.controller.MyServletContextListener</listener-class>
-  </listener>
-=======
   <servlet>
     <servlet-name>PointController</servlet-name>
     <servlet-class>com.smoothtix.controller.PointController</servlet-class>
@@ -195,6 +190,10 @@
     <servlet-name>PointController</servlet-name>
     <url-pattern>/pointController</url-pattern>
   </servlet-mapping>
->>>>>>> 2fb90c2f3af6b613993cba5aee28594fd1722559
+
+
+  <listener>
+    <listener-class>com.smoothtix.controller.MyServletContextListener</listener-class>
+  </listener>
 
 </web-app>
