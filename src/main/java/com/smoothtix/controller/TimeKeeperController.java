@@ -1,12 +1,19 @@
 package com.smoothtix.controller;
 
+import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import com.smoothtix.dao.passengerTable;
 import com.smoothtix.dao.timeKprTable;
+
+import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import com.smoothtix.model.Passenger;
+import com.smoothtix.model.TimeKeeper;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import java.io.BufferedReader;
@@ -19,9 +26,9 @@ public class TimeKeeperController extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
         response.setContentType("text/json");
         PrintWriter out = response.getWriter();
-        JSONArray passengerDataArray = new JSONArray();
+        JSONArray timeKprDataArray = new JSONArray();
         String p_id = request.getParameter("p_id");
-        String timekpr_id = request.getHeader("timekpr_id");
+        String timekpr_id = request.getParameter("timekpr_id");
 
         try {
             ResultSet rs;
@@ -44,9 +51,9 @@ public class TimeKeeperController extends HttpServlet {
                 timeKprData.put("timekpr_id", rs.getString("timekpr_id"));
                 timeKprData.put("p_id", rs.getString("p_id"));
                 timeKprData.put("stand", rs.getString("stand"));
-                passengerDataArray.put(timeKprData);
+                timeKprDataArray.put(timeKprData);
             }
-            out.println(passengerDataArray);
+            out.println(timeKprDataArray);
             response.setStatus(HttpServletResponse.SC_OK);
         } catch (Exception e) {
             response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
@@ -68,7 +75,6 @@ public class TimeKeeperController extends HttpServlet {
                 String nic = jsonObject.get("nic").getAsString();
                 String stand = jsonObject.get("stand").getAsString();
                 result = timeKprTable.insert(nic, stand);
-                System.out.println(stand);
             } else{
                 return;
             }
@@ -96,6 +102,35 @@ public class TimeKeeperController extends HttpServlet {
                 response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
             }
         } catch (Exception e) {
+            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @Override
+    protected void doPut(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        response.setContentType("text/html");
+        PrintWriter out = response.getWriter();
+
+        try {
+            Gson gson = new Gson();
+
+            BufferedReader reader = request.getReader();
+            TimeKeeper timekeeper = gson.fromJson(reader, TimeKeeper.class);
+            int updateSuccess = 0;
+            System.out.println(timekeeper.get_timekpr_id());
+            System.out.println(timekeeper.get_stand());
+            if(timekeeper.get_timekpr_id() != null && timekeeper.get_stand() != null){
+                updateSuccess = timeKprTable.update(timekeeper);
+                if(updateSuccess == 1){
+                    response.setStatus(HttpServletResponse.SC_OK);
+                }
+            }
+            else {
+                System.out.println("test3");
+                response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
             response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
         }
     }

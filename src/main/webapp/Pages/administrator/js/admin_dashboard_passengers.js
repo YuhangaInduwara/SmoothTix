@@ -9,9 +9,9 @@ let normalDataSearch = [];
 let flagDataSearch = [];
 let searchOption = 'p_id';
 
-isAuthenticated();
-
-fetchAndDisplayData(false);
+document.addEventListener('DOMContentLoaded', function () {
+    isAuthenticated().then(() => fetchAndDisplayData(false));
+});
 
 function refreshPage() {
     location.reload();
@@ -19,8 +19,9 @@ function refreshPage() {
 
 async function fetchAndDisplayData(flag) {
     try {
-        const url = `/SmoothTix_war_exploded/passengerController`;
-        const response = await fetch(url, {
+        document.getElementById("userName").textContent = session_user_name;
+        const url_fetch = `${ url }/passengerController`;
+        const response = await fetch(url_fetch, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
@@ -50,7 +51,7 @@ function updatePage(page, flag, search) {
     const tableBody = document.querySelector(flag ? "#flagTable tbody" : "#dataTable tbody");
     const startIndex = (page - 1) * pageSize;
     const endIndex = startIndex + pageSize;
-    let dataToShow = [];
+    let dataToShow;
     if(search){
         const data = flag ? flagDataSearch : normalDataSearch;
         dataToShow = data.slice(startIndex, endIndex);
@@ -304,7 +305,7 @@ function FlagConfirm() {
 
     const jsonData = JSON.stringify(updatedFlag);
 
-    fetch(`../../../passengerController`, {
+    fetch(`${ url }/passengerController`, {
         method: 'PUT',
         headers: {
             'Content-Type': 'application/json',

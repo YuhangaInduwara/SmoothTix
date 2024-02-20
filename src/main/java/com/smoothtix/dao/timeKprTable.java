@@ -2,6 +2,7 @@ package com.smoothtix.dao;
 
 import com.smoothtix.database.dbConnection;
 import com.smoothtix.model.Passenger;
+import com.smoothtix.model.TimeKeeper;
 
 import java.sql.*;
 
@@ -24,9 +25,9 @@ public class timeKprTable {
                     return 4;
                 }
                 else if(rs.getInt("privilege_level") == 6){
-                    PreparedStatement ps = con.prepareStatement("insert into timekeeper(timekpr_id, nic,stand) values (?,?,?)");
+                    PreparedStatement ps = con.prepareStatement("insert into timekeeper(timekpr_id, p_id,stand) values (?,?,?)");
                     ps.setString(1, generate_timekpr_id());
-                    ps.setString(2, rs.getString("nic"));
+                    ps.setString(2, rs.getString("p_id"));
                     ps.setString(3, stand);
                     System.out.println("nic: " + rs.getString("nic"));
                     System.out.println("p_id: " + rs.getString("p_id"));
@@ -34,7 +35,15 @@ public class timeKprTable {
                     Passenger passenger = new Passenger (rs.getString("nic"), 2);
                     int success = passengerTable.updatePrivilegeLevel(rs.getString("p_id"), passenger);
                     if(success == 1){
-                        return ps.executeUpdate();
+                        int success1 = ps.executeUpdate();
+                        if(success1 == 1){
+                            return 1;
+                        }
+                        else{
+                            Passenger passenger2 = new Passenger (rs.getString("nic"), 6);
+                            int success2 = passengerTable.updatePrivilegeLevel(rs.getString("p_id"), passenger2);
+                            return -1;
+                        }
                     }
                     else{
                         return -1;
@@ -97,6 +106,13 @@ public class timeKprTable {
         return pst.executeQuery();
     }
 
+    public static int update(TimeKeeper timeKeeper) throws SQLException, ClassNotFoundException {
+        Connection con = dbConnection.initializeDatabase();
+        PreparedStatement pst = con.prepareStatement("UPDATE Timekeeper SET stand=? WHERE timekpr_id=?");
+        pst.setString(1,timeKeeper.get_stand());
+        pst.setString(2,timeKeeper.get_timekpr_id());
+        return pst.executeUpdate();
+    }
 
     public static int delete(String timekpr_id) throws SQLException, ClassNotFoundException {
         Connection con = dbConnection.initializeDatabase();

@@ -2,6 +2,16 @@ let route_id = "";
 let currentPage = 1;
 const pageSize = 10;
 let allData = [];
+let dataSearch = [];
+let searchOption = 'route_no';
+
+document.addEventListener('DOMContentLoaded', function () {
+    isAuthenticated().then(() => fetchAllData());
+});
+
+function refreshPage() {
+    location.reload();
+}
 
 function openForm_add() {
     const existingForm = document.querySelector(".bus_add_form_body");
@@ -36,6 +46,7 @@ function closeForm_update() {
 }
 
 function fetchAllData() {
+    document.getElementById("userName").textContent = session_user_name;
     fetch('/SmoothTix_war_exploded/routeController', {
         method: 'GET',
         headers: {
@@ -51,7 +62,8 @@ function fetchAllData() {
         })
         .then(data => {
             allData = data;
-            updatePage(currentPage);
+            console.log(allData)
+            updatePage(currentPage, false);
         })
         .catch(error => {
             console.error('Error:', error);
@@ -60,15 +72,23 @@ function fetchAllData() {
 
 fetchAllData();
 
-function updatePage(page) {
+function updatePage(page, search) {
     const startIndex = (page - 1) * pageSize;
     const endIndex = startIndex + pageSize;
-    let dataToShow= allData.slice(startIndex, endIndex);
     const tableBody = document.querySelector("#dataTable tbody");
+
+    let dataToShow;
+    if(search){
+        console.log("hello: " + dataSearch)
+        dataToShow = dataSearch.slice(startIndex, endIndex);
+    }
+    else{
+        dataToShow = allData.slice(startIndex, endIndex);
+    }
+
     tableBody.innerHTML = "";
     displayDataAsTable(dataToShow);
     updatePageNumber(currentPage);
-
 }
 
 function updatePageNumber(page) {
@@ -91,7 +111,6 @@ function changePage(newPage) {
 function displayDataAsTable(data) {
     const tableBody = document.querySelector("#dataTable tbody");
     const rowCount = data.length;
-    let existingData = {};
     console.log(rowCount)
     if(rowCount === 0){
         const noDataRow = document.createElement("tr");
@@ -345,3 +364,25 @@ function closeAlertFail() {
     document.getElementById("failAlert").style.display = "none";
     document.getElementById("overlay").style.display = "none";
 }
+
+
+const searchInput = document.getElementById("searchInput");
+searchInput.addEventListener("keyup", searchData);
+
+function searchData() {
+    const searchTerm = document.getElementById("searchInput").value;
+    const search = searchTerm.toLowerCase();
+    console.log(searchTerm)
+    console.log(searchOption)
+
+    dataSearch = allData.filter(user =>
+        user[searchOption].toLowerCase().includes(search)
+    );
+
+    updatePage(currentPage, true);
+}
+
+const searchSelect = document.getElementById("searchSelect");
+searchSelect.addEventListener("change", (event) => {
+    searchOption = event.target.value;
+});
