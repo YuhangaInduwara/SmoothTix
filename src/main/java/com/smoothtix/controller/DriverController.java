@@ -30,7 +30,6 @@ public class DriverController extends HttpServlet {
 
         String driver_id = request.getHeader("driver_id");
         String p_id = request.getHeader("p_id");
-        System.out.println("hello: " + p_id);
 
         try {
             ResultSet rs;

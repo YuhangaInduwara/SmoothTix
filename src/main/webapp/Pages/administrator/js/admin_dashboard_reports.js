@@ -1,9 +1,3 @@
-let currentPage = 1;
-const pageSize = 10;
-let allData = [];
-let dataSearch = [];
-let searchOption = 'conductor_id';
-
 document.addEventListener('DOMContentLoaded', function () {
     isAuthenticated().then(() => fetchAllData());
 });
@@ -14,7 +8,7 @@ function refreshPage() {
 
 function fetchAllData() {
     document.getElementById("userName").textContent = session_user_name;
-    fetch(`${ url }/conductorController`, {
+    fetch(`${ url }/busController`, {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json',
@@ -74,7 +68,6 @@ function changePage(newPage) {
 function displayDataAsTable(data) {
     const tableBody = document.querySelector("#dataTable tbody");
     const rowCount = data.length;
-    let existingData = {};
     if(rowCount === 0){
         const noDataRow = document.createElement("tr");
         noDataRow.innerHTML = `<td colspan="8">No data available</td>`;
@@ -88,36 +81,13 @@ function displayDataAsTable(data) {
         const row = document.createElement("tr");
 
         row.innerHTML = `
+            <td>${item.bus_id}</td>
+            <td>${item.owner_id}</td>
+            <td>${item.reg_no}</td>
+            <td>${item.route_id}</td>
+            <td>${item.no_of_Seats}</td>
+            <td>${item.review_points}</td>
         `;
-
-        fetch(`${ url }/passengerController`, {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json',
-                'p_id': item.p_id,
-            },
-        })
-            .then(response => {
-                if (response.ok) {
-                    response.json().then(data => {
-                        existingData = data[0];
-                        row.innerHTML = `
-                            <td>${item.conductor_id}</td>
-                            <td>${existingData.first_name} ${existingData.last_name}</td>
-                            <td>${existingData.nic}</td>
-                            <td>${existingData.email}</td>
-                            <td>${item.review_points}</td>
-                        `;
-                    });
-                } else if (response.status === 401) {
-                    console.log('Unauthorized');
-                } else {
-                    console.error('Error:', response.status);
-                }
-            })
-            .catch(error => {
-                console.error('Error:', error);
-            });
 
         tableBody.appendChild(row);
     });
@@ -133,7 +103,7 @@ searchInput.addEventListener("keyup", searchData);
 function searchData() {
     const searchTerm = document.getElementById("searchInput").value;
     const search = searchTerm.toLowerCase();
-
+    
     dataSearch = allData.filter(user =>
         user[searchOption].toLowerCase().includes(search)
     );

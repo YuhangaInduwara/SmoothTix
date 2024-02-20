@@ -111,7 +111,7 @@ public class routeTable {
         ps2.setString(2,route.get_destination());
         ResultSet rs2= ps2.executeQuery();
         while(rs2.next()){
-            if(!Objects.equals(rs1.getString("route_id"), route_id)){
+            if(!Objects.equals(rs2.getString("route_id"), route_id)){
                 return 101;
             }
         }
