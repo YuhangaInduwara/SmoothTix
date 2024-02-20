@@ -182,4 +182,8 @@
     <url-pattern>/itemCountController</url-pattern>
   </servlet-mapping>
 
+  <listener>
+    <listener-class>com.smoothtix.controller.MyServletContextListener</listener-class>
+  </listener>
+
 </web-app>
