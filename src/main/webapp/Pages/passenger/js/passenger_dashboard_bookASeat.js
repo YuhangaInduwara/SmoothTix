@@ -10,7 +10,6 @@ let seatAvailabilityArray = [];
 let booking_schedule_id = "";
 const errorMessages = {};
 
-isAuthenticated();
 
 function fetchAllData() {
     fetch(`${ url }/scheduleController`, {
@@ -206,6 +205,7 @@ function closeAlert(){
 }
 
 function openSeatSelection(schedule_id, start, destination, date, time, available_seats, price) {
+    isAuthenticated();
     if(parseInt(available_seats, 10) === 0){
         openAlert( "Sorry! All seats are booked.", "alertFail");
     }

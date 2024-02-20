@@ -28,13 +28,16 @@ public class timeKprTable {
                     ps.setString(1, generate_timekpr_id());
                     ps.setString(2, rs.getString("nic"));
                     ps.setString(3, stand);
+                    System.out.println("nic: " + rs.getString("nic"));
+                    System.out.println("p_id: " + rs.getString("p_id"));
+                    System.out.println("stand: " + stand);
                     Passenger passenger = new Passenger (rs.getString("nic"), 2);
-                    int success = passengerTable.updatePrivilegeLevel(rs.getString("nic"), passenger);
+                    int success = passengerTable.updatePrivilegeLevel(rs.getString("p_id"), passenger);
                     if(success == 1){
                         return ps.executeUpdate();
                     }
                     else{
-                        return 0;
+                        return -1;
                     }
                 }
                 else{
