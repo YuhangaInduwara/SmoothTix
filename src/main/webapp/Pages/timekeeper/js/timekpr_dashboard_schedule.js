@@ -6,6 +6,7 @@ const pageSize = 10;
 let allData = [];
 
 getTimeKeeperData();
+isAuthenticated();
 
 function getTimeKeeperData(){
     fetch(`${ url }/timekeeperController?p_id=${p_id}`, {

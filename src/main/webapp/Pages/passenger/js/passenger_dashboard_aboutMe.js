@@ -1,3 +1,5 @@
+isAuthenticated();
+
 let p_id = ""
 // Fetch all data from the database
 function fetchAllData() {

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Reports</title>
+    <title>SmoothTix</title>
     <link rel="stylesheet" type="text/css" href="../css/admin_dashboard_passengers.css">
     <link rel="icon" type="image/x-icon" href="../../../images/favicon/favicon.png">
 </head>
@@ -52,8 +52,8 @@
                 <a href="../../passenger/html/passenger_dashboard_home.html">Login as a Passenger</a>
             </div>
             <div class="sidebar_element">
-                <a href="../../login/html/login.html"><img src="../../../images/vector_icons/logout.png" alt="logout" class="sidebar_img"></a>
-                <a href="../../login/html/login.html">Logout</a>
+                <a href="../../login/html/login.html" onclick="logout(); return false;"><img src="../../../images/vector_icons/logout.png" alt="logout" class="sidebar_img"></a>
+                <button id="logoutButton" style="background: none; border: none; padding: 0; text-decoration: none; cursor: pointer;" ><a href="" onclick="logout(); return false;">Logout</a></button>
             </div>
         </div>
     </div>
@@ -64,8 +64,8 @@
                 <h1>Reports</h1>
             </div>
             <div class="user_profile">
-                <h3>Username</h3>
-                <img src="../../../images/vector_icons/user.png" alt="userimage" class="user_img">
+                <h3 id="userName">Username</h3>
+                <img src="../../../images/vector_icons/admin_avatar.png" alt="userimage" class="user_img">
             </div>
         </div>
         <div class="body_content">

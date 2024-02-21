@@ -19,7 +19,9 @@ function fetchAllData() {
             }
         })
         .then(data => {
-            displayDataAsTable(data);
+            allData = data;
+            console.log(allData)
+            updatePage(currentPage);
         })
         .catch(error => {
             console.error('Error:', error);
@@ -361,11 +363,9 @@ searchSelect.addEventListener("change", (event) => {
     console.log(searchOption)
 });
 
-// Attach the searchData function to the keyup event of the search input field
 const searchInput = document.getElementById("searchInput");
 searchInput.addEventListener("keyup", searchData);
 
-// Handle search
 function searchData() {
     const tableBody = document.querySelector("#dataTable tbody");
     tableBody.innerHTML = "";
@@ -398,7 +398,6 @@ function searchData() {
             console.error('Error:', error);
         });
 }
-
 
 
 

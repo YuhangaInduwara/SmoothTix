@@ -39,17 +39,13 @@ public class MailController extends HttpServlet {
             if (rs1.next()) {
                 passengerName = rs1.getString("first_name") + " " + rs1.getString("last_name");
             } else {
-                System.out.println("No passenger found for p_id: " + p_id);
             }
 
             ResultSet rs2 = scheduleTable.getByScheduleId(schedule_id);
             if (rs2.next()) {
                 date = String.valueOf(rs2.getDate("date_time"));
                 time = String.valueOf(rs2.getTime("date_time"));
-                System.out.println(date);
-                System.out.println(time);
             } else {
-                System.out.println("No schedule found for schedule_id: " + schedule_id);
             }
 
             ResultSet rs3 = scheduleTable.getByRouteByScheduleId(schedule_id);
@@ -57,9 +53,6 @@ public class MailController extends HttpServlet {
                 start = String.valueOf(rs3.getString("start"));
                 destination = String.valueOf(rs3.getString("destination"));
                 busRegNo = String.valueOf(rs3.getString("reg_no"));
-                System.out.println(start);
-                System.out.println(destination);
-                System.out.println(busRegNo);
             } else {
                 System.out.println("No schedule found for schedule_id: " + schedule_id);
             }
@@ -71,7 +64,6 @@ public class MailController extends HttpServlet {
                     java.net.URLEncoder.encode(bookingId, "UTF-8")
             );
             String qrCodeUrl = apiUrl + "?" + parameters;
-            System.out.println(qrCodeUrl);
             String message = "Dear " + passengerName + ",<br/><br/>" +
                     "We are delighted to inform you that your booking for the upcoming journey has been successfully confirmed. Your travel details are as follows:<br/><br/>" +
                     "Date of Journey: " + date + "<br/>" +
@@ -83,7 +75,6 @@ public class MailController extends HttpServlet {
                     "Reserved seat/seats: " + bookedSeats + "<br/>" +
                     "Reservation cost: Rs." + price + ".00<br/>" +
                     "Please find attached QR code for this booking. This QR code will serve as your electronic ticket, so please ensure that you have it readily available on your mobile device when boarding.<br/><br/>";
-            System.out.println(message);
             String footer = "We appreciate your trust in our services and wish you a pleasant journey. Thank you for choosing SmoothTix.<br/><br/>" +
                     "Safe travels!<br/><br/>" +
                     "Best regards,<br/><br/>" +
@@ -125,7 +116,6 @@ public class MailController extends HttpServlet {
                 e.printStackTrace();
                 response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
                 response.getWriter().write("Error sending email");
-                System.out.println("Error");
             }
 
         } catch (SQLException e) {

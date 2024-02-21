@@ -91,6 +91,34 @@ public class scheduleTable {
         return rs;
     }
 
+    public static ResultSet getRemainderSchedules() throws SQLException, ClassNotFoundException {
+        Connection con = dbConnection.initializeDatabase();
+        PreparedStatement pst = con.prepareStatement("SELECT\n" +
+                "    passenger.first_name,\n" +
+                "    passenger.last_name,\n" +
+                "    passenger.email,\n" +
+                "    bus.reg_no AS bus_reg_no,\n" +
+                "    booked_seats.seat_no,\n" +
+                "    schedule.date_time\n" +
+                "FROM\n" +
+                "    passenger\n" +
+                "JOIN\n" +
+                "    booking ON passenger.p_id = booking.p_id\n" +
+                "JOIN\n" +
+                "    booked_seats ON booking.booking_id = booked_seats.booking_id\n" +
+                "JOIN\n" +
+                "    schedule ON booking.schedule_id = schedule.schedule_id\n" +
+                "JOIN\n" +
+                "    bus_profile ON schedule.bus_profile_id = bus_profile.bus_profile_id\n" +
+                "JOIN\n" +
+                "    bus ON bus_profile.bus_id = bus.bus_id\n" +
+                "WHERE\n" +
+                "    schedule.date_time > NOW() AND\n" +
+                "    DATE(schedule.date_time) = CURDATE() + INTERVAL 1 DAY;");
+        ResultSet rs = pst.executeQuery();
+        return rs;
+    }
+
     public static int update(String schedule_id, Schedule schedule) throws SQLException, ClassNotFoundException {
         Connection con = dbConnection.initializeDatabase();
 
