@@ -126,4 +126,10 @@ public class passengerTable {
         pst.setString(1,nic);
         return pst.executeUpdate();
     }
+
+    public  static ResultSet getLastPassenger() throws SQLException {
+        Connection con = dbConnection.initializeDatabase();
+        PreparedStatement pst = con.prepareStatement("SELECT * FROM passenger ORDER BY p_id DESC LIMIT 1;");
+        return pst.executeQuery();
+    }
 }

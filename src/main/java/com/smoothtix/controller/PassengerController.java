@@ -25,6 +25,7 @@ public class PassengerController extends HttpServlet {
         String flag = request.getHeader("flag");
         String nic = request.getParameter("nic");
         String privilege_level = request.getHeader("privilege_level");
+
         try {
             ResultSet rs = null;
             if(p_id == null){
