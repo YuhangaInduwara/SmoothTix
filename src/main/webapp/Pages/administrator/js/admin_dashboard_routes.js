@@ -154,8 +154,8 @@ document.getElementById("busRegForm").addEventListener("submit", function(event)
     event.preventDefault();
 
     const route_no = document.getElementById("add_route_no").value;
-    const start = document.getElementById("add_start").value;
-    const destination = document.getElementById("add_destination").value;
+    const start = document.getElementById("add_start").value.toLowerCase();
+    const destination = document.getElementById("add_destination").value.toLowerCase();
     const distance = document.getElementById("add_distance").value;
     const price_per_ride = document.getElementById("add_price_per_ride").value;
 
@@ -275,8 +275,8 @@ function updateRow(route_id){
         event.preventDefault();
 
         const route_no = document.getElementById("update_route_no").value;
-        const start = document.getElementById("update_start").value;
-        const destination = document.getElementById("update_destination").value;
+        const start = document.getElementById("update_start").value.toLowerCase();
+        const destination = document.getElementById("update_destination").value.toLowerCase();
         const distance = document.getElementById("update_distance").value;
         const price_per_ride = document.getElementById("update_price_per_ride").value;
 

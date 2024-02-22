@@ -5,6 +5,7 @@
       <map>
         <entry key="file://$PROJECT_DIR$/src/main/webapp/Pages/administrator/html/admin_dashboard_passengers.html" value="file://$PROJECT_DIR$/src/main/webapp/Pages/administrator/html" />
         <entry key="file://$PROJECT_DIR$/src/main/webapp/Pages/administrator/html/admin_dashboard_timekeepers.html" value="file://$PROJECT_DIR$/src/main/webapp/Pages/administrator/html" />
+        <entry key="file://$PROJECT_DIR$/src/main/webapp/Pages/passenger/html/passenger_dashboard_bookASeat.html" value="file://$PROJECT_DIR$/src/main/webapp/Pages/passenger/html" />
       </map>
     </option>
   </component>
