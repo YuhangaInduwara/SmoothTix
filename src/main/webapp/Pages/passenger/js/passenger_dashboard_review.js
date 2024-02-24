@@ -1,4 +1,4 @@
-let booking_id = "BK0001";
+let booking_id = "BK0002";
 
 isAuthenticated();
 console.log("hello2")
@@ -65,7 +65,7 @@ function addReview(point_id, booking_id, comments){
         .then(response =>{
             if(response.ok){
                 return response.json();
-                console.log("review id : ", response.review_id);
+                //console.log("review id : ", response.review_id);
             }
             else{
                 console.log("Error : ", response.status);
