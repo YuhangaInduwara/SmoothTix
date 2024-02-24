@@ -9,6 +9,56 @@ let totalPrice = 0;
 let seatAvailabilityArray = [];
 let booking_schedule_id = "";
 const errorMessages = {};
+let standData = [];
+
+setSearchStands();
+
+function refreshPage() {
+    location.reload();
+}
+
+function setSearchStands() {
+    fetch(`${url}/routeController?request_data=stand_list`, {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+    })
+        .then(response => {
+            if (response.ok) {
+                return response.json();
+            } else {
+                console.error('Error:', response.status);
+                throw new Error(`HTTP error! Status: ${response.status}`);
+            }
+        })
+        .then(data => {
+
+            if (data) {
+                standData = data;
+
+                let dropdown_start = document.getElementById("dropdown_start");
+                let dropdown_destination = document.getElementById("dropdown_destination");
+
+                for (let i = 0; i < standData.length; i++) {
+                    let option_start = document.createElement("option");
+                    option_start.text = standData[i].stand_list;
+                    option_start.value = standData[i].stand_list;
+                    dropdown_start.add(option_start);
+
+                    let option_destination = document.createElement("option");
+                    option_destination.text = standData[i].stand_list;
+                    option_destination.value = standData[i].stand_list;
+                    dropdown_destination.add(option_destination);
+                }
+            } else {
+                console.error('Error: Invalid or missing data.stand property');
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
+}
 
 
 function fetchAllData() {
@@ -146,8 +196,8 @@ function renderPageControl(){
 }
 
 function searchData() {
-    const start = document.getElementById('dropdown_start').value;
-    const destination = document.getElementById('dropdown_destination').value;
+    const start = document.getElementById('dropdown_start').value.toLowerCase();
+    const destination = document.getElementById('dropdown_destination').value.toLowerCase();
     const date = document.getElementById('datePicker').value;
     const startTime = document.getElementById('startTimePicker').value;
     const endTime = document.getElementById('endTimePicker').value;
