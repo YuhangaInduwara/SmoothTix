@@ -24,9 +24,10 @@ public class BookingController extends HttpServlet {
         PrintWriter out = response.getWriter();
         JSONArray bookingDataArray = new JSONArray();
         String p_id = request.getParameter("p_id");
-        ResultSet rs;
+
 
         try {
+            ResultSet rs;
             if(p_id == null){
                 rs = bookingTable.getAll();
                 while (rs.next()) {
@@ -46,7 +47,13 @@ public class BookingController extends HttpServlet {
                 while (rs.next()) {
                     JSONObject bookingData = new JSONObject();
                     bookingData.put("booking_id", rs.getString("booking_id"));
-                    bookingData.put("schedule_id", rs.getString("schedule_id"));
+                    bookingData.put("reg_no", rs.getString("reg_no"));
+                    bookingData.put("start", rs.getString("start"));
+                    bookingData.put("destination", rs.getString("destination"));
+                    bookingData.put("date", rs.getDate("date_time"));
+                    bookingData.put("time", rs.getTime("date_time"));
+                    //bookingData.put("seat_no", rs.getInt("seat_no"));
+                    bookingData.put("status", rs.getInt("status"));
                     bookingDataArray.put(bookingData);
                 }
             }
@@ -57,6 +64,7 @@ public class BookingController extends HttpServlet {
             e.printStackTrace();
             response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
         }
+
     }
 
     @Override
