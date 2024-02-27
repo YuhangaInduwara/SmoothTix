@@ -149,20 +149,43 @@ a{
             border-radius: 50%;
             object-fit: cover;
             border: 3px solid #fff;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.8);
         }
 .profile h2 {
             margin-top: 10px;
         }
 
 /* Add styles for the form */
-.formContainer {
-  max-width: 400px;
-  margin: 20px auto;
-  padding: 20px;
-  background-color: #f9f9f9;
-  border-radius: 8px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-}
+#formContainer {
+            display: flex;
+            flex-direction: column;
+            gap: 20px; /* Adjust the spacing between forms */
+        }
+
+        /* Style for form */
+/*form {
+            border: 1px solid #ccc;
+            padding: 30px;
+            border-radius: 8px;
+            max-width: 550px;
+            margin-left:70px;
+        }
+*/
+        /* Style for form labels */
+label {
+            display: block; /* Make labels display as block to appear above inputs */
+            margin-bottom: 5px; /* Add spacing between labels and inputs */
+            font-weight: bold; /* Optionally, make labels bold */
+            padding: 5px;
+        }
+
+        /* Style for form inputs */
+input[type="text"] {
+            width: 90%; /* Take up full width */
+            padding: 10px; /* Add padding for better appearance */
+            border: 1px solid #ccc; /* Add border */
+            border-radius: 3px; /* Add border radius */
+            color:#605D5D;
+        }
 
 
