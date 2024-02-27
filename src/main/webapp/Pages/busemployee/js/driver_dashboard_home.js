@@ -1,4 +1,3 @@
-
 isAuthenticated();
 fetchPassengerData();
 
@@ -30,28 +29,26 @@ fetch(`${url}/passengerController`, {
 function displayPassengerProfile(passengers) {
     const formContainer = document.querySelector("#formContainer");
 
-    console.log(passengers.last_name)
-
     // Clear existing content
     formContainer.innerHTML = '';
 
-    // Create a form element
+    // Loop through each passenger
     passengers.forEach(passenger => {
-    const form = document.createElement("form");
+        // Create a form element
+        const form = document.createElement("form");
 
-    // Create and append input elements for each field
-    const firstNameInput = createTextInput("first_name", "First Name", passenger.first_name);
-    const lastNameInput = createTextInput("last_name", "Last Name", passenger.last_name);
-    const nicInput = createTextInput("nic", "NIC", passenger.nic);
-    const emailInput = createTextInput("email", "Email", passenger.email);
-   console.log(passenger.first_name)
-    // Append input elements to the form
-   form.append(firstNameInput, lastNameInput, nicInput, emailInput);
+        // Create and append input elements for each field
+        const firstNameInput = createTextInput("first_name", "First Name", passenger.first_name);
+        const lastNameInput = createTextInput("last_name", "Last Name", passenger.last_name);
+        const nicInput = createTextInput("nic", "NIC", passenger.nic);
+        const emailInput = createTextInput("email", "Email", passenger.email);
 
-    // Append the form to the form container
-    formContainer.appendChild(form);
-     });
+        // Append input elements to the form
+        form.append(firstNameInput, lastNameInput, nicInput, emailInput);
 
+        // Append the form to the form container
+        formContainer.appendChild(form);
+    });
 }
 
 // Helper function to create text input elements
@@ -60,7 +57,7 @@ function createTextInput(id, label, value) {
     input.type = "text";
     input.id = id;
     input.name = id;
-    input.value = value || "";
+    input.value = value || ""; // Set the value of the input field
     input.readOnly = true;
 
     const inputLabel = document.createElement("label");
@@ -69,5 +66,3 @@ function createTextInput(id, label, value) {
 
     return inputLabel;
 }
-
-
