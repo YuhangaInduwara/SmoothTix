@@ -1,7 +1,11 @@
 package com.smoothtix.controller;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import com.smoothtix.dao.conductorTable;
+import com.smoothtix.dao.timeKprTable;
 import com.smoothtix.model.Conductor;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -18,16 +22,24 @@ import java.sql.ResultSet;
 public class ConductorController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        response.setContentType("text/html");
+        response.setContentType("text/json");
         PrintWriter out = response.getWriter();
         JSONArray conductorDataArray = new JSONArray();
 
+        String p_id = request.getParameter("p_id");
         String conductor_id = request.getHeader("conductor_id");
 
         try {
-            ResultSet rs = null;
+            ResultSet rs;
+
             if(conductor_id == null){
-                rs = conductorTable.getAll();
+                if(p_id == null){
+
+                    rs = conductorTable.getAll();
+                }
+                else{
+                    rs = conductorTable.get_by_p_id(p_id);
+                }
             }
             else{
                 rs = conductorTable.get(conductor_id);
@@ -39,11 +51,10 @@ public class ConductorController extends HttpServlet {
                 conductorData.put("p_id", rs.getString("p_id"));
                 conductorData.put("review_points", rs.getFloat("review_points"));
 
-
                 conductorDataArray.put(conductorData);
             }
 
-            out.println(conductorDataArray.toString()); // Send JSON data as a response
+            out.println(conductorDataArray); // Send JSON data as a response
             response.setStatus(HttpServletResponse.SC_OK);
         }catch (Exception e) {
             e.printStackTrace();
@@ -53,23 +64,42 @@ public class ConductorController extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        response.setContentType("text/html");
+        response.setContentType("text/json");
         PrintWriter out = response.getWriter();
-
         try {
-            Gson gson = new Gson();
-
             BufferedReader reader = request.getReader();
-            Conductor conductor = gson.fromJson(reader, Conductor.class);
-            int registrationSuccess = conductorTable.insert(conductor);
+            JsonElement jsonElement = JsonParser.parseReader(reader);
+            int result;
 
-            if (registrationSuccess >= 1) {
+            if (jsonElement.isJsonObject()) {
+                JsonObject jsonObject = jsonElement.getAsJsonObject();
+                String nic = jsonObject.get("nic").getAsString();
+                Float review_points = jsonObject.get("review_points").getAsFloat();
+                result = conductorTable.insert(nic, review_points);
+                System.out.println(result);
+            } else{
+                return;
+            }
+
+            if(result == 0){
+                out.write("{\"error\": \"Incorrect NIC!\"}");
+                response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+            }
+            else if(result == 1){
                 response.setStatus(HttpServletResponse.SC_OK);
-            } else {
+            }
+            else if(result == 3){
+                out.write("{\"error\": \"The user is already a Conductor!\"}");
+                response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+            }
+            else if(result == 4){
+                out.write("{\"error\": \"The user is holding an another role!\"}");
+                response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+            }
+            else{
                 response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
             }
         } catch (Exception e) {
-            e.printStackTrace();
             response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
         }
     }
@@ -86,8 +116,6 @@ public class ConductorController extends HttpServlet {
 
             BufferedReader reader = request.getReader();
             Conductor conductor = gson.fromJson(reader, Conductor.class);
-
-
             int updateSuccess = conductorTable.update(conductor_id, conductor);
 
             if (updateSuccess >= 1) {

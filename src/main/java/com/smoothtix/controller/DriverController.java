@@ -5,8 +5,6 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.smoothtix.dao.driverTable;
-import com.smoothtix.dao.passengerTable;
-import com.smoothtix.dao.timeKprTable;
 import com.smoothtix.model.Driver;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -76,24 +74,24 @@ public class DriverController extends HttpServlet {
 
             if (jsonElement.isJsonObject()) {
                 JsonObject jsonObject = jsonElement.getAsJsonObject();
-                String p_id = jsonObject.get("p_id").getAsString();
+                String nic = jsonObject.get("nic").getAsString();
                 String license_no = jsonObject.get("license_no").getAsString();
                 Float review_points = jsonObject.get("review_points").getAsFloat();
-                result = driverTable.insert(p_id, license_no, review_points);
+                result = driverTable.insert(nic, license_no, review_points);
                 System.out.println(result);
             } else{
                 return;
             }
 
             if(result == 0){
-                out.write("{\"error\": \"Incorrect PID!\"}");
+                out.write("{\"error\": \"Incorrect NIC!\"}");
                 response.setStatus(HttpServletResponse.SC_NOT_FOUND);
             }
             else if(result == 1){
                 response.setStatus(HttpServletResponse.SC_OK);
             }
             else if(result == 3){
-                out.write("{\"error\": \"The user is already a driver!\"}");
+                out.write("{\"error\": \"The user is already a Driver!\"}");
                 response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
             }
             else if(result == 4){

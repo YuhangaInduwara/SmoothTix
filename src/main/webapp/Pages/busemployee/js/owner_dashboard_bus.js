@@ -1,9 +1,17 @@
-let bus_id = "";
+let Bus_id = "";
 let searchOption = "bus_id";
 let currentPage = 1;
 const pageSize = 10;
+let dataSearch = [];
 let allData = [];
 
+document.addEventListener('DOMContentLoaded', function () {
+    isAuthenticated().then(() => fetchAllData());
+});
+
+function refreshPage() {
+    location.reload();
+}
 // Fetch all data from the database
 function fetchAllData() {
     fetch(`${ url }/busController`, {
@@ -48,11 +56,20 @@ function changePage(newPage) {
         updatePage(currentPage, false);
     }
 }
-function updatePage(page) {
+function updatePage(page, search) {
     const startIndex = (page - 1) * pageSize;
     const endIndex = startIndex + pageSize;
-    let dataToShow= allData.slice(startIndex, endIndex);
     const tableBody = document.querySelector("#dataTable tbody");
+
+    let dataToShow;
+    if(search){
+        console.log("hello: " + dataSearch)
+        dataToShow = dataSearch.slice(startIndex, endIndex);
+    }
+    else{
+        dataToShow = allData.slice(startIndex, endIndex);
+    }
+
     tableBody.innerHTML = "";
     displayDataAsTable(dataToShow);
     updatePageNumber(currentPage);
@@ -407,47 +424,24 @@ function createForm() {
     formContainer_update.appendChild(form_update.cloneNode(true)); // Clone the form
 }
 
-const searchSelect = document.getElementById("searchSelect");
-searchSelect.addEventListener("change", (event) => {
-    searchOption = event.target.value;
-    console.log(searchOption)
-});
-// Attach the searchData function to the keyup event of the search input field
+
 const searchInput = document.getElementById("searchInput");
 searchInput.addEventListener("keyup", searchData);
 
-// Handle search
 function searchData() {
-    const tableBody = document.querySelector("#dataTable tbody");
-    tableBody.innerHTML = "";
-
     const searchTerm = document.getElementById("searchInput").value;
+    const search = searchTerm.toLowerCase();
 
-    if (searchTerm.trim() === "") {
-        fetchAllData();
-        return;
-    }
+    dataSearch = allData.filter(user =>
+        user[searchOption].toLowerCase().includes(search)
+    );
 
-    fetch(`${ url }/busController`, {
-        method: 'GET',
-        headers: {
-            'Content-Type': 'application/json',
-            [searchOption]: searchTerm
-        },
-    })
-        .then(response => {
-            if (response.ok) {
-                return response.json();
-            } else {
-                console.error('Error:', response.status);
-            }
-        })
-        .then(data => {
-            displayDataAsTable(data);
-        })
-        .catch(error => {
-            console.error('Error:', error);
-        });
+    updatePage(currentPage, true);
 }
+
+const searchSelect = document.getElementById("searchSelect");
+searchSelect.addEventListener("change", (event) => {
+    searchOption = event.target.value;
+});
 
 

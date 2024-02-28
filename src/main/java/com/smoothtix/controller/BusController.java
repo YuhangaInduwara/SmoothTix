@@ -40,7 +40,7 @@ public class BusController extends HttpServlet {
                 busData.put("reg_no", rs.getString("reg_no"));
                 busData.put("route_id", rs.getString("route_id"));
                 busData.put("no_of_Seats", rs.getInt("no_of_Seats"));
-                busData.put("review_points", rs.getFloat("review_points"));
+                busData.put("reveiw_points", rs.getFloat("reveiw_points"));
                 busDataArray.put(busData);
             }
 

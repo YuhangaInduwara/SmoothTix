@@ -38,7 +38,6 @@ function fetchAllData() {
         });
 }
 
-fetchAllData();
 
 function updatePage(page, search) {
     const startIndex = (page - 1) * pageSize;

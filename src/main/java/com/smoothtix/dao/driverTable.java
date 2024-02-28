@@ -6,39 +6,49 @@ import com.smoothtix.model.Driver;
 import java.sql.*;
 
 public class driverTable {
-    public static int insert(String p_id, String license_no, Float review_points) throws SQLException, ClassNotFoundException {
+    public static int insert(String nic, String license_no, Float review_points) throws SQLException, ClassNotFoundException {
         Connection con = dbConnection.initializeDatabase();
-        PreparedStatement pst = con.prepareStatement("SELECT * FROM passenger WHERE p_id=?");
-        pst.setString(1, p_id);
+        PreparedStatement pst = con.prepareStatement("SELECT * FROM passenger WHERE nic=?");
+        pst.setString(1, nic);
         ResultSet rs = pst.executeQuery();
         if (rs.next()) {
 
-                if (rs.getInt("privilege_level") == 4) {
-                    return 3;
-                } else if (rs.getInt("privilege_level") == 1 || rs.getInt("privilege_level") == 2 || rs.getInt("privilege_level") == 3 || rs.getInt("privilege_level") == 5) {
-                    return 4;
-                } else if (rs.getInt("privilege_level") == 6) {
-                    PreparedStatement ps = con.prepareStatement("insert into driver(driver_id, p_id,license_no ,review_points) values (?,?,?,?)");
+            if (rs.getInt("privilege_level") == 4) {
+                return 3;
+            } else if (rs.getInt("privilege_level") == 1 || rs.getInt("privilege_level") == 2 || rs.getInt("privilege_level") == 3 || rs.getInt("privilege_level") == 5) {
+                return 4;
+            } else if (rs.getInt("privilege_level") == 6) {
+                PreparedStatement ps = con.prepareStatement("insert into driver(driver_id, p_id,license_no ,review_points) values (?,?,?,?)");
 
-                    ps.setString(1, generate_driver_id());
-                    ps.setString(2, rs.getString("p_id"));
-                    ps.setString(3, license_no);
-                    ps.setFloat(4, review_points);
-                    Passenger passenger = new Passenger(rs.getString("p_id"), 4);
-                    int success = passengerTable.updatePrivilegeLevel(rs.getString("p_id"), passenger);
-                    System.out.println(passengerTable.updatePrivilegeLevel(rs.getString("p_id"), passenger));
-                    if (success == 1) {
-                        return ps.executeUpdate();
+                ps.setString(1, generate_driver_id());
+                ps.setString(2, rs.getString("p_id"));
+                ps.setString(3, license_no);
+                ps.setFloat(4, review_points);
+                System.out.println("nic: " + rs.getString("nic"));
+                System.out.println("p_id: " + rs.getString("p_id"));
+                System.out.println("license_no: " + license_no);
+                System.out.println("review_points: " + review_points);
+                Passenger passenger = new Passenger(rs.getString("nic"), 4);
+                int success = passengerTable.updatePrivilegeLevel(rs.getString("p_id"), passenger);
+                if (success == 1) {
+                    int success1 = ps.executeUpdate();
+                    if (success1 == 1) {
+                        return 1;
                     } else {
-                        return 0;
+                        Passenger passenger2 = new Passenger(rs.getString("nic"), 6);
+                        int success2 = passengerTable.updatePrivilegeLevel(rs.getString("p_id"), passenger2);
+                        return -1;
                     }
                 } else {
-                    return 0;
+                    return -1;
                 }
-        } else {
+            } else {
+                return 0;
+            }
+        }
+        else {
             return 0;
         }
-
     }
     private static String generate_driver_id () throws SQLException {
         Connection con;
@@ -57,7 +67,6 @@ public class driverTable {
 
         return "D" + String.format("%04d", nextdriverID);
     }
-
 
 
     public static ResultSet get(String driver_id) throws SQLException, ClassNotFoundException {
