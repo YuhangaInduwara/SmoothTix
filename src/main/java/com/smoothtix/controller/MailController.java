@@ -19,7 +19,7 @@ public class MailController extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         final String fromEmail = "smoothtix@gmail.com";
-        final String password = "ikwc nnnq rguk hexc";
+        final String password = "obzy cvzg dznf llkg";
 
         String bookingId = request.getParameter("bookingId");
         String email = request.getParameter("email");

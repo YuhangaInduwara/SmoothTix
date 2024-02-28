@@ -141,7 +141,7 @@ a{
     justify-content: center;
     align-items: center;
     height: 70vh;
-    margin bottom: 0;
+    margin-bottom: 0;
 }
 
 .centered {
@@ -157,12 +157,12 @@ a{
 
 .user-details-form {
     width: 700px;
-    align-items: left;
+    align-items: flex-start;
     background-color: #DFE3E5;
     padding: 20px;
     border-radius: 5px;
     box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
-    margin bottom: 50px;
+    margin-bottom: 50px;
 
 }
 .textarea{
