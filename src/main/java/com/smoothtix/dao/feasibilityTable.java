@@ -31,7 +31,7 @@ public class feasibilityTable {
     }
     public static ResultSet getAll() throws SQLException, ClassNotFoundException {
         Connection con = dbConnection.initializeDatabase();
-        PreparedStatement pst = con.prepareStatement("SELECT * FROM bus_profile");
+        PreparedStatement pst = con.prepareStatement("SELECT * FROM feasible_schedule");
         ResultSet rs = pst.executeQuery();
         return rs;
     }
