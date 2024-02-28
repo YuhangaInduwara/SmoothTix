@@ -13,7 +13,7 @@ import java.util.concurrent.TimeUnit;
 
 public class ReminderService {
     static final String fromEmail = "smoothtix@gmail.com";
-    static final String password = "ikwc nnnq rguk hexc";
+    static final String password = "obzy cvzg dznf llkg";
 
     public static void main(String[] args) {
         ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);

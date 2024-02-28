@@ -1,56 +1,111 @@
 
+isAuthenticated();
+fetchPassengerData();
 
-//if (isAuthenticated()) {
-//    const jwtToken = localStorage.getItem('jwtToken');
-//    if (jwtToken) {
-//        const decodedToken = decodeJWT(jwtToken);
-//        p_id = decodedToken.p_id; // Assuming p_id is stored in the JWT payload
-//    } else {
-//        window.location.href = `${url}/Pages/login/html/login.html`;
-//    }
-//} else {
-//    window.location.href = `${url}/Pages/login/html/login.html`;
-//}
-
-function fetchPassengerDetails(p_id) {
-    fetch(`${url}/passengerController/${p_id}`)
-        .then(response => response.json())
-        .then(data => {
-            // Populate HTML elements with passenger details
-            document.getElementById('firstName').textContent = data.first_name;
-            document.getElementById('lastName').textContent = data.last_name;
-            document.getElementById('email').textContent = data.email;
-            document.getElementById('nic').textContent = data.nic;
-        })
-        .catch(error => {
-            console.error('Error fetching passenger details:', error);
-            // Handle the error appropriately, e.g., display an error message to the user
-        });
-}
-
-function getConductorPId() {
-    const jwtToken = localStorage.getItem('jwtToken');
-    if (jwtToken) {
-        // Decode the JWT token and extract the p_id
-        const decodedToken = decodeJWT(jwtToken);
-        const p_id = decodedToken.po_id;
-        if (p_id) {
-            return p_id;
+function fetchPassengerData() {
+console.log(session_p_id)
+fetch(`${url}/passengerController`, {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+            'p_id': session_p_id,
+        },
+    })
+    .then(response => {
+        if (response.ok) {
+            return response.json();
         } else {
-            // Handle the case where p_id is not available in the token
-            throw new Error('p_id not found in authentication token');
+            throw new Error('Network response was not ok.');
         }
-    } else {
-        // Handle the case where the conductor is not logged in
-        throw new Error('Conductor is not logged in');
-    }
+    })
+    .then(passengerData => {
+        console.log(passengerData)
+        displayPassengerProfile(passengerData);
+    })
+    .catch(error => {
+        console.error('Error fetching last passenger:', error);
+    });
 }
 
-window.onload = function() {
-    try {
-        const conductorPId = getConductorPId();
-        fetchPassengerDetails(conductorPId);
-    } catch (error) {
-        // Handle the error appropriately, e.g., redirect to login page
-    }
-};
+//function displayPassengerProfile(passengers) {
+//    const formContainer = document.querySelector("#formContainer");
+//
+//    // Clear existing content
+//    formContainer.innerHTML = '';
+//
+//    // Loop through each passenger
+//    passengers.forEach(passenger => {
+//        // Create a form element
+//        const form = document.createElement("form");
+//
+//        // Create and append input elements for each field
+//        const firstNameInput = createTextInput("first_name", "First Name", passenger.first_name);
+//        const lastNameInput = createTextInput("last_name", "Last Name", passenger.last_name);
+//        const nicInput = createTextInput("nic", "NIC", passenger.nic);
+//        const emailInput = createTextInput("email", "Email", passenger.email);
+//
+//        // Append input elements to the form
+//        form.append(firstNameInput, lastNameInput, nicInput, emailInput);
+//
+//        // Append the form to the form container
+//        formContainer.appendChild(form);
+//    });
+//}
+//
+//// Helper function to create text input elements
+//function createTextInput(id, label, value) {
+//    const input = document.createElement("input");
+//    input.type = "text";
+//    input.id = id;
+//    input.name = id;
+//    input.value = value || ""; // Set the value of the input field
+//    input.readOnly = true;
+//
+//    const inputLabel = document.createElement("label");
+//    inputLabel.textContent = label;
+//    inputLabel.appendChild(input);
+//
+//    return inputLabel;
+//}
+function displayPassengerProfile(passengers) {
+    const formContainer = document.querySelector("#formContainer");
+
+    // Clear existing content
+    formContainer.innerHTML = '';
+
+    // Loop through each passenger
+    passengers.forEach(passenger => {
+        // Create a form element
+        const form = document.createElement("form");
+
+        // Concatenate first_name and last_name into a single name
+        const fullName = passenger.first_name + ' ' + passenger.last_name;
+
+        // Create and append input elements for each field
+        const nameInput = createTextInput("name", "Name", fullName); // Use fullName here
+        const nicInput = createTextInput("nic", "NIC", passenger.nic);
+        const emailInput = createTextInput("email", "Email", passenger.email);
+
+        // Append input elements to the form
+        form.append(nameInput, nicInput, emailInput);
+
+        // Append the form to the form container
+        formContainer.appendChild(form);
+    });
+}
+
+// Helper function to create text input elements
+function createTextInput(id, label, value) {
+    const input = document.createElement("input");
+    input.type = "text";
+    input.id = id;
+    input.name = id;
+    input.value = value || ""; // Set the value of the input field
+    input.readOnly = true;
+
+    const inputLabel = document.createElement("label");
+    inputLabel.textContent = label;
+    inputLabel.appendChild(input);
+
+    return inputLabel;
+}

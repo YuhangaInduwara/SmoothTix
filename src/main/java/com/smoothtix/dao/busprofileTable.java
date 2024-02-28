@@ -49,6 +49,23 @@ public class busprofileTable {
         return rs;
     }
 
+    public static ResultSet get_start_dest(String bus_profile_id) throws SQLException, ClassNotFoundException {
+        Connection con = dbConnection.initializeDatabase();
+        PreparedStatement pst = con.prepareStatement("SELECT\n" +
+                "    route.start AS start,\n" +
+                "    route.destination AS destination\n" +
+                "FROM\n" +
+                "    bus_profile\n" +
+                "JOIN\n" +
+                "    bus ON bus_profile.bus_id = bus.bus_id\n" +
+                "JOIN\n" +
+                "    route ON bus.route_id = route.route_id\n" +
+                "WHERE\n" +
+                "    bus_profile.bus_profile_id = 'BP001';");
+        ResultSet rs = pst.executeQuery();
+        return rs;
+    }
+
     public static int update(String bus_profile_id, Busprofile bus_profile) throws SQLException, ClassNotFoundException {
         Connection con = dbConnection.initializeDatabase();
         PreparedStatement pst = con.prepareStatement("UPDATE bus_profile SET bus_profile_id=?, bus_id=? , driver_id=?, conductor_id=? WHERE bus_profile_id=?");

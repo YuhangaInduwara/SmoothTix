@@ -82,7 +82,26 @@ public class bookingTable {
     // schedule -
     public static ResultSet getByP_id(String p_id) throws SQLException, ClassNotFoundException {
         Connection con = dbConnection.initializeDatabase();
-        PreparedStatement pst = con.prepareStatement("SELECT * FROM booking WHERE p_id=?");
+        PreparedStatement pst = con.prepareStatement(
+//                "SELECT b.booking_id, bs.seat_no, bu.reg_no, s.date_time, r.start, r.destination, b.status" +
+//                        "FROM booking b" +
+//                        "JOIN booked_seats bs ON bs.booking_id = b.booking_id" +
+//                        "JOIN schedule s ON b.schedule_id = s.schedule_id" +
+//                        "JOIN bus_profile bp ON s.bus_profile_id = bp.bus_profile_id" +
+//                        "JOIN bus bu ON bp.bus_id = bu.bus_id" +
+//                        "JOIN route r ON bu.route_id = r.route_id" +
+//                        "WHERE b.p_id = ?" +
+//                        "ORDER BY s.date_time;"
+
+                "SELECT b.booking_id, bu.reg_no, s.date_time, r.start, r.destination, b.status " +
+                        "FROM booking b " +
+                        "JOIN schedule s ON b.schedule_id = s.schedule_id " +
+                        "JOIN bus_profile bp ON s.bus_profile_id = bp.bus_profile_id " +
+                        "JOIN bus bu ON bp.bus_id = bu.bus_id " +
+                        "JOIN route r ON bu.route_id = r.route_id " +
+                        "WHERE b.p_id = ? " +
+                        "ORDER BY s.date_time;"
+        );
         pst.setString(1,p_id);
         ResultSet rs = pst.executeQuery();
         return rs;
