@@ -4,7 +4,15 @@ let currentPage = 1;
 const pageSize = 10;
 let allData = [];
 
+document.addEventListener('DOMContentLoaded', function () {
+    isAuthenticated().then(() => fetchAllData());
+});
+
+function refreshPage() {
+    location.reload();
+}
 function fetchAllData() {
+    document.getElementById("userName").textContent = session_user_name;
     fetch(`${ url }/busprofileController`, {
         method: 'GET',
         headers: {
@@ -28,14 +36,21 @@ function fetchAllData() {
         });
 }
 
-fetchAllData();
 
-
-function updatePage(page) {
+function updatePage(page, search) {
     const startIndex = (page - 1) * pageSize;
     const endIndex = startIndex + pageSize;
-    let dataToShow= allData.slice(startIndex, endIndex);
     const tableBody = document.querySelector("#dataTable tbody");
+
+    let dataToShow;
+    if(search){
+        console.log("hello: " + dataSearch)
+        dataToShow = dataSearch.slice(startIndex, endIndex);
+    }
+    else{
+        dataToShow = allData.slice(startIndex, endIndex);
+    }
+
     tableBody.innerHTML = "";
     displayDataAsTable(dataToShow);
     updatePageNumber(currentPage);
@@ -76,46 +91,176 @@ function displayDataAsTable(data) {
     data.forEach(item => {
         const row = document.createElement("tr");
 
-                row.innerHTML = `
-                    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
-                    <td>${item.bus_profile_id}</td>
-                    <td>${item.bus_id}</td>
-                    <td>${item.driver_id}</td>
-                    <td>${item.conductor_id}</td>
-                    <td>
-                        <span class="icon-container">
-                            <i onclick="updateRow('${item.bus_profile_id}')"><img src="../../../images/vector_icons/update_icon.png" alt="update" class="action_icon"></i>
-                        </span>
-                        <span class="icon-container" style="margin-left: 1px;">
-                            <i onclick="deleteRow('${item.bus_profile_id}')"><img src="../../../images/vector_icons/delete_icon.png" alt="delete" class="action_icon"></i>
-                        </span>
-                    </td>
-                   <td>
-                       <button class="feasible-schedule-btn" onclick="redirectToFeasibleSchedule('${item.bus_profile_id}')">Feasible Schedule</button>
-                   </td>
-                `;
+        row.innerHTML = `
+        `;
+
+        fetch(`${url}/busController`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'p_id': item.p_id,
+            },
+        })
+        .then(response => {
+            if (response.ok) {
+                response.json().then(data => {
+                    existingData = data[0];
+                    row.innerHTML = `
+                        <td>${item.bus_profile_id}</td>
+                        <td>${item.bus_id}</td>
+                        <td>${item.driver_id}</td>
+                        <td>${item.conductor_id}</td>
+                        <td>
+                            <span class="icon-container">
+                                <i onclick="updateRow('${item.bus_profile_id}')"><img src="../../../images/vector_icons/update_icon.png" alt="update" class="action_icon"></i>
+                            </span>
+                            <span class="icon-container" style="margin-left: 1px;">
+                                <i onclick="openFlagConfirm('${item.bus_profile_id}')"><img src="../../../images/vector_icons/delete_icon.png" alt="delete" class="action_icon"></i>
+                            </span>
+                        </td>
+                       <td>
+                           <button class="feasible-schedule-btn" onclick="redirectToFeasibleSchedule('${item.bus_profile_id}')">Feasible Schedule</button>
+                       </td>
+                    `;
+                });
+            } else if (response.status === 401) {
+                console.log('Unauthorized');
+            } else {
+                console.error('Error:', response.status);
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
+
         tableBody.appendChild(row);
     });
 }
 
-function redirectToFeasibleSchedule(bus_profile_id) {
-    // Check if busId is not null or undefined before storing in localStorage
-    if (bus_profile_id) {
-        // Store bus_id in localStorage
-        localStorage.setItem('selectedBusId', bus_profile_id);
 
-        // Redirect to feasible_schedule.html or trigger the necessary actions
-        window.location.href = '../html/feasible_schedule.html';
+function redirectToFeasibleSchedule(bus_profile_id) {
+    if (bus_profile_id) {
+        openForm_feasible(bus_profile_id);
     } else {
         console.error('Invalid bus_profile_id:', bus_profile_id);
-        // Handle the case where bus_id is null or undefined
+
     }
 }
+function openForm_feasible(bus_profile_id) {
+    const feasibleForm = document.getElementById('feasibleScheduleForm');
+    if (feasibleForm) {
+        feasibleForm.style.display = 'block';
 
+    const inputForBusProfileId = document.getElementById('inputForBusProfileId');
+            if (inputForBusProfileId) {
+                // Set the value property
+                inputForBusProfileId.value = bus_profile_id;
+            } else {
+                console.error('Element with ID "inputForBusProfileId" not found.');
+            }
+        } else {
+            console.error('Feasible form not found');
+        }
+
+        const overlay = document.getElementById('overlay');
+        if (overlay) {
+            overlay.style.display = 'block';
+        } else {
+            console.error('Overlay not found');
+        }
+    }
+
+function closeForm_feasible() {
+    const feasibleForm = document.getElementById('feasibleScheduleForm');
+    if (feasibleForm) {
+        feasibleForm.style.display = 'none';
+    } else {
+        console.error('Feasible form not found');
+    }
+
+    const overlay = document.getElementById('overlay');
+    if (overlay) {
+        overlay.style.display = 'none';
+    } else {
+        console.error('Overlay not found');
+    }
+}
+document.addEventListener("DOMContentLoaded", function () {
+    if (bus_profile_id) {
+        document.getElementById('bus_profile_id').innerText = bus_profile_id;
+    }
+});
+
+document.addEventListener("DOMContentLoaded", function () {
+    const form = document.getElementById('feasibleScheduleForm');
+
+    form.addEventListener('submit', function (event) {
+        event.preventDefault();
+
+        if (validateForm()) {
+            const bus_profile_id = document.getElementById("inputForBusProfileId").value;
+            const date = document.getElementById("date").value;
+            const time_range = getCheckedTimeRanges();
+            const availability = document.getElementById("availability").value;
+
+            // Prepare data for AJAX request
+            const formData = {
+                bus_profile_id: bus_profile_id,
+                date: date,
+                time_range: time_range,
+                availability: availability
+            };
+
+
+            fetch(`${url}/feasibilityController`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(formData)
+            })
+            .then(response => {
+                if (response.ok) {
+                    openAlertSuccess("Data Successfully Added!");
+                    console.log('Success');
+                } else {
+                    return response.json()
+                        .then(data => {
+                            const error_msg = data.error;
+                            console.log(error_msg);
+                            openAlertFail(error_msg);
+                            console.error('Error:', response.status);
+                        });
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+        }
+    });
+
+    function getCheckedTimeRanges() {
+        const checkboxes = document.querySelectorAll('input[name="time_range[]"]:checked');
+        const timeRanges = Array.from(checkboxes).map(checkbox => checkbox.value);
+        return timeRanges.join(',');
+    }
+
+
+    function validateForm() {
+        var checkboxes = document.querySelectorAll('input[name="time_range[]"]:checked');
+        if (checkboxes.length === 0) {
+            openAlertFail("Please select at least one time range.");
+            return false;
+        }
+        return true;
+    }
+});
 
 function renderPageControl(){
     document.getElementById("page_control").style.display = "flex";
 }
+
+
 //Add new bus to the database
 document.getElementById("busprofileRegForm").addEventListener("submit", function(event) {
     event.preventDefault();
@@ -250,21 +395,20 @@ function deleteRow(bus_profile_id){
             'bus_profile_id': bus_profile_id
         },
     })
-        .then(response => {
-            if (response.ok) {
-                openAlertSuccess();
-            } else if (response.status === 401) {
-                openAlertFail(response.status);
-                console.log('Delete unsuccessful');
-            } else {
-                openAlertFail(response.status);
-                console.error('Error:', response.status);
-            }
-        })
-        .catch(error => {
-            console.error('Error:', error);
-        });
-}
+     .then(response => {
+         if (response.ok) {
+             closeAlert();
+             openAlertSuccess("Successfully Deleted!");
+         } else {
+             openAlertFail(response.status);
+             closeAlert();
+             console.error('Error:', response.status);
+         }
+     })
+     .catch(error => {
+         console.error('Error:', error);
+     });
+ }
 
 function openForm_add() {
     const existingForm = document.querySelector(".busprofile_add_form_body");
@@ -297,26 +441,43 @@ function closeForm_update() {
     document.getElementById("overlay").style.display = "none";
 }
 
-function openAlertSuccess() {
+function openAlertSuccess(msg) {
+    bus_profile_id = "";
+    document.getElementById("alertMsgSuccess").textContent = msg;
     document.getElementById("successAlert").style.display = "block";
     document.getElementById("overlay").style.display = "block";
 }
 
 function closeAlertSuccess() {
+    bus_profile_id = "";
     document.getElementById("successAlert").style.display = "none";
     document.getElementById("overlay").style.display = "none";
     window.location.href = "../html/owner_dashboard_busprofile.html";
 }
 
-function openAlertFail() {
+function openAlertFail(response) {
+    bus_profile_id = "";
+    document.getElementById("failMsg").textContent = response;
     document.getElementById("failAlert").style.display = "block";
     document.getElementById("overlay").style.display = "block";
 }
 
 function closeAlertFail() {
+    bus_profile_id = "";
     document.getElementById("failAlert").style.display = "none";
     document.getElementById("overlay").style.display = "none";
     window.location.href = "../html/owner_dashboard_busprofile.html";
+}
+function closeAlert(){
+    bus_profile_id = "";
+    document.getElementById("confirmAlert").style.display = "none";
+    document.getElementById("overlay").style.display = "none";
+}
+function openFlagConfirm(driver_id){
+    Bus_profile_id = bus_profile_id;
+    document.getElementById("confirmAlert").style.display = "block";
+    document.getElementById("overlay").style.display = "block";
+    document.getElementById("deleteUser").textContent = Bus_profile_id;
 }
 
 // Create the add and update forms

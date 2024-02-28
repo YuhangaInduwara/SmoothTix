@@ -317,15 +317,24 @@ a{
     margin-bottom: 20px;
 }
 
-.alertMsg {
-    color: #109046;
+.alertMsgSuccess,
+.alertMsgFail {
     font-size: 25px;
     font-family: Times New Roman, serif;
     font-weight: 700;
     line-height: 1.5;
     word-wrap: break-word;
-    margin-bottom: 20px;
+    margin-bottom: 40px;
 }
+
+.alertMsgSuccess{
+    color: #109046;
+}
+
+.alertMsgFail{
+    color: #ff0202;
+}
+
 
 .okButton {
     width: 150px;
@@ -439,7 +448,7 @@ tbody tr:hover {
 #page_control{
     width: calc(100% - 20px);
     height: 40px;
-    display: none;
+    display: block;
     justify-content: flex-end;
     align-items: center;
     margin-top: 10px;

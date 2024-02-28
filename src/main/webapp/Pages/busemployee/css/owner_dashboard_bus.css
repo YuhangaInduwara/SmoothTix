@@ -399,7 +399,7 @@ tbody tr:hover {
 #page_control{
     width: calc(100% - 20px);
     height: 40px;
-    display: none;
+    display: block;
     justify-content: flex-end;
     align-items: center;
     margin-top: 10px;
