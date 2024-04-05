@@ -285,7 +285,7 @@ label[for="bus_profile_id"] {
     margin: 10px auto;
 }
 label[for="availability"],
-label[for="date"], {
+label[for="date"]{
     display: block;
     text-align: center;
     margin: 10px auto;

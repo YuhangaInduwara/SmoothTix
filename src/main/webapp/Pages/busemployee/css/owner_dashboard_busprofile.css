@@ -479,3 +479,82 @@ button.feasible-schedule-btn {
 button.feasible-schedule-btn:hover {
     background-color: #45a049; /* Darker green color on hover */
 }
+
+
+.form-container {
+    /*background-color: #fff;*/
+    /*padding: 20px;*/
+    /*border-radius: 8px;*/
+    /*box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);*/
+    display: none;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+    z-index: 1000;
+    margin: auto auto;
+    padding: 30px;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    background-color: #f5f5f5;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+button:hover {
+    background-color: #45a049;
+}
+.checkbox-group {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr); /* 6 checkboxes per row */
+    gap: 10px; /* Adjust the gap between checkboxes as needed */
+}
+
+input[type="checkbox"] {
+    display: none; /* Hide the actual checkboxes */
+}
+
+/*label {*/
+/*    background-color: #fff;*/
+/*    border: 1px solid #ccc;*/
+/*    padding: 15px;*/
+/*    margin: 5px;*/
+/*    cursor: pointer;*/
+/*    text-align: center;*/
+/*    border-radius: 5px;*/
+/*    transition: background-color 0.3s, color 0.3s;*/
+/*}*/
+
+input[type="checkbox"]:checked + label {
+    background-color: #e53935;
+    color: #fff;
+}
+
+label[for="bus_profile_id"] {
+    display: block;
+    text-align: center;
+    margin: 10px auto;
+}
+label[for="availability"],
+label[for="date"]{
+    display: block;
+    text-align: center;
+    margin: 10px auto;
+}
+#bus_profile_id{
+    display: block;
+    margin: 0 auto;
+    width:3%;
+}
+
+#availability,
+#date{
+    display: block;
+    margin: 0 auto;
+    width:20%;
+}

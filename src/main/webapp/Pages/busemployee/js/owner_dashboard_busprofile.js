@@ -91,7 +91,7 @@ function displayDataAsTable(data) {
                         </span>
                     </td>
                    <td>
-                       <button class="feasible-schedule-btn" onclick="redirectToFeasibleSchedule('${item.bus_profile_id}')">Feasible Schedule</button>
+                       <button class="feasible-schedule-btn" onclick="showFeasibleSelection('${item.bus_profile_id}')">Feasible Schedule</button>
                    </td>
                 `;
         tableBody.appendChild(row);
@@ -399,6 +399,10 @@ function searchData() {
         });
 }
 
+function showFeasibleSelection(){
+    document.getElementById("feasibleScheduleForm").style.display = "block";
+    document.getElementById("overlay").style.display = "block";
+}
 
 
 
