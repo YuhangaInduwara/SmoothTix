@@ -24,10 +24,6 @@ public class driverTable {
                 ps.setString(2, rs.getString("p_id"));
                 ps.setString(3, license_no);
                 ps.setFloat(4, review_points);
-                System.out.println("nic: " + rs.getString("nic"));
-                System.out.println("p_id: " + rs.getString("p_id"));
-                System.out.println("license_no: " + license_no);
-                System.out.println("review_points: " + review_points);
                 Passenger passenger = new Passenger(rs.getString("nic"), 4);
                 int success = passengerTable.updatePrivilegeLevel(rs.getString("p_id"), passenger);
                 if (success == 1) {
