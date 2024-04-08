@@ -38,7 +38,6 @@ function fetchAllData() {
         });
 }
 
-fetchAllData();
 
 function updatePage(page, search) {
     const startIndex = (page - 1) * pageSize;
@@ -144,7 +143,7 @@ function renderPageControl(){
 document.getElementById("busRegForm").addEventListener("submit", function(event) {
     event.preventDefault();
     const nic = document.getElementById("add_nic").value;
-    const stand = document.getElementById("add_stand").value;
+    const stand = document.getElementById("add_stand").value.toLowerCase();
     console.log(nic)
     const userData = {
         nic: nic,
@@ -238,154 +237,169 @@ function showSuggestions1(event) {
     const input = event.target;
     const inputValue = input.value.toUpperCase();
     const suggestionsContainer = document.getElementById(`autocomplete-container1`);
-    fetch(`${ url }/passengerController`, {
-        method: 'GET',
-        headers: {
-            'Content-Type': 'application/json',
-            'flag': '0',
-            'privilege_level': '6',
-        },
-    })
-        .then(response => {
-            if (response.ok) {
-                return response.json();
-            } else {
-                console.error('Error:', response.status);
-                throw new Error(`HTTP error! Status: ${response.status}`);
-            }
+    if(inputValue === ""){
+        suggestionsContainer.innerHTML = '';
+    }
+    else {
+        fetch(`${url}/passengerController`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'flag': '0',
+                'privilege_level': '6',
+            },
         })
-        .then(data => {
-            const suggestions = data.map(item => item.nic);
-            suggestionsContainer.innerHTML = '';
-            const filteredSuggestions = suggestions.filter(suggestion =>
-                suggestion.toUpperCase().includes(inputValue)
-            );
-            suggestionsContainer.style.maxHeight = '200px';
-            suggestionsContainer.style.overflowY = 'auto';
-            suggestionsContainer.style.width = '100%';
-            suggestionsContainer.style.left = `18px`;
-            if (filteredSuggestions.length === 0) {
-                const errorMessage = document.createElement('li');
-                errorMessage.textContent = 'No suggestions found';
-                suggestionsContainer.appendChild(errorMessage);
-            } else {
-                filteredSuggestions.forEach(suggestion => {
-                    const listItem = document.createElement('li');
-                    listItem.classList.add('autocomplete-list-item');
-                    listItem.textContent = suggestion;
-                    listItem.addEventListener('click', () => {
-                        input.value = suggestion;
-                        suggestionsContainer.innerHTML = '';
+            .then(response => {
+                if (response.ok) {
+                    return response.json();
+                } else {
+                    console.error('Error:', response.status);
+                    throw new Error(`HTTP error! Status: ${response.status}`);
+                }
+            })
+            .then(data => {
+                const suggestions = data.map(item => item.nic);
+                suggestionsContainer.innerHTML = '';
+                const filteredSuggestions = suggestions.filter(suggestion =>
+                    suggestion.toUpperCase().includes(inputValue)
+                );
+                suggestionsContainer.style.maxHeight = '200px';
+                suggestionsContainer.style.overflowY = 'auto';
+                suggestionsContainer.style.width = '100%';
+                suggestionsContainer.style.left = `18px`;
+                if (filteredSuggestions.length === 0) {
+                    const errorMessage = document.createElement('li');
+                    errorMessage.textContent = 'No suggestions found';
+                    suggestionsContainer.appendChild(errorMessage);
+                } else {
+                    filteredSuggestions.forEach(suggestion => {
+                        const listItem = document.createElement('li');
+                        listItem.classList.add('autocomplete-list-item');
+                        listItem.textContent = suggestion;
+                        listItem.addEventListener('click', () => {
+                            input.value = suggestion;
+                            suggestionsContainer.innerHTML = '';
+                        });
+                        suggestionsContainer.appendChild(listItem);
                     });
-                    suggestionsContainer.appendChild(listItem);
-                });
-            }
-        })
-        .catch(error => {
-            console.error('Error:', error);
-        });
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+    }
 }
 
 function showSuggestions2(event) {
     const input = event.target;
     const inputValue = input.value.toUpperCase();
     const suggestionsContainer = document.getElementById(`autocomplete-container2`);
-    fetch(`${ url }/routeController?request_data=stand_list`, {
-        method: 'GET',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-    })
-        .then(response => {
-            if (response.ok) {
-                return response.json();
-            } else {
-                console.error('Error:', response.status);
-                throw new Error(`HTTP error! Status: ${response.status}`);
-            }
+    if(inputValue === ""){
+        suggestionsContainer.innerHTML = '';
+    }
+    else {
+        fetch(`${url}/routeController?request_data=stand_list`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+            },
         })
-        .then(data => {
-            const suggestions = data.map(item => item.stand_list);
-            suggestionsContainer.innerHTML = '';
-            const filteredSuggestions = suggestions.filter(suggestion =>
-                suggestion.toUpperCase().includes(inputValue)
-            );
-            console.log(filteredSuggestions)
-            suggestionsContainer.style.maxHeight = '200px';
-            suggestionsContainer.style.overflowY = 'auto';
-            suggestionsContainer.style.width = '100%';
-            suggestionsContainer.style.left = `18px`;
-            if (filteredSuggestions.length === 0) {
-                const errorMessage = document.createElement('li');
-                errorMessage.textContent = 'No suggestions found';
-                suggestionsContainer.appendChild(errorMessage);
-            } else {
-                filteredSuggestions.forEach(suggestion => {
-                    const listItem = document.createElement('li');
-                    listItem.classList.add('autocomplete-list-item');
-                    listItem.textContent = suggestion;
-                    listItem.addEventListener('click', () => {
-                        input.value = suggestion;
-                        suggestionsContainer.innerHTML = '';
+            .then(response => {
+                if (response.ok) {
+                    return response.json();
+                } else {
+                    console.error('Error:', response.status);
+                    throw new Error(`HTTP error! Status: ${response.status}`);
+                }
+            })
+            .then(data => {
+                const suggestions = data.map(item => item.stand_list);
+                suggestionsContainer.innerHTML = '';
+                const filteredSuggestions = suggestions.filter(suggestion =>
+                    suggestion.toUpperCase().includes(inputValue)
+                );
+                console.log(filteredSuggestions)
+                suggestionsContainer.style.maxHeight = '200px';
+                suggestionsContainer.style.overflowY = 'auto';
+                suggestionsContainer.style.width = '100%';
+                suggestionsContainer.style.left = `18px`;
+                if (filteredSuggestions.length === 0) {
+                    const errorMessage = document.createElement('li');
+                    errorMessage.textContent = 'No suggestions found';
+                    suggestionsContainer.appendChild(errorMessage);
+                } else {
+                    filteredSuggestions.forEach(suggestion => {
+                        const listItem = document.createElement('li');
+                        listItem.classList.add('autocomplete-list-item');
+                        listItem.textContent = suggestion;
+                        listItem.addEventListener('click', () => {
+                            input.value = suggestion;
+                            suggestionsContainer.innerHTML = '';
+                        });
+                        suggestionsContainer.appendChild(listItem);
                     });
-                    suggestionsContainer.appendChild(listItem);
-                });
-            }
-        })
-        .catch(error => {
-            console.error('Error:', error);
-        });
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+    }
 }
 
 function showSuggestions3(event) {
     const input = event.target;
     const inputValue = input.value.toUpperCase();
     const suggestionsContainer = document.getElementById(`autocomplete-container3`);
-    fetch(`${ url }/routeController?request_data=stand_list`, {
-        method: 'GET',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-    })
-        .then(response => {
-            if (response.ok) {
-                return response.json();
-            } else {
-                console.error('Error:', response.status);
-                throw new Error(`HTTP error! Status: ${response.status}`);
-            }
+    if(inputValue === ""){
+        suggestionsContainer.innerHTML = '';
+    }
+    else {
+        fetch(`${url}/routeController?request_data=stand_list`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+            },
         })
-        .then(data => {
-            const suggestions = data.map(item => item.stand_list);
-            suggestionsContainer.innerHTML = '';
-            const filteredSuggestions = suggestions.filter(suggestion =>
-                suggestion.toUpperCase().includes(inputValue)
-            );
-            console.log(filteredSuggestions)
-            suggestionsContainer.style.maxHeight = '200px';
-            suggestionsContainer.style.overflowY = 'auto';
-            suggestionsContainer.style.width = '100%';
-            suggestionsContainer.style.left = `18px`;
-            if (filteredSuggestions.length === 0) {
-                const errorMessage = document.createElement('li');
-                errorMessage.textContent = 'No suggestions found';
-                suggestionsContainer.appendChild(errorMessage);
-            } else {
-                filteredSuggestions.forEach(suggestion => {
-                    const listItem = document.createElement('li');
-                    listItem.classList.add('autocomplete-list-item');
-                    listItem.textContent = suggestion;
-                    listItem.addEventListener('click', () => {
-                        input.value = suggestion;
-                        suggestionsContainer.innerHTML = '';
+            .then(response => {
+                if (response.ok) {
+                    return response.json();
+                } else {
+                    console.error('Error:', response.status);
+                    throw new Error(`HTTP error! Status: ${response.status}`);
+                }
+            })
+            .then(data => {
+                const suggestions = data.map(item => item.stand_list);
+                suggestionsContainer.innerHTML = '';
+                const filteredSuggestions = suggestions.filter(suggestion =>
+                    suggestion.toUpperCase().includes(inputValue)
+                );
+                console.log(filteredSuggestions)
+                suggestionsContainer.style.maxHeight = '200px';
+                suggestionsContainer.style.overflowY = 'auto';
+                suggestionsContainer.style.width = '100%';
+                suggestionsContainer.style.left = `18px`;
+                if (filteredSuggestions.length === 0) {
+                    const errorMessage = document.createElement('li');
+                    errorMessage.textContent = 'No suggestions found';
+                    suggestionsContainer.appendChild(errorMessage);
+                } else {
+                    filteredSuggestions.forEach(suggestion => {
+                        const listItem = document.createElement('li');
+                        listItem.classList.add('autocomplete-list-item');
+                        listItem.textContent = suggestion;
+                        listItem.addEventListener('click', () => {
+                            input.value = suggestion;
+                            suggestionsContainer.innerHTML = '';
+                        });
+                        suggestionsContainer.appendChild(listItem);
                     });
-                    suggestionsContainer.appendChild(listItem);
-                });
-            }
-        })
-        .catch(error => {
-            console.error('Error:', error);
-        });
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+    }
 }
 
 function updateRow(timekpr_id){

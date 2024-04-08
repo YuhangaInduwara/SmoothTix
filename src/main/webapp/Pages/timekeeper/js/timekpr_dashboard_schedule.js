@@ -215,6 +215,38 @@ function renderPageControl(){
     document.getElementById("page_control").style.display = "flex";
 }
 
+
+document.getElementById("busRegForm").addEventListener("submit", function(event) {
+    event.preventDefault();
+    const start = timeKeeper_stand;
+    const destination = document.getElementById("add_destination").value;
+    const date = document.getElementById("add_date").value;
+    const time = document.getElementById("add_time").value;
+
+    fetch(`${ url }/feasibilityController?start=${start}&destination=${destination}&date=${date}&time=${time}`, {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+    })
+        .then(response => {
+            if (response.ok) {
+                closeForm_add();
+                openAlertSuccess("Successfully Added!");
+            } else{
+                return response.json()
+                    .then(data => {
+                        const error_msg = data.error;
+                        openAlertFail(error_msg);
+                        throw new Error("Failed");
+                    });
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
+});
+
 function searchData() {
     const start = document.getElementById('dropdown_start').value.toLowerCase();
     const destination = document.getElementById('dropdown_destination').value.toLowerCase();
@@ -251,9 +283,7 @@ function updateRow(bus_id){
     openForm_update();
 
     let existingData = {};
-
-    const urlParams = new URLSearchParams(window.location.search);
-
+    new URLSearchParams(window.location.search);
     document.getElementById("header_bus_id").innerHTML = bus_id
 
     fetch('../../../busController', {
@@ -428,57 +458,84 @@ function createForm() {
     formContainer_add.appendChild(form_add.cloneNode(true)); // Clone the form
     formContainer_update.appendChild(form_update.cloneNode(true)); // Clone the form
 
-    showSuggestions({ target: document.getElementById('add_destination') });
+    // showSuggestions({ target: document.getElementById('add_destination') });
 }
 
 function showSuggestions(event) {
     const input = event.target;
     const inputValue = input.value.toUpperCase();
     const suggestionsContainer = document.getElementById(`autocomplete-container`);
-    fetch(`${ url }/routeController?request_data=stand_list`, {
-        method: 'GET',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-    })
-        .then(response => {
-            if (response.ok) {
-                return response.json();
-            } else {
-                console.error('Error:', response.status);
-                throw new Error(`HTTP error! Status: ${response.status}`);
-            }
+    if(inputValue === ""){
+        suggestionsContainer.innerHTML = '';
+    }
+    else{
+        fetch(`${ url }/routeController?request_data=stand_list`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+            },
         })
-        .then(data => {
-            const suggestions = data.map(item => item.stand_list);
-            suggestionsContainer.innerHTML = '';
-            const filteredSuggestions = suggestions.filter(suggestion =>
-                suggestion.toUpperCase().includes(inputValue)
-            );
-            console.log(filteredSuggestions)
-            suggestionsContainer.style.maxHeight = '200px';
-            suggestionsContainer.style.overflowY = 'auto';
-            suggestionsContainer.style.width = '100%';
-            suggestionsContainer.style.left = `18px`;
-            if (filteredSuggestions.length === 0) {
-                const errorMessage = document.createElement('li');
-                errorMessage.textContent = 'No suggestions found';
-                suggestionsContainer.appendChild(errorMessage);
-            } else {
-                filteredSuggestions.forEach(suggestion => {
-                    const listItem = document.createElement('li');
-                    listItem.classList.add('autocomplete-list-item');
-                    listItem.textContent = suggestion;
-                    listItem.addEventListener('click', () => {
-                        input.value = suggestion;
-                        suggestionsContainer.innerHTML = '';
+            .then(response => {
+                if (response.ok) {
+                    return response.json();
+                } else {
+                    console.error('Error:', response.status);
+                    throw new Error(`HTTP error! Status: ${response.status}`);
+                }
+            })
+            .then(data => {
+                const suggestions = data.map(item => item.stand_list);
+                suggestionsContainer.innerHTML = '';
+                const filteredSuggestions = suggestions.filter(suggestion =>
+                    suggestion.toUpperCase().includes(inputValue)
+                );
+                console.log(filteredSuggestions)
+                suggestionsContainer.style.maxHeight = '200px';
+                suggestionsContainer.style.overflowY = 'auto';
+                suggestionsContainer.style.width = '100%';
+                suggestionsContainer.style.left = `18px`;
+                if (filteredSuggestions.length === 0) {
+                    const errorMessage = document.createElement('li');
+                    errorMessage.textContent = 'No suggestions found';
+                    suggestionsContainer.appendChild(errorMessage);
+                } else {
+                    filteredSuggestions.forEach(suggestion => {
+                        const listItem = document.createElement('li');
+                        listItem.classList.add('autocomplete-list-item');
+                        listItem.textContent = suggestion;
+                        listItem.addEventListener('click', () => {
+                            input.value = suggestion;
+                            suggestionsContainer.innerHTML = '';
+                        });
+                        suggestionsContainer.appendChild(listItem);
                     });
-                    suggestionsContainer.appendChild(listItem);
-                });
-            }
-        })
-        .catch(error => {
-            console.error('Error:', error);
-        });
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+    }
 }
 
+function openAlertSuccess(msg) {
+    document.getElementById("alertMsgSuccess").textContent = msg;
+    document.getElementById("successAlert").style.display = "block";
+    document.getElementById("overlay").style.display = "block";
+}
+
+function closeAlertSuccess() {
+    document.getElementById("successAlert").style.display = "none";
+    document.getElementById("overlay").style.display = "none";
+    window.location.href = "../html/timekpr_dashboard_schedule.html";
+}
+
+function openAlertFail(response) {
+    document.getElementById("failMsg").textContent = response;
+    document.getElementById("failAlert").style.display = "block";
+    document.getElementById("overlay").style.display = "block";
+}
+
+function closeAlertFail() {
+    document.getElementById("failAlert").style.display = "none";
+    document.getElementById("overlay").style.display = "none";
+}

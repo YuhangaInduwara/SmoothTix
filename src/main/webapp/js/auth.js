@@ -3,69 +3,69 @@ let session_user_role = '6';
 let session_user_name = 'UserName';
 
 async function isAuthenticated() {
-    console.log("hello1: ");
-    const jwtToken = localStorage.getItem('jwtToken');
-    console.log("hello2: ");
+     console.log("hello1: ");
+     const jwtToken = localStorage.getItem('jwtToken');
+     console.log("hello2: ");
 
-    if (!jwtToken && !(window.location.href.includes("login.html"))) {
-        console.log("hello3: ");
-        window.location.href = `${frontend_url}/Pages/login/html/login.html`;
-    }
+     if (!jwtToken && !(window.location.href.includes("login.html"))) {
+         console.log("hello3: ");
+         window.location.href = `${frontend_url}/Pages/login/html/login.html`;
+     }
 
-    const headers = {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${jwtToken}`,
-    };
+     const headers = {
+         'Content-Type': 'application/json',
+         'Authorization': `Bearer ${jwtToken}`,
+     };
 
-    try {
-        const response = await fetch('/SmoothTix_war_exploded/loginController?action=validate', {
-            method: 'GET',
-            headers: headers,
-        });
+     try {
+         const response = await fetch('/SmoothTix_war_exploded/loginController?action=validate', {
+             method: 'GET',
+             headers: headers,
+         });
 
-        console.log(response);
+         console.log(response);
 
-        if (response.ok) {
-            console.log("hello4: " )
-            const decodedToken = decodeJWT(jwtToken);
-            session_p_id = decodedToken.p_id;
-            session_user_role = decodedToken.user_role;
-            session_user_name = decodedToken.user_name;
-            console.log("hello5: " + session_p_id)
-            console.log("hello6: " + session_user_role)
-            console.log("hello7: " + session_user_name)
+         if (response.ok) {
+             console.log("hello4: " )
+             const decodedToken = decodeJWT(jwtToken);
+             session_p_id = decodedToken.p_id;
+             session_user_role = decodedToken.user_role;
+             session_user_name = decodedToken.user_name;
+             console.log("hello5: " + session_p_id)
+             console.log("hello6: " + session_user_role)
+             console.log("hello7: " + session_user_name)
 
-            if(window.location.href.includes("administrator") && session_user_role !== 1){
-                changePage(session_user_role);
-            }
-            else if(window.location.href.includes("timekpr") && session_user_role !== 2){
-                changePage(session_user_role);
-            }
-            else if(window.location.href.includes("owner") && session_user_role !== 3){
-                changePage(session_user_role);
-            }
-            else if(window.location.href.includes("driver") && session_user_role !== 4){
-                changePage(session_user_role);
-            }
-            else if(window.location.href.includes("conductor") && session_user_role !== 5){
-                changePage(session_user_role);
-            }
-            else if(window.location.href.includes("login")){
-                changePage(session_user_role);
-            }
+             if(window.location.href.includes("administrator") && session_user_role !== 1){
+                 changePage(session_user_role);
+             }
+             else if(window.location.href.includes("timekpr") && session_user_role !== 2){
+                 changePage(session_user_role);
+             }
+             else if(window.location.href.includes("owner") && session_user_role !== 3){
+                 changePage(session_user_role);
+             }
+             else if(window.location.href.includes("driver") && session_user_role !== 4){
+                 changePage(session_user_role);
+             }
+             else if(window.location.href.includes("conductor") && session_user_role !== 5){
+                 changePage(session_user_role);
+             }
+             else if(window.location.href.includes("login")){
+                 changePage(session_user_role);
+             }
 
-        } else {
-            if (!(window.location.href.includes("login.html"))) {
-                window.location.href = `${frontend_url}/Pages/login/html/login.html`;
-            }
-        }
-    } catch (error) {
-        console.error('Error in isAuthenticated:', error);
+         } else {
+             if (!(window.location.href.includes("login.html"))) {
+                 window.location.href = `${frontend_url}/Pages/login/html/login.html`;
+             }
+         }
+     } catch (error) {
+         console.error('Error in isAuthenticated:', error);
 
-        if (!(window.location.href.includes("login.html"))) {
-            window.location.href = `${frontend_url}/Pages/login/html/login.html`;
-        }
-    }
+         if (!(window.location.href.includes("login.html"))) {
+             window.location.href = `${frontend_url}/Pages/login/html/login.html`;
+         }
+     }
 }
 
 

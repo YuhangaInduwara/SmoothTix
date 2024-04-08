@@ -112,10 +112,12 @@ public class BusprofileController extends HttpServlet {
         try {
             String bus_profile_id = request.getHeader("bus_profile_id");
             int deleteSuccess = busprofileTable.delete(bus_profile_id);
-
+            System.out.println(bus_profile_id);
             if (deleteSuccess >= 1) {
+                System.out.println(deleteSuccess);
                 response.setStatus(HttpServletResponse.SC_OK);
             } else {
+                System.out.println(deleteSuccess);
                 response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
             }
         } catch (Exception e) {

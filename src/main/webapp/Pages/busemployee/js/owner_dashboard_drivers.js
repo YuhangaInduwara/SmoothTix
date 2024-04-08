@@ -1,10 +1,20 @@
-    let driver_id = "";
-    let searchOption = "driver_id";
-    let currentPage = 1;
-    const pageSize = 10;
-    let allData = [];
+let Driver_id = "";
+let searchOption = "driver_id";
+let currentPage = 1;
+const pageSize = 10;
+let dataSearch = [];
+let allData = [];
+
+document.addEventListener('DOMContentLoaded', function () {
+    isAuthenticated().then(() => fetchAllData());
+});
+
+function refreshPage() {
+    location.reload();
+}
 
 function fetchAllData() {
+    document.getElementById("userName").textContent = session_user_name;
     fetch(`${url}/driverController`, {
         method: 'GET',
         headers: {
@@ -16,29 +26,33 @@ function fetchAllData() {
                 return response.json();
             } else {
                 console.error('Error:', response.status);
-                throw new Error('Network response was not ok.');
             }
         })
         .then(data => {
-            if (data) {
-                allData = data;
-                updatePage(currentPage);
-            } else {
-                console.error('Error: Empty response or invalid JSON');
-            }
+            allData = data;
+            console.log(allData)
+            updatePage(currentPage, false);
         })
         .catch(error => {
-            console.error('Fetch error:', error);
+            console.error('Error:', error);
         });
-    }
+}
 
-fetchAllData();
 
-function updatePage(page) {
+function updatePage(page, search) {
     const startIndex = (page - 1) * pageSize;
     const endIndex = startIndex + pageSize;
-    let dataToShow = allData.slice(startIndex, endIndex);
     const tableBody = document.querySelector("#dataTable tbody");
+
+    let dataToShow;
+    if(search){
+        console.log("hello: " + dataSearch)
+        dataToShow = dataSearch.slice(startIndex, endIndex);
+    }
+    else{
+        dataToShow = allData.slice(startIndex, endIndex);
+    }
+
     tableBody.innerHTML = "";
     displayDataAsTable(dataToShow);
     updatePageNumber(currentPage);
@@ -68,10 +82,10 @@ function renderPageControl() {
 function displayDataAsTable(data) {
     const tableBody = document.querySelector("#dataTable tbody");
     const rowCount = data.length;
-
+    let existingData = {};
     if (rowCount === 0) {
         const noDataRow = document.createElement("tr");
-        noDataRow.innerHTML = `<td colspan="8">No data available</td>`;
+        noDataRow.innerHTML = `<td colspan="7">No data available</td>`;
         tableBody.appendChild(noDataRow);
         return;
     }
@@ -79,81 +93,72 @@ function displayDataAsTable(data) {
     if (rowCount >= 10) {
         renderPageControl();
     }
-
-    // Array to store promises
-    const fetchPromises = [];
-
     data.forEach(item => {
-        // Push each fetch call as a promise
-        fetchPromises.push(
-            fetch(`${url}/passengerController`, {
-                method: 'GET',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'p_id': item.p_id,
-                },
-            })
-            .then(response => {
-                if (response.ok) {
-                    return response.json();
-                } else {
-                    console.error('Error:', response.status);
-                    return null; // Handle error case
-                }
-            })
-            .then(passengerData => {
-                // Create a row after fetching passenger data
-                const row = document.createElement("tr");
+        const row = document.createElement("tr");
 
-                row.innerHTML = `
-                    <td>${item.driver_id}</td>
-                    <td>${item.p_id}</td>
-                    <td>${item.license_no}</td>
-                    <td>${passengerData ? `${passengerData[0].first_name} ${passengerData[0].last_name}` : 'N/A'}</td>
-                    <td>${passengerData ? passengerData[0].nic : 'N/A'}</td>
-                    <td>${passengerData ? passengerData[0].email : 'N/A'}</td>
-                    <td>${item.review_points}</td>
-                    <td>
-                        <span class="icon-container">
-                            <i onclick="updateRow('${item.driver_id}')"><img src="../../../images/vector_icons/update_icon.png" alt="update" class="action_icon"></i>
-                        </span>
-                        <span class="icon-container" style="margin-left: 1px;">
-                            <i onclick="openFlagConfirm('${item.driver_id}')"><img src="../../../images/vector_icons/delete_icon.png" alt="delete" class="action_icon"></i>
-                        </span>
-                    </td>
-                `;
+        row.innerHTML = `
+        `;
 
-                tableBody.appendChild(row);
-            })
-            .catch(error => {
-                console.error('Error:', error);
-            })
-        );
-    });
-
-    // Wait for all promises to resolve
-    Promise.all(fetchPromises)
-        .then(() => {
-            // All fetch calls are completed
-            updatePageNumber(currentPage);
+        fetch(`${url}/passengerController`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'p_id': item.p_id,
+            },
+        })
+        .then(response => {
+            if (response.ok) {
+                response.json().then(data => {
+                    existingData = data[0];
+                    row.innerHTML = `
+                        <td>${item.driver_id}</td>
+                        <td>${item.license_no}</td>
+                        <td>${existingData.first_name} ${existingData.last_name}</td>
+                        <td>${existingData.nic}</td>
+                        <td>${existingData.email}</td>
+                        <td>${item.review_points}</td>
+                        <td>
+                            <span class="icon-container">
+                                <i onclick="updateRow('${item.driver_id}')"><img src="../../../images/vector_icons/update_icon.png" alt="update" class="action_icon"></i>
+                            </span>
+                            <span class="icon-container" style="margin-left: 1px;">
+                                <i onclick="openFlagConfirm('${item.driver_id}')"><img src="../../../images/vector_icons/delete_icon.png" alt="delete" class="action_icon"></i>
+                            </span>
+                        </td>
+                    `;
+                });
+            } else if (response.status === 401) {
+                console.log('Unauthorized');
+            } else {
+                console.error('Error:', response.status);
+            }
         })
         .catch(error => {
             console.error('Error:', error);
         });
+
+        tableBody.appendChild(row);
+    });
+}
+
+function renderPageControl(){
+    document.getElementById("page_control").style.display = "flex";
 }
 
 document.getElementById("driverRegForm").addEventListener("submit", function (event) {
     event.preventDefault();
-    const p_id = document.getElementById("add_p_id").value;
+    const nic = document.getElementById("add_nic").value;
     const license_no = document.getElementById("add_license_no").value;
     const review_points = document.getElementById("add_review_points").value;
+    console.log(nic)
     const userData = {
-        p_id: p_id,
+        nic: nic,
         license_no: license_no,
         review_points: review_points,
     };
-    console.log(userData);
     const jsonData = JSON.stringify(userData);
+    console.log("test: "+jsonData)
+
     fetch(`${url}/driverController`, {
         method: 'POST',
         headers: {
@@ -162,14 +167,10 @@ document.getElementById("driverRegForm").addEventListener("submit", function (ev
         body: jsonData
     })
         .then(response => {
-
             if (response.ok) {
                 closeForm_add();
                 openAlertSuccess("Successfully Added!");
-            } else if (response.status === 401) {
-                openAlertFail(response.status);
-                console.log('Update unsuccessful');
-            } else {
+            } else{
                 return response.json()
                     .then(data => {
                         const error_msg = data.error;
@@ -183,6 +184,8 @@ document.getElementById("driverRegForm").addEventListener("submit", function (ev
         });
 });
 
+createForm('add');
+createForm('update');
 
  // Handle update
 function updateRow(driver_id){
@@ -258,7 +261,10 @@ function updateRow(driver_id){
 }
 
 function openForm_add(){
-    createAddForm();
+    const existingForm = document.querySelector(".driver_add_form_body");
+    if (!existingForm) {
+        createForm('add');
+    }
     document.getElementById("driverRegForm").style.display = "block";
     document.getElementById("overlay").style.display = "block";
 }
@@ -269,7 +275,10 @@ function closeForm_add() {
 }
 
 function openForm_update(){
-    createUpdateForm();
+    const existingForm = document.querySelector(".driver_update_form_body");
+    if (!existingForm) {
+        createForm('update');
+    }
     document.getElementById("driverUpdateForm").style.display = "block";
     document.getElementById("overlay").style.display = "block";
 }
@@ -278,16 +287,18 @@ function closeForm_update(){
     document.getElementById("driverUpdateForm").style.display = "none";
     document.getElementById("overlay").style.display = "none";
 }
-// Create the add form
-function createAddForm(){
-    const form_add = document.createElement('div');
-    form_add.classList.add('driver_add_form_body');
 
-    const form = `
+function createForm(action) {
+    if(action === 'add'){
+        const form_add = document.createElement('div');
+        form_add.classList.add('driver_add_form_body');
+
+        const form= `
         <div class="driver_form_left">
             <div class="form_div">
-                <label for="p_id" class="driver_form_title">Passenger Id <span class="driver_form_require">*</span></label>
-                <input type="text" name="p_id" id="p_id" class="form_data" placeholder="Enter the Passenger ID" required="required"/>
+                <label for="nic" class="driver_form_title">NIC<span class="driver_form_require">*</span></label>
+                <input type="text" name="nic" id="nic" class="form_data" placeholder="Enter NIC" required="required" oninput="showSuggestions1(event)"/>
+                <ul id="nic_suggestions" class="autocomplete-list"></ul>
             </div>
             <div class="form_div">
                 <label for="license_no" class="driver_form_title">Driving License Number <span class="driver_form_require">*</span></label>
@@ -298,34 +309,87 @@ function createAddForm(){
                 <input type="text" name="review_points" id="review_points" class="form_data" placeholder="Enter Driver Points" required="required"/>
             </div>
         </div>
-    `;
+        `;
 
-    form_add.innerHTML = form.replace(/id="/g, 'id="add_');
-    const formContainer_add = document.getElementById('formContainer_add');
-    formContainer_add.appendChild(form_add.cloneNode(true)); // Clone the form
+        form_add.innerHTML = form.replace(/id="/g, 'id="add_');
+        const formContainer_add = document.getElementById('formContainer_add');
+        formContainer_add.appendChild(form_add.cloneNode(true)); // Clone the form
+//        showSuggestions1({ target: document.getElementById('nic_suggestions') });
+
+    }
+    else if(action === 'update'){
+        const form_update = document.createElement('div');
+        form_update.classList.add('driver_update_form_body');
+
+        const form = `
+            <div class="driver_form_left">
+                <div class="form_div">
+                    <label for="license_no" class="driver_form_title">Driving License Number <span class="driver_form_require">*</span></label>
+                    <input type="text" name="license_no" id="license_no" class="form_data" placeholder=" update driving License Number"  />
+                </div>
+                <div class="form_div">
+                    <label for="review_points" class="driver_form_title"> Driver Points <span class="driver_form_require">*</span></label>
+                    <input type="text" name="review_points" id="review_points" class="form_data" placeholder=" Update Driver Points" />
+                </div>
+            </div>
+        `;
+
+        form_update.innerHTML = form.replace(/id="/g, 'id="update_');
+        const formContainer_update = document.getElementById('formContainer_update');
+        formContainer_update.appendChild(form_update.cloneNode(true)); // Clone the form
+
+    }
 }
-
-// Create the update form
-function createUpdateForm() {
-    const form_update = document.createElement('div');
-    form_update.classList.add('driver_update_form_body');
-
-    const form = `
-        <div class="driver_form_left">
-            <div class="form_div">
-                <label for="license_no" class="driver_form_title">Driving License Number <span class="driver_form_require">*</span></label>
-                <input type="text" name="license_no" id="license_no" class="form_data" placeholder=" update driving License Number"  />
-            </div>
-            <div class="form_div">
-                <label for="review_points" class="driver_form_title"> Driver Points <span class="driver_form_require">*</span></label>
-                <input type="text" name="review_points" id="review_points" class="form_data" placeholder=" Update Driver Points" />
-            </div>
-        </div>
-    `;
-
-    form_update.innerHTML = form.replace(/id="/g, 'id="update_');
-    const formContainer_update = document.getElementById('formContainer_update');
-    formContainer_update.appendChild(form_update.cloneNode(true)); // Clone the form
+function showSuggestions1(event) {
+    const input = event.target;
+    const inputValue = input.value.toUpperCase();
+    const suggestionsContainer = document.getElementById(`autocomplete-container1`);
+    fetch(`${ url }/passengerController`, {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+            'flag': '0',
+            'privilege_level': '6',
+        },
+    })
+        .then(response => {
+            if (response.ok) {
+                return response.json();
+            } else {
+                console.error('Error:', response.status);
+                throw new Error(`HTTP error! Status: ${response.status}`);
+            }
+        })
+        .then(data => {
+            const suggestions = data.map(item => item.nic);
+            suggestionsContainer.innerHTML = '';
+            const filteredSuggestions = suggestions.filter(suggestion =>
+                suggestion.toUpperCase().includes(inputValue)
+            );
+            suggestionsContainer.style.maxHeight = '200px';
+            suggestionsContainer.style.overflowY = 'auto';
+            suggestionsContainer.style.width = '100%';
+            suggestionsContainer.style.left = `18px`;
+            if (filteredSuggestions.length === 0) {
+                const errorMessage = document.createElement('li');
+                errorMessage.textContent = 'No suggestions found';
+                suggestionsContainer.appendChild(errorMessage);
+            } else {
+                filteredSuggestions.forEach(suggestion => {
+                    const listItem = document.createElement('li');
+                    listItem.classList.add('autocomplete-list-item');
+                    listItem.textContent = suggestion;
+                    listItem.addEventListener('click', () => {
+                        input.value = suggestion;
+                        suggestionsContainer.innerHTML = '';
+                    });
+                    suggestionsContainer.appendChild(listItem);
+                });
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
 }
 
 function openAlertSuccess(msg) {
@@ -391,46 +455,23 @@ function deleteRow() {
     });
 }
 
+const searchInput = document.getElementById("searchInput");
+searchInput.addEventListener("keyup", searchData);
+
+function searchData() {
+    const searchTerm = document.getElementById("searchInput").value;
+    const search = searchTerm.toLowerCase();
+
+    dataSearch = allData.filter(user =>
+        user[searchOption].toLowerCase().includes(search)
+    );
+
+    updatePage(currentPage, true);
+}
+
 const searchSelect = document.getElementById("searchSelect");
 searchSelect.addEventListener("change", (event) => {
     searchOption = event.target.value;
 });
-// Attach the searchData function to the keyup event of the search input field
-const searchInput = document.getElementById("searchInput");
-searchInput.addEventListener("keyup", searchData);
-
-// Handle search
-function searchData() {
-    const tableBody = document.querySelector("#dataTable tbody");
-    tableBody.innerHTML = "";
-
-    const searchTerm = document.getElementById("searchInput").value;
-
-    if (searchTerm.trim() === "") {
-        fetchAllData();
-        return;
-    }
-
-    fetch(`${ url }/driverController`, {
-        method: 'GET',
-        headers: {
-            'Content-Type': 'application/json',
-            [searchOption]: searchTerm
-        },
-    })
-        .then(response => {
-            if (response.ok) {
-                return response.json();
-            } else {
-                console.error('Error:', response.status);
-            }
-        })
-        .then(data => {
-            displayDataAsTable(data);
-        })
-        .catch(error => {
-            console.error('Error:', error);
-        });
-}
 
 

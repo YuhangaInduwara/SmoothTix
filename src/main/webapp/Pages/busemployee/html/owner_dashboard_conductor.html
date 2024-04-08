@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Conductor</title>
+    <title>SmoothTix</title>
+    <link rel="icon" type="image/x-icon" href="../../../images/favicon/favicon.png">
     <link rel="stylesheet" type="text/css" href="../css/owner_dashboard_conductor.css">
 </head>
 <body>
@@ -63,7 +64,7 @@
                 <h1>Conductor</h1>
             </div>
             <div class="user_profile">
-                <h3>Username</h3>
+                <h3 id="userName">Username</h3>
                 <img src="../../../images/vector_icons/user.png" alt="userimage" class="user_img">
             </div>
         </div>
@@ -80,6 +81,7 @@
                                 <h2>Add New Condutor</h2>
                             </div>
                             <div id="formContainer_add"></div>
+                            <div id="autocomplete-container1"></div>
                             <div class="bus_form_footer">
                                 <button type="button" class="bus_form_button" onclick="closeForm_add()">Close</button>
                                 <input type="submit" class="bus_form_button" value="Add" id="busRegFormSubmit">
@@ -100,16 +102,23 @@
                     </div>
                     <div class="alertBody" id="successAlert">
                         <img src="../../../images/Alert_icons/Success_icon.png" class="alertImg" alt="success">
-                        <div class="alertMsg">Successfully Added !</div>
+                        <div class="alertMsgSuccess" id="alertMsgSuccess"></div>
                         <button class="okButton" onclick="closeAlertSuccess()">Ok</button>
                     </div>
                     <div class="alertBody" id="failAlert">
                         <img src="../../../images/Alert_icons/Error_icon.png" class="alertImg" alt="fail">
-                        <div class="alertMsg">Operation Failed !</div>
+                        <div class="alertMsgFail" id="failMsg"></div>
                         <button class="okButton" onclick="closeAlertFail()">Ok</button>
                     </div>
                 </div>
                 <div class="search_box">
+                    <div class="search" style="margin-right: 10px">
+                        <label>
+                            <select class="search_input" id="searchSelect">
+                                <option value="conductor_id" selected>Conductor ID</option>
+                            </select>
+                        </label>
+                    </div>
                     <div class="search">
                         <label>
                             <input class="search_input" type="text" placeholder="Search" id="searchInput">
@@ -118,15 +127,18 @@
                             <img src="../../../images/vector_icons/search_icon.png" alt="Search" class="search_img">
                         </button>
                     </div>
+                    <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24" width="24" onclick="refreshPage()" style="margin-top: 5px"><path d="M0 0h24v24H0z" fill="none"/><path d="M17.65 6.35C16.2 4.9 14.21 4 12 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08c-.82 2.33-3.04 4-5.65 4-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"/></svg>
                 </div>
             </div>
             <div>
                 <table id="dataTable" class="bus_table">
                     <thead>
                     <tr>
-                        <th>CONDUCTOR ID</th>
-                        <th>P_ID</th>
-                        <th>CONDUCTOR POINTS</th>
+                        <th>Conductor ID</th>
+                        <th>Name</th>
+                        <th>NIC</th>
+                        <th>Email</th>
+                        <th>Review Points</th>
                         <th>Actions</th>
                     </tr>
                     </thead>
@@ -134,14 +146,23 @@
 
                     </tbody>
                 </table>
-                <div class="page_control" id="page_control">
-                    <img class="arrow_img" src="../../../images/vector_icons/arrow_left.png" alt="arrow_left">
-                    <img class="arrow_img" src="../../../images/vector_icons/arrow_right.png" alt="arrow_right">
+                <div id="page_control">
+                    <span id="prevPageIcon" onclick="changePage(currentPage - 1)"><img class="arrow_img" src="../../../images/vector_icons/arrow_left.png" alt="arrow_left"></span>
+                    <span id="currentPageNumber" class="currentPageNumber">1</span>
+                    <span id="nextPageIcon" onclick="changePage(currentPage + 1)"> <img class="arrow_img" src="../../../images/vector_icons/arrow_right.png" alt="arrow_right"></span>
+                </div>
+                <div class="alertBody" id="confirmAlert">
+                    <img src="../../../images/Alert_icons/Alert_icon.png" class="alertImg" alt="confirm">
+                    <div class="alertMsgSuccess" style="color: #ff0202">Are you sure to delete: <span id="deleteUser"></span>?</div>
+                    <button class="okButton" onclick="closeAlert()" style="margin-right: 20px">Cancel</button>
+                    <button class="okButton" onclick="deleteRow()" >Yes</button>
                 </div>
             </div>
         </div>
     </div>
 </div>
+<script src="../../../js/url.js"></script>
+<script src="../../../js/auth.js"></script>
 <script src="../js/owner_dashboard_conductor.js"></script>
 </body>
 </html>
