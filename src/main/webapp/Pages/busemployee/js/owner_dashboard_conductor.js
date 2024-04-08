@@ -1,8 +1,24 @@
+let Conductor_id = "";
+let searchOption = "conductor_id";
+let currentPage = 1;
+const pageSize = 10;
+let allData = [];
+let dataSearch = [];
+
+document.addEventListener('DOMContentLoaded', function () {
+    isAuthenticated().then(() => fetchAllData());
+});
+
+function refreshPage() {
+    location.reload();
+}
+
 function fetchAllData() {
-    fetch(`${url}/conductorController`, {
+    document.getElementById("userName").textContent = session_user_name;
+    fetch(`${ url }/conductorController`, {
         method: 'GET',
         headers: {
-            'Content-Type': 'application/json'
+            'Content-Type': 'application/json',
         },
     })
         .then(response => {
@@ -13,56 +29,132 @@ function fetchAllData() {
             }
         })
         .then(data => {
-            displayDataAsTable(data);
+            allData = data;
+            console.log(allData)
+            updatePage(currentPage, false);
         })
         .catch(error => {
             console.error('Error:', error);
         });
 }
 
-fetchAllData();
+
+function updatePage(page, search) {
+    const startIndex = (page - 1) * pageSize;
+    const endIndex = startIndex + pageSize;
+    const tableBody = document.querySelector("#dataTable tbody");
+
+    let dataToShow;
+    if(search){
+        console.log("hello: " + dataSearch)
+        dataToShow = dataSearch.slice(startIndex, endIndex);
+    }
+    else{
+        dataToShow = allData.slice(startIndex, endIndex);
+    }
+
+    tableBody.innerHTML = "";
+    displayDataAsTable(dataToShow);
+    updatePageNumber(currentPage);
+}
+
+function updatePageNumber(page) {
+    document.getElementById("currentPageNumber").textContent = page;
+}
+
+const prevPageIcon = document.getElementById("prevPageIcon");
+prevPageIcon.addEventListener("click", () => changePage(currentPage))
+
+const nextPageIcon = document.getElementById("nextPageIcon");
+nextPageIcon.addEventListener("click", () => changePage(currentPage));
+
+function changePage(newPage) {
+    console.log(currentPage + "  " + newPage)
+    if (currentPage !== newPage) {
+        currentPage = Math.max(1, newPage);
+        updatePage(currentPage, false);
+    }
+}
 
 // Display all data
 function displayDataAsTable(data) {
     const tableBody = document.querySelector("#dataTable tbody");
+    const rowCount = data.length;
+    let existingData = {};
+    if(rowCount === 0){
+        const noDataRow = document.createElement("tr");
+        noDataRow.innerHTML = `<td colspan="6">No data available</td>`;
+        tableBody.appendChild(noDataRow);
+        return;
+    }
+     if(rowCount >= 10){
+         renderPageControl()
+     }
+     data.forEach(item => {
+         const row = document.createElement("tr");
 
-    data.forEach(item => {
-        const row = document.createElement("tr");
+         row.innerHTML = `
+         `;
 
-        row.innerHTML = `
-            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
-            <td>${item.conductor_id}</td>
-            <td>${item.p_id}</td>
-            <td>${item.review_points}</td>
-            <td>
-                <span class="icon-container">
-                    <i class="fas fa-pencil-alt" style="color: #ff0202" onclick="updateRow('${item.conductor_id}')"></i>
-                </span>
-                <span class="icon-container" style="margin-left: 10px;"> <!-- Adjust the margin as needed -->
-                    <i class="fas fa-trash-alt" style="color: #ff0202" onclick="deleteRow('${item.conductor_id}')"></i>
-                </span>
-            </td>
-        `;
+        fetch(`${ url }/passengerController`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'p_id': item.p_id,
+            },
+        })
+            .then(response => {
+                if (response.ok) {
+                    response.json().then(data => {
+                        existingData = data[0];
+                        row.innerHTML = `
+                            <td>${item.conductor_id}</td>
+                            <td>${existingData.first_name} ${existingData.last_name}</td>
+                            <td>${existingData.nic}</td>
+                            <td>${existingData.email}</td>
+                            <td>${item.review_points}</td>
+                            <td>
+                              <span class="icon-container">
+                                  <i onclick="updateRow('${item.conductor_id}')"><img src="../../../images/vector_icons/update_icon.png" alt="update" class="action_icon"></i>
+                              </span>
+                                <span class="icon-container" style="margin-left: 1px;">
+                                  <i onclick="openFlagConfirm('${item.conductor_id}')"><img src="../../../images/vector_icons/delete_icon.png" alt="delete" class="action_icon"></i>
+                              </span>
+                            </td>
+                        `;
+                    });
+                } else if (response.status === 401) {
+                    console.log('Unauthorized');
+                } else {
+                    console.error('Error:', response.status);
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
 
         tableBody.appendChild(row);
     });
+}
+
+function renderPageControl(){
+    document.getElementById("page_control").style.display = "flex";
 }
 
 //
 document.getElementById("conductorForm").addEventListener("submit", function(event) {
     event.preventDefault();
 
-    const conductor_id = document.getElementById("add_conductor_id").value;
-    const p_id = document.getElementById("add_p_id").value;
+    const nic = document.getElementById("add_nic").value;
     const review_points = document.getElementById("add_review_points").value;
 
     const userData = {
-        conductor_id: conductor_id,
-        p_id: p_id,
+        nic: nic,
         review_points: review_points,
     };
     console.log(userData)
     const jsonData = JSON.stringify(userData);
+    console.log("test: "+jsonData)
 
     fetch(`${url}/conductorController`, {
         method: 'POST',
@@ -74,19 +166,23 @@ document.getElementById("conductorForm").addEventListener("submit", function(eve
         .then(response => {
             if (response.ok) {
                 closeForm_add();
-                openAlertSuccess();
-            } else if (response.status === 401) {
-                openAlertFail();
-                console.log('operation unsuccessful');
-            } else {
-                openAlertFail();
-                console.error('Error:', response.status);
+                openAlertSuccess("Successfully Added!");
+            } else{
+                return response.json()
+                    .then(data => {
+                        const error_msg = data.error;
+                        openAlertFail(error_msg);
+                        throw new Error("Failed");
+                    });
             }
         })
         .catch(error => {
             console.error('Error:', error);
         });
 });
+
+createForm('add');
+createForm('update');
 
 // Handle update
 function updateRow(conductor_id){
@@ -95,7 +191,6 @@ function updateRow(conductor_id){
     let existingData = {};
 
     const urlParams = new URLSearchParams(window.location.search);
-
     document.getElementById("header_conductor_id").innerHTML = conductor_id
 
     fetch(`${url}/conductorController`, {
@@ -110,9 +205,7 @@ function updateRow(conductor_id){
                 response.json().then(data => {
                     existingData = data[0];
                     console.log("existingData:", existingData);
-
-                    document.getElementById("update_conductor_id").value = existingData.conductor_id;
-                    document.getElementById("update_p_id").value = existingData.p_id;
+                    document.getElementById("update_nic").value = existingData.nic;
                     document.getElementById("update_review_points").value = existingData.review_points;
                 });
             } else if (response.status === 401) {
@@ -128,18 +221,14 @@ function updateRow(conductor_id){
     document.getElementById("conductorUpdateForm").addEventListener("submit", function(event) {
         event.preventDefault();
 
-        const conductor_id = document.getElementById("update_conductor_id").value;
-        const p_id = document.getElementById("update_p_id").value;
         const review_points = document.getElementById("update_review_points").value;
 
         const updatedData = {
-            conductor_id: conductor_id,
-            p_id: p_id,
             review_points: review_points,
-
         };
 
         const jsonData = JSON.stringify(updatedData);
+        console.log(jsonData)
 
     fetch(`${url}/conductorController`, {
             method: 'PUT',
@@ -152,7 +241,7 @@ function updateRow(conductor_id){
             .then(response => {
                 if (response.ok) {
                     closeForm_update();
-                    openAlertSuccess();
+                    openAlertSuccess("Successfully");
                 } else if (response.status === 401) {
                     openAlertFail(response.status);
                     console.log('Update unsuccessful');
@@ -168,24 +257,25 @@ function updateRow(conductor_id){
 }
 
 // Handle delete
-function deleteRow(conductor_id){
-    console.log(conductor_id)
-    console.log("hello")
+function deleteRow(){
     fetch(`${url}/conductorController`, {
         method: 'DELETE',
         headers: {
             'Content-Type': 'application/json',
-            'conductor_id': conductor_id
+            'conductor_id': Conductor_id
         },
     })
         .then(response => {
             if (response.ok) {
-                openAlertSuccess();
+                closeAlert();
+                openAlertSuccess("Successfully Deleted!");
             } else if (response.status === 401) {
+                closeAlert();
                 openAlertFail(response.status);
                 console.log('Delete unsuccessful');
             } else {
                 openAlertFail(response.status);
+                closeAlert();
                 console.error('Error:', response.status);
             }
         })
@@ -198,7 +288,7 @@ function openForm_add() {
     const existingForm = document.querySelector(".conductor_add_form_body");
 
     if (!existingForm) {
-        createForm();
+        createForm('add');
     }
 
     document.getElementById("conductorForm").style.display = "block";
@@ -214,7 +304,7 @@ function openForm_update() {
     const existingForm = document.querySelector(".conductor_update_form_body");
 
     if (!existingForm) {
-        createForm();
+        createForm('update');
     }
 
     document.getElementById("conductorUpdateForm").style.display = "block";
@@ -226,83 +316,103 @@ function closeForm_update() {
     document.getElementById("overlay").style.display = "none";
 }
 
-function openAlertSuccess() {
+function openAlertSuccess(msg) {
+    conductor_id = "";
+    document.getElementById("alertMsgSuccess").textContent = msg;
     document.getElementById("successAlert").style.display = "block";
     document.getElementById("overlay").style.display = "block";
 }
 
 function closeAlertSuccess() {
+    conductor_id = "";
     document.getElementById("successAlert").style.display = "none";
     document.getElementById("overlay").style.display = "none";
     window.location.href = "../html/owner_dashboard_conductor.html";
 }
 
 function openAlertFail() {
+    conductor_id = "";
     document.getElementById("failAlert").style.display = "block";
     document.getElementById("overlay").style.display = "block";
 }
 
 function closeAlertFail() {
+    conductor_id = "";
     document.getElementById("failAlert").style.display = "none";
     document.getElementById("overlay").style.display = "none";
-    window.location.href = "../html/owner_dashboard_conductor.html";
 }
 
-// Create the add and update forms
-function createForm() {
-    const form_add = document.createElement('div');
-    form_add.classList.add('conductor_add_form_body');
+function openFlagConfirm(conductor_id){
+    Conductor_id = conductor_id;
+    document.getElementById("confirmAlert").style.display = "block";
+    document.getElementById("overlay").style.display = "block";
+    document.getElementById("deleteUser").textContent = Conductor_id;
+}
+function closeAlert(){
+    conductor_id = "";
+    document.getElementById("confirmAlert").style.display = "none";
+    document.getElementById("overlay").style.display = "none";
+}
 
-    const form_update = document.createElement('div');
-    form_update.classList.add('conductor_update_form_body');
+function createForm(action) {
+    if(action === 'add'){
+        const form_add = document.createElement('div');
+        form_add.classList.add('conductor_add_form_body');
 
-    var form= `
+        const form= `
         <div class="bus_form_left">
             <div class="form_div">
-                <label for="conductor_id" class="conductor_form_title">Conductor Id <span class="conductor_form_require">*</span></label>
-                <input type="text" name="conductor_id" id="conductor_id" class="form_data" placeholder="Enter the Conductor ID" required="required" />
+                <label for="nic" class="conductor_form_title">NIC<span class="conductor_form_require">*</span></label>
+                <input type="text" name="nic" id="nic" class="form_data" placeholder="Enter NIC" required="required" oninput="showSuggestions1(event)"/>
+                <ul id="nic_suggestions" class="autocomplete-list"></ul>
             </div>
             <div class="form_div">
-                <label for="p_id" class="conductor_form_title">Passenger Id <span class="conductor_form_require">*</span></label>
-                <input type="text" name="p_id" id="p_id" class="form_data" placeholder="Enter the Passenger ID" required="required" />
-            </div>
-            <div class="form_div">
-                <label for="review_points" class="conductor_form_title">CONDUCTOR POINTS <span class="conductor_form_require">*</span></label>
+                <label for="review_points" class="conductor_form_title">Conductor Points <span class="conductor_form_require">*</span></label>
                 <input type="text" name="review_points" id="review_points" class="form_data" placeholder="Enter Conductor Points" required="required"/>
             </div>
         </div>
         `;
 
-    form_add.innerHTML = form.replace(/id="/g, 'id="add_');
-    form_update.innerHTML = form.replace(/id="/g, 'id="update_');
-    const formContainer_add = document.getElementById('formContainer_add');
-    const formContainer_update = document.getElementById('formContainer_update');
+        form_add.innerHTML = form.replace(/id="/g, 'id="add_');
+        const formContainer_add = document.getElementById('formContainer_add');
+        formContainer_add.appendChild(form_add.cloneNode(true)); // Clone the form
 
-    formContainer_add.appendChild(form_add.cloneNode(true)); // Clone the form
-    formContainer_update.appendChild(form_update.cloneNode(true)); // Clone the form
+    }
+    else if(action === 'update'){
+        const form_update = document.createElement('div');
+        form_update.classList.add('conductor_update_form_body');
+
+        const form= `
+        <div class="bus_form_left">
+            <div class="form_div">
+                <label for="nic" class="conductor_form_title">NIC<span class="conductor_form_require">*</span></label>
+                <input type="text" name="nic" id="nic" class="form_data" placeholder="Enter NIC" required="required" disabled/>
+            </div>
+            <div class="form_div">
+                <div class="form_div">
+                    <label for="review_points" class="conductor_form_title">Conductor Points <span class="conductor_form_require">*</span></label>
+                    <input type="text" name="review_points" id="review_points" class="form_data" placeholder="Enter Conductor Points" required="required"/>
+                </div>
+        </div>
+        `;
+
+        form_update.innerHTML = form.replace(/id="/g, 'id="update_');
+        const formContainer_update = document.getElementById('formContainer_update');
+        formContainer_update.appendChild(form_update.cloneNode(true)); // Clone the form
+
+    }
 }
 
-// Attach the searchData function to the keyup event of the search input field
-const searchInput = document.getElementById("searchInput");
-searchInput.addEventListener("keyup", searchData);
-
-// Handle search
-function searchData() {
-    const tableBody = document.querySelector("#dataTable tbody");
-    tableBody.innerHTML = "";
-
-    const searchTerm = document.getElementById("searchInput").value;
-
-    if (searchTerm.trim() === "") {
-        fetchAllData();
-        return;
-    }
-
-    fetch(`${url}/conductorController`, {
+function showSuggestions1(event) {
+    const input = event.target;
+    const inputValue = input.value.toUpperCase();
+    const suggestionsContainer = document.getElementById(`autocomplete-container1`);
+    fetch(`${ url }/passengerController`, {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json',
-            'conductor_id': searchTerm
+            'flag': '0',
+            'privilege_level': '6',
         },
     })
         .then(response => {
@@ -310,15 +420,62 @@ function searchData() {
                 return response.json();
             } else {
                 console.error('Error:', response.status);
+                throw new Error(`HTTP error! Status: ${response.status}`);
             }
         })
         .then(data => {
-            displayDataAsTable(data);
+            const suggestions = data.map(item => item.nic);
+            suggestionsContainer.innerHTML = '';
+            const filteredSuggestions = suggestions.filter(suggestion =>
+                suggestion.toUpperCase().includes(inputValue)
+            );
+            suggestionsContainer.style.maxHeight = '200px';
+            suggestionsContainer.style.overflowY = 'auto';
+            suggestionsContainer.style.width = '100%';
+            suggestionsContainer.style.left = `18px`;
+            if (filteredSuggestions.length === 0) {
+                const errorMessage = document.createElement('li');
+                errorMessage.textContent = 'No suggestions found';
+                suggestionsContainer.appendChild(errorMessage);
+            } else {
+                filteredSuggestions.forEach(suggestion => {
+                    const listItem = document.createElement('li');
+                    listItem.classList.add('autocomplete-list-item');
+                    listItem.textContent = suggestion;
+                    listItem.addEventListener('click', () => {
+                        input.value = suggestion;
+                        suggestionsContainer.innerHTML = '';
+                    });
+                    suggestionsContainer.appendChild(listItem);
+                });
+            }
         })
         .catch(error => {
             console.error('Error:', error);
         });
 }
+
+
+// Attach the searchData function to the keyup event of the search input field
+const searchInput = document.getElementById("searchInput");
+searchInput.addEventListener("keyup", searchData);
+
+// Handle search
+function searchData() {
+    const searchTerm = document.getElementById("searchInput").value;
+    const search = searchTerm.toLowerCase();
+
+    dataSearch = allData.filter(user =>
+        user[searchOption].toLowerCase().includes(search)
+    );
+
+    updatePage(currentPage, true);
+}
+
+const searchSelect = document.getElementById("searchSelect");
+searchSelect.addEventListener("change", (event) => {
+    searchOption = event.target.value;
+});
 
 
 

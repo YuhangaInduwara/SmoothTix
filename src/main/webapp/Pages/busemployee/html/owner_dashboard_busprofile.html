@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bus Profile</title>
+    <title>SmoothTix</title>
     <link rel="icon" type="image/x-icon" href="../../../images/favicon/favicon.png">
     <link rel="stylesheet" type="text/css" href="../css/owner_dashboard_busprofile.css">
 </head>
@@ -63,16 +63,15 @@
                 <h1>Bus Profile</h1>
             </div>
             <div class="user_profile">
-                <h3>Username</h3>
+                <h3 id="userName">Username</h3>
                 <img src="../../../images/vector_icons/user.png" alt="userimage" class="user_img">
             </div>
         </div>
         <div class="body_content">
             <div class="functions">
                 <div class="add-new">
-                    <button class="add-new-button" onclick="openForm_add()">Add New Bus Profile</button>
+                    <button class="add-new-button" onclick="openForm_add()">Add Driver</button>
                 </div>
-
                 <div class="overlay" id="overlay"></div>
                 <div class="body_content">
                     <div class="form">
@@ -81,6 +80,9 @@
                                 <h2>New Bus Profile</h2>
                             </div>
                             <div id="formContainer_add"></div>
+                            <div id="autocomplete-container1"></div>
+                            <div id="autocomplete-container2"></div>
+                            <div id="autocomplete-container3"></div>
                             <div class="busprofile_form_footer">
                                 <button type="button" class="busprofile_form_button" onclick="closeForm_add()">Close</button>
                                 <input type="submit" class="busprofile_form_button" value="Add" id="busprofileRegFormSubmit">
@@ -102,12 +104,12 @@
 
                     <div class="alertBody" id="successAlert">
                         <img src="../../../images/Alert_icons/Success_icon.png" class="alertImg" alt="success">
-                        <div class="alertMsgSuccess">Operation Successful!</div>
+                        <div class="alertMsgSuccess" id="alertMsgSuccess"></div>
                         <button class="okButton" onclick="closeAlertSuccess()">Ok</button>
                     </div>
                     <div class="alertBody" id="failAlert">
                         <img src="../../../images/Alert_icons/Error_icon.png" class="alertImg" alt="fail">
-                        <div class="alertMsgFail" id="failMsg">Operation UnSuccessful! </div>
+                        <div class="alertMsgFail" id="failMsg"> </div>
                         <button class="okButton" onclick="closeAlertFail()">Ok</button>
                     </div>
                 </div>
@@ -117,9 +119,8 @@
                             <select class="search_input" id="searchSelect">
                                 <option value="" disabled selected>Search by</option>
                                 <option value="bus_profile_id">Busprofile ID</option>
-                                <option value="bus_id">Bus ID</option>
-                                <option value="driver_id">Driver ID</option>
-                                <option value="conductor_id">Conductor ID</option>
+                                <option value="reg_no">Bus Registration NO.</option>
+                                <option value="nic">NIC</option>
                             </select>
                         </label>
                     </div>
@@ -138,9 +139,11 @@
                 <thead>
                 <tr>
                     <th>Bus profile ID</th>
-                    <th>Bus Id</th>
-                    <th>Driver ID</th>
-                    <th>Conductor ID</th>
+                    <th>Bus Registration No.</th>
+                    <th>Driver Name</th>
+                    <th>Driver NIC</th>
+                    <th>Conductor Name</th>
+                    <th>Conductor NIC</th>
                     <th>Actions</th>
                     <th>Feasible Schedule</th>
                 </tr>
@@ -159,6 +162,105 @@
                 <div class="alertMsgSuccess" style="color: #ff0202">Are you sure to delete: <span id="deleteUser"></span>?</div>
                 <button class="okButton" onclick="closeAlert()" style="margin-right: 20px">Cancel</button>
                 <button class="okButton" onclick="deleteRow()" >Yes</button>
+            </div>
+            <div class="overlay" id="overlay" onclick="closeForm_feasible()"></div>
+            <div class="form" id="feasibleScheduleForm">
+                <form id="yourFeasibilityForm">
+                    <fieldset>
+                        <legend>Bus Profile Information</legend>
+                        <label >Bus Profile ID:</label>
+                        <input type="text" id="inputForBusProfileId">
+                    </fieldset>
+
+                    <fieldset>
+                        <label for="date">Date:</label>
+                        <input type="date" id="date" name="date" required>
+
+                        <label>Time Range:</label>
+                        <div class="checkbox-group"m>
+                            <input type="checkbox" id="00-01" name="time_range[]" value="00-01">
+                            <label for="00-01">12:00 AM - 1:00 AM</label>
+
+                            <input type="checkbox" id="01-02" name="time_range[]" value="01-02">
+                            <label for="01-02">1:00 AM - 2:00 AM</label>
+
+                            <input type="checkbox" id="02-03" name="time_range[]" value="02-03">
+                            <label for="02-03">2:00 AM - 3:00 AM</label>
+
+                            <input type="checkbox" id="03-04" name="time_range[]" value="03-04">
+                            <label for="03-04">3:00 AM - 4:00 AM</label>
+
+                            <input type="checkbox" id="04-05" name="time_range[]" value="04-05">
+                            <label for="04-05">4:00 AM - 5:00 AM</label>
+
+                            <input type="checkbox" id="05-06" name="time_range[]" value="05-06">
+                            <label for="05-06">5:00 AM - 6:00 AM</label>
+
+                            <input type="checkbox" id="06-07" name="time_range[]" value="06-07">
+                            <label for="06-07">6:00 AM - 7:00 AM</label>
+
+                            <input type="checkbox" id="07-08" name="time_range[]" value="07-08">
+                            <label for="07-08">7:00 AM - 8:00 AM</label>
+
+                            <input type="checkbox" id="08-09" name="time_range[]" value="08-09">
+                            <label for="08-09">8:00 AM - 9:00 AM</label>
+
+                            <input type="checkbox" id="09-10" name="time_range[]" value="09-10">
+                            <label for="09-10">9:00 AM - 10:00 AM</label>
+
+                            <input type="checkbox" id="10-11" name="time_range[]" value="10-11">
+                            <label for="10-11">10:00 AM - 11:00 AM</label>
+
+                            <input type="checkbox" id="11-12" name="time_range[]" value="11-12">
+                            <label for="11-12">11:00 AM - 12:00 PM</label>
+
+                            <input type="checkbox" id="12-13" name="time_range[]" value="12-13">
+                            <label for="12-13">12:00 PM - 1:00 PM</label>
+
+                            <input type="checkbox" id="13-14" name="time_range[]" value="13-14">
+                            <label for="13-14">1:00 PM - 2:00 PM</label>
+
+                            <input type="checkbox" id="14-15" name="time_range[]" value="14-15">
+                            <label for="14-15">2:00 PM - 3:00 PM</label>
+
+                            <input type="checkbox" id="15-16" name="time_range[]" value="15-16">
+                            <label for="15-16">3:00 PM - 4:00 PM</label>
+
+                            <input type="checkbox" id="16-17" name="time_range[]" value="16-17">
+                            <label for="16-17">4:00 PM - 5:00 PM</label>
+
+                            <input type="checkbox" id="17-18" name="time_range[]" value="17-18">
+                            <label for="17-18">5:00 PM - 6:00 PM</label>
+
+                            <input type="checkbox" id="18-19" name="time_range[]" value="18-19">
+                            <label for="18-19">6:00 PM - 7:00 PM</label>
+
+                            <input type="checkbox" id="19-20" name="time_range[]" value="19-20">
+                            <label for="19-20">7:00 PM - 8:00 PM</label>
+
+                            <input type="checkbox" id="20-21" name="time_range[]" value="20-21">
+                            <label for="20-21">8:00 PM - 9:00 PM</label>
+
+                            <input type="checkbox" id="21-22" name="time_range[]" value="21-22">
+                            <label for="21-22">9:00 PM - 10:00 PM</label>
+
+                            <input type="checkbox" id="22-23" name="time_range[]" value="22-23">
+                            <label for="22-23">10:00 PM - 11:00 PM</label>
+
+                            <input type="checkbox" id="23-00" name="time_range[]" value="23-00">
+                            <label for="23-00">23:00 PM - 00:00 AM</label>
+                        </div>
+                        <label for="availability">Availability:</label>
+                        <select id="availability" name="availability" required>
+                            <option value="1" selected>Available</option>
+
+                        </select>
+                    </fieldset>
+                    <div class="form-buttons">
+                        <button type="button" class="busprofile_form_button" onclick="closeForm_feasible()">Cancel</button>
+                        <button type="submit">Submit</button>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
