@@ -27,7 +27,6 @@ public class ScheduleController extends HttpServlet {
         JSONArray scheduleDataArray = new JSONArray();
         String schedule_id = request.getHeader("schedule_id");
         String driver_id = request.getHeader("driver_id");
-
         String start = request.getParameter("start");
         String destination = request.getParameter("destination");
         String date = request.getParameter("date");
