@@ -226,6 +226,7 @@ a{
     background-color: rgba(0, 0, 0, 0.5);
     z-index: 1;
 }
+
 .busprofile_form_header{
     text-align: center;
     font-size: 20px;
@@ -462,22 +463,6 @@ tbody tr:hover {
 #flag_nextPageIcon{
     margin-right: 0;
 }
-/* Add this to your existing stylesheet or create a new one */
-button.feasible-schedule-btn {
-    background-color: rgb(255, 0, 0);
-    color: white; /* White text color */
-    padding: 10px 20px; /* Padding inside the button */
-    border: none; /* Remove border */
-    border-radius: 5px; /* Rounded corners */
-    cursor: pointer; /* Add a pointer cursor on hover */
-    font-size: 16px; /* Font size */
-    transition: background-color 0.3s; /* Add a smooth transition on hover */
-}
-
-button.feasible-schedule-btn:hover {
-    background-color: #45a049; /* Darker green color on hover */
-}
-
 
 .form {
     display: none;
