@@ -46,7 +46,6 @@ function updatePage(page, search) {
 
     let dataToShow;
     if(search){
-        console.log("hello: " + dataSearch)
         dataToShow = dataSearch.slice(startIndex, endIndex);
     }
     else{
@@ -150,14 +149,14 @@ document.getElementById("driverRegForm").addEventListener("submit", function (ev
     const nic = document.getElementById("add_nic").value;
     const license_no = document.getElementById("add_license_no").value;
     const review_points = document.getElementById("add_review_points").value;
-    console.log(nic)
+
     const userData = {
         nic: nic,
         license_no: license_no,
         review_points: review_points,
     };
     const jsonData = JSON.stringify(userData);
-    console.log("test: "+jsonData)
+
 
     fetch(`${url}/driverController`, {
         method: 'POST',
@@ -428,7 +427,7 @@ function openFlagConfirm(driver_id){
     Driver_id = driver_id;
     document.getElementById("confirmAlert").style.display = "block";
     document.getElementById("overlay").style.display = "block";
-    document.getElementById("deleteUser").textContent = driver_id;
+    document.getElementById("deleteUser").textContent = Driver_id;
 }
 
 // Handle delete

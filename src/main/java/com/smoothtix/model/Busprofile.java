@@ -6,7 +6,7 @@ public class Busprofile {
     String conductor_id;
     String bus_id;
 
-    public Busprofile(String bus_profile_id, String bus_id, String driver_id, String conductor_id){
+    public Busprofile(){
         this.bus_profile_id = bus_profile_id;
         this.bus_id = bus_id;
         this.driver_id = driver_id;

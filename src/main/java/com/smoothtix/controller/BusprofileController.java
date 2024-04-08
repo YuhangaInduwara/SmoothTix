@@ -5,6 +5,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.smoothtix.dao.busprofileTable;
+import com.smoothtix.dao.driverTable;
 import com.smoothtix.model.Busprofile;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -23,32 +24,28 @@ public class BusprofileController extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         response.setContentType("text/html");
         PrintWriter out = response.getWriter();
-        JSONArray busprofileDataArray = new JSONArray();
-
-        String bus_profile_id = request.getHeader("bus_profile_id");
 
         try {
-            ResultSet rs = null;
-            if(bus_profile_id == null){
-                rs = busprofileTable.getAll();
-            }
-            else{
-                rs = busprofileTable.get(bus_profile_id);
-            }
+            ResultSet rs = busprofileTable.getAllDetails();
 
+            JSONArray busprofileDataArray = new JSONArray();
             while (rs.next()) {
                 JSONObject busprofileData = new JSONObject();
                 busprofileData.put("bus_profile_id", rs.getString("bus_profile_id"));
-                busprofileData.put("bus_id", rs.getString("bus_id"));
-                busprofileData.put("driver_id", rs.getString("driver_id"));
-                busprofileData.put("conductor_id", rs.getString("conductor_id"));
+                busprofileData.put("bus_registration_no", rs.getString("bus_registration_no"));
+                busprofileData.put("route", rs.getString("route_start") + " - " + rs.getString("route_destination"));
+                busprofileData.put("driver_name", rs.getString("driver_first_name") + " " + rs.getString("driver_last_name"));
+                busprofileData.put("driver_nic", rs.getString("driver_nic"));
+                busprofileData.put("conductor_name", rs.getString("conductor_first_name") + " " + rs.getString("conductor_last_name"));
+                busprofileData.put("conductor_nic", rs.getString("conductor_nic"));
 
                 busprofileDataArray.put(busprofileData);
             }
 
-            out.println(busprofileDataArray.toString()); // Send JSON data as a response
+            // Send JSON data as a response
+            out.println(busprofileDataArray.toString());
             response.setStatus(HttpServletResponse.SC_OK);
-        }catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
             response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
         }
@@ -56,26 +53,48 @@ public class BusprofileController extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        response.setContentType("text/html");
+        response.setContentType("text/json");
         PrintWriter out = response.getWriter();
 
         try {
-            Gson gson = new Gson();
-
+            // Read JSON data from the request
             BufferedReader reader = request.getReader();
-            Busprofile busprofile = gson.fromJson(reader, Busprofile.class);
-            int registrationSuccess = busprofileTable.insert(busprofile);
+            JsonElement jsonElement = JsonParser.parseReader(reader);
 
-            if (registrationSuccess >= 1) {
-                response.setStatus(HttpServletResponse.SC_OK);
+            if (jsonElement.isJsonObject()) {
+                // Parse the JSON object
+                JsonObject jsonObject = jsonElement.getAsJsonObject();
+                String reg_no = jsonObject.get("reg_no").getAsString();
+                String driver_nic = jsonObject.get("driver_nic").getAsString();
+                String conductor_nic = jsonObject.get("conductor_nic").getAsString();
+
+                // Call the insert method with the parsed parameters
+                int result = busprofileTable.insert(reg_no, driver_nic, conductor_nic);
+
+                JsonObject jsonResponse = new JsonObject();
+                if (result == 1) {
+                    jsonResponse.addProperty("message", "Insertion successful");
+                    response.setStatus(HttpServletResponse.SC_OK);
+                } else if (result == 0) {
+                    jsonResponse.addProperty("error", "Bus, driver, or conductor not found");
+                    response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+                } else {
+                    jsonResponse.addProperty("error", "Insertion failed");
+                    response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+                }
+                out.println(jsonResponse.toString()); // Send JSON response
             } else {
                 response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+                out.println("{\"error\": \"Invalid JSON data\"}");
             }
         } catch (Exception e) {
             e.printStackTrace();
             response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            out.println("{\"error\": \"Internal server error\"}");
         }
     }
+
+
 
     @Override
     protected void doPut(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -112,12 +131,10 @@ public class BusprofileController extends HttpServlet {
         try {
             String bus_profile_id = request.getHeader("bus_profile_id");
             int deleteSuccess = busprofileTable.delete(bus_profile_id);
-            System.out.println(bus_profile_id);
+
             if (deleteSuccess >= 1) {
-                System.out.println(deleteSuccess);
                 response.setStatus(HttpServletResponse.SC_OK);
             } else {
-                System.out.println(deleteSuccess);
                 response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
             }
         } catch (Exception e) {
