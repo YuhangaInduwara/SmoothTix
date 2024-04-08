@@ -70,15 +70,17 @@ public class ScheduleController extends HttpServlet {
                 while (rs.next()) {
                     JSONObject scheduleData = new JSONObject();
                     scheduleData.put("schedule_id", rs.getString("schedule_id"));
-                    scheduleData.put("bus_profile_id", rs.getString("bus_profile_id"));
-                    scheduleData.put("date_time", rs.getString("date_time"));
+                    scheduleData.put("reg_no", rs.getString("reg_no"));
+                    scheduleData.put("conductor_name", rs.getString("conductor_name"));
                     scheduleData.put("route_no", rs.getString("route_no"));
-                    scheduleData.put("start", rs.getString("start"));
-                    scheduleData.put("destination", rs.getString("destination"));
+                    scheduleData.put("route", rs.getString("route"));
+                    scheduleData.put("date", rs.getDate("date_time"));
+                    scheduleData.put("time", rs.getTime("date_time"));
+                    scheduleData.put("status", rs.getString("status"));
                     scheduleDataArray.put(scheduleData);
                 }
             }
-
+            System.out.println(scheduleDataArray);
             out.println(scheduleDataArray);
             response.setStatus(HttpServletResponse.SC_OK);
         }catch (Exception e) {

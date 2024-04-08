@@ -33,14 +33,49 @@ public class scheduleTable {
         return rs;
     }
 
+//    public static ResultSet getByDriverId(String driver_id) throws SQLException, ClassNotFoundException {
+//        Connection con = dbConnection.initializeDatabase();
+//        PreparedStatement pst = con.prepareStatement("SELECT s.*, r.route_no, r.start, r.destination\n" +
+//                "FROM schedule s\n" +
+//                "JOIN bus_profile b ON s.bus_profile_id = b.bus_profile_id\n" +
+//                "JOIN bus bs ON b.bus_id = bs.bus_id\n" +
+//                "JOIN route r ON bs.route_id = r.route_id\n" +
+//                "WHERE b.driver_id = ?;");
+//        pst.setString(1,driver_id);
+//        ResultSet rs = pst.executeQuery();
+//        return rs;
+//    }
+
     public static ResultSet getByDriverId(String driver_id) throws SQLException, ClassNotFoundException {
         Connection con = dbConnection.initializeDatabase();
-        PreparedStatement pst = con.prepareStatement("SELECT s.*, r.route_no, r.start, r.destination\n" +
-                "FROM schedule s\n" +
-                "JOIN bus_profile b ON s.bus_profile_id = b.bus_profile_id\n" +
-                "JOIN bus bs ON b.bus_id = bs.bus_id\n" +
-                "JOIN route r ON bs.route_id = r.route_id\n" +
-                "WHERE b.driver_id = ?;");
+        PreparedStatement pst = con.prepareStatement("SELECT \n" +
+                "    s.schedule_id,\n" +
+                "    b.reg_no,\n" +
+                "    CONCAT(c.first_name, ' ', c.last_name) AS conductor_name,\n" +
+                "    r.route_no,\n" +
+                "    CONCAT(r.start, ' - ', r.destination) AS route,\n" +
+                "    s.date_time,\n" +
+                "    s.status\n" +
+                "FROM \n" +
+                "    driver d\n" +
+                "JOIN \n" +
+                "    bus_profile bp ON d.driver_id = bp.driver_id\n" +
+                "JOIN \n" +
+                "    bus b ON bp.bus_id = b.bus_id\n" +
+                "JOIN \n" +
+                "    conductor co ON bp.conductor_id = co.conductor_id\n" +
+                "JOIN \n" +
+                "    passenger c ON co.p_id = c.p_id\n" +
+                "JOIN \n" +
+                "    schedule s ON bp.bus_profile_id = s.bus_profile_id  \n" +
+                "JOIN \n" +
+                "    route r ON b.route_id = r.route_id\n" +
+                "WHERE \n" +
+                "    d.driver_id = ?\n" +
+                "    AND s.date_time > CURRENT_TIMESTAMP()\n" +
+                "ORDER BY \n" +
+                "    s.date_time ASC\n" +
+                "LIMIT 1");
         pst.setString(1,driver_id);
         ResultSet rs = pst.executeQuery();
         return rs;
