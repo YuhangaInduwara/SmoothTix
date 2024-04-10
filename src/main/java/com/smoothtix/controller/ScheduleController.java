@@ -27,6 +27,8 @@ public class ScheduleController extends HttpServlet {
         JSONArray scheduleDataArray = new JSONArray();
         String schedule_id = request.getHeader("schedule_id");
         String driver_id = request.getHeader("driver_id");
+        String conductor_id = request.getHeader("conductor_id");
+
         String start = request.getParameter("start");
         String destination = request.getParameter("destination");
         String date = request.getParameter("date");
@@ -35,7 +37,7 @@ public class ScheduleController extends HttpServlet {
 
         try {
             ResultSet rs;
-            if(schedule_id == null && driver_id == null){
+            if(schedule_id == null && driver_id == null && conductor_id == null){
                 rs = scheduleTable.getAll();
 
                 while (rs.next()) {
@@ -61,16 +63,31 @@ public class ScheduleController extends HttpServlet {
                     scheduleDataArray = filterScheduleData(scheduleDataArray, start, destination, date, startTime, endTime);
                 }
             }
-            else if(driver_id == null){
+            else if(driver_id == null && conductor_id == null){
                 rs = scheduleTable.getByScheduleId(schedule_id);
             }
-            else if(schedule_id == null){
+            else if(schedule_id == null && conductor_id == null){
                 rs = scheduleTable.getByDriverId(driver_id);
                 while (rs.next()) {
                     JSONObject scheduleData = new JSONObject();
                     scheduleData.put("schedule_id", rs.getString("schedule_id"));
                     scheduleData.put("reg_no", rs.getString("reg_no"));
                     scheduleData.put("conductor_name", rs.getString("conductor_name"));
+                    scheduleData.put("route_no", rs.getString("route_no"));
+                    scheduleData.put("route", rs.getString("route"));
+                    scheduleData.put("date", rs.getDate("date_time"));
+                    scheduleData.put("time", rs.getTime("date_time"));
+                    scheduleData.put("status", rs.getString("status"));
+                    scheduleDataArray.put(scheduleData);
+                }
+            }
+            else if(schedule_id == null && driver_id == null){
+                rs = scheduleTable.getByConductorId(conductor_id);
+                while (rs.next()) {
+                    JSONObject scheduleData = new JSONObject();
+                    scheduleData.put("schedule_id", rs.getString("schedule_id"));
+                    scheduleData.put("reg_no", rs.getString("reg_no"));
+                    scheduleData.put("driver_name", rs.getString("driver_name"));
                     scheduleData.put("route_no", rs.getString("route_no"));
                     scheduleData.put("route", rs.getString("route"));
                     scheduleData.put("date", rs.getDate("date_time"));
