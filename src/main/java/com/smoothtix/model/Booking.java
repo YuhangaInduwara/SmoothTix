@@ -17,6 +17,11 @@ public class Booking {
         this.selectedSeats = selectedSeats;
     }
 
+    public Booking(String booking_id, Boolean status){
+        this.booking_id = booking_id;
+        this.status = status;
+    }
+
     public String getBooking_id(){
         return booking_id;
     }

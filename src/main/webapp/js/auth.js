@@ -3,6 +3,7 @@ let session_user_role = '6';
 let session_user_name = 'UserName';
 
 async function isAuthenticated() {
+
      console.log("hello1: ");
      const jwtToken = localStorage.getItem('jwtToken');
      console.log("hello2: ");

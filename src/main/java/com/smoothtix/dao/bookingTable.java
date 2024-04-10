@@ -107,6 +107,33 @@ public class bookingTable {
         return rs;
     }
 
+    public static ResultSet getByBooking_id(String booking_id) throws SQLException, ClassNotFoundException {
+        Connection con = dbConnection.initializeDatabase();
+        PreparedStatement pst = con.prepareStatement(
+//                "SELECT b.booking_id, bs.seat_no, bu.reg_no, s.date_time, r.start, r.destination, b.status" +
+//                        "FROM booking b" +
+//                        "JOIN booked_seats bs ON bs.booking_id = b.booking_id" +
+//                        "JOIN schedule s ON b.schedule_id = s.schedule_id" +
+//                        "JOIN bus_profile bp ON s.bus_profile_id = bp.bus_profile_id" +
+//                        "JOIN bus bu ON bp.bus_id = bu.bus_id" +
+//                        "JOIN route r ON bu.route_id = r.route_id" +
+//                        "WHERE b.p_id = ?" +
+//                        "ORDER BY s.date_time;"
+
+                "SELECT b.booking_id, bu.reg_no, s.date_time, r.start, r.destination, b.status " +
+                        "FROM booking b " +
+                        "JOIN schedule s ON b.schedule_id = s.schedule_id " +
+                        "JOIN bus_profile bp ON s.bus_profile_id = bp.bus_profile_id " +
+                        "JOIN bus bu ON bp.bus_id = bu.bus_id " +
+                        "JOIN route r ON bu.route_id = r.route_id " +
+                        "WHERE b.booking_id = ? " +
+                        "ORDER BY s.date_time;"
+        );
+        pst.setString(1,booking_id);
+        ResultSet rs = pst.executeQuery();
+        return rs;
+    }
+
 //    public static int update(String booking_id, Booking booking) throws SQLException, ClassNotFoundException {
 //        Connection con = dbConnection.initializeDatabase();
 //        PreparedStatement pst = con.prepareStatement("UPDATE booking SET owner_id=?, route=?, engineNo=?, chassisNo=?, noOfSeats=?, manufact_year=?, brand=?, model=? WHERE bus_id=?");
@@ -123,6 +150,16 @@ public class bookingTable {
 //        return rawCount;
 //    }
 
+    public static int update_status(String booking_id, Boolean status) throws SQLException, ClassNotFoundException{
+        System.out.println("Booking Id: " + booking_id + " Status: " + status);
+        Connection con = dbConnection.initializeDatabase();
+        PreparedStatement pst = con.prepareStatement("UPDATE booking SET status=? WHERE booking_id=?");
+        pst.setBoolean(1,status);
+        pst.setString(2,booking_id);
+        int rawCount = pst.executeUpdate();
+        return rawCount;
+    }
+
     public static int delete(String booking_id) throws SQLException, ClassNotFoundException {
         Connection con = dbConnection.initializeDatabase();
         PreparedStatement pst = con.prepareStatement("DELETE FROM booking WHERE booking_id = ?");
@@ -130,4 +167,6 @@ public class bookingTable {
         int rawCount = pst.executeUpdate();
         return rawCount;
     }
+
+
 }
