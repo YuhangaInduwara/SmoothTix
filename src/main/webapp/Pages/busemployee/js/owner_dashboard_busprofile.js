@@ -3,6 +3,7 @@ let searchOption = "bus_profile_id";
 let currentPage = 1;
 const pageSize = 10;
 let allData = [];
+let dataSearch = [];
 
 document.addEventListener('DOMContentLoaded', function () {
     isAuthenticated().then(() => fetchAllData());
@@ -29,7 +30,7 @@ function fetchAllData() {
         .then(data => {
             allData = data;
             console.log(allData)
-            updatePage(currentPage);
+            updatePage(currentPage,false);
         })
         .catch(error => {
             console.error('Error:', error);
@@ -44,7 +45,7 @@ function updatePage(page, search) {
 
     let dataToShow;
     if(search){
-        console.log("hello: " + dataSearch)
+
         dataToShow = dataSearch.slice(startIndex, endIndex);
     }
     else{
@@ -76,67 +77,41 @@ function changePage(newPage) {
 // Display all data
 function displayDataAsTable(data) {
     const tableBody = document.querySelector("#dataTable tbody");
-        const rowCount = data.length;
-        let existingData = {};
-        if(rowCount === 0){
-            const noDataRow = document.createElement("tr");
-            noDataRow.innerHTML = `<td colspan="6">No data available</td>`;
-            tableBody.appendChild(noDataRow);
-            return;
-        }
-        if(rowCount >= 10){
-            renderPageControl()
-        }
+    tableBody.innerHTML = ""; // Clear existing rows
 
+    if (data.length === 0) {
+        const noDataRow = document.createElement("tr");
+        noDataRow.innerHTML = `<td colspan="7">No data available</td>`;
+        tableBody.appendChild(noDataRow);
+        return;
+    }
+
+    // Assuming 'data' now includes all necessary details directly
     data.forEach(item => {
         const row = document.createElement("tr");
-
         row.innerHTML = `
+            <td>${item.bus_profile_id}</td>
+            <td>${item.bus_registration_no}</td>
+            <td>${item.route}</td>
+            <td>${item.driver_name}</td>
+            <td>${item.driver_nic}</td>
+            <td>${item.conductor_name}</td>
+            <td>${item.conductor_nic}</td>
+            <td>
+                <span class="icon-container" style="margin-left: 1px;">
+                    <i onclick="redirectToFeasibleSchedule('${item.bus_profile_id}')"><img src="../../../images/vector_icons/schedule.png" alt="Availability" class="action_icon"></i>
+                </span>
+                <span class="icon-container">
+                    <i onclick="updateRow('${item.bus_profile_id}')"><img src="../../../images/vector_icons/update_icon.png" alt="update" class="action_icon"></i>
+                </span>
+                <span class="icon-container" style="margin-left: 1px;">
+                    <i onclick="openFlagConfirm('${item.bus_profile_id}')"><img src="../../../images/vector_icons/delete_icon.png" alt="delete" class="action_icon"></i>
+                </span>
+            </td>
         `;
-
-        fetch(`${url}/busController`, {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json',
-                'p_id': item.p_id,
-            },
-        })
-        .then(response => {
-            if (response.ok) {
-                response.json().then(data => {
-                    existingData = data[0];
-                    row.innerHTML = `
-                        <td>${item.bus_profile_id}</td>
-                        <td>${item.bus_id}</td>
-                        <td>${item.driver_id}</td>
-                        <td>${item.conductor_id}</td>
-                        <td>
-                            <span class="icon-container">
-                                <i onclick="updateRow('${item.bus_profile_id}')"><img src="../../../images/vector_icons/update_icon.png" alt="update" class="action_icon"></i>
-                            </span>
-                            <span class="icon-container" style="margin-left: 1px;">
-                                <i onclick="openFlagConfirm('${item.bus_profile_id}')"><img src="../../../images/vector_icons/delete_icon.png" alt="delete" class="action_icon"></i>
-                            </span>
-                        </td>
-                       <td>
-                           <button class="feasible-schedule-btn" onclick="redirectToFeasibleSchedule('${item.bus_profile_id}')">Feasible Schedule</button>
-                       </td>
-                    `;
-                });
-            } else if (response.status === 401) {
-                console.log('Unauthorized');
-            } else {
-                console.error('Error:', response.status);
-            }
-        })
-        .catch(error => {
-            console.error('Error:', error);
-        });
-
         tableBody.appendChild(row);
     });
 }
-
 
 function redirectToFeasibleSchedule(bus_profile_id) {
     if (bus_profile_id) {
@@ -203,7 +178,6 @@ document.addEventListener("DOMContentLoaded", function () {
             const time_range = getCheckedTimeRanges();
             const availability = document.getElementById("availability").value;
 
-            // Prepare data for AJAX request
             const formData = {
                 bus_profile_id: bus_profile_id,
                 date: date,
@@ -264,17 +238,14 @@ function renderPageControl(){
 //Add new bus to the database
 document.getElementById("busprofileRegForm").addEventListener("submit", function(event) {
     event.preventDefault();
-
-    const bus_profile_id = document.getElementById("add_bus_profile_id").value;
-    const bus_id = document.getElementById("add_bus_id").value;
-    const driver_id = document.getElementById("add_driver_id").value;
-    const conductor_id = document.getElementById("add_conductor_id").value;
+    const reg_no = document.getElementById("add_bus_reg_no").value;
+    const driver_nic = document.getElementById("add_driver_nic").value;
+    const conductor_nic = document.getElementById("add_conductor_nic").value;
 
     const userData = {
-        bus_profile_id: bus_profile_id,
-        bus_id: bus_id,
-        driver_id: driver_id,
-        conductor_id: conductor_id,
+        reg_no: reg_no,
+        driver_nic: driver_nic,
+        conductor_nic: conductor_nic,
 
     };
     console.log(userData)
@@ -290,13 +261,14 @@ document.getElementById("busprofileRegForm").addEventListener("submit", function
         .then(response => {
             if (response.ok) {
                 closeForm_add();
-                openAlertSuccess();
-            } else if (response.status === 401) {
-                openAlertFail();
-                console.log('operation unsuccessful');
-            } else {
-                openAlertFail();
-                console.error('Error:', response.status);
+                openAlertSuccess("Successfully Added!");
+            } else{
+                return response.json()
+                    .then(data => {
+                        const error_msg = data.error;
+                        openAlertFail(error_msg);
+                        throw new Error("Failed");
+                    });
             }
         })
         .catch(error => {
@@ -386,15 +358,14 @@ function updateRow(bus_profile_id){
     });
 }
 
-// Handle delete
-function deleteRow(bus_profile_id){
-    fetch(`${ url }/busprofileController`, {
-        method: 'DELETE',
-        headers: {
-            'Content-Type': 'application/json',
-            'bus_profile_id': bus_profile_id
-        },
-    })
+ function deleteRow() {
+     fetch(`${ url }/busprofileController`, {
+         method: 'DELETE',
+         headers: {
+             'Content-Type': 'application/json',
+             'bus_profile_id': bus_profile_id,
+         },
+     })
      .then(response => {
          if (response.ok) {
              closeAlert();
@@ -410,13 +381,13 @@ function deleteRow(bus_profile_id){
      });
  }
 
+
 function openForm_add() {
     const existingForm = document.querySelector(".busprofile_add_form_body");
 
     if (!existingForm) {
-        createForm();
+        createForm('add');
     }
-
     document.getElementById("busprofileRegForm").style.display = "block";
     document.getElementById("overlay").style.display = "block";
 }
@@ -429,7 +400,7 @@ function closeForm_add() {
 function openForm_update() {
     const existingForm = document.querySelector(".busprofile_update_form_body");
     if (!existingForm) {
-        createForm();
+        createForm('update');
     }
 
     document.getElementById("busprofileUpdateForm").style.display = "block";
@@ -480,69 +451,130 @@ function openFlagConfirm(driver_id){
     document.getElementById("deleteUser").textContent = Bus_profile_id;
 }
 
+document.addEventListener('DOMContentLoaded', function() {
+    createForm('add');
+    createForm('update');
+});
+
 // Create the add and update forms
-function createForm() {
-    const form_add = document.createElement('div');
-    form_add.classList.add('busprofile_add_form_body');
+function createForm(action) {
+    if(action === 'add'){
+        const form_add = document.createElement('div');
+        form_add.classList.add('busprofile_add_form_body');
 
-    const form_update = document.createElement('div');
-    form_update.classList.add('busprofile_update_form_body');
-
-    var form= `
+        const form= `
         <div class="busprofile_form_left">
             <div class="form_div">
-                <label for="bus_profile_id" class="busprofile_form_title">Bus profile Id <span class="busprofile_form_require">*</span></label>
-                <input type="text" name="bus_profile_id" id="bus_profile_id" class="form_data" placeholder="Enter Bus profile ID" required="required" />
+                <label for="bus_reg_no" class="busprofile_form_title">Bus Registration No.<span class="busprofile_form_require">*</span></label>
+                <input type="text" name="bus_reg_no" id="bus_reg_no" class="form_data" placeholder="Enter NIC" required="required" oninput="showSuggestions1(event)"/>
+                <ul id="bus_reg_no_suggestions" class="autocomplete-list"></ul>
             </div>
             <div class="form_div">
-                <label for="bus_id" class="busprofile_form_title">Bus Id <span class="busprofile_form_require">*</span></label>
-                <input type="text" name="bus_id" id="bus_id" class="form_data" placeholder="Enter Bus Id" required="required" />
+                <label for="driver_nic" class="busprofile_form_title">Driver NIC <span class="busprofile_form_require">*</span></label>
+                <input type="text" name="driver_nic" id="driver_nic" class="form_data" placeholder="Enter Driver NIC" required="required" oninput="showSuggestions2(event)" />
+                <ul id="Driver_nic_suggestions" class="autocomplete-list"></ul>
             </div>
             <div class="form_div">
-                <label for="driver_id" class="busprofile_form_title">Driver ID <span class="busprofile_form_require">*</span></label>
-                <input type="text" name="driver_id" id="driver_id" class="form_data" placeholder="Enter Driver ID" required="required" />
-            </div>
-            <div class="form_div">
-                <label for="conductor_id" class="busprofile_form_title">Conductor ID<span class="busprofile_form_require">*</span></label>
-                <input type="text" name="conductor_id" id="conductor_id" class="form_data" placeholder="Enter Conductor ID" required="required" />
+                <label for="conductor_nic" class="busprofile_form_title">CONDUCTOR NIC <span class="busprofile_form_require">*</span></label>
+                <input type="text" name="conductor_nic" id="conductor_nic" class="form_data" placeholder="Enter Conductor NIC" required="required" oninput="showSuggestions3(event)"/>
+                <ul id="Conductor_nic_suggestions" class="autocomplete-list"></ul>
             </div>
         </div>
         `;
 
-    form_add.innerHTML = form.replace(/id="/g, 'id="add_');
-    form_update.innerHTML = form.replace(/id="/g, 'id="update_');
-    const formContainer_add = document.getElementById('formContainer_add');
-    const formContainer_update = document.getElementById('formContainer_update');
+        form_add.innerHTML = form.replace(/id="/g, 'id="add_');
+        const formContainer_add = document.getElementById('formContainer_add');
+        formContainer_add.appendChild(form_add.cloneNode(true)); // Clone the form
 
-    formContainer_add.appendChild(form_add.cloneNode(true)); // Clone the form
-    formContainer_update.appendChild(form_update.cloneNode(true)); // Clone the form
+    }
+    else if(action === 'update'){
+        const form_update = document.createElement('div');
+        form_update.classList.add('busprofile_update_form_body');
+
+        const form = `
+            <div class="busprofile_form_left">
+                <div class="form_div">
+                    <label for="driver_nic" class="busprofile_form_title">Driver NIC <span class="busprofile_form_require">*</span></label>
+                    <input type="text" name="driver_nic" id="driver_nic" class="form_data" placeholder=" update Driver NIC"  />
+                </div>
+                <div class="form_div">
+                    <label for="conductor_nic" class="busprofile_form_title"> Conductor NIC <span class="busprofile_form_require">*</span></label>
+                    <input type="text" name="conductor_nic" id="conductor_nic" class="form_data" placeholder=" Update Conductor NIC" />
+                </div>
+            </div>
+        `;
+
+        form_update.innerHTML = form.replace(/id="/g, 'id="update_');
+        const formContainer_update = document.getElementById('formContainer_update');
+        formContainer_update.appendChild(form_update.cloneNode(true)); // Clone the form
+
+    }
 }
 
-const searchSelect = document.getElementById("searchSelect");
-searchSelect.addEventListener("change", (event) => {
-    searchOption = event.target.value;
-    console.log(searchOption)
-});
-
-const searchInput = document.getElementById("searchInput");
-searchInput.addEventListener("keyup", searchData);
-
-function searchData() {
-    const tableBody = document.querySelector("#dataTable tbody");
-    tableBody.innerHTML = "";
-
-    const searchTerm = document.getElementById("searchInput").value;
-
-    if (searchTerm.trim() === "") {
-        fetchAllData();
-        return;
+function showSuggestions1(event) {
+    const input = event.target;
+    const inputValue = input.value.toUpperCase();
+    const suggestionsContainer = document.getElementById(`autocomplete-container1`);
+    if(inputValue === ""){
+        suggestionsContainer.innerHTML = '';
     }
-
-    fetch(`${ url }/busprofileController`, {
+    else {
+        fetch(`${url}/busController`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+        })
+            .then(response => {
+                if (response.ok) {
+                    return response.json();
+                } else {
+                    console.error('Error:', response.status);
+                    throw new Error(`HTTP error! Status: ${response.status}`);
+                }
+            })
+            .then(data => {
+                const suggestions = data.map(item => item.reg_no);
+                suggestionsContainer.innerHTML = '';
+                const filteredSuggestions = suggestions.filter(suggestion =>
+                    suggestion.toUpperCase().includes(inputValue)
+                );
+                suggestionsContainer.style.maxHeight = '200px';
+                suggestionsContainer.style.overflowY = 'auto';
+                suggestionsContainer.style.width = '100%';
+                suggestionsContainer.style.left = `18px`;
+                if (filteredSuggestions.length === 0) {
+                    const errorMessage = document.createElement('li');
+                    errorMessage.textContent = 'No suggestions found';
+                    suggestionsContainer.appendChild(errorMessage);
+                } else {
+                    filteredSuggestions.forEach(suggestion => {
+                        const listItem = document.createElement('li');
+                        listItem.classList.add('autocomplete-list-item');
+                        listItem.textContent = suggestion;
+                        listItem.addEventListener('click', () => {
+                            input.value = suggestion;
+                            suggestionsContainer.innerHTML = '';
+                        });
+                        suggestionsContainer.appendChild(listItem);
+                    });
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+    }
+}
+function showSuggestions2(event) {
+    const input = event.target;
+    const inputValue = input.value.toUpperCase();
+    const suggestionsContainer = document.getElementById(`autocomplete-container1`);
+    fetch(`${ url }/passengerController`, {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json',
-            [searchOption]: searchTerm
+            'flag': '0',
+            'privilege_level': '4',
         },
     })
         .then(response => {
@@ -550,16 +582,107 @@ function searchData() {
                 return response.json();
             } else {
                 console.error('Error:', response.status);
+                throw new Error(`HTTP error! Status: ${response.status}`);
             }
         })
         .then(data => {
-            displayDataAsTable(data);
+            const suggestions = data.map(item => item.nic);
+            suggestionsContainer.innerHTML = '';
+            const filteredSuggestions = suggestions.filter(suggestion =>
+                suggestion.toUpperCase().includes(inputValue)
+            );
+            suggestionsContainer.style.maxHeight = '200px';
+            suggestionsContainer.style.overflowY = 'auto';
+            suggestionsContainer.style.width = '100%';
+            suggestionsContainer.style.left = `18px`;
+            if (filteredSuggestions.length === 0) {
+                const errorMessage = document.createElement('li');
+                errorMessage.textContent = 'No suggestions found';
+                suggestionsContainer.appendChild(errorMessage);
+            } else {
+                filteredSuggestions.forEach(suggestion => {
+                    const listItem = document.createElement('li');
+                    listItem.classList.add('autocomplete-list-item');
+                    listItem.textContent = suggestion;
+                    listItem.addEventListener('click', () => {
+                        input.value = suggestion;
+                        suggestionsContainer.innerHTML = '';
+                    });
+                    suggestionsContainer.appendChild(listItem);
+                });
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
+}
+function showSuggestions3(event) {
+    const input = event.target;
+    const inputValue = input.value.toUpperCase();
+    const suggestionsContainer = document.getElementById(`autocomplete-container1`);
+    fetch(`${ url }/passengerController`, {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+            'flag': '0',
+            'privilege_level': '5',
+        },
+    })
+        .then(response => {
+            if (response.ok) {
+                return response.json();
+            } else {
+                console.error('Error:', response.status);
+                throw new Error(`HTTP error! Status: ${response.status}`);
+            }
+        })
+        .then(data => {
+            const suggestions = data.map(item => item.nic);
+            suggestionsContainer.innerHTML = '';
+            const filteredSuggestions = suggestions.filter(suggestion =>
+                suggestion.toUpperCase().includes(inputValue)
+            );
+            suggestionsContainer.style.maxHeight = '200px';
+            suggestionsContainer.style.overflowY = 'auto';
+            suggestionsContainer.style.width = '100%';
+            suggestionsContainer.style.left = `18px`;
+            if (filteredSuggestions.length === 0) {
+                const errorMessage = document.createElement('li');
+                errorMessage.textContent = 'No suggestions found';
+                suggestionsContainer.appendChild(errorMessage);
+            } else {
+                filteredSuggestions.forEach(suggestion => {
+                    const listItem = document.createElement('li');
+                    listItem.classList.add('autocomplete-list-item');
+                    listItem.textContent = suggestion;
+                    listItem.addEventListener('click', () => {
+                        input.value = suggestion;
+                        suggestionsContainer.innerHTML = '';
+                    });
+                    suggestionsContainer.appendChild(listItem);
+                });
+            }
         })
         .catch(error => {
             console.error('Error:', error);
         });
 }
 
+const searchInput = document.getElementById("searchInput");
+searchInput.addEventListener("keyup", searchData);
 
+function searchData() {
+    const searchTerm = document.getElementById("searchInput").value;
+    const search = searchTerm.toLowerCase();
 
+    dataSearch = allData.filter(user =>
+        user[searchOption].toLowerCase().includes(search)
+    );
 
+    updatePage(currentPage, true);
+}
+
+const searchSelect = document.getElementById("searchSelect");
+searchSelect.addEventListener("change", (event) => {
+    searchOption = event.target.value;
+});
