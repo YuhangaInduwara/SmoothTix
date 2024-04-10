@@ -127,3 +127,61 @@ a{
     display: flex;
     flex-direction: row;
 }
+
+
+.container {
+        display: flex;
+        justify-content: space-around;
+    }
+
+    .box {
+        position: relative;
+        transition: box-shadow 0.3s;
+        width: 25%;
+        padding: 20px;
+        border: 1px solid #ccc;
+        /*margin-bottom: 20px;*/
+        margin-top: 70px;
+        border-radius: 20px;
+        background-color: #F8F9F9;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.8);
+    }
+    .box:hover {
+
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+    .form-heading {
+        text-align: center;
+        margin-bottom: 20px;
+    }
+
+    form {
+        display: flex;
+        flex-direction: column;
+    }
+
+    label {
+        margin-bottom: 10px;
+    }
+
+    input {
+        padding: 8px;
+        outline: none;
+        margin-bottom: 10px;
+        border:none;
+        box-sizing: border-box;
+        border-radius: 10px;
+        background-color:#F8F9F9;
+    }
+
+    .stars-input {
+        padding-left: 25px; /* Adjust according to the size of the icon */
+        background-image: url("../../../images/vector_icons/star.png" ); /* URL of the icon */
+        background-repeat: no-repeat;
+        background-size: 20px; /* Adjust according to the size of the icon */
+        background-position: 5px center; /* Adjust according to the size of the icon */
+    }
+
+
+
