@@ -133,6 +133,7 @@ public class scheduleTable {
 
     public static ResultSet getAll() throws SQLException, ClassNotFoundException {
         Connection con = dbConnection.initializeDatabase();
+        System.out.println("hello_schedule");
         PreparedStatement pst = con.prepareStatement("SELECT \n" +
                 "    s.schedule_id, \n" +
                 "    r_start.start AS start, \n" +

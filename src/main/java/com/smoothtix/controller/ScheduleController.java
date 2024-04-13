@@ -96,7 +96,6 @@ public class ScheduleController extends HttpServlet {
                     scheduleDataArray.put(scheduleData);
                 }
             }
-            System.out.println(scheduleDataArray);
             out.println(scheduleDataArray);
             response.setStatus(HttpServletResponse.SC_OK);
         }catch (Exception e) {

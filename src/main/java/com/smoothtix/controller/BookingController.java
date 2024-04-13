@@ -26,7 +26,7 @@ public class BookingController extends HttpServlet {
         JSONArray bookingDataArray = new JSONArray();
         String p_id = request.getParameter("p_id");
         String booking_id = request.getParameter("booking_id");
-        System.out.println(booking_id);
+        System.out.println("Booking_p_id: " +p_id);
 
         try {
             ResultSet rs;
@@ -54,7 +54,7 @@ public class BookingController extends HttpServlet {
                     bookingData.put("destination", rs.getString("destination"));
                     bookingData.put("date", rs.getDate("date_time"));
                     bookingData.put("time", rs.getTime("date_time"));
-                    //bookingData.put("seat_no", rs.getInt("seat_no"));
+                    bookingData.put("seat_no", rs.getString("booked_seats"));
                     bookingData.put("status", rs.getInt("status"));
                     bookingDataArray.put(bookingData);
                 }

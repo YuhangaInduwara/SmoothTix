@@ -94,6 +94,7 @@ function updatePage(page) {
     const dataToShow = allData.slice(startIndex, endIndex);
 
     list.innerHTML = "";
+    // console.log(startIndex + " " +dataToShow + " " + endIndex)
     displayDataAsScheduleTiles(dataToShow);
     updatePageNumber(currentPage);
 }
@@ -151,9 +152,11 @@ function displayDataAsScheduleTiles(data) {
     }
 
     data.forEach(item => {
-        const scheduleElement = document.createElement("div");
-        scheduleElement.classList.add("schedule_tiles");
-        scheduleElement.innerHTML = `
+        console.log(item.status)
+        if(item.status === 0){
+            const scheduleElement = document.createElement("div");
+            scheduleElement.classList.add("schedule_tiles");
+            scheduleElement.innerHTML = `
             <div class="schedule_element_row1">
                 <div class="busRegNo">
                     <h1 id="busRegNo">${item.reg_no}</h1>
@@ -187,7 +190,8 @@ function displayDataAsScheduleTiles(data) {
             </div>
         `;
 
-        scheduleList.appendChild(scheduleElement);
+            scheduleList.appendChild(scheduleElement);
+        }
     });
 }
 

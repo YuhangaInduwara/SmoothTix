@@ -55,10 +55,6 @@ function update(p_id){
     openForm_update();
 
     let existingData = {};
-<<<<<<< HEAD
-=======
-
->>>>>>> c333b2a71d12dd2077ce963f3a05bd52fc34fa01
 
     const urlParams = new URLSearchParams(window.location.search);
 
@@ -73,17 +69,10 @@ function update(p_id){
             if (response.ok) {
                 response.json().then(data => {
                     existingData = data[0];
-<<<<<<< HEAD
                     console.log("existingData:", existingData);
                      document.getElementById("header_nic").innerHTML = existingData.first_name;
-
-                    document.getElementById("update_first_name").value = existingData.first_name;
-                    document.getElementById("update_last_name").value = existingData.last_name;
-=======
-                    document.getElementById("header_nic").innerHTML = existingData.first_name + " " + existingData.last_name + "'s";
                     document.getElementById("update_fname").value = existingData.first_name;
                     document.getElementById("update_lname").value = existingData.last_name;
->>>>>>> c333b2a71d12dd2077ce963f3a05bd52fc34fa01
                     document.getElementById("update_nic").value = existingData.nic;
                     document.getElementById("update_email").value = existingData.email;
                 });
