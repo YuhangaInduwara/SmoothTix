@@ -7,6 +7,10 @@ document.addEventListener('DOMContentLoaded', function () {
    isAuthenticated().then(() => fetchAllData());
 });
 
+function refreshPage() {
+    location.reload();
+}
+
 function fetchAllData(){
     fetch(`${ url }/bookingController?p_id=${p_id}`, {
         method: 'GET',
@@ -22,9 +26,17 @@ function fetchAllData(){
             }
         })
         .then(data => {
-            allData = data;
-            console.log(data);
-            updatePage(currentPage);
+            allData = data.sort((a, b) => {
+                const dateComparison = a.date.localeCompare(b.date);
+                if (dateComparison !== 0) {
+                    return dateComparison;
+                }
+
+                return a.time.localeCompare(b.time);
+            });
+            console.log(allData);
+            displayDataAsScheduleTiles_0(allData);
+            displayDataAsScheduleTiles_1(allData);
         })
         .catch(error => {
             console.error('Error:', error);
@@ -39,7 +51,7 @@ function updatePage(page) {
 
     list.innerHTML = "";
     console.log(startIndex + " " +dataToShow + " " + endIndex)
-    displayDataAsScheduleTiles(dataToShow);
+    displayDataAsScheduleTiles_0(dataToShow);
     updatePageNumber(currentPage);
 }
 
@@ -80,8 +92,10 @@ function getDataForPage(page) {
     return allData.slice(startIndex, endIndex);
 }
 
-function displayDataAsScheduleTiles(data) {
+function displayDataAsScheduleTiles_0(data) {
     const scheduleList = document.getElementById("schedule_list");
+
+    let counter = 0;
 
     const dataCount = data.length;
     if(dataCount === 0){
@@ -91,13 +105,9 @@ function displayDataAsScheduleTiles(data) {
         return;
     }
 
-    if(dataCount >= 3){
-        renderPageControl();
-    }
-
     data.forEach(item => {
-        console.log(item.status)
-        if(item.status !== 3){
+        if(counter < 2 && item.status === 0){
+            counter += 1;
             const scheduleElement = document.createElement("div");
             scheduleElement.classList.add("schedule_tiles");
             scheduleElement.innerHTML = `
@@ -133,159 +143,75 @@ function displayDataAsScheduleTiles(data) {
 
             scheduleList.appendChild(scheduleElement);
         }
+        if(counter >= 2){
+            document.getElementById("see_more_upcoming").style.display = "flex";
+        }
+        else{
+            document.getElementById("see_more_upcoming").style.display = "none";
+        }
+    });
+}
+
+function displayDataAsScheduleTiles_1(data) {
+    const scheduleList = document.getElementById("schedule_list_old");
+
+    let counter = 0;
+
+    const dataCount = data.length;
+    if(dataCount === 0){
+        const noData = document.createElement("tr");
+        noData.innerHTML = `<td colspan="6">No schedules available</td>`;
+        scheduleList.appendChild(noData);
+        return;
+    }
+
+    data.forEach(item => {
+        if(counter < 2 && item.status === 1){
+            counter += 1;
+            const scheduleElement = document.createElement("div");
+            scheduleElement.classList.add("schedule_tiles");
+            scheduleElement.innerHTML = `
+                <div class="schedule_element_row1">
+                    <div class="busRegNo">
+                        <h1 id="busRegNo">${item.booking_id}</h1>
+                    </div>
+                    <div>
+                        <p>From: <span id="start">${item.start}</span></p>
+                        <p>To: <span id="destination">${item.destination}</span></p>
+                    </div>
+                    <div>
+                        <p>Date: <span id="bookingClosingDate">${item.date}</span></p>
+                        <p>Time: <span id="bookingClosingTime">${item.time}</span></p>
+                    </div>
+                    <div class="seatAvailability">
+                        <h2>Booked <br> Seat/Seats</h2>
+                        <h1 id="seatAvailability">${item.seat_no}</h1>
+                    </div>
+                </div>
+                <div class="schedule_element_row2">
+                    <div class="routeNo">
+                        <h1 id="busRegNo">${item.reg_no}</h1>
+                    </div>
+                    <div>
+                        <h1>Status: ${item.status}</h1>
+                    </div>
+                    <div class="addBookingBtn">
+                        <button class="button" onclick="openSeatSelection('${item.schedule_id}', '${item.start}', '${item.destination}', '${item.date}', '${item.time}', '${item.available_seats}', '${item.price_per_ride}')">Book Seat</button>
+                    </div>
+                </div>
+            `;
+
+            scheduleList.appendChild(scheduleElement);
+        }
+        if(counter >= 2){
+            document.getElementById("see_more_previous").style.display = "flex";
+        }
+        else{
+            document.getElementById("see_more_previous").style.display = "none";
+        }
     });
 }
 
 function renderPageControl(){
     document.getElementById("page_control").style.display = "flex";
 }
-
-
-
-
-
-
-
-
-
-
-
-//
-// function handleBookings(bookings) {
-//     const currentBookings = bookings.filter(booking => booking.status === 0);
-//     const historyBookings = bookings.filter(booking => booking.status === 1);
-//
-//     // console.log("Current Bookings:");
-//     // currentBookings.forEach(booking => {
-//     //     console.log(booking); // Print each current booking
-//     // });
-//     //
-//     // console.log("History Bookings:");
-//     // historyBookings.forEach(booking => {
-//     //     console.log(booking); // Print each historical booking
-//     // });
-//
-//     displayCurrentBookings(currentBookings);
-//     // displayHistoryBookings(historyBookings);
-// }
-//
-// function displayCurrentBookings(currentBookings) {
-//     console.log('Current Bookings:', currentBookings);
-//     totalData = Math.ceil(currentBookings.length / 3) + 1;
-//     document.getElementById("noOfData").textContent = totalData;
-//     updateData(currentBookings);
-//
-// }
-//
-// function displayHistoryBookings(historyBookings) {
-//     // Handle history bookings here
-//     console.log('History Bookings:', historyBookings);
-//     // Call other functions or update UI as needed
-// }
-//
-// function updateData(data){
-// //    const list = document.getElementById("schedule_list");
-//     const startIndex = (data - 1) * dataSize;
-//     const endIndex = startIndex + dataSize;
-//     const tableBody = document.querySelector("#dataTable tbody");
-//     const dataToShow = allData.slice(startIndex, endIndex);
-//
-//     tableBody.innerHTML = "";
-//     console.log(startIndex + " " +dataToShow + " " + endIndex)
-//     displayDataAsTable(dataToShow);
-//     updateDataNumber(currentData);
-// }
-//
-// function updateDataNumber(data) {
-//     document.getElementById("currentDataNumber").textContent = data;
-// }
-//
-// const prevDataIcon = document.getElementById("prevDataIcon");
-// prevDataIcon.addEventListener("click", () => changeData(currentData))
-//
-// const nextDataIcon = document.getElementById("nextDataIcon");
-// nextDataIcon.addEventListener("click", () => changeData(currentData));
-//
-//
-// function changeData(newData) {
-//     if(newData === totalData){
-//     document.getElementById("nextDataIcon").style.pointerEvents = "none";
-//     document.getElementById("nextDataIcon").style.opacity = "0.5";
-//     }
-//     else{
-//     document.getElementById("nextDataIcon").style.pointerEvents = "auto";
-//     document.getElementById("nextDataIcon").style.opacity = "1";
-//     }
-//
-//     if (currentData !== newData) {
-//         currentData = Math.max(1, newData);
-//         updateData(currentData);
-//     }
-// }
-//
-// function displayDataAsTable(data) {
-//     const tableBody = document.querySelector("#dataTable tbody");
-//     const rowCount = data.length;
-//     if(rowCount === 0){
-//         const noDataRow = document.createElement("tr");
-//         noDataRow.innerHTML = `<td colspan="8">No Bookings available</td>`;
-//         tableBody.appendChild(noDataRow);
-//         return;
-//     }
-//
-//     data.forEach(item => {
-//         const row = document.createElement("tr");
-//
-//         row.innerHTML = `
-//             <td>${item.booking_id}</td>
-//             <td>${item.reg_no}</td>
-//             <td>${item.start}</td>
-//             <td>${item.destination}</td>
-//             <td>${item.date}</td>
-//             <td>${item.time}</td>
-//             <td>${item.seat_no}</td>
-//             <td>${item.status}</td>
-//         `;
-//
-//         tableBody.appendChild(row);
-//     });
-// }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-//function displayDataAsTable(data) {
-//    const tableBody = document.querySelector("#dataTable tbody");
-//    const rowCount = data.length;
-//    if(rowCount >=10){
-//        renderPageControl()
-//    }
-//    data.forEach(item => {
-//        const row = document.createElement("tr");
-//
-//        row.innerHTML = `
-//            <td>${item.booking_id}</td>
-//            <td>${item.schedule_id}</td>
-//            <td>${item.route_id}</td>
-//            <td>${item.date}</td>
-//            <td>${item.time}</td>
-//            <td>${item.seat_no}</td>
-//            <td>${item.price}</td>
-//            <td>
-//                <a class="bus-profile" href="./passenger_dashboard_myBookings_moreinfo.html">More info </a>
-//            </td>
-//        `;
-//
-//        tableBody.appendChild(row);
-//    });
-//}

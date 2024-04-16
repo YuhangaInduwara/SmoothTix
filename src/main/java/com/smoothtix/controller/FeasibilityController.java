@@ -15,6 +15,9 @@ import java.sql.SQLException;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.sql.Time;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Objects;
 
 
@@ -75,32 +78,38 @@ public class FeasibilityController extends HttpServlet {
         ResultSet rs;
 
         try {
-            rs = feasibilityTable.getAll();
+            rs = feasibilityTable.get_by_date(start, destination, date);
             while (rs.next()) {
-                JSONObject feasibleData = new JSONObject();
+                String busProfileId = rs.getString("bus_profile_id");
+                String timeRangesString = rs.getString("time_range");
 
-                ResultSet rs2 = busprofileTable.get_start_dest(rs.getString("bus_profile_id"));
-                if(rs2.next()){
-//                    if(Objects.equals(start, rs2.getString("start")) && Objects.equals(destination, rs2.getString("destination"))){
-//                        if(Objects.equals(rs.getString("date"), date)){
-//
-//                        }
-//                    }
+                String[] timeRanges = timeRangesString.split(",");
+                SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
+                Date givenTime = sdf.parse(time);
+
+                for (String range : timeRanges) {
+                    String[] rangeParts = range.split("-");
+                    Time startTime = Time.valueOf(rangeParts[0] + ":00:00");
+                    Time endTime = Time.valueOf(rangeParts[1] + ":00:00");
+                    System.out.println("start: " + startTime + " end: " + endTime);
+
+                    if (isBetween(givenTime, startTime, endTime)) {
+                        System.out.println("Bus profile ID " + busProfileId + " is feasible.");
+                        break;
+                    }
                 }
-                System.out.println("date1: " + date + "Date2: "+ rs.getString("date") + "time: " + time);
-                feasibleData.put("bus_profile_id", rs.getString("bus_profile_id"));
-                feasibleData.put("date", rs.getString("date"));
-                feasibleData.put("time_range", rs.getString("time_range"));
-                feasibleDataArray.put(feasibleData);
             }
 
-            System.out.println(feasibleDataArray);
             out.println(feasibleDataArray);
             response.setStatus(HttpServletResponse.SC_OK);
         }catch (Exception e) {
             e.printStackTrace();
             response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
         }
+    }
+
+    private static boolean isBetween(Date givenTime, Time startTime, Time endTime) {
+        return !givenTime.before(startTime) && !givenTime.after(endTime);
     }
 
 
