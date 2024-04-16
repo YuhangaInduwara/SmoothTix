@@ -1,8 +1,7 @@
 const p_id = "P0001";
-let currentData = 1;
-const dataSize = 3;
+let currentPage = 1;
+const pageSize = 3;
 let allData = [];
-let totalData = 1;
 
 document.addEventListener('DOMContentLoaded', function () {
    isAuthenticated().then(() => fetchAllData());
@@ -25,6 +24,7 @@ function fetchAllData(){
         .then(data => {
             allData = data;
             console.log(data);
+            updatePage(currentPage);
         })
         .catch(error => {
             console.error('Error:', error);
@@ -38,7 +38,7 @@ function updatePage(page) {
     const dataToShow = allData.slice(startIndex, endIndex);
 
     list.innerHTML = "";
-    // console.log(startIndex + " " +dataToShow + " " + endIndex)
+    console.log(startIndex + " " +dataToShow + " " + endIndex)
     displayDataAsScheduleTiles(dataToShow);
     updatePageNumber(currentPage);
 }
@@ -97,36 +97,33 @@ function displayDataAsScheduleTiles(data) {
 
     data.forEach(item => {
         console.log(item.status)
-        if(item.status === 0){
+        if(item.status !== 3){
             const scheduleElement = document.createElement("div");
             scheduleElement.classList.add("schedule_tiles");
             scheduleElement.innerHTML = `
             <div class="schedule_element_row1">
                 <div class="busRegNo">
-                    <h1 id="busRegNo">${item.reg_no}</h1>
+                    <h1 id="busRegNo">${item.booking_id}</h1>
                 </div>
                 <div>
                     <p>From: <span id="start">${item.start}</span></p>
                     <p>To: <span id="destination">${item.destination}</span></p>
                 </div>
                 <div>
-                    <p>Booking Closing Date: <span id="bookingClosingDate">${item.date}</span></p>
-                    <p>Booking Closing Time: <span id="bookingClosingTime">${item.adjusted_time}</span></p>
+                    <p>Date: <span id="bookingClosingDate">${item.date}</span></p>
+                    <p>Time: <span id="bookingClosingTime">${item.time}</span></p>
                 </div>
                 <div class="seatAvailability">
-                    <h2>Available <br> Seats</h2>
-                    <h1 id="seatAvailability">${item.available_seats}</h1>
+                    <h2>Booked <br> Seat/Seats</h2>
+                    <h1 id="seatAvailability">${item.seat_no}</h1>
                 </div>
             </div>
             <div class="schedule_element_row2">
                 <div class="routeNo">
-                    <h1 id="busRegNo">${item.route_no}</h1>
+                    <h1 id="busRegNo">${item.reg_no}</h1>
                 </div>
                 <div>
-                    <h1>Departure Time: ${item.time}</h1>
-                </div>
-                <div class="price">
-                    <h1>Rs. ${item.price_per_ride}</h1>
+                    <h1>Status: ${item.status}</h1>
                 </div>
                 <div class="addBookingBtn">
                     <button class="button" onclick="openSeatSelection('${item.schedule_id}', '${item.start}', '${item.destination}', '${item.date}', '${item.time}', '${item.available_seats}', '${item.price_per_ride}')">Book Seat</button>
