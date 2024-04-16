@@ -35,4 +35,28 @@ public class feasibilityTable {
         ResultSet rs = pst.executeQuery();
         return rs;
     }
+
+    public static ResultSet get_by_date(String start, String destination, String date) throws SQLException {
+        Connection con = dbConnection.initializeDatabase();
+        PreparedStatement pst = con.prepareStatement("SELECT\n" +
+                "    bp.bus_profile_id,\n" +
+                "    fs.time_range\n" +
+                "FROM\n" +
+                "    feasible_schedule fs\n" +
+                "JOIN\n" +
+                "    bus_profile bp ON fs.bus_profile_id = bp.bus_profile_id\n" +
+                "JOIN\n" +
+                "    bus b ON bp.bus_id = b.bus_id\n" +
+                "JOIN\n" +
+                "    route r ON b.route_id = r.route_id\n" +
+                "WHERE\n" +
+                "    r.start = ?\n" +
+                "    AND r.destination = ?\n" +
+                "    AND fs.date = ?;");
+        pst.setString(1, start);
+        pst.setString(2, destination);
+        pst.setString(3, date);
+        ResultSet rs = pst.executeQuery();
+        return rs;
+    }
 }

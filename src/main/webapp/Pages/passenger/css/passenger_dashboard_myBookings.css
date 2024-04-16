@@ -268,10 +268,11 @@ select::after {
 }
 
 .schedule_list{
-    display:flex; justify-content:center;align-items:center;flex-direction:row;gap: 10px; margin-left: 10px; margin-right: 10px;
+    display:flex; justify-content:flex-start;align-items:center;flex-direction:row;gap: 10px; margin-left: 10px; margin-right: 10px; white-space: nowrap;
 }
 
 .schedule_tiles{
+    max-width: 750px;
     border: 1px solid #cccccc;
     box-shadow: 0 0 5px rgba(0.1, 0.1, 0.1, 0.1);
     background-color: white; width: 90%; display: flex; flex-direction: column; justify-content: space-between; align-items: center; border-radius: 10px; height:150px;
@@ -624,16 +625,33 @@ label {
     margin-left: -20px;
 }
 
+.upcoming_booking_title{
+    margin-left: 20px;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-content: center;
+    gap: 20px;
+    /*margin-top: -10px;*/
+    /*margin-bottom: -10px;*/
+}
+
+.see_more{
+    margin-top: auto;
+    font-style: normal;
+    display: none;
+}
+
+h5.see_more a {
+    color: #FF0000; /* Change to the color you desire */
+}
+
+
+
+
 @keyframes spin {
     0% { transform: rotate(0deg); }
     100% { transform: rotate(360deg); }
-}
-
-.booking-container {
-    overflow-x: auto;
-    overflow-y: hidden;
-    white-space: nowrap;
-    padding-bottom: 20px; /* Add some padding to avoid cutting off the last booking tile */
 }
 
 body {

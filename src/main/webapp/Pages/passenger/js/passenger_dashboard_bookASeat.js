@@ -327,43 +327,6 @@ function toggleSeat(seatNumber) {
     updateSeatMap();
 }
 
-// function updateSeatMap() {
-//     const seatMapElement = document.getElementById('seat-map');
-//     seatMapElement.innerHTML = '';
-//     for (let rowNumber = 1; rowNumber <= rows; rowNumber++) {
-//         const rowElement = document.createElement('div');
-//         rowElement.classList.add('row');
-//         for (let seatIndex = 1; seatIndex <= seatsPerRow; seatIndex++) {
-//             const seatNumber = (rowNumber - 1) * seatsPerRow + seatIndex;
-//             const isAvailable = seatAvailabilityArray[seatNumber - 1];
-//             const seatElement = document.createElement('div');
-//             seatElement.classList.add('seat');
-//
-//             if (isAvailable === '1') {
-//                 seatElement.textContent = seatNumber;
-//                 seatElement.addEventListener('click', () => toggleSeat(seatNumber));
-//                 if (selectedSeats.includes(seatNumber)) {
-//                     seatElement.classList.add('selected');
-//                 }
-//             } else if (isAvailable === '0') {
-//                 seatElement.style.backgroundColor = 'red';
-//                 seatElement.style.color = 'white';
-//                 seatElement.textContent = seatNumber;
-//                 seatElement.classList.add('unavailable');
-//                 seatElement.setAttribute('disabled', 'true');
-//             } else{
-//                 seatElement.style.backgroundColor = 'red';
-//                 seatElement.style.color = 'white';
-//                 seatElement.textContent = 'X';
-//                 seatElement.classList.add('unavailable');
-//                 seatElement.setAttribute('disabled', 'true');
-//             }
-//             rowElement.appendChild(seatElement);
-//         }
-//         seatMapElement.appendChild(rowElement);
-//     }
-// }
-
 function updateSeatMap() {
     const seatMapElement = document.getElementById('seat-map');
     seatMapElement.innerHTML = '';
@@ -371,10 +334,18 @@ function updateSeatMap() {
         const rowElement = document.createElement('div');
         rowElement.classList.add('row');
         for (let seatIndex = 1; seatIndex <= seatsPerRow; seatIndex++) {
-            const seatNumber = (rowNumber - 1) * seatsPerRow + seatIndex;
-            const isAvailable = seatAvailabilityArray[seatNumber - 1];
             const seatElement = document.createElement('div');
             seatElement.classList.add('seat');
+
+            if(seatIndex === 3 && rowNumber !== 10){
+                const emptySeatElement = document.createElement('div');
+                emptySeatElement.classList.add('seat');
+                emptySeatElement.style.visibility = 'hidden';
+                rowElement.appendChild(emptySeatElement);
+            }
+
+            const seatNumber = (rowNumber - 1) * seatsPerRow + seatIndex;
+            const isAvailable = seatAvailabilityArray[seatNumber - 1];
 
             if (isAvailable === '1') {
                 seatElement.textContent = seatNumber;
@@ -400,6 +371,7 @@ function updateSeatMap() {
         seatMapElement.appendChild(rowElement);
     }
 }
+
 
 function payment() {
     if(totalPrice <= 0){
@@ -672,3 +644,39 @@ function resetPaymentDetails() {
     document.getElementById("declaration").checked = false;
 }
 
+// function updateSeatMap() {
+//     const seatMapElement = document.getElementById('seat-map');
+//     seatMapElement.innerHTML = '';
+//     for (let rowNumber = 1; rowNumber <= rows; rowNumber++) {
+//         const rowElement = document.createElement('div');
+//         rowElement.classList.add('row');
+//         for (let seatIndex = 1; seatIndex <= seatsPerRow; seatIndex++) {
+//             const seatNumber = (rowNumber - 1) * seatsPerRow + seatIndex;
+//             const isAvailable = seatAvailabilityArray[seatNumber - 1];
+//             const seatElement = document.createElement('div');
+//             seatElement.classList.add('seat');
+//
+//             if (isAvailable === '1') {
+//                 seatElement.textContent = seatNumber;
+//                 seatElement.addEventListener('click', () => toggleSeat(seatNumber));
+//                 if (selectedSeats.includes(seatNumber)) {
+//                     seatElement.classList.add('selected');
+//                 }
+//             } else if (isAvailable === '0') {
+//                 seatElement.style.backgroundColor = 'red';
+//                 seatElement.style.color = 'white';
+//                 seatElement.textContent = seatNumber;
+//                 seatElement.classList.add('unavailable');
+//                 seatElement.setAttribute('disabled', 'true');
+//             } else{
+//                 seatElement.style.backgroundColor = 'red';
+//                 seatElement.style.color = 'white';
+//                 seatElement.textContent = 'X';
+//                 seatElement.classList.add('unavailable');
+//                 seatElement.setAttribute('disabled', 'true');
+//             }
+//             rowElement.appendChild(seatElement);
+//         }
+//         seatMapElement.appendChild(rowElement);
+//     }
+// }
