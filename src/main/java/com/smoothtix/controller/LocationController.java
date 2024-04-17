@@ -22,47 +22,20 @@ public class LocationController extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         response.setContentType("text/html");
         PrintWriter out = response.getWriter();
-        JSONArray scheduleDataArray = new JSONArray();
-        String schedule_id = request.getHeader("schedule_id");
-//        String driver_id = request.getHeader("driver_id");
-        System.out.println(schedule_id);
+        JSONArray locationDataArray = new JSONArray();
+        String schedule_id = request.getParameter("schedule_id");
 
         try {
             ResultSet rs = locationTable.getByScheduleId(schedule_id);
-//            if(schedule_id == null && driver_id == null){
-//                rs = scheduleTable.getAll();
-//            }
-//            else if(driver_id == null){
-//                rs = scheduleTable.getByScheduleId(schedule_id);
-//            }
-//            else if(schedule_id == null){
-//                rs = scheduleTable.getByDriverId(driver_id);
-//            }
-
-//            while (rs.next()) {
-//                JSONObject scheduleData = new JSONObject();
-//                scheduleData.put("schedule_id", rs.getString("schedule_id"));
-//                scheduleData.put("date", rs.getString("date"));
-//                scheduleData.put("route_id", rs.getString("route_id"));
-//                scheduleData.put("start", rs.getString("start"));
-//                scheduleData.put("destination", rs.getString("destination"));
-//                scheduleData.put("start_time", rs.getString("start_time"));
-//                scheduleData.put("end_time", rs.getString("end_time"));
-//
-//                scheduleDataArray.put(scheduleData);
-//            }
-
             while (rs.next()) {
                 JSONObject scheduleData = new JSONObject();
-//                scheduleData.put("location_id", rs.getString("location_id"));
                 scheduleData.put("schedule_id", rs.getString("schedule_id"));
                 scheduleData.put("latitude", rs.getString("latitude"));
                 scheduleData.put("longitude", rs.getString("longitude"));
-//                System.out.println(scheduleData);
-                scheduleDataArray.put(scheduleData);
+                locationDataArray.put(scheduleData);
             }
 
-            out.println(scheduleDataArray.toString()); // Send JSON data as a response
+            out.println(locationDataArray.toString());
             response.setStatus(HttpServletResponse.SC_OK);
         }catch (Exception e) {
             e.printStackTrace();

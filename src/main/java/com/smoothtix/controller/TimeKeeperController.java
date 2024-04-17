@@ -29,6 +29,7 @@ public class TimeKeeperController extends HttpServlet {
         JSONArray timeKprDataArray = new JSONArray();
         String p_id = request.getParameter("p_id");
         String timekpr_id = request.getParameter("timekpr_id");
+        System.out.println("Tkpr p_id" + p_id);
 
         try {
             ResultSet rs;
@@ -53,6 +54,7 @@ public class TimeKeeperController extends HttpServlet {
                 timeKprData.put("stand", rs.getString("stand"));
                 timeKprDataArray.put(timeKprData);
             }
+            System.out.println("Hello_tkpr: " + timeKprDataArray);
             out.println(timeKprDataArray);
             response.setStatus(HttpServletResponse.SC_OK);
         } catch (Exception e) {
