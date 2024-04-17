@@ -18,6 +18,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 
 public class BusprofileController extends HttpServlet {
     @Override
@@ -95,10 +96,9 @@ public class BusprofileController extends HttpServlet {
     }
 
 
-
     @Override
     protected void doPut(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        response.setContentType("text/html");
+        response.setContentType("text/json");
         PrintWriter out = response.getWriter();
 
         try {
@@ -123,6 +123,7 @@ public class BusprofileController extends HttpServlet {
         }
     }
 
+
     @Override
     protected void doDelete(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         response.setContentType("text/html");
@@ -133,14 +134,16 @@ public class BusprofileController extends HttpServlet {
             int deleteSuccess = busprofileTable.delete(bus_profile_id);
 
             if (deleteSuccess >= 1) {
+                System.out.println(deleteSuccess);
                 response.setStatus(HttpServletResponse.SC_OK);
             } else {
+                System.out.println(deleteSuccess);
                 response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
             }
         } catch (Exception e) {
-            e.printStackTrace();
             response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
         }
     }
+
 
 }

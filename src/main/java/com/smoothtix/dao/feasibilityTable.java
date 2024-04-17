@@ -16,7 +16,7 @@ public class feasibilityTable {
         pst.setString(1, feasibility.getBus_id());
         pst.setDate(2, feasibility.getDate());
         pst.setString(3, feasibility.getTime_range());
-        pst.setInt(4, feasibility.getAvailability());
+        pst.setInt(4,1);
 
         int rawCount = pst.executeUpdate();
         return rawCount;

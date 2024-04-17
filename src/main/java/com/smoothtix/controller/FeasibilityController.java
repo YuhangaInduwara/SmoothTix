@@ -87,7 +87,6 @@ public class FeasibilityController extends HttpServlet {
 //                        }
 //                    }
                 }
-                System.out.println("date1: " + date + "Date2: "+ rs.getString("date") + "time: " + time);
                 feasibleData.put("bus_profile_id", rs.getString("bus_profile_id"));
                 feasibleData.put("date", rs.getString("date"));
                 feasibleData.put("time_range", rs.getString("time_range"));
