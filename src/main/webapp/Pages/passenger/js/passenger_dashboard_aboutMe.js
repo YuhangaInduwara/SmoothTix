@@ -1,6 +1,7 @@
 isAuthenticated();
 
-let p_id = ""
+fetchAllData();
+
 // Fetch all data from the database
 function fetchAllData() {
 
@@ -8,7 +9,7 @@ function fetchAllData() {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json',
-            'p_id': p_id
+            'p_id': session_p_id
         },
     })
         .then(response => {
@@ -43,7 +44,6 @@ function displayDataAsParagraphs(data) {
 
             <div class="editDeleteButtons">
              <button class="okButton" onclick="update('${item.p_id}')" style="margin-right: 10px; margin-left: 10px">Edit</button>
-             <button class="okButton" onclick="deleteEntity('${item.nic}')">Delete</button>
            </div>
         `;
 
@@ -55,7 +55,6 @@ function update(p_id){
     openForm_update();
 
     let existingData = {};
-
     const urlParams = new URLSearchParams(window.location.search);
 
     fetch('../../../passengerController', {
@@ -69,10 +68,11 @@ function update(p_id){
             if (response.ok) {
                 response.json().then(data => {
                     existingData = data[0];
+
                     console.log("existingData:", existingData);
-                     document.getElementById("header_nic").innerHTML = existingData.first_name;
-                    document.getElementById("update_fname").value = existingData.first_name;
-                    document.getElementById("update_lname").value = existingData.last_name;
+                    document.getElementById("update_first_name").value = existingData.first_name;
+                    document.getElementById("update_last_name").value = existingData.last_name;
+                    document.getElementById("header_nic").innerHTML = existingData.first_name + " " + existingData.last_name + "'s";
                     document.getElementById("update_nic").value = existingData.nic;
                     document.getElementById("update_email").value = existingData.email;
                 });
@@ -129,29 +129,29 @@ function update(p_id){
     });
 }
 
-function deleteEntity(nic){
-    fetch(`../../../passengerController`, {
-        method: 'DELETE',
-        headers: {
-            'Content-Type': 'application/json',
-            'nic': nic
-        },
-    })
-        .then(response => {
-            if (response.ok) {
-                openAlertSuccess();
-            } else if (response.status === 401) {
-                openAlertFail(response.status);
-                console.log('Delete unsuccessful');
-            } else {
-                openAlertFail(response.status);
-                console.error('Error:', response.status);
-            }
-        })
-        .catch(error => {
-            console.error('Error:', error);
-        });
-}
+//function deleteEntity(nic){
+//    fetch(`../../../passengerController`, {
+//        method: 'DELETE',
+//        headers: {
+//            'Content-Type': 'application/json',
+//            'nic': nic
+//        },
+//    })
+//        .then(response => {
+//            if (response.ok) {
+//                openAlertSuccess();
+//            } else if (response.status === 401) {
+//                openAlertFail(response.status);
+//                console.log('Delete unsuccessful');
+//            } else {
+//                openAlertFail(response.status);
+//                console.error('Error:', response.status);
+//            }
+//        })
+//        .catch(error => {
+//            console.error('Error:', error);
+//        });
+//}
 
 function openForm_update() {
     const existingForm = document.querySelector(".passenger_update_form_body");
@@ -253,7 +253,7 @@ function checkSessionStatus() {
         });
 }
 
-window.onload = function() {
-    checkSessionStatus(); // Call the function when the page loads
-    setInterval(checkSessionStatus, 60000); // Set up periodic checks
-};
+//window.onload = function() {
+//    checkSessionStatus(); // Call the function when the page loads
+//    setInterval(checkSessionStatus, 60000); // Set up periodic checks
+//};
