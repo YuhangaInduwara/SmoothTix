@@ -27,7 +27,6 @@ public class SeatAvailabilityController extends HttpServlet {
         PrintWriter out = response.getWriter();
         JSONArray seatAvailabilityDataArray = new JSONArray();
         String schedule_id = request.getParameter("schedule_id");
-//        System.out.println(schedule_id);
 
         try {
             ResultSet rs;

@@ -26,7 +26,7 @@ public class BookingController extends HttpServlet {
         JSONArray bookingDataArray = new JSONArray();
         String p_id = request.getParameter("p_id");
         String booking_id = request.getParameter("booking_id");
-        System.out.println("Booking_p_id: " +p_id);
+        System.out.println("Booking_p_id: " + booking_id);
 
         try {
             ResultSet rs;
@@ -50,6 +50,7 @@ public class BookingController extends HttpServlet {
                     JSONObject bookingData = new JSONObject();
                     bookingData.put("booking_id", rs.getString("booking_id"));
                     bookingData.put("reg_no", rs.getString("reg_no"));
+                    bookingData.put("route_no", rs.getString("route_no"));
                     bookingData.put("start", rs.getString("start"));
                     bookingData.put("destination", rs.getString("destination"));
                     bookingData.put("date", rs.getDate("date_time"));
@@ -64,12 +65,13 @@ public class BookingController extends HttpServlet {
                 while (rs.next()) {
                     JSONObject bookingData = new JSONObject();
                     bookingData.put("booking_id", rs.getString("booking_id"));
+                    bookingData.put("schedule_id", rs.getString("schedule_id"));
                     bookingData.put("reg_no", rs.getString("reg_no"));
                     bookingData.put("start", rs.getString("start"));
                     bookingData.put("destination", rs.getString("destination"));
                     bookingData.put("date", rs.getDate("date_time"));
                     bookingData.put("time", rs.getTime("date_time"));
-//                    bookingData.put("seat_no", rs.getInt("seat_no"));
+                    bookingData.put("seat_no", rs.getInt("booked_seats"));
                     bookingData.put("status", rs.getInt("status"));
                     bookingDataArray.put(bookingData);
                 }

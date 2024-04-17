@@ -209,6 +209,17 @@ public class scheduleTable {
         return rawCount;
     }
 
+    public static int updateStatus(String schedule_id, String status) throws SQLException {
+        Connection con = dbConnection.initializeDatabase();
+
+        PreparedStatement pst = con.prepareStatement("UPDATE schedule SET status=? WHERE schedule_id=?");
+        pst.setInt(1, Integer.parseInt(status));
+        pst.setString(2,schedule_id);
+
+        int rawCount = pst.executeUpdate();
+        return rawCount;
+    }
+
     public static int delete(String schedule_id) throws SQLException, ClassNotFoundException {
         Connection con = dbConnection.initializeDatabase();
         PreparedStatement pst = con.prepareStatement("DELETE FROM schedule WHERE schedule_id = ?");
@@ -216,4 +227,5 @@ public class scheduleTable {
         int rawCount = pst.executeUpdate();
         return rawCount;
     }
+
 }
