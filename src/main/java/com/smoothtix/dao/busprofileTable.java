@@ -133,6 +133,14 @@ public class busprofileTable {
         return rs;
     }
 
+    public static ResultSet getRowDetails(String bus_profile_id) throws SQLException, ClassNotFoundException {
+        Connection con = dbConnection.initializeDatabase();
+        PreparedStatement pst = con.prepareStatement("");
+        pst.setString(1, bus_profile_id);
+        ResultSet rs = pst.executeQuery();
+        return rs;
+    }
+
     public static ResultSet get_start_dest(String bus_profile_id) throws SQLException, ClassNotFoundException {
         Connection con = dbConnection.initializeDatabase();
         PreparedStatement pst = con.prepareStatement("SELECT\n" +

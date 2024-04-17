@@ -72,11 +72,48 @@ public class scheduleTable {
                 "    route r ON b.route_id = r.route_id\n" +
                 "WHERE \n" +
                 "    d.driver_id = ?\n" +
-                "    AND s.date_time > CURRENT_TIMESTAMP()\n" +
+                "    AND s.date_time > DATE_SUB(CURRENT_TIMESTAMP(), INTERVAL 1 HOUR)\n" +
+                "    AND (s.status = 0 OR s.status = 1)\n" +
                 "ORDER BY \n" +
                 "    s.date_time ASC\n" +
                 "LIMIT 1");
         pst.setString(1,driver_id);
+        ResultSet rs = pst.executeQuery();
+        return rs;
+    }
+
+    public static ResultSet getByConductorId(String conductor_id) throws SQLException, ClassNotFoundException {
+        Connection con = dbConnection.initializeDatabase();
+        PreparedStatement pst = con.prepareStatement("SELECT \n" +
+                "    s.schedule_id,\n" +
+                "    b.reg_no,\n" +
+                "    CONCAT(c.first_name, ' ', c.last_name) AS driver_name,\n" +
+                "    r.route_no,\n" +
+                "    CONCAT(r.start, ' - ', r.destination) AS route,\n" +
+                "    s.date_time,\n" +
+                "    s.status\n" +
+                "FROM \n" +
+                "    conductor co\n" +
+                "JOIN \n" +
+                "    bus_profile bp ON co.conductor_id = bp.conductor_id\n" +
+                "JOIN \n" +
+                "    bus b ON bp.bus_id = b.bus_id\n" +
+                "JOIN \n" +
+                "    driver d ON bp.driver_id = d.driver_id\n" +
+                "JOIN \n" +
+                "    passenger c ON d.p_id = c.p_id\n" +
+                "JOIN \n" +
+                "    schedule s ON bp.bus_profile_id = s.bus_profile_id  \n" +
+                "JOIN \n" +
+                "    route r ON b.route_id = r.route_id\n" +
+                "WHERE \n" +
+                "    co.conductor_id = ?\n" +
+                "    AND s.date_time > DATE_SUB(CURRENT_TIMESTAMP(), INTERVAL 1 HOUR)\n" +
+                "    AND (s.status = 0 OR s.status = 1)\n" +
+                "ORDER BY \n" +
+                "    s.date_time ASC\n" +
+                "LIMIT 1");
+        pst.setString(1,conductor_id);
         ResultSet rs = pst.executeQuery();
         return rs;
     }
@@ -96,6 +133,7 @@ public class scheduleTable {
 
     public static ResultSet getAll() throws SQLException, ClassNotFoundException {
         Connection con = dbConnection.initializeDatabase();
+        System.out.println("hello_schedule");
         PreparedStatement pst = con.prepareStatement("SELECT \n" +
                 "    s.schedule_id, \n" +
                 "    r_start.start AS start, \n" +

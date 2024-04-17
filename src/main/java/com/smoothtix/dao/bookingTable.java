@@ -93,16 +93,74 @@ public class bookingTable {
 //                        "WHERE b.p_id = ?" +
 //                        "ORDER BY s.date_time;"
 
+//                "SELECT b.booking_id, bu.reg_no, s.date_time, r.start, r.destination, b.status " +
+//                        "FROM booking b " +
+//                        "JOIN schedule s ON b.schedule_id = s.schedule_id " +
+//                        "JOIN bus_profile bp ON s.bus_profile_id = bp.bus_profile_id " +
+//                        "JOIN bus bu ON bp.bus_id = bu.bus_id " +
+//                        "JOIN route r ON bu.route_id = r.route_id " +
+//                        "WHERE b.p_id = ? " +
+//                        "ORDER BY s.date_time;"
+                "SELECT \n" +
+                        "    b.booking_id, \n" +
+                        "    bu.reg_no, \n" +
+                        "    s.date_time, \n" +
+                        "    r.start, \n" +
+                        "    r.destination, \n" +
+                        "    b.status, \n" +
+                        "    GROUP_CONCAT(bs.seat_no) AS booked_seats\n" +
+                        "FROM \n" +
+                        "    booking b \n" +
+                        "JOIN \n" +
+                        "    schedule s ON b.schedule_id = s.schedule_id \n" +
+                        "JOIN \n" +
+                        "    bus_profile bp ON s.bus_profile_id = bp.bus_profile_id \n" +
+                        "JOIN \n" +
+                        "    bus bu ON bp.bus_id = bu.bus_id \n" +
+                        "JOIN \n" +
+                        "    route r ON bu.route_id = r.route_id \n" +
+                        "JOIN \n" +
+                        "    booked_seats bs ON b.booking_id = bs.booking_id\n" +
+                        "WHERE \n" +
+                        "    b.p_id = ?\n" +
+                        "GROUP BY \n" +
+                        "    b.booking_id, \n" +
+                        "    bu.reg_no, \n" +
+                        "    s.date_time, \n" +
+                        "    r.start, \n" +
+                        "    r.destination, \n" +
+                        "    b.status\n" +
+                        "ORDER BY \n" +
+                        "    s.date_time;"
+        );
+        pst.setString(1,p_id);
+        ResultSet rs = pst.executeQuery();
+        return rs;
+    }
+
+    public static ResultSet getByBooking_id(String booking_id) throws SQLException, ClassNotFoundException {
+        Connection con = dbConnection.initializeDatabase();
+        PreparedStatement pst = con.prepareStatement(
+//                "SELECT b.booking_id, bs.seat_no, bu.reg_no, s.date_time, r.start, r.destination, b.status" +
+//                        "FROM booking b" +
+//                        "JOIN booked_seats bs ON bs.booking_id = b.booking_id" +
+//                        "JOIN schedule s ON b.schedule_id = s.schedule_id" +
+//                        "JOIN bus_profile bp ON s.bus_profile_id = bp.bus_profile_id" +
+//                        "JOIN bus bu ON bp.bus_id = bu.bus_id" +
+//                        "JOIN route r ON bu.route_id = r.route_id" +
+//                        "WHERE b.p_id = ?" +
+//                        "ORDER BY s.date_time;"
+
                 "SELECT b.booking_id, bu.reg_no, s.date_time, r.start, r.destination, b.status " +
                         "FROM booking b " +
                         "JOIN schedule s ON b.schedule_id = s.schedule_id " +
                         "JOIN bus_profile bp ON s.bus_profile_id = bp.bus_profile_id " +
                         "JOIN bus bu ON bp.bus_id = bu.bus_id " +
                         "JOIN route r ON bu.route_id = r.route_id " +
-                        "WHERE b.p_id = ? " +
+                        "WHERE b.booking_id = ? " +
                         "ORDER BY s.date_time;"
         );
-        pst.setString(1,p_id);
+        pst.setString(1,booking_id);
         ResultSet rs = pst.executeQuery();
         return rs;
     }
@@ -123,6 +181,16 @@ public class bookingTable {
 //        return rawCount;
 //    }
 
+    public static int update_status(String booking_id, Boolean status) throws SQLException, ClassNotFoundException{
+        System.out.println("Booking Id: " + booking_id + " Status: " + status);
+        Connection con = dbConnection.initializeDatabase();
+        PreparedStatement pst = con.prepareStatement("UPDATE booking SET status=? WHERE booking_id=?");
+        pst.setBoolean(1,status);
+        pst.setString(2,booking_id);
+        int rawCount = pst.executeUpdate();
+        return rawCount;
+    }
+
     public static int delete(String booking_id) throws SQLException, ClassNotFoundException {
         Connection con = dbConnection.initializeDatabase();
         PreparedStatement pst = con.prepareStatement("DELETE FROM booking WHERE booking_id = ?");
@@ -130,4 +198,6 @@ public class bookingTable {
         int rawCount = pst.executeUpdate();
         return rawCount;
     }
+
+
 }

@@ -21,7 +21,7 @@ public class locationTable {
 
     private static String generateLocationID() throws SQLException, ClassNotFoundException {
         Connection con = dbConnection.initializeDatabase();
-        String query = "SELECT MAX(CAST(SUBSTRING(location_id, 2) AS SIGNED)) + 1 AS next_location_id FROM location";
+        String query = "SELECT COALESCE(MAX(CAST(SUBSTRING(location_id, 2) AS SIGNED)), 0) + 1 AS next_location_id FROM location";
         Statement stmt = con.createStatement();
         ResultSet rs = ((Statement) stmt).executeQuery(query);
 
@@ -30,7 +30,7 @@ public class locationTable {
             nextLocationID = rs.getInt("next_location_id");
         }
 
-        return "L" + String.format("%03d", nextLocationID);
+        return "L" + String.format("%04d", nextLocationID);
     }
 
     public static ResultSet getByScheduleId(String schedule_id) throws SQLException, ClassNotFoundException {

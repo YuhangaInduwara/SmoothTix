@@ -9,7 +9,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.json.JSONArray;
 import org.json.JSONObject;
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -40,7 +39,7 @@ public class BusController extends HttpServlet {
                 busData.put("reg_no", rs.getString("reg_no"));
                 busData.put("route_id", rs.getString("route_id"));
                 busData.put("no_of_Seats", rs.getInt("no_of_Seats"));
-                busData.put("reveiw_points", rs.getFloat("reveiw_points"));
+                busData.put("review_points", rs.getFloat("review_points"));
                 busDataArray.put(busData);
             }
 
