@@ -1,5 +1,6 @@
-isAuthenticated();
-fetchPassengerData();
+document.addEventListener('DOMContentLoaded', function () {
+   isAuthenticated().then(() => fetchPassengerData());
+});
 
 function fetchPassengerData() {
 console.log(session_p_id)
