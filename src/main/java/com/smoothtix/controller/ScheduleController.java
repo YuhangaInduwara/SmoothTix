@@ -130,24 +130,29 @@ public class ScheduleController extends HttpServlet {
     @Override
     protected void doPut(HttpServletRequest request, HttpServletResponse response) {
         response.setContentType("text/html");
-//        PrintWriter out = response.getWriter();
+        String schedule_id = request.getParameter("schedule_id");
+        String status = request.getParameter("status");
+        int updateSuccess = 0;
 
         try {
-            Gson gson = new Gson();
+            if(status == null){
+                Gson gson = new Gson();
 
-            String schedule_id = request.getHeader("schedule_id");
-
-            BufferedReader reader = request.getReader();
-            Schedule schedule = gson.fromJson(reader, Schedule.class);
-
-
-            int updateSuccess = scheduleTable.update(schedule_id, schedule);
+                BufferedReader reader = request.getReader();
+                Schedule schedule = gson.fromJson(reader, Schedule.class);
+                updateSuccess = scheduleTable.update(schedule_id, schedule);
+            }
+            else{
+                System.out.println(schedule_id + " " + status);
+                updateSuccess = scheduleTable.updateStatus(schedule_id, status);
+            }
 
             if (updateSuccess >= 1) {
                 response.setStatus(HttpServletResponse.SC_OK);
             } else {
                 response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
             }
+
         } catch (Exception e) {
             e.printStackTrace();
             response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);

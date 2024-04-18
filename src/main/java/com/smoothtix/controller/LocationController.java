@@ -49,6 +49,7 @@ public class LocationController extends HttpServlet {
         PrintWriter out = response.getWriter();
 
         try {
+//            System.out.println("hello_location");
             Gson gson = new Gson();
 
             BufferedReader reader = request.getReader();
