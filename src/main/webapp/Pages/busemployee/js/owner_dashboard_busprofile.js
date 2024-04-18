@@ -316,7 +316,7 @@ function updateRow(bus_profile_id) {
 // Handle form submission for updating bus profile data
 document.getElementById("busprofileUpdateForm").addEventListener("submit", function(event) {
     event.preventDefault();
-
+    const bus_profile_id = document.getElementById("header_bus_profile_id").textContent;
     const reg_no = document.getElementById("update_bus_reg_no").value;
     const driver_nic = document.getElementById("update_driver_nic").value;
     const conductor_nic = document.getElementById("update_conductor_nic").value;
@@ -356,88 +356,6 @@ document.getElementById("busprofileUpdateForm").addEventListener("submit", funct
         });
     });
 
-
-
-//function updateRow(bus_profile_id){
-//    openForm_update();
-//
-//    let existingData = {};
-//
-//    const urlParams = new URLSearchParams(window.location.search);
-//
-//    document.getElementById("header_bus_profile_id").innerHTML = bus_profile_id
-//
-//    fetch(`${ url }/busprofileController`, {
-//        method: 'GET',
-//        headers: {
-//            'Content-Type': 'application/json',
-//            'bus_profile_id': bus_profile_id
-//        },
-//    })
-//        .then(response => {
-//            if (response.ok) {
-//                response.json().then(data => {
-//                    existingData = data[0];
-//                    console.log("existingData:", existingData);
-//
-//                    document.getElementById("update_bus_profile_id").value = existingData.bus_profile_id;
-//                    document.getElementById("update_bus_id").value = existingData.bus_id;
-//                    document.getElementById("update_driver_id").value = existingData.driver_id;
-//                    document.getElementById("update_conductor_id").value = existingData.conductor_id;
-//
-//                });
-//            } else if (response.status === 401) {
-//                console.log('Unauthorized');
-//            } else {
-//                console.error('Error:', response.status);
-//            }
-//        })
-//        .catch(error => {
-//            console.error('Error:', error);
-//        });
-//
-//    document.getElementById("busprofileUpdateForm").addEventListener("submit", function(event) {
-//        event.preventDefault();
-//
-//        const bus_profile_id = document.getElementById("update_bus_profile_id").value;
-//        const bus_id = document.getElementById("update_bus_id").value;
-//        const driver_id = document.getElementById("update_driver_id").value;
-//        const conductor_id = document.getElementById("update_conductor_id").value;
-//
-//        const updatedData = {
-//            bus_profile_id: bus_profile_id,
-//            bus_id: bus_id,
-//            driver_id: driver_id,
-//            conductor_id: conductor_id,
-//        };
-//
-//        const jsonData = JSON.stringify(updatedData);
-//
-//    fetch(`${ url }/busprofileController`, {
-//            method: 'PUT',
-//            headers: {
-//                'Content-Type': 'application/json',
-//                'bus_profile_id': bus_profile_id
-//            },
-//            body: jsonData
-//        })
-//            .then(response => {
-//                if (response.ok) {
-//                    closeForm_update();
-//                    openAlertSuccess();
-//                } else if (response.status === 401) {
-//                    openAlertFail(response.status);
-//                    console.log('Update unsuccessful');
-//                } else {
-//                    openAlertFail(response.status);
-//                    console.error('Error:', response.status);
-//                }
-//            })
-//            .catch(error => {
-//                console.error('Error:', error);
-//            });
-//    });
-//}
 
  function deleteRow() {
      fetch(`${ url }/busprofileController`, {

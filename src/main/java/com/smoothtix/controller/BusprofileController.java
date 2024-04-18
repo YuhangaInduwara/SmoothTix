@@ -98,20 +98,26 @@ public class BusprofileController extends HttpServlet {
 
     @Override
     protected void doPut(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        response.setContentType("text/json");
+        response.setContentType("application/json");
         PrintWriter out = response.getWriter();
 
         try {
             Gson gson = new Gson();
-
-            String bus_profile_id = request.getHeader("bus_profile_id");
-
+            String busProfileId = request.getHeader("bus_profile_id");
+            System.out.println(busProfileId);
             BufferedReader reader = request.getReader();
             Busprofile busprofile = gson.fromJson(reader, Busprofile.class);
 
+            // Retrieve bus_id, driver_id, and conductor_id based on provided reg_no, driver_nic, and conductor_nic
+            String busId = busprofileTable.retrieveBusId(busprofile.getBus_id());
+            System.out.println(busId);
+            String driverId = busprofileTable.retrieveDriverId(busprofile.getDriver_id());
+            System.out.println(driverId);
+            String conductorId = busprofileTable.retrieveConductorId(busprofile.getConductor_id());
 
-            int updateSuccess = busprofileTable.update(bus_profile_id, busprofile);
-
+            // Update bus_profile table with retrieved IDs
+            int updateSuccess = busprofileTable.update(busProfileId, busId, driverId, conductorId);
+            System.out.println(updateSuccess);
             if (updateSuccess >= 1) {
                 response.setStatus(HttpServletResponse.SC_OK);
             } else {
@@ -122,6 +128,7 @@ public class BusprofileController extends HttpServlet {
             response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
         }
     }
+
 
 
     @Override
