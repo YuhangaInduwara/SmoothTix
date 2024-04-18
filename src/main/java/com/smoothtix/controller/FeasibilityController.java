@@ -98,6 +98,7 @@ public class FeasibilityController extends HttpServlet {
                         break;
                     }
                 }
+
             }
 
             out.println(feasibleDataArray);
