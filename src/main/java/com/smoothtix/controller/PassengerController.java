@@ -14,6 +14,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.ResultSet;
+import static com.smoothtix.controller.PasswordHash.checkPassword;
 
 public class PassengerController extends HttpServlet {
     @Override
@@ -25,9 +26,25 @@ public class PassengerController extends HttpServlet {
         String flag = request.getHeader("flag");
         String nic = request.getParameter("nic");
         String privilege_level = request.getHeader("privilege_level");
+        String password = request.getHeader("password");
 
         try {
             ResultSet rs = null;
+            System.out.println("hello");
+            if(p_id != null && password != null){
+                String hashedpwd = passengerTable.getPassword(p_id);
+                System.out.println("hasedpwd = " + hashedpwd);
+                if(checkPassword(password, hashedpwd)){
+                    response.setStatus(HttpServletResponse.SC_OK);
+                    System.out.println("password matched");
+                    return;
+                }
+                else{
+                    response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+                    System.out.println("password not matched");
+                    return;
+                }
+            }
             if(p_id == null){
                 if(flag == null){
                     if(nic == null){
@@ -57,6 +74,7 @@ public class PassengerController extends HttpServlet {
                 passengerData.put("last_name", rs.getString("last_name"));
                 passengerData.put("nic", rs.getString("nic"));
                 passengerData.put("email", rs.getString("email"));
+                passengerData.put("password", rs.getString("password"));
                 passengerData.put("flag", rs.getBoolean("flag"));
                 passengerData.put("privilege_level", rs.getInt("privilege_level"));
                 passengerDataArray.put(passengerData);
@@ -64,6 +82,7 @@ public class PassengerController extends HttpServlet {
 
             out.println(passengerDataArray.toString());
             response.setStatus(HttpServletResponse.SC_OK);
+            System.out.println("methentath awwada");
         }catch (Exception e) {
             e.printStackTrace();
             response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
@@ -78,13 +97,16 @@ public class PassengerController extends HttpServlet {
         try {
             Gson gson = new Gson();
             String p_id = request.getHeader("p_id");
+            System.out.println(p_id);
 
             BufferedReader reader = request.getReader();
             Passenger passenger = gson.fromJson(reader, Passenger.class);
             int updateSuccess = 0;
             if(passenger.get_password() != null && !passenger.get_password().isEmpty()){
+                System.out.println(passenger.get_password());
                 String hashedPassword = PasswordHash.hashPassword(passenger.get_password());
                 passenger.set_password(hashedPassword);
+                System.out.println(hashedPassword);
                 updateSuccess = passengerTable.updatePassword(p_id, passenger);
             }
             else if(passenger.get_flag() != null){
