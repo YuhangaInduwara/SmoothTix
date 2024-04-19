@@ -7,6 +7,8 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+
 import org.json.JSONArray;
 import org.json.JSONObject;
 import java.io.BufferedReader;
@@ -23,13 +25,18 @@ public class BusController extends HttpServlet {
 
         String bus_id = request.getHeader("bus_id");
 
+        HttpSession session = request.getSession();
+        String p_id = (String) session.getAttribute("p_id"); // Retrieve p_id from session
+        System.out.println(p_id);
+
         try {
             ResultSet rs = null;
-            if(bus_id == null){
-                rs = busTable.getAll();
-            }
-            else{
+            if (bus_id != null) {
                 rs = busTable.get(bus_id);
+            } else if (p_id != null) {
+                rs = busTable.getByOwner(p_id); // Filter by p_id instead of owner_id
+            } else {
+                rs = busTable.getAll();
             }
 
             while (rs.next()) {
@@ -45,11 +52,12 @@ public class BusController extends HttpServlet {
 
             out.println(busDataArray.toString()); // Send JSON data as a response
             response.setStatus(HttpServletResponse.SC_OK);
-        }catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
             response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
         }
     }
+
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

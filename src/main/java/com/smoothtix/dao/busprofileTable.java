@@ -93,7 +93,7 @@ public class busprofileTable {
         ResultSet rs = pst.executeQuery();
         return rs;
     }
-    public static ResultSet getAllDetails() throws SQLException, ClassNotFoundException {
+    public static ResultSet getAllDetails(String p_id) throws SQLException, ClassNotFoundException {
         Connection con = dbConnection.initializeDatabase();
         PreparedStatement pst = con.prepareStatement("SELECT\n" +
                 "    bp.bus_profile_id,\n" +
@@ -122,10 +122,18 @@ public class busprofileTable {
                 "LEFT JOIN\n" +
                 "    passenger p_conductor ON c.p_id = p_conductor.p_id\n" +
                 "LEFT JOIN\n" +
-                "    passenger p_driver ON d.p_id = p_driver.p_id;\n");
+                "    passenger p_driver ON d.p_id = p_driver.p_id\n" +
+                "JOIN\n" +
+                "    bus bu ON bp.bus_id = bu.bus_id\n" +
+                "JOIN\n" +
+                "    owner o ON bu.owner_id = o.owner_id\n" +
+                "WHERE\n" +
+                "    o.p_id = ?;");
+        pst.setString(1, p_id);
         ResultSet rs = pst.executeQuery();
         return rs;
     }
+
     public static ResultSet getAll() throws SQLException, ClassNotFoundException {
         Connection con = dbConnection.initializeDatabase();
         PreparedStatement pst = con.prepareStatement("SELECT * FROM bus_profile");

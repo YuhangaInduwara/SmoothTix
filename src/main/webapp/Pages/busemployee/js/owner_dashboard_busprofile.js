@@ -14,27 +14,51 @@ function refreshPage() {
 }
 function fetchAllData() {
     document.getElementById("userName").textContent = session_user_name;
-    fetch(`${ url }/busprofileController`, {
+    const authToken = localStorage.getItem('jwtToken');
+
+    // Validate the user session and get user data including p_id
+    fetch(`${url}/loginController?action=validate`, {
         method: 'GET',
         headers: {
-            'Content-Type': 'application/json'
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${authToken}`
         },
     })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error(`Failed to validate session: ${response.status}`);
+        }
+        return response.json();
+    })
+    .then(userData => {
+        const p_id = userData.p_id;
+
+        // Fetch bus data using p_id
+        fetch(`${ url }/busprofileController`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${authToken}`,
+                'p_id': p_id
+            },
+        })
         .then(response => {
-            if (response.ok) {
-                return response.json();
-            } else {
-                console.error('Error:', response.status);
+            if (!response.ok) {
+                throw new Error(`Failed to fetch bus data: ${response.status}`);
             }
+            return response.json();
         })
         .then(data => {
             allData = data;
-            console.log(allData)
-            updatePage(currentPage,false);
+            updatePage(currentPage);
         })
         .catch(error => {
-            console.error('Error:', error);
+            console.error('Error fetching bus data:', error);
         });
+    })
+    .catch(error => {
+        console.error('Error validating session:', error);
+    });
 }
 
 

@@ -11,6 +11,8 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -26,8 +28,12 @@ public class BusprofileController extends HttpServlet {
         response.setContentType("text/html");
         PrintWriter out = response.getWriter();
 
+        HttpSession session = request.getSession();
+        String p_id = (String) session.getAttribute("p_id"); // Retrieve p_id from session
+        System.out.println(p_id);
+
         try {
-            ResultSet rs = busprofileTable.getAllDetails();
+            ResultSet rs = busprofileTable.getAllDetails(p_id);
 
             JSONArray busprofileDataArray = new JSONArray();
             while (rs.next()) {
