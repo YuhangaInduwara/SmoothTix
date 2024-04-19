@@ -277,4 +277,34 @@ public class busprofileTable {
         int rawCount = pst.executeUpdate();
         return rawCount;
     }
+
+    public static ResultSet getBPbyc_id(String conductor_id) throws SQLException {
+        Connection con = dbConnection.initializeDatabase();
+        PreparedStatement pst = con.prepareStatement("SELECT \n" +
+                "    bu.reg_no, \n" +
+                "    CONCAT(pd.first_name, ' ', pd.last_name) AS driver_name,\n" +
+                "    CONCAT(pc.first_name, ' ', pc.last_name) AS conductor_name,\n" +
+                "    r.route_no,\n" +
+                "    r.start,\n" +
+                "    r.destination\n" +
+                "FROM \n" +
+                "    bus_profile bp\n" +
+                "JOIN \n" +
+                "    bus bu ON bp.bus_id = bu.bus_id\n" +
+                "JOIN \n" +
+                "    driver d ON bp.driver_id = d.driver_id\n" +
+                "JOIN \n" +
+                "    passenger pd ON d.p_id = pd.p_id\n" +
+                "JOIN \n" +
+                "    conductor c ON bp.conductor_id = c.conductor_id\n" +
+                "JOIN \n" +
+                "    passenger pc ON c.p_id = pc.p_id\n" +
+                "JOIN \n" +
+                "    route r ON bu.route_id = r.route_id\n" +
+                "WHERE \n" +
+                "    bp.conductor_id = ?;");
+        pst.setString(1,conductor_id);
+        ResultSet rs = pst.executeQuery();
+        return rs;
+    }
 }

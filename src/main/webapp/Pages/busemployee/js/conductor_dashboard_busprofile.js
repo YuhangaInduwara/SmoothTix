@@ -1,9 +1,10 @@
-document.addEventListener('DOMContentLoaded', function () {
-   isAuthenticated().then(() => fetchAllData());
-});
-function fetchAllData() {
+//document.addEventListener('DOMContentLoaded', function () {
+//   isAuthenticated().then(() => fetchAllData());
+//});
+fetchConductorId();
+function fetchConductorId() {
     document.getElementById("userName").textContent = session_user_name;
-    fetch(`${ url }/busprofileController`, {
+    fetch(`${ url }/conductorController?p_id=${session_p_id}`, {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json'
@@ -17,22 +18,52 @@ function fetchAllData() {
                 }
             })
             .then(data => {
-                if (data && data.length > 0) {
+            console.log(data[0].conductor_id);
+            fetchAllData(data[0].conductor_id)
+//                if (data && data.length > 0) {
                     displayDataAsForms(data);
+//                } else {
+//                    console.log('No data available.');
+//                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+        }
+function fetchAllData(conductor_id) {
+    document.getElementById("userName").textContent = session_user_name;
+    fetch(`${ url }/busprofileController?conductor_id=${conductor_id}`, {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+    })
+        .then(response => {
+                if (response.ok) {
+                    return response.json();
                 } else {
-                    console.log('No data available.');
+                    throw new Error('Error fetching data:', response.status);
                 }
+            })
+            .then(data => {
+//                if (data && data.length > 0) {
+                    displayDataAsForms(data);
+//                } else {
+//                    console.log('No data available.');
+//                }
             })
             .catch(error => {
                 console.error('Error:', error);
             });
         }
 
+
 function displayDataAsForms(data) {
     const formContainer = document.getElementById("formContainer");
     formContainer.innerHTML = ""; // Clear existing forms
 
     data.forEach((item, index) => {
+    console.log(item);
         const form = document.createElement("div");
         form.classList.add("box");
 
@@ -45,7 +76,7 @@ function displayDataAsForms(data) {
         innerForm.id = `form${index + 1}`;
 
         const inputs = [
-            { label: "Bus Number:", key: "bus_registration_no" },
+            { label: "Bus Number:", key: "reg_no" },
             { label: "Route:", key: "route" },
             { label: "Conductor's Name:", key: "conductor_name" },
             { label: "Driver's Name:", key: "driver_name" }
