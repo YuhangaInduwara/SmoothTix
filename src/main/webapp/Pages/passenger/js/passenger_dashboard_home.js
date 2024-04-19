@@ -1,36 +1,92 @@
-<<<<<<< HEAD
-isAuthenticated();
 
  function createForm() {
-        const form_add = document.createElement('div');
-        form_add.classList.add('bus_add_form_body');
+    const form_add = document.createElement('div');
+    form_add.classList.add('bus_add_form_body');
 
-        var form = `
-            <div class="bus_form_left">
-                <div class="form_div">
-                    <label for="owner_id" class="bus_form_title">Owner NIC <span class="reg_form_require">*</span></label>
-                    <input type="text" name="owner_id" id="owner_id" class="form_data" placeholder="Enter Owner NIC" required="required" />
-                </div>
-                <div class="form_div">
-                    <label for="reg_no" class="bus_form_title">Registration No <span class="bus_form_require">*</span></label>
-                    <input type="text" name="reg_no" id="reg_no" class="form_data" placeholder="Enter Registration No" required="required" />
-                </div>
-                <div class="form_div">
-                    <label for="route_id" class="bus_form_title">Route Id <span class="bus_form_require">*</span></label>
-                    <input type="text" name="route_id" id="route_id" class="form_data" placeholder="Enter Route_id" required="required" />
-                </div>
-                <div class="form_div">
-                    <label for="no_of_Seats" class="bus_form_title">Number of Seats <span class="bus_form_require">*</span></label>
-                    <input type="number" name="no_of_Seats" id="no_of_Seats" class="form_data" placeholder="Enter Number of Seats" required="required" />
-                </div>
+    var form = `
+        <div class="bus_form_left">
+            <div class="form_div">
+                <label for="reg_no" class="bus_form_title">Registration No <span class="bus_form_require">*</span></label>
+                <input type="text" name="reg_no" id="reg_no" class="form_data" placeholder="Enter Registration No" required="required" />
             </div>
-        `;
+        <div class="form_div">
+            <label for="route_id" class="bus_form_title">Route Id <span class="bus_form_require">*</span></label>
+            <input type="text" name="route_id" id="route_id" class="form_data" placeholder="Enter Route_id" required="required" oninput="showSuggestions1(event)" />
+            <ul id="bus_route_suggestions" class="autocomplete-list"></ul>
+        </div>
+            <div class="form_div">
+                <label for="no_of_Seats" class="bus_form_title">Number of Seats <span class="bus_form_require">*</span></label>
+                <input type="number" name="no_of_Seats" id="no_of_Seats" class="form_data" placeholder="Enter Number of Seats" required="required" />
+            </div>
+        </div>
+    `;
 
-        form_add.innerHTML = form.replace(/id="/g, 'id="add_');
-        const formContainer_add = document.getElementById('formContainer_add');
-        formContainer_add.appendChild(form_add.cloneNode(true)); // Clone the form
+    form_add.innerHTML = form.replace(/id="/g, 'id="add_');
+    const formContainer_add = document.getElementById('formContainer_add');
+    formContainer_add.appendChild(form_add.cloneNode(true)); // Clone the form
 
+}
+
+function showSuggestions1(event) {
+    const input = event.target;
+    const inputValue = input.value.toUpperCase();
+    const suggestionsContainer = document.getElementById(`autocomplete-container1`);
+    if(inputValue === ""){
+        suggestionsContainer.innerHTML = '';
     }
+    else {
+        fetch(`${url}/routeController`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+        })
+            .then(response => {
+                if (response.ok) {
+                    return response.json();
+                } else {
+                    console.error('Error:', response.status);
+                    throw new Error(`HTTP error! Status: ${response.status}`);
+                }
+            })
+            .then(data => {
+                const suggestions = data.map(item => {
+                    return {
+                        route_id: item.route_id,
+                        start: item.start,
+                        destination: item.destination
+                    };
+                });
+                suggestionsContainer.innerHTML = '';
+                const filteredSuggestions = suggestions.filter(suggestion =>
+                    suggestion.route_id.toUpperCase().includes(inputValue)
+                );
+                suggestionsContainer.style.maxHeight = '200px';
+                suggestionsContainer.style.overflowY = 'auto';
+                suggestionsContainer.style.width = '100%';
+                suggestionsContainer.style.left = `18px`;
+                if (filteredSuggestions.length === 0) {
+                    const errorMessage = document.createElement('li');
+                    errorMessage.textContent = 'No suggestions found';
+                    suggestionsContainer.appendChild(errorMessage);
+                } else {
+                    filteredSuggestions.forEach(suggestion => {
+                        const listItem = document.createElement('li');
+                        listItem.classList.add('autocomplete-list-item');
+                        listItem.textContent = `${suggestion.route_id} - ${suggestion.start} to ${suggestion.destination}`;
+                        listItem.addEventListener('click', () => {
+                            input.value = suggestion.route_id;
+                            suggestionsContainer.innerHTML = '';
+                        });
+                        suggestionsContainer.appendChild(listItem);
+                    });
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+    }
+}
 
 
 function openForm_add() {
@@ -78,14 +134,12 @@ function closeAlertFail() {
 // Add new bus to the database
 document.getElementById("busRegForm").addEventListener("submit", function(event) {
     event.preventDefault();
-    const owner_id = document.getElementById("add_owner_id").value;
     const reg_no = document.getElementById("add_reg_no").value;
     const route_id = document.getElementById("add_route_id").value;
     const no_of_Seats = document.getElementById("add_no_of_Seats").value;
 
 
     const userData = {
-        owner_id: owner_id,
         reg_no: reg_no,
         route_id: route_id,
         no_of_Seats: no_of_Seats,
@@ -96,7 +150,8 @@ document.getElementById("busRegForm").addEventListener("submit", function(event)
     fetch(`${ url }/busController`, {
         method: 'POST',
         headers: {
-            'Content-Type': 'application/json'
+            'Content-Type': 'application/json',
+            'p_id': session_p_id
         },
         body: jsonData
     })
@@ -117,7 +172,7 @@ document.getElementById("busRegForm").addEventListener("submit", function(event)
             console.error('Error:', error);
         });
 });
-=======
+
 document.addEventListener('DOMContentLoaded', function () {
     isAuthenticated().then(() => init_page());
 });
@@ -167,4 +222,3 @@ function init_page(){
 }
 
 
->>>>>>> f0f64fb237bfb6faf9fe101d39e8331dceb8b6c9

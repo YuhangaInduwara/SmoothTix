@@ -60,9 +60,6 @@ public class LoginController extends HttpServlet {
                                 .compact();
                         response.setHeader("Authorization", "Bearer " + jwtToken);
 
-                        HttpSession session = request.getSession();
-                        session.setAttribute("p_id", resultset.getString("p_id"));
-
                         JSONObject userData = new JSONObject();
                         userData.put("user_name", resultset.getString("first_name") + " " + resultset.getString("last_name"));
                         userData.put("nic", login.get_nic());

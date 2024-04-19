@@ -28,9 +28,7 @@ public class BusprofileController extends HttpServlet {
         response.setContentType("text/html");
         PrintWriter out = response.getWriter();
 
-        HttpSession session = request.getSession();
-        String p_id = (String) session.getAttribute("p_id"); // Retrieve p_id from session
-        System.out.println(p_id);
+        String p_id = request.getHeader("p_id");
 
         try {
             ResultSet rs = busprofileTable.getAllDetails(p_id);

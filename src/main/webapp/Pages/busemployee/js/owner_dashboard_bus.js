@@ -5,6 +5,7 @@ const pageSize = 10;
 let dataSearch = [];
 let allData = [];
 
+
 document.addEventListener('DOMContentLoaded', function () {
     isAuthenticated().then(() => fetchAllData());
 });
@@ -15,51 +16,26 @@ function refreshPage() {
 // Fetch all data from the database
 function fetchAllData() {
     document.getElementById("userName").textContent = session_user_name;
-    const authToken = localStorage.getItem('jwtToken');
-
-    // Validate the user session and get user data including p_id
-    fetch(`${url}/loginController?action=validate`, {
-        method: 'GET',
-        headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${authToken}`
-        },
-    })
-    .then(response => {
-        if (!response.ok) {
-            throw new Error(`Failed to validate session: ${response.status}`);
-        }
-        return response.json();
-    })
-    .then(userData => {
-        const p_id = userData.p_id;
-
-        // Fetch bus data using p_id
-        fetch(`${url}/busController`, {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${authToken}`,
-                'p_id': p_id
-            },
-        })
-        .then(response => {
-            if (!response.ok) {
-                throw new Error(`Failed to fetch bus data: ${response.status}`);
-            }
-            return response.json();
-        })
-        .then(data => {
-            allData = data;
-            updatePage(currentPage);
-        })
-        .catch(error => {
-            console.error('Error fetching bus data:', error);
-        });
-    })
-    .catch(error => {
-        console.error('Error validating session:', error);
-    });
+            fetch(`${url}/busController`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'p_id': session_p_id
+                },
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`Failed to fetch bus data: ${response.status}`);
+                }
+                return response.json();
+            })
+            .then(data => {
+                allData = data;
+                updatePage(currentPage);
+            })
+            .catch(error => {
+                console.error('Error fetching bus data:', error);
+            });
 }
 
 
@@ -169,14 +145,11 @@ function renderPageControl(){
 document.getElementById("busRegForm").addEventListener("submit", function(event) {
     event.preventDefault();
 
-    const owner_id = document.getElementById("add_owner_id").value;
     const reg_no = document.getElementById("add_reg_no").value;
     const route_id = document.getElementById("add_route_id").value;
     const no_of_Seats = document.getElementById("add_no_of_Seats").value;
 
-
     const userData = {
-        owner_id: owner_id,
         reg_no: reg_no,
         route_id: route_id,
         no_of_Seats: no_of_Seats,
@@ -187,27 +160,29 @@ document.getElementById("busRegForm").addEventListener("submit", function(event)
     fetch(`${ url }/busController`, {
         method: 'POST',
         headers: {
-            'Content-Type': 'application/json'
+            'Content-Type': 'application/json',
+            'p_id': session_p_id
         },
         body: jsonData
     })
-        .then(response => {
-            if (response.ok) {
-                closeForm_add();
-                openAlertSuccess("Successfully Added!");
-            } else{
-                return response.json()
-                    .then(data => {
-                        const error_msg = data.error;
-                        openAlertFail(error_msg);
-                        throw new Error("Failed");
-                    });
-            }
-        })
-        .catch(error => {
-            console.error('Error:', error);
-        });
+    .then(response => {
+        if (response.ok) {
+            closeForm_add();
+            openAlertSuccess("Successfully Added!");
+        } else{
+            return response.json()
+                .then(data => {
+                    const error_msg = data.error;
+                    openAlertFail(error_msg);
+                    throw new Error("Failed");
+                });
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+    });
 });
+
 
 // Handle update
 function updateRow(bus_id){
@@ -231,10 +206,8 @@ function updateRow(bus_id){
                 response.json().then(data => {
                     existingData = data[0];
                     console.log("existingData:", existingData);
-
                     document.getElementById("update_route_id").value = existingData.route_id;
                     document.getElementById("update_no_of_Seats").value = existingData.no_of_Seats;
-
                 });
             } else if (response.status === 401) {
                 console.log('Unauthorized');
@@ -248,16 +221,11 @@ function updateRow(bus_id){
 
     document.getElementById("busUpdateForm").addEventListener("submit", function(event) {
         event.preventDefault();
-
-
         const route_id = document.getElementById("update_route_id").value;
         const no_of_Seats = document.getElementById("update_no_of_Seats").value;
-
-
         const updatedData = {
             route_id: route_id,
             no_of_Seats: no_of_Seats,
-
         };
 
         const jsonData = JSON.stringify(updatedData);
@@ -270,31 +238,31 @@ function updateRow(bus_id){
             },
             body: jsonData
         })
-            .then(response => {
-                if (response.ok) {
-                    closeForm_update();
-                    openAlertSuccess();
-                } else if (response.status === 401) {
-                    openAlertFail(response.status);
-                    console.log('Update unsuccessful');
-                } else {
-                    openAlertFail(response.status);
-                    console.error('Error:', response.status);
-                }
-            })
-            .catch(error => {
-                console.error('Error:', error);
-            });
+        .then(response => {
+            if (response.ok) {
+                closeForm_update();
+                openAlertSuccess("Successfully");
+            } else if (response.status === 401) {
+                openAlertFail(response.status);
+                console.log('Update unsuccessful');
+            } else {
+                openAlertFail(response.status);
+                console.error('Error:', response.status);
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
     });
 }
 
 // Handle delete
-function deleteRow(bus_id){
+function deleteRow(){
     fetch(`${ url }/busController`, {
         method: 'DELETE',
         headers: {
             'Content-Type': 'application/json',
-            'bus_id': bus_id
+            'bus_id': Bus_id
         },
     })
        .then(response => {
@@ -320,7 +288,7 @@ function openForm_add() {
     const existingForm = document.querySelector(".bus_add_form_body");
 
     if (!existingForm) {
-        createForm();
+        createForm('add');
     }
 
     document.getElementById("busRegForm").style.display = "block";
@@ -336,7 +304,7 @@ function openForm_update() {
     const existingForm = document.querySelector(".bus_update_form_body");
 
     if (!existingForm) {
-        createForm();
+        createForm('update');
     }
 
     document.getElementById("busUpdateForm").style.display = "block";
@@ -348,8 +316,9 @@ function closeForm_update() {
     document.getElementById("overlay").style.display = "none";
 }
 
-function openAlertSuccess() {
+function openAlertSuccess(msg) {
     bus_id = "";
+    document.getElementById("alertMsgSuccess").textContent = msg;
     document.getElementById("successAlert").style.display = "block";
     document.getElementById("overlay").style.display = "block";
 }
@@ -363,7 +332,7 @@ function closeAlertSuccess() {
 
 function openAlertFail(response) {
     bus_id = "";
-    document.getElementById("failMsg").innerHTML = "Operation failed (" + response + ")";
+    document.getElementById("failMsg").textContent = response;
     document.getElementById("failAlert").style.display = "block";
     document.getElementById("overlay").style.display = "block";
 }
@@ -375,10 +344,10 @@ function closeAlertFail() {
     window.location.href = "../html/owner_dashboard_bus.html";
 }
 function openFlagConfirm(bus_id){
-    bus_id = bus_id;
+    Bus_id = bus_id;
     document.getElementById("confirmAlert").style.display = "block";
     document.getElementById("overlay").style.display = "block";
-    document.getElementById("deleteUser").textContent = bus_id;
+    document.getElementById("deleteUser").textContent = Bus_id;
 }
 
 function closeAlert(){
@@ -387,48 +356,122 @@ function closeAlert(){
     document.getElementById("overlay").style.display = "none";
 }
 
+document.addEventListener('DOMContentLoaded', function() {
+    createForm('add');
+    createForm('update');
+});
+
 // Create the add and update forms
-function createForm() {
-    const form_add = document.createElement('div');
-    form_add.classList.add('bus_add_form_body');
+function createForm(action) {
+if(action === 'add'){
+     const form_add = document.createElement('div');
+     form_add.classList.add('bus_add_form_body');
 
-    const form_update = document.createElement('div');
-    form_update.classList.add('bus_update_form_body');
-
-    var form= `
+        const form= `
         <div class="bus_form_left">
-            <div class="form_div">
-                <label for="owner_id" class="bus_form_title">Owner NIC <span class="reg_form_require">*</span></label>
-                <input type="text" name="owner_id" id="owner_id" class="form_data" placeholder="Enter Owner NIC" required="required" />
-            </div>
             <div class="form_div">
                 <label for="reg_no" class="bus_form_title">Registration No <span class="bus_form_require">*</span></label>
                 <input type="text" name="reg_no" id="reg_no" class="form_data" placeholder="Enter Registration No" required="required" />
             </div>
-        </div>
-        <div class="bus_form_right">
             <div class="form_div">
                 <label for="route_id" class="bus_form_title">Route Id <span class="bus_form_require">*</span></label>
-                <input type="text" name="route_id" id="route_id" class="form_data" placeholder="Enter Route_id" required="required" />
+                <input type="text" name="route_id" id="route_id" class="form_data" placeholder="Enter Route_id" required="required" oninput="showSuggestions1(event)" />
+                <ul id="bus_route_suggestions" class="autocomplete-list"></ul>
             </div>
             <div class="form_div">
                 <label for="no_of_Seats" class="bus_form_title">Number of Seats <span class="bus_form_require">*</span></label>
                 <input type="number" name="no_of_Seats" id="no_of_Seats" class="form_data" placeholder="Enter Number of Seats" required="required" />
             </div>
-            <div class="form_div">
-                <label for="review_points" class="bus_form_title">Reveiw Points <span class="bus_form_require">*</span></label>
-                <input type="text" name="review_points" id="review_points" class="form_data" placeholder="Enter Reveiw points" required="required" />
-            </div>
         </div>
         `;
 
-    form_add.innerHTML = form.replace(/id="/g, 'id="add_');
-    form_update.innerHTML = form.replace(/id="/g, 'id="update_');
-    const formContainer_add = document.getElementById('formContainer_add');
-    const formContainer_update = document.getElementById('formContainer_update');
+        form_add.innerHTML = form.replace(/id="/g, 'id="add_');
+        const formContainer_add = document.getElementById('formContainer_add');
+        formContainer_add.appendChild(form_add.cloneNode(true)); // Clone the form
 
-    formContainer_add.appendChild(form_add.cloneNode(true)); // Clone the form
-    formContainer_update.appendChild(form_update.cloneNode(true)); // Clone the form
+    }
+    else if(action === 'update'){
+        const form_update = document.createElement('div');
+        form_update.classList.add('bus_update_form_body');
+
+        const form = `
+            <div class="bus_form_left">
+                <div class="form_div">
+                    <label for="route_id" class="bus_form_title">Route Id <span class="bus_form_require">*</span></label>
+                    <input type="text" name="route_id" id="route_id" class="form_data" placeholder="Enter Route_id" required="required" />
+                </div>
+                <div class="form_div">
+                    <label for="no_of_Seats" class="bus_form_title">Number of Seats <span class="bus_form_require">*</span></label>
+                    <input type="number" name="no_of_Seats" id="no_of_Seats" class="form_data" placeholder="Enter Number of Seats" required="required" />
+                </div>
+            </div>
+        `;
+
+        form_update.innerHTML = form.replace(/id="/g, 'id="update_');
+        const formContainer_update = document.getElementById('formContainer_update');
+        formContainer_update.appendChild(form_update.cloneNode(true)); // Clone the form
+    }
+
+}
+function showSuggestions1(event) {
+    const input = event.target;
+    const inputValue = input.value.toUpperCase();
+    const suggestionsContainer = document.getElementById(`autocomplete-container1`);
+    if(inputValue === ""){
+        suggestionsContainer.innerHTML = '';
+    }
+    else {
+        fetch(`${url}/routeController`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+        })
+            .then(response => {
+                if (response.ok) {
+                    return response.json();
+                } else {
+                    console.error('Error:', response.status);
+                    throw new Error(`HTTP error! Status: ${response.status}`);
+                }
+            })
+            .then(data => {
+                const suggestions = data.map(item => {
+                    return {
+                        route_id: item.route_id,
+                        start: item.start,
+                        destination: item.destination
+                    };
+                });
+                suggestionsContainer.innerHTML = '';
+                const filteredSuggestions = suggestions.filter(suggestion =>
+                    suggestion.route_id.toUpperCase().includes(inputValue)
+                );
+                suggestionsContainer.style.maxHeight = '200px';
+                suggestionsContainer.style.overflowY = 'auto';
+                suggestionsContainer.style.width = '100%';
+                suggestionsContainer.style.left = `18px`;
+                if (filteredSuggestions.length === 0) {
+                    const errorMessage = document.createElement('li');
+                    errorMessage.textContent = 'No suggestions found';
+                    suggestionsContainer.appendChild(errorMessage);
+                } else {
+                    filteredSuggestions.forEach(suggestion => {
+                        const listItem = document.createElement('li');
+                        listItem.classList.add('autocomplete-list-item');
+                        listItem.textContent = `${suggestion.route_id} - ${suggestion.start} to ${suggestion.destination}`;
+                        listItem.addEventListener('click', () => {
+                            input.value = suggestion.route_id;
+                            suggestionsContainer.innerHTML = '';
+                        });
+                        suggestionsContainer.appendChild(listItem);
+                    });
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+    }
 }
 
 

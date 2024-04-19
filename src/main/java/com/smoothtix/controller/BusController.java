@@ -24,17 +24,13 @@ public class BusController extends HttpServlet {
         JSONArray busDataArray = new JSONArray();
 
         String bus_id = request.getHeader("bus_id");
-
-        HttpSession session = request.getSession();
-        String p_id = (String) session.getAttribute("p_id"); // Retrieve p_id from session
-        System.out.println(p_id);
-
+        String p_id = request.getHeader("p_id");
         try {
             ResultSet rs = null;
             if (bus_id != null) {
                 rs = busTable.get(bus_id);
             } else if (p_id != null) {
-                rs = busTable.getByOwner(p_id); // Filter by p_id instead of owner_id
+                rs = busTable.getByOwner(p_id);
             } else {
                 rs = busTable.getAll();
             }
@@ -64,12 +60,14 @@ public class BusController extends HttpServlet {
         response.setContentType("text/html");
         PrintWriter out = response.getWriter();
 
+        String ownerNic = request.getHeader("p_id");
+
         try {
             Gson gson = new Gson();
 
             BufferedReader reader = request.getReader();
             Bus bus = gson.fromJson(reader, Bus.class);
-            int registrationSuccess = busTable.insert(bus);
+            int registrationSuccess = busTable.insert(bus, ownerNic);
 
             if (registrationSuccess >= 1) {
                 response.setStatus(HttpServletResponse.SC_OK);
