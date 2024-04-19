@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', function () {
-   isAuthenticated().then(() => fetchBusprofileData());
+   isAuthenticated().then(() => fetchAllData());
 });
 function fetchAllData() {
     document.getElementById("userName").textContent = session_user_name;
@@ -10,21 +10,23 @@ function fetchAllData() {
         },
     })
         .then(response => {
-            if (response.ok) {
-                return response.json();
-            } else {
-                console.error('Error:', response.status);
-            }
-        })
-        .then(data => {
-            allData = data;
-            console.log(allData)
-            updatePage(currentPage,false);
-        })
-        .catch(error => {
-            console.error('Error:', error);
-        });
-}
+                if (response.ok) {
+                    return response.json();
+                } else {
+                    throw new Error('Error fetching data:', response.status);
+                }
+            })
+            .then(data => {
+                if (data && data.length > 0) {
+                    displayDataAsForms(data);
+                } else {
+                    console.log('No data available.');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+        }
 
 function displayDataAsForms(data) {
     const formContainer = document.getElementById("formContainer");
@@ -68,4 +70,3 @@ function displayDataAsForms(data) {
         formContainer.appendChild(form);
     });
 }
-
