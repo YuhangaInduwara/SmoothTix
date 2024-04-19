@@ -132,4 +132,15 @@ public class passengerTable {
         PreparedStatement pst = con.prepareStatement("SELECT * FROM passenger ORDER BY p_id DESC LIMIT 1;");
         return pst.executeQuery();
     }
+
+    public static String getPassword(String p_id) throws SQLException{
+        Connection con = dbConnection.initializeDatabase();
+        PreparedStatement pst = con.prepareStatement("SELECT password FROM passenger WHERE p_id=?");
+        pst.setString(1,p_id);
+        ResultSet rs = pst.executeQuery();
+        if(rs.next()){
+            return rs.getString("password");
+        }
+        else return null;
+    }
 }

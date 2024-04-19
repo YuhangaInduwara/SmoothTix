@@ -1,5 +1,7 @@
 isAuthenticated();
 
+let session_p_id_temp = "P0044";
+
 fetchAllData();
 
 // Fetch all data from the database
@@ -9,7 +11,7 @@ function fetchAllData() {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json',
-            'p_id': session_p_id
+            'p_id': session_p_id_temp
         },
     })
         .then(response => {
@@ -43,7 +45,8 @@ function displayDataAsParagraphs(data) {
             <p class="data_box"><strong>Email:</strong> ${item.email}</p>
 
             <div class="editDeleteButtons">
-             <button class="okButton" onclick="update('${item.p_id}')" style="margin-right: 10px; margin-left: 10px">Edit</button>
+             <button class="okButton" onclick="update('${item.p_id}')" style="margin-right: 10px; margin-left: 10px">Edit Information</button>
+             <button class="okButton" onclick="changePassword('${item.p_id}')" style="margin-right: 10px; margin-left: 10px">Change Password</button>
            </div>
         `;
 
@@ -87,7 +90,6 @@ function update(p_id){
         });
 
     document.getElementById("passengerUpdateForm").addEventListener("submit", function(event) {
-        event.preventDefault();
 
         const first_name = document.getElementById("update_first_name").value;
         const last_name = document.getElementById("update_last_name").value;
@@ -126,6 +128,69 @@ function update(p_id){
             .catch(error => {
                 console.error('Error:', error);
             });
+    });
+}
+
+function changePassword(p_id){
+    openForm_changePassword();
+
+    document.getElementById("passengerUpdateForm").addEventListener("submit", function(event) {
+
+            const password = document.getElementById("update_current_password").value;
+            const new_password = document.getElementById("update_new_password").value;
+            const reenter_new_password = document.getElementById("update_reenter_new_password").value;
+            debugger;
+            fetch('../../../passengerController', {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'p_id': p_id,
+                        'password': password
+                    },
+            })
+                    .then(response => {
+                        if(response.ok){
+                            console.log("nicee");
+                            if(new_password == reenter_new_password){
+                                const updatedPassword = {
+                                    password: new_password,
+                                };
+                                const jsonData = JSON.stringify(updatedPassword);
+                                console.log(p_id);
+
+                                fetch(`../../../passengerController`, {
+                                    method: 'PUT',
+                                    headers: {
+                                        'Content-Type': 'application/json',
+                                        'p_id': p_id
+                                    },
+                                    body: jsonData
+                                })
+                                    .then(response => {
+                                        if (response.ok) {
+                                            openAlertSuccess();
+                                            closeForm_update();
+                                        } else if (response.status === 401) {
+                                            openAlertFail(response.status);
+                                            console.log('Update unsuccessful');
+                                        } else {
+                                            openAlertFail(response.status);
+                                            console.error('Error:', response.status);
+                                        }
+                                    })
+                                    .catch(error => {
+                                        console.error('Error:', error);
+                                    });
+                            }
+                            else{
+                                openAlertFail("Enter Equal Passwords");
+                            }
+                        }
+
+                    })
+                    .catch(error => {
+                        openAlertFail("Incorrect Password");
+                    });
     });
 }
 
@@ -168,6 +233,17 @@ function closeForm_update() {
     document.getElementById("passengerUpdateForm").style.display = "none";
     document.getElementById("overlay").style.display = "none";
     window.location.href = "../html/passenger_dashboard_aboutMe.html";
+}
+
+function openForm_changePassword() {
+    const existingForm = document.querySelector(".passenger_update_form_body");
+
+    if (!existingForm) {
+        createPasswordForm();
+    }
+
+    document.getElementById("passengerUpdateForm").style.display = "block";
+    document.getElementById("overlay").style.display = "block";
 }
 
 function openAlertSuccess() {
@@ -231,6 +307,40 @@ function createForm() {
 
 //    formContainer_add.appendChild(form_add.cloneNode(true)); // Clone the form
     formContainer_update.appendChild(form_update.cloneNode(true)); // Clone the form
+}
+
+function createPasswordForm(){
+    const form_update = document.createElement('div');
+    form_update.classList.add('passenger_update_form_body');
+
+    var form= `
+        <div class="passenger_form_left">
+
+            <div class="form_div">
+                <label for="current_password" class="passenger_form_title">Current Password <span class="passenger_form_require">*</span></label>
+                <input type="text" name="current_password" id="current_password" class="form_data" placeholder="Enter current password" required="required" />
+            </div>
+           <div class="form_div">
+                <label for="new_password" class="passenger_form_title">New Password <span class="passenger_form_require">*</span></label>
+                <input type="text" name="new_password" id="new_password" class="form_data" placeholder="Enter new password" required="required" />
+           </div>
+           <div class="form_div">
+                <label for="reenter_new_password" class="passenger_form_title">ReEnter New Password <span class="passenger_form_require">*</span></label>
+                <input type="text" name="reenter_new_password" id="reenter_new_password" class="form_data" placeholder="ReEnter new password" required="required" />
+           </div>
+
+        </div>
+
+        `;
+
+//    form_add.innerHTML = form.replace(/id="/g, 'id="add_');
+    form_update.innerHTML = form.replace(/id="/g, 'id="update_');
+//    const formContainer_add = document.getElementById('formContainer_add');
+    const formContainer_updates = document.getElementById('formContainer_updates');
+
+//    formContainer_add.appendChild(form_add.cloneNode(true)); // Clone the form
+    formContainer_update.appendChild(form_update.cloneNode(true)); // Clone the form
+
 }
 
 // Attach the searchData function to the keyup event of the search input field
