@@ -53,10 +53,12 @@ public class BookingController extends HttpServlet {
                     bookingData.put("route_no", rs.getString("route_no"));
                     bookingData.put("start", rs.getString("start"));
                     bookingData.put("destination", rs.getString("destination"));
+                    bookingData.put("schedule_id", rs.getString("schedule_id"));
                     bookingData.put("date", rs.getDate("date_time"));
                     bookingData.put("time", rs.getTime("date_time"));
                     bookingData.put("seat_no", rs.getString("booked_seats"));
                     bookingData.put("status", rs.getInt("status"));
+                    bookingData.put("schedule_status", rs.getInt("schedule_status"));
                     bookingDataArray.put(bookingData);
                 }
             }

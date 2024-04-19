@@ -5,6 +5,9 @@ let currentPage = 1;
 const pageSize = 10;
 let allData = [];
 let standData = [];
+let allFeasibleData = [];
+let date_time;
+let bus_profile_id_schedule;
 
 getTimeKeeperData();
 
@@ -198,10 +201,10 @@ function displayDataAsTable(data) {
                 <td>${item.status}</td>
                 <td>
                     <span class="icon-container">
-                    <i onclick="updateRow('${item.bus_id}')"><img src="../../../images/vector_icons/update_icon.png" alt="update" class="action_icon"></i>
+                    <i onclick="updateRow('${item.schedule_id}')"><img src="../../../images/vector_icons/update_icon.png" alt="update" class="action_icon"></i>
                 </span>
                 <span class="icon-container" style="margin-left: 1px;">
-                    <i onclick="deleteRow('${item.bus_id}')"><img src="../../../images/vector_icons/delete_icon.png" alt="delete" class="action_icon"></i>
+                    <i onclick="deleteRow('${item.schedule_id}')"><img src="../../../images/vector_icons/delete_icon.png" alt="delete" class="action_icon"></i>
                 </span>
                 </td>
             `;
@@ -223,6 +226,8 @@ document.getElementById("busRegForm").addEventListener("submit", function(event)
     const date = document.getElementById("add_date").value;
     const time = document.getElementById("add_time").value;
 
+    date_time = date + " " + time;
+
     fetch(`${ url }/feasibilityController?start=${start}&destination=${destination}&date=${date}&time=${time}`, {
         method: 'GET',
         headers: {
@@ -231,7 +236,14 @@ document.getElementById("busRegForm").addEventListener("submit", function(event)
     })
         .then(response => {
             if (response.ok) {
-                closeForm_add();
+                return response.json()
+                    .then(data =>{
+                        allFeasibleData = data;
+                        console.log(allFeasibleData);
+                        closeForm_add();
+                        openForm_bpSelection();
+                    })
+
                 openAlertSuccess("Successfully Added!");
             } else{
                 return response.json()
@@ -286,7 +298,7 @@ function updateRow(bus_id){
     new URLSearchParams(window.location.search);
     document.getElementById("header_bus_id").innerHTML = bus_id
 
-    fetch('../../../busController', {
+    fetch(`${ url }/busController`, {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json',
@@ -343,7 +355,7 @@ function updateRow(bus_id){
 
         const jsonData = JSON.stringify(updatedData);
 
-        fetch(`/SmoothTix_war_exploded/busController`, {
+        fetch(`${ url }/busController`, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',
@@ -369,17 +381,16 @@ function updateRow(bus_id){
     });
 }
 
-function deleteRow(bus_id){
-    fetch(`/SmoothTix_war_exploded/busController`, {
+function deleteRow(schedule_id){
+    fetch(`${ url }/scheduleController?schedule_id=${schedule_id}`, {
         method: 'DELETE',
         headers: {
             'Content-Type': 'application/json',
-            'bus_id': bus_id
         },
     })
         .then(response => {
             if (response.ok) {
-                openAlertSuccess();
+                openAlertSuccess('Deleted successfully');
             } else if (response.status === 401) {
                 openAlertFail(response.status);
                 console.log('Delete unsuccessful');
@@ -391,6 +402,17 @@ function deleteRow(bus_id){
         .catch(error => {
             console.error('Error:', error);
         });
+}
+
+function openForm_bpSelection() {
+    createTableRows(allFeasibleData);
+    document.getElementById("bpSelection").style.display = "block";
+    document.getElementById("overlay").style.display = "block";
+}
+
+function closeForm_bpSelection() {
+    document.getElementById("bpSelection").style.display = "none";
+    document.getElementById("overlay").style.display = "none";
 }
 
 function openForm_add() {
@@ -539,3 +561,75 @@ function closeAlertFail() {
     document.getElementById("failAlert").style.display = "none";
     document.getElementById("overlay").style.display = "none";
 }
+
+function createTableRow(obj) {
+    const row = document.createElement('tr');
+    row.addEventListener('click', () => handleRowClick(obj));
+
+    row.innerHTML = `
+        <td>${obj.reg_no}</td>
+        <td>${obj.conductor_nic}</td>
+        <td>${obj.driver_nic}</td>
+    `;
+
+    return row;
+}
+
+function createTableRows(data) {
+    const tbody = document.querySelector('#bpSelection_container tbody');
+    tbody.innerHTML = '';
+    if (Array.isArray(data)) {
+        data.forEach(obj => {
+            const row = createTableRow(obj);
+            tbody.appendChild(row);
+        });
+    } else {
+        const row = createTableRow(data);
+        tbody.appendChild(row);
+    }
+}
+
+function handleRowClick(data) {
+    const tbody = document.querySelector('#bpSelection_container tbody');
+    tbody.innerHTML = '';
+    const row = createTableRow(data);
+    bus_profile_id_schedule = data.bus_profile_id;
+    tbody.appendChild(row);
+}
+
+document.getElementById("bpSelection").addEventListener("submit", function(event) {
+    event.preventDefault();
+
+    const userData = {
+        bus_profile_id: bus_profile_id_schedule,
+        date_time: date_time,
+        status: 0
+    };
+    const jsonData = JSON.stringify(userData);
+
+    fetch(`${ url }/scheduleController`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: jsonData
+    })
+        .then(response => {
+            if (response.ok) {
+                closeForm_bpSelection();
+                openAlertSuccess("Successfully Added!");
+            } else{
+                return response.json()
+                    .then(data => {
+                        const error_msg = data.error;
+                        openAlertFail(error_msg);
+                        throw new Error("Failed");
+                    });
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
+});
+
+

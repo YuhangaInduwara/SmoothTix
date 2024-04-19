@@ -8,20 +8,22 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class seatAvailabilityTable {
-//    public static int insert(Schedule schedule) throws SQLException, ClassNotFoundException {
-//        Connection con = dbConnection.initializeDatabase();
-//        PreparedStatement pst = con.prepareStatement("insert into schedule(schedule_id, date, route_id, start, destination, start_time, end_time) values (?,?,?,?,?,?,?)");
-//        pst.setString(1,schedule.getSchedule_id());
-//        pst.setString(2,schedule.getDate());
-//        pst.setString(3,schedule.getRoute_id());
-//        pst.setString(4,schedule.getStart());
-//        pst.setString(5,schedule.getDestination());
-//        pst.setString(6,schedule.getStart_time());
-//        pst.setString(7,schedule.getEnd_time());
-//
-//        int rawCount = pst.executeUpdate();
-//        return rawCount;
-//    }
+    public static int insert(String schedule_id, int no_of_seats) throws SQLException, ClassNotFoundException {
+        Connection con = dbConnection.initializeDatabase();
+        PreparedStatement pst = con.prepareStatement("INSERT INTO seat_availability (schedule_id, seat_no, availability) VALUES (?, ?, ?)");
+
+        int rawCount = 0;
+        for (int seatNo = 1; seatNo <= no_of_seats; seatNo++) {
+            pst.setString(1, schedule_id);
+            pst.setInt(2, seatNo);
+            pst.setInt(3, 1);
+            rawCount += pst.executeUpdate();
+        }
+
+        pst.close();
+        return rawCount;
+    }
+
 
     public static ResultSet getByScheduleId(String schedule_id) throws SQLException, ClassNotFoundException {
         Connection con = dbConnection.initializeDatabase();

@@ -6,9 +6,20 @@
   <title>My Bookings</title>
   <link rel="stylesheet" type="text/css" href="../css/passenger_dashboard_myBookings.css">
   <link rel="icon" type="image/x-icon" href="../../../images/favicon/favicon.png">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
 </head>
 <body>
 <div class="dashboard">
+  <div class="alertBody" id="alertSuccess">
+    <img src="../../../images/Alert_icons/Success_icon.png" class="alertImg" alt="success">
+    <div class="alertMsgSuccess" id="alertMsgSuccess"></div>
+    <button class="okButton" onclick="closeAlert()">Ok</button>
+  </div>
+  <div class="alertBody" id="alertFail">
+    <img src="../../../images/Alert_icons/Error_icon.png" class="alertImg" alt="fail">
+    <div class="alertMsgFail" id="alertMsg"></div>
+    <button class="okButton" onclick="closeAlert()">Ok</button>
+  </div>
   <div class="sidebar">
     <div class="site_logo">
       <img src="../../../images/logo.png" alt="site_logo" class="site_logo_img">
@@ -39,7 +50,6 @@
       </div>
     </div>
   </div>
-
   <div class="content_container">
     <div class="navbar">
       <div class="page_name">
@@ -52,6 +62,15 @@
     </div>
     <div class="body_content">
       <div class="functions">
+        <div class="overlay" id="overlay"></div>
+        <div class="mapView" id="locationView">
+          <div id="map-container" style="position: relative; width: 1500px; height: 600px; border-radius: 10px;">
+            <div id="map" style="position: absolute; top: 0; left: 0; width: 100%; height: 105%; border-radius: 10px; flex-direction: row; justify-content: center; align-items: flex-end;"></div>
+            <div style="position: absolute; top: 10px; right: 10px; z-index: 1001;">
+              <button class="closeButton" onclick="RemoveLocation()">X</button>
+            </div>
+          </div>
+        </div>
         <div class="search_box">
           <div>
             <label>
@@ -87,6 +106,48 @@
         </div>
       </div>
       <div>
+        <div class="review_container" id="review_container">
+          <h2>Review Your Journey</h2>
+          <form id="review_form">
+            <label for="driverRating">Rate for Driving</label>
+            <select id="driverRating" name="driverRating" required>
+              <option value="">Select a rating</option>
+              <option value="5">5 stars ⭐⭐⭐⭐⭐</option>
+              <option value="4">4 stars ⭐⭐⭐⭐</option>
+              <option value="3">3 stars ⭐⭐⭐</option>
+              <option value="2">2 stars ⭐⭐</option>
+              <option value="1">1 stars ⭐</option>
+            </select>
+
+            <label for="busRating">Rate for the Bus</label>
+            <select id="busRating" name="busRating" required>
+              <option value="">Select a rating</option>
+              <option value="5">5 stars ⭐⭐⭐⭐⭐</option>
+              <option value="4">4 stars ⭐⭐⭐⭐</option>
+              <option value="3">3 stars ⭐⭐⭐</option>
+              <option value="2">2 stars ⭐⭐</option>
+              <option value="1">1 stars ⭐</option>
+            </select>
+
+            <label for="conductorRating">Rate for Conductor Support</label>
+            <select id="conductorRating" name="conductorRating" required>
+              <option value="">Select a rating</option>
+              <option value="5">5 stars ⭐⭐⭐⭐⭐</option>
+              <option value="4">4 stars ⭐⭐⭐⭐</option>
+              <option value="3">3 stars ⭐⭐⭐</option>
+              <option value="2">2 stars ⭐⭐</option>
+              <option value="1">1 stars ⭐</option>
+            </select>
+
+            <label for="comments">Comments:</label>
+            <textarea id="comments" name="comments" rows="4" required></textarea>
+
+            <button type="submit" >Submit Review</button>
+          </form>
+          <div style="position: absolute; top: 10px; right: 10px; z-index: 1001;">
+            <button class="closeButton" onclick="closeReview()">X</button>
+          </div>
+        </div>
           <div>
             <div class="upcoming_booking_title">
               <h2>Upcoming Bookings</h2>
@@ -114,6 +175,7 @@
 </div>
 <script src="../../../js/url.js"></script>
 <script src="../../../js/auth.js"></script>
+<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
 <script src="../js/passenger_dashboard_myBookings.js"></script>
 </body>
 </html>
