@@ -4,25 +4,43 @@ import com.smoothtix.database.dbConnection;
 import com.smoothtix.model.Bus;
 import com.smoothtix.model.Schedule;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 
 public class scheduleTable {
     public static int insert(Schedule schedule) throws SQLException, ClassNotFoundException {
         Connection con = dbConnection.initializeDatabase();
-        PreparedStatement pst = con.prepareStatement("insert into schedule(schedule_id, date, route_id, start, destination, start_time, end_time) values (?,?,?,?,?,?,?)");
-        pst.setString(1,schedule.getSchedule_id());
-        pst.setString(2,schedule.getDate());
-        pst.setString(3,schedule.getRoute_id());
-        pst.setString(4,schedule.getStart());
-        pst.setString(5,schedule.getDestination());
-        pst.setString(6,schedule.getStart_time());
-        pst.setString(7,schedule.getEnd_time());
-
+        String schedule_id = generateScheduleID();
+        PreparedStatement pst = con.prepareStatement("insert into schedule(schedule_id, bus_profile_id, date_time, status) values (?,?,?,?)");
+        pst.setString(1,schedule_id);
+        pst.setString(2,schedule.getBus_profile_id());
+        pst.setString(3,schedule.getDate_time());
+        pst.setInt(4,schedule.getStatus());
         int rawCount = pst.executeUpdate();
-        return rawCount;
+        int rawCount2 = 0;
+        if(rawCount > 0){
+            ResultSet rs1 = busprofileTable.getByBPId(schedule.getBus_profile_id());
+            if(rs1.next()){
+                int no_of_seats = rs1.getInt("no_of_seats");
+                if(no_of_seats > 0){
+                    rawCount2 = seatAvailabilityTable.insert(schedule_id, no_of_seats);
+                }
+            }
+        }
+        return rawCount2;
+    }
+
+    private static String generateScheduleID() throws SQLException, ClassNotFoundException {
+        Connection con = dbConnection.initializeDatabase();
+        String query = "SELECT COALESCE(MAX(CAST(SUBSTRING(schedule_id, 3) AS SIGNED)), 0) + 1 AS next_schedule_id FROM schedule";
+        Statement stmt = con.createStatement();
+        ResultSet rs = ((Statement) stmt).executeQuery(query);
+
+        int nextScheduleID = 1;
+        if (rs.next()) {
+            nextScheduleID = rs.getInt("next_schedule_id");
+        }
+
+        return "SH" + String.format("%04d", nextScheduleID);
     }
 
     public static ResultSet getByScheduleId(String schedule_id) throws SQLException, ClassNotFoundException {

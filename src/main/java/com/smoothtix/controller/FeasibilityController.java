@@ -94,7 +94,16 @@ public class FeasibilityController extends HttpServlet {
                     System.out.println("start: " + startTime + " end: " + endTime);
 
                     if (isBetween(givenTime, startTime, endTime)) {
-                        System.out.println("Bus profile ID " + busProfileId + " is feasible.");
+                        ResultSet rs1 = busprofileTable.getByBPId(busProfileId);
+                        if(rs1.next()) {
+                            JSONObject feasibleBPData = new JSONObject();
+                            feasibleBPData.put("bus_profile_id",rs1.getString("bus_profile_id"));
+                            feasibleBPData.put("reg_no",rs1.getString("reg_no"));
+                            feasibleBPData.put("driver_nic",rs1.getString("driver_nic"));
+                            feasibleBPData.put("conductor_nic",rs1.getString("conductor_nic"));
+
+                            feasibleDataArray.put(feasibleBPData);
+                        }
                         break;
                     }
                 }

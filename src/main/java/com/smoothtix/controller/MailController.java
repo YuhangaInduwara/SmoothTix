@@ -60,7 +60,7 @@ public class MailController extends HttpServlet {
             String subject = "Your Booking Details";
             String apiUrl = "https://quickchart.io/qr";
             String parameters = String.format(
-                    "dark=ff0000&ecLevel=H&size=200&text=%s",
+                    "ecLevel=H&size=200&text=%s",
                     java.net.URLEncoder.encode(schedule_id + " " + bookingId, "UTF-8")
             );
             String qrCodeUrl = apiUrl + "?" + parameters;

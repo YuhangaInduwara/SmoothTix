@@ -8,6 +8,9 @@ public class Schedule {
     String destination;
     String start_time;
     String end_time;
+    String bus_profile_id;
+    int status;
+    String date_time;
 
     public Schedule(String schedule_id, String date, String route_id, String start, String destination, String start_time, String end_time){
         this.schedule_id = schedule_id;
@@ -17,6 +20,12 @@ public class Schedule {
         this.destination = destination;
         this.start_time = start_time;
         this.end_time = end_time;
+    }
+
+    public Schedule(String bus_profile_id, String date_time, int status){
+        this.bus_profile_id = bus_profile_id;
+        this.date_time = date_time;
+        this.status = status;
     }
 
     public String getSchedule_id(){
@@ -41,6 +50,16 @@ public class Schedule {
     }
     public String getEnd_time(){
         return end_time;
+    }
+
+    public String getBus_profile_id(){
+        return bus_profile_id;
+    }
+    public String getDate_time(){
+        return date_time;
+    }
+    public int getStatus(){
+        return status;
     }
 
     public void setSchedule_id(String schedule_id){

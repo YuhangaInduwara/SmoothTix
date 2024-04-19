@@ -67,6 +67,30 @@
         <div class="overlay" id="overlay"></div>
         <div class="body_content">
             <div class="form">
+                <form class="bus_form" id="bpSelection">
+                    <div class="bus_form_header">
+                        <h2>Select a Bus Profile</h2>
+                    </div>
+                    <div>
+                        <table id="bpSelection_container" class="bus_table">
+                            <thead>
+                            <tr>
+                                <th>Bus</th>
+                                <th>Driver</th>
+                                <th>Conductor</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="bus_form_footer">
+                        <button type="button" class="bus_form_button" onclick="closeForm_bpSelection()">Close</button>
+                        <input type="submit" class="bus_form_button" value="Add" id="bpSelectionSubmit">
+                    </div>
+                </form>
+            </div>
+            <div class="form">
                 <form class="bus_form" id="busRegForm">
                     <div class="bus_form_header">
                         <h2>Add New Schedule</h2>

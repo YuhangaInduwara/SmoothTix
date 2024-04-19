@@ -162,10 +162,9 @@ public class ScheduleController extends HttpServlet {
     @Override
     protected void doDelete(HttpServletRequest request, HttpServletResponse response) {
         response.setContentType("text/html");
-//        PrintWriter out = response.getWriter();
 
         try {
-            String schedule_id = request.getHeader("schedule_id");
+            String schedule_id = request.getParameter("schedule_id");
             int deleteSuccess = scheduleTable.delete(schedule_id);
 
             if (deleteSuccess >= 1) {
