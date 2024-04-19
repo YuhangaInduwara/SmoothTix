@@ -28,7 +28,7 @@ public class ConductorController extends HttpServlet {
 
         String p_id = request.getParameter("p_id");
         String conductor_id = request.getHeader("conductor_id");
-
+        System.out.println("conductor "+ p_id);
         try {
             ResultSet rs;
 
@@ -39,6 +39,7 @@ public class ConductorController extends HttpServlet {
                 }
                 else{
                     rs = conductorTable.get_by_p_id(p_id);
+                    System.out.println("conductorDataArray");
                 }
             }
             else{
@@ -53,7 +54,7 @@ public class ConductorController extends HttpServlet {
 
                 conductorDataArray.put(conductorData);
             }
-
+            System.out.println(conductorDataArray);
             out.println(conductorDataArray); // Send JSON data as a response
             response.setStatus(HttpServletResponse.SC_OK);
         }catch (Exception e) {
