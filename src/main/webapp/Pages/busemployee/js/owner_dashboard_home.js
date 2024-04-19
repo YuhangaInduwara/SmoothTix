@@ -1,4 +1,6 @@
+isAuthenticated();
 function fetchAllData() {
+    document.getElementById("userName").textContent = session_user_name;
     fetch('../../../conductorController', {
         method: 'GET',
         headers: {
@@ -11,9 +13,6 @@ function fetchAllData() {
             } else {
                 console.error('Error:', response.status);
             }
-        })
-        .then(data => {
-            displayDataAsTable(data);
         })
         .catch(error => {
             console.error('Error:', error);
