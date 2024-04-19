@@ -1,10 +1,9 @@
-isAuthenticated();
+document.addEventListener('DOMContentLoaded', function () {
+    isAuthenticated().then(() => fetchAllData());
+});
 
-fetchAllData();
-
-// Fetch all data from the database
 function fetchAllData() {
-
+    document.getElementById("userName").textContent = session_user_name;
     fetch('../../../passengerController', {
         method: 'GET',
         headers: {
@@ -252,8 +251,3 @@ function checkSessionStatus() {
             fetchAllData();
         });
 }
-
-//window.onload = function() {
-//    checkSessionStatus(); // Call the function when the page loads
-//    setInterval(checkSessionStatus, 60000); // Set up periodic checks
-//};

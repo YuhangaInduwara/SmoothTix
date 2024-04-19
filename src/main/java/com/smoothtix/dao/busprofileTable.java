@@ -74,7 +74,7 @@ public class busprofileTable {
         ResultSet rs;
 
         con = dbConnection.initializeDatabase();
-        String query = "SELECT COALESCE(MAX(CAST(SUBSTRING(bus_profile_id, 4) AS SIGNED)), 0) + 1 AS next_bus_profile_id FROM bus_profile";
+        String query = "SELECT COALESCE(MAX(CAST(SUBSTRING(bus_profile_id, 3) AS SIGNED)), 0) + 1 AS next_bus_profile_id FROM bus_profile";
         stmt = con.createStatement();
         rs = stmt.executeQuery(query);
 
@@ -133,6 +133,33 @@ public class busprofileTable {
         return rs;
     }
 
+    public static ResultSet getByBPId(String bus_profile_id) throws SQLException, ClassNotFoundException {
+        Connection con = dbConnection.initializeDatabase();
+        PreparedStatement pst = con.prepareStatement("SELECT \n" +
+                "    bp.bus_profile_id,\n" +
+                "    b.reg_no,\n" +
+                "    b.no_of_seats,\n" +
+                "    p_driver.nic AS driver_nic,\n" +
+                "    p_conductor.nic AS conductor_nic\n" +
+                "FROM \n" +
+                "    bus_profile bp\n" +
+                "JOIN \n" +
+                "    bus b ON bp.bus_id = b.bus_id\n" +
+                "JOIN \n" +
+                "    driver d ON bp.driver_id = d.driver_id\n" +
+                "JOIN \n" +
+                "    passenger p_driver ON d.p_id = p_driver.p_id\n" +
+                "JOIN \n" +
+                "    conductor c ON bp.conductor_id = c.conductor_id\n" +
+                "JOIN \n" +
+                "    passenger p_conductor ON c.p_id = p_conductor.p_id\n" +
+                "WHERE \n" +
+                "    bp.bus_profile_id = ?;");
+        pst.setString(1,bus_profile_id);
+        ResultSet rs = pst.executeQuery();
+        return rs;
+    }
+
     public static ResultSet getRowDetails(String bus_profile_id) throws SQLException, ClassNotFoundException {
         Connection con = dbConnection.initializeDatabase();
         PreparedStatement pst = con.prepareStatement("");
@@ -153,7 +180,8 @@ public class busprofileTable {
                 "JOIN\n" +
                 "    route ON bus.route_id = route.route_id\n" +
                 "WHERE\n" +
-                "    bus_profile.bus_profile_id = 'BP001';");
+                "    bus_profile.bus_profile_id = ?;");
+        pst.setString(1,bus_profile_id);
         ResultSet rs = pst.executeQuery();
         return rs;
     }
