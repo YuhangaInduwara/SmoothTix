@@ -1,68 +1,71 @@
-isAuthenticated();
-// Function to fetch data from the server
-function fetchDataFromServer() {
-    fetchPassengerData();
-    fetchBusData();
-    fetchDriverData();
-}
-
-// Function to fetch passenger data from the server
-function fetchPassengerData() {
-    fetch(`${url}/passengerController`)
+document.addEventListener('DOMContentLoaded', function () {
+   isAuthenticated().then(() => fetchBusprofileData());
+});
+function fetchAllData() {
+    document.getElementById("userName").textContent = session_user_name;
+    fetch(`${ url }/busprofileController`, {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+    })
         .then(response => {
-            if (!response.ok) {
-                throw new Error('Failed to fetch passenger data');
+            if (response.ok) {
+                return response.json();
+            } else {
+                console.error('Error:', response.status);
             }
-            return response.json();
         })
-        .then(passengerData => {
-            // Extract relevant information (e.g., passenger name) from the response
-            const passengerName = passengerData.name; // Update with actual key names
-            // Call function to display passenger name on the webpage
-            displayPassengerName(passengerName);
+        .then(data => {
+            allData = data;
+            console.log(allData)
+            updatePage(currentPage,false);
         })
         .catch(error => {
-            console.error('Error fetching passenger data:', error);
+            console.error('Error:', error);
         });
 }
 
-// Function to fetch bus data from the server
-function fetchBusData() {
-    fetch(`${url}/busController`)
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('Failed to fetch bus data');
-            }
-            return response.json();
-        })
-        .then(busData => {
-            // Extract relevant information (e.g., bus number) from the response
-            const busNumber = busData.number; // Update with actual key names
-            // Call function to display bus number on the webpage
-            displayBusNumber(busNumber);
-        })
-        .catch(error => {
-            console.error('Error fetching bus data:', error);
-        });
-}
+function displayDataAsForms(data) {
+    const formContainer = document.getElementById("formContainer");
+    formContainer.innerHTML = ""; // Clear existing forms
 
-// Function to fetch driver data from the server
-function fetchDriverData() {
-    fetch(`${url}/driverController`)
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('Failed to fetch driver data');
-            }
-            return response.json();
-        })
-        .then(driverData => {
-            // Extract relevant information (e.g., driver name) from the response
-            const driverName = driverData.name; // Update with actual key names
-            // Call function to display driver name on the webpage
-            displayDriverName(driverName);
-        })
-        .catch(error => {
-            console.error('Error fetching driver data:', error);
+    data.forEach((item, index) => {
+        const form = document.createElement("div");
+        form.classList.add("box");
+
+        const heading = document.createElement("h2");
+        heading.classList.add("form-heading");
+        heading.textContent = `Bus Profile ${index + 1}`;
+        form.appendChild(heading);
+
+        const innerForm = document.createElement("form");
+        innerForm.id = `form${index + 1}`;
+
+        const inputs = [
+            { label: "Bus Number:", key: "bus_registration_no" },
+            { label: "Route:", key: "route" },
+            { label: "Conductor's Name:", key: "conductor_name" },
+            { label: "Driver's Name:", key: "driver_name" }
+        ];
+
+        inputs.forEach(input => {
+            const label = document.createElement("label");
+            label.setAttribute("for", `${input.key}${index + 1}`);
+            label.textContent = input.label;
+
+            const inputField = document.createElement("input");
+            inputField.setAttribute("type", "text");
+            inputField.setAttribute("id", `${input.key}${index + 1}`);
+            inputField.setAttribute("name", `${input.key}${index + 1}`);
+            inputField.value = item[input.key];
+
+            innerForm.appendChild(label);
+            innerForm.appendChild(inputField);
         });
+
+        form.appendChild(innerForm);
+        formContainer.appendChild(form);
+    });
 }
 
