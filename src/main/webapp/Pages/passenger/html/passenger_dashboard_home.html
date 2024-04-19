@@ -29,6 +29,13 @@
                 <a href="./passenger_dashboard_myBookings.html">My Bookings</a>
             </div>
             <div class="sidebar_element">
+                <a href="#" onclick="openForm_add()">
+                    <img src="../../../images/vector_icons/bus.png" alt="add_bus" class="sidebar_img">
+                </a>
+                <a href="#" onclick="openForm_add()">Add Bus</a>
+            </div>
+
+            <div class="sidebar_element">
                 <a href="./passenger_dashboard_bookASeat.html"><img src="../../../images/vector_icons/bookASeat.png" alt="book_a_seat" class="sidebar_img"></a>
                 <a href="./passenger_dashboard_bookASeat.html"> Book a Seat</a>
             </div>
@@ -43,7 +50,7 @@
     <div class="content_container" >
         <div class="navbar">
             <div class="page_name">
-                <h1>Home</h1>
+                <h1 style="font-size: 40px; margin: 50px 0 0 60px">Welcome <span id="user">User</span></h1>
             </div>
             <div class="user_profile">
                 <h3 id="userName">Username</h3>
@@ -51,29 +58,54 @@
             </div>
         </div>
         <div class="body_content">
+            <div class="overlay" id="overlay"></div>
+            <div class="body_content">
+                <div class="form">
+                    <form class="bus_form" id="busRegForm">
+                        <div class="bus_form_header">
+                            <h2>Add New Bus</h2>
+                        </div>
+                        <div id="formContainer_add"></div>
+                        <div class="bus_form_footer">
+                            <button type="button" class="bus_form_button" onclick="closeForm_add()">Close</button>
+                            <input type="submit" class="bus_form_button" value="Add" id="busRegFormSubmit">
+                        </div>
+                    </form>
+                </div>
+                <div class="alertBody" id="successAlert">
+                    <img src="../../../images/Alert_icons/Success_icon.png" class="alertImg" alt="success">
+                    <div class="alertMsgSuccess">Operation Successful!</div>
+                    <button class="okButton" onclick="closeAlertSuccess()">Ok</button>
+                </div>
+                <div class="alertBody" id="failAlert">
+                    <img src="../../../images/Alert_icons/Error_icon.png" class="alertImg" alt="fail">
+                    <div class="alertMsgFail" id="failMsg"></div>
+                    <button class="okButton" onclick="closeAlertFail()">Ok</button>
+                </div>
+            </div>
             <div class="tile_grid">
                 <div class="raw_1">
-                    <h1 style="font-size: 40px; margin: 50px 0 0 60px">Welcome User</h1>
+                    <h1 style="font-size: 40px; margin: 50px 0 0 60px"></h1>
                 </div>
                 <div class="raw_2">
                     <a href="./passenger_dashboard_myBookings.html">
                         <div class="tile">
                             <h1>Number of Total Bookings</h1>
-                            <h1 class="count">3</h1>
+                            <h1 class="count" id="total_booking">3</h1>
                             <img src="../../../images/vector_icons/myBookings.png" alt="bookings" class="sidebar_img">
                         </div>
                     </a>
                     <a href="./passenger_dashboard_myBookings.html">
                         <div class="tile">
                             <h1>Number of Current Bookings</h1>
-                            <h1 class="count">0</h1>
+                            <h1 class="count" id="current_booking">0</h1>
                             <img src="../../../images/vector_icons/bookASeat.png" alt="bookings" class="sidebar_img">
                         </div>
                     </a>
                     <a href="./passenger_dashboard_home.html">
                         <div class="tile">
                             <h1>Next Booking Date & Time</h1>
-                            <h1 class="count">N/A</h1>
+                            <h1 class="count" id="date_time">N/A</h1>
                             <img src="../../../images/vector_icons/timeKeeper.png" alt="time" class="sidebar_img">
                         </div>
                     </a>

@@ -214,10 +214,6 @@ function createForm(action) {
         const form= `
         <div class="bus_form_left">
             <div class="form_div">
-                <label for="nic" class="bus_form_title">NIC<span class="bus_form_require">*</span></label>
-                <input type="text" name="nic" id="nic" class="form_data" placeholder="Enter NIC" required="required" disabled/>
-            </div>
-            <div class="form_div">
                 <label for="stand" class="bus_form_title">Bus Stand<span class="bus_form_require">*</span></label>
                 <input type="text" name="stand" id="stand" class="form_data" placeholder="Enter the Bus Stand" required="required" oninput="showSuggestions3(event)"/>
                 <ul id="stand_suggestions" class="autocomplete-list"></ul>
@@ -421,7 +417,7 @@ function updateRow(timekpr_id){
                 response.json().then(data => {
                     existingData = data[0];
                     console.log("existingData:", existingData);
-                    document.getElementById("update_nic").value = existingData.p_id;
+                    // document.getElementById("update_nic").value = existingData.p_id;
                     document.getElementById("update_stand").value = existingData.stand;
                 });
             } else if (response.status === 401) {

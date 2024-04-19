@@ -14,27 +14,51 @@ function refreshPage() {
 }
 function fetchAllData() {
     document.getElementById("userName").textContent = session_user_name;
-    fetch(`${ url }/busprofileController`, {
+    const authToken = localStorage.getItem('jwtToken');
+
+    // Validate the user session and get user data including p_id
+    fetch(`${url}/loginController?action=validate`, {
         method: 'GET',
         headers: {
-            'Content-Type': 'application/json'
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${authToken}`
         },
     })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error(`Failed to validate session: ${response.status}`);
+        }
+        return response.json();
+    })
+    .then(userData => {
+        const p_id = userData.p_id;
+
+        // Fetch bus data using p_id
+        fetch(`${ url }/busprofileController`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${authToken}`,
+                'p_id': p_id
+            },
+        })
         .then(response => {
-            if (response.ok) {
-                return response.json();
-            } else {
-                console.error('Error:', response.status);
+            if (!response.ok) {
+                throw new Error(`Failed to fetch bus data: ${response.status}`);
             }
+            return response.json();
         })
         .then(data => {
             allData = data;
-            console.log(allData)
-            updatePage(currentPage,false);
+            updatePage(currentPage);
         })
         .catch(error => {
-            console.error('Error:', error);
+            console.error('Error fetching bus data:', error);
         });
+    })
+    .catch(error => {
+        console.error('Error validating session:', error);
+    });
 }
 
 
@@ -176,13 +200,11 @@ document.addEventListener("DOMContentLoaded", function () {
             const bus_profile_id = document.getElementById("inputForBusProfileId").value;
             const date = document.getElementById("date").value;
             const time_range = getCheckedTimeRanges();
-            const availability = document.getElementById("availability").value;
 
             const formData = {
                 bus_profile_id: bus_profile_id,
                 date: date,
                 time_range: time_range,
-                availability: availability
             };
 
 
@@ -277,8 +299,8 @@ document.getElementById("busprofileRegForm").addEventListener("submit", function
 });
 
 // Handle update
-function updateRow(bus_profile_id){
-    openForm_update();
+
+function updateRow(bus_profile_id) {
 
     let existingData = {};
 
@@ -286,11 +308,11 @@ function updateRow(bus_profile_id){
 
     document.getElementById("header_bus_profile_id").innerHTML = bus_profile_id
 
-    fetch(`${ url }/busprofileController`, {
+    fetch(`${url}/busprofileController`, {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json',
-            'bus_profile_id': bus_profile_id
+            'bus_profile_id' :bus_profile_id
         },
     })
         .then(response => {
@@ -299,11 +321,9 @@ function updateRow(bus_profile_id){
                     existingData = data[0];
                     console.log("existingData:", existingData);
 
-                    document.getElementById("update_bus_profile_id").value = existingData.bus_profile_id;
-                    document.getElementById("update_bus_id").value = existingData.bus_id;
-                    document.getElementById("update_driver_id").value = existingData.driver_id;
-                    document.getElementById("update_conductor_id").value = existingData.conductor_id;
-
+                    document.getElementById("update_bus_reg_no").value = existingData.bus_registration_no;
+                    document.getElementById("update_driver_nic").value = existingData.driver_nic;
+                    document.getElementById("update_conductor_nic").value = existingData.conductor_nic;
                 });
             } else if (response.status === 401) {
                 console.log('Unauthorized');
@@ -314,23 +334,26 @@ function updateRow(bus_profile_id){
         .catch(error => {
             console.error('Error:', error);
         });
+    openForm_update(); // Open the update form
+}
 
-    document.getElementById("busprofileUpdateForm").addEventListener("submit", function(event) {
-        event.preventDefault();
+// Handle form submission for updating bus profile data
+document.getElementById("busprofileUpdateForm").addEventListener("submit", function(event) {
+    event.preventDefault();
+    const bus_profile_id = document.getElementById("header_bus_profile_id").textContent;
+    const reg_no = document.getElementById("update_bus_reg_no").value;
+    const driver_nic = document.getElementById("update_driver_nic").value;
+    const conductor_nic = document.getElementById("update_conductor_nic").value;
 
-        const bus_profile_id = document.getElementById("update_bus_profile_id").value;
-        const bus_id = document.getElementById("update_bus_id").value;
-        const driver_id = document.getElementById("update_driver_id").value;
-        const conductor_id = document.getElementById("update_conductor_id").value;
+    const userData = {
+        reg_no: reg_no,
+        driver_nic: driver_nic,
+        conductor_nic: conductor_nic,
+    };
+    console.log(userData);
 
-        const updatedData = {
-            bus_profile_id: bus_profile_id,
-            bus_id: bus_id,
-            driver_id: driver_id,
-            conductor_id: conductor_id,
-        };
-
-        const jsonData = JSON.stringify(updatedData);
+    const jsonData = JSON.stringify(userData);
+    console.log(jsonData);
 
     fetch(`${ url }/busprofileController`, {
             method: 'PUT',
@@ -338,38 +361,42 @@ function updateRow(bus_profile_id){
                 'Content-Type': 'application/json',
                 'bus_profile_id': bus_profile_id
             },
-            body: jsonData
+        body: jsonData
+    })
+        .then(response => {
+            if (response.ok) {
+                closeForm_update();
+                openAlertSuccess("Successfully");
+            } else if (response.status === 401) {
+                openAlertFail(response.status);
+                console.log('Update unsuccessful');
+            } else {
+                openAlertFail(response.status);
+                console.error('Error:', response.status);
+            }
         })
-            .then(response => {
-                if (response.ok) {
-                    closeForm_update();
-                    openAlertSuccess();
-                } else if (response.status === 401) {
-                    openAlertFail(response.status);
-                    console.log('Update unsuccessful');
-                } else {
-                    openAlertFail(response.status);
-                    console.error('Error:', response.status);
-                }
-            })
-            .catch(error => {
-                console.error('Error:', error);
-            });
+        .catch(error => {
+            console.error('Error:', error);
+        });
     });
-}
+
 
  function deleteRow() {
      fetch(`${ url }/busprofileController`, {
          method: 'DELETE',
          headers: {
              'Content-Type': 'application/json',
-             'bus_profile_id': bus_profile_id,
+             'bus_profile_id': Bus_profile_id,
          },
      })
      .then(response => {
          if (response.ok) {
              closeAlert();
              openAlertSuccess("Successfully Deleted!");
+         } else if (response.status === 401) {
+             closeAlert();
+             openAlertFail(response.status);
+             console.log('Delete unsuccessful');
          } else {
              openAlertFail(response.status);
              closeAlert();
@@ -444,7 +471,7 @@ function closeAlert(){
     document.getElementById("confirmAlert").style.display = "none";
     document.getElementById("overlay").style.display = "none";
 }
-function openFlagConfirm(driver_id){
+function openFlagConfirm(bus_profile_id){
     Bus_profile_id = bus_profile_id;
     document.getElementById("confirmAlert").style.display = "block";
     document.getElementById("overlay").style.display = "block";
@@ -466,7 +493,7 @@ function createForm(action) {
         <div class="busprofile_form_left">
             <div class="form_div">
                 <label for="bus_reg_no" class="busprofile_form_title">Bus Registration No.<span class="busprofile_form_require">*</span></label>
-                <input type="text" name="bus_reg_no" id="bus_reg_no" class="form_data" placeholder="Enter NIC" required="required" oninput="showSuggestions1(event)"/>
+                <input type="text" name="bus_reg_no" id="bus_reg_no" class="form_data" placeholder="Enter Bus Registration No" required="required" oninput="showSuggestions1(event)"/>
                 <ul id="bus_reg_no_suggestions" class="autocomplete-list"></ul>
             </div>
             <div class="form_div">
@@ -494,12 +521,19 @@ function createForm(action) {
         const form = `
             <div class="busprofile_form_left">
                 <div class="form_div">
+                    <label for="bus_reg_no" class="busprofile_form_title">Bus Registration No.<span class="busprofile_form_require">*</span></label>
+                    <input type="text" name="bus_reg_no" id="bus_reg_no" class="form_data" placeholder="Update Bus Registration No"  />
+
+                </div>
+                <div class="form_div">
                     <label for="driver_nic" class="busprofile_form_title">Driver NIC <span class="busprofile_form_require">*</span></label>
-                    <input type="text" name="driver_nic" id="driver_nic" class="form_data" placeholder=" update Driver NIC"  />
+                    <input type="text" name="driver_nic" id="driver_nic" class="form_data" placeholder="Update Driver NIC"  />
+
                 </div>
                 <div class="form_div">
                     <label for="conductor_nic" class="busprofile_form_title"> Conductor NIC <span class="busprofile_form_require">*</span></label>
-                    <input type="text" name="conductor_nic" id="conductor_nic" class="form_data" placeholder=" Update Conductor NIC" />
+                    <input type="text" name="conductor_nic" id="conductor_nic" class="form_data" placeholder="Update Conductor NIC"/>
+
                 </div>
             </div>
         `;
@@ -507,8 +541,8 @@ function createForm(action) {
         form_update.innerHTML = form.replace(/id="/g, 'id="update_');
         const formContainer_update = document.getElementById('formContainer_update');
         formContainer_update.appendChild(form_update.cloneNode(true)); // Clone the form
-
     }
+
 }
 
 function showSuggestions1(event) {

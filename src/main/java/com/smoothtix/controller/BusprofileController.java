@@ -11,6 +11,8 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -18,6 +20,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 
 public class BusprofileController extends HttpServlet {
     @Override
@@ -25,8 +28,12 @@ public class BusprofileController extends HttpServlet {
         response.setContentType("text/html");
         PrintWriter out = response.getWriter();
 
+        HttpSession session = request.getSession();
+        String p_id = (String) session.getAttribute("p_id"); // Retrieve p_id from session
+        System.out.println(p_id);
+
         try {
-            ResultSet rs = busprofileTable.getAllDetails();
+            ResultSet rs = busprofileTable.getAllDetails(p_id);
 
             JSONArray busprofileDataArray = new JSONArray();
             while (rs.next()) {
@@ -95,23 +102,28 @@ public class BusprofileController extends HttpServlet {
     }
 
 
-
     @Override
     protected void doPut(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        response.setContentType("text/html");
+        response.setContentType("application/json");
         PrintWriter out = response.getWriter();
 
         try {
             Gson gson = new Gson();
-
-            String bus_profile_id = request.getHeader("bus_profile_id");
-
+            String busProfileId = request.getHeader("bus_profile_id");
+            System.out.println(busProfileId);
             BufferedReader reader = request.getReader();
             Busprofile busprofile = gson.fromJson(reader, Busprofile.class);
 
+            // Retrieve bus_id, driver_id, and conductor_id based on provided reg_no, driver_nic, and conductor_nic
+            String busId = busprofileTable.retrieveBusId(busprofile.getBus_id());
+            System.out.println(busId);
+            String driverId = busprofileTable.retrieveDriverId(busprofile.getDriver_id());
+            System.out.println(driverId);
+            String conductorId = busprofileTable.retrieveConductorId(busprofile.getConductor_id());
 
-            int updateSuccess = busprofileTable.update(bus_profile_id, busprofile);
-
+            // Update bus_profile table with retrieved IDs
+            int updateSuccess = busprofileTable.update(busProfileId, busId, driverId, conductorId);
+            System.out.println(updateSuccess);
             if (updateSuccess >= 1) {
                 response.setStatus(HttpServletResponse.SC_OK);
             } else {
@@ -123,6 +135,8 @@ public class BusprofileController extends HttpServlet {
         }
     }
 
+
+
     @Override
     protected void doDelete(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         response.setContentType("text/html");
@@ -133,14 +147,16 @@ public class BusprofileController extends HttpServlet {
             int deleteSuccess = busprofileTable.delete(bus_profile_id);
 
             if (deleteSuccess >= 1) {
+                System.out.println(deleteSuccess);
                 response.setStatus(HttpServletResponse.SC_OK);
             } else {
+                System.out.println(deleteSuccess);
                 response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
             }
         } catch (Exception e) {
-            e.printStackTrace();
             response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
         }
     }
+
 
 }

@@ -74,7 +74,7 @@ public class busprofileTable {
         ResultSet rs;
 
         con = dbConnection.initializeDatabase();
-        String query = "SELECT COALESCE(MAX(CAST(SUBSTRING(bus_profile_id, 4) AS SIGNED)), 0) + 1 AS next_bus_profile_id FROM bus_profile";
+        String query = "SELECT COALESCE(MAX(CAST(SUBSTRING(bus_profile_id, 3) AS SIGNED)), 0) + 1 AS next_bus_profile_id FROM bus_profile";
         stmt = con.createStatement();
         rs = stmt.executeQuery(query);
 
@@ -93,7 +93,7 @@ public class busprofileTable {
         ResultSet rs = pst.executeQuery();
         return rs;
     }
-    public static ResultSet getAllDetails() throws SQLException, ClassNotFoundException {
+    public static ResultSet getAllDetails(String p_id) throws SQLException, ClassNotFoundException {
         Connection con = dbConnection.initializeDatabase();
         PreparedStatement pst = con.prepareStatement("SELECT\n" +
                 "    bp.bus_profile_id,\n" +
@@ -122,13 +122,48 @@ public class busprofileTable {
                 "LEFT JOIN\n" +
                 "    passenger p_conductor ON c.p_id = p_conductor.p_id\n" +
                 "LEFT JOIN\n" +
-                "    passenger p_driver ON d.p_id = p_driver.p_id;\n");
+                "    passenger p_driver ON d.p_id = p_driver.p_id\n" +
+                "JOIN\n" +
+                "    bus bu ON bp.bus_id = bu.bus_id\n" +
+                "JOIN\n" +
+                "    owner o ON bu.owner_id = o.owner_id\n" +
+                "WHERE\n" +
+                "    o.p_id = ?;");
+        pst.setString(1, p_id);
         ResultSet rs = pst.executeQuery();
         return rs;
     }
+
     public static ResultSet getAll() throws SQLException, ClassNotFoundException {
         Connection con = dbConnection.initializeDatabase();
         PreparedStatement pst = con.prepareStatement("SELECT * FROM bus_profile");
+        ResultSet rs = pst.executeQuery();
+        return rs;
+    }
+
+    public static ResultSet getByBPId(String bus_profile_id) throws SQLException, ClassNotFoundException {
+        Connection con = dbConnection.initializeDatabase();
+        PreparedStatement pst = con.prepareStatement("SELECT \n" +
+                "    bp.bus_profile_id,\n" +
+                "    b.reg_no,\n" +
+                "    b.no_of_seats,\n" +
+                "    p_driver.nic AS driver_nic,\n" +
+                "    p_conductor.nic AS conductor_nic\n" +
+                "FROM \n" +
+                "    bus_profile bp\n" +
+                "JOIN \n" +
+                "    bus b ON bp.bus_id = b.bus_id\n" +
+                "JOIN \n" +
+                "    driver d ON bp.driver_id = d.driver_id\n" +
+                "JOIN \n" +
+                "    passenger p_driver ON d.p_id = p_driver.p_id\n" +
+                "JOIN \n" +
+                "    conductor c ON bp.conductor_id = c.conductor_id\n" +
+                "JOIN \n" +
+                "    passenger p_conductor ON c.p_id = p_conductor.p_id\n" +
+                "WHERE \n" +
+                "    bp.bus_profile_id = ?;");
+        pst.setString(1,bus_profile_id);
         ResultSet rs = pst.executeQuery();
         return rs;
     }
@@ -153,23 +188,88 @@ public class busprofileTable {
                 "JOIN\n" +
                 "    route ON bus.route_id = route.route_id\n" +
                 "WHERE\n" +
-                "    bus_profile.bus_profile_id = 'BP001';");
+                "    bus_profile.bus_profile_id = ?;");
+        pst.setString(1,bus_profile_id);
         ResultSet rs = pst.executeQuery();
         return rs;
     }
 
-    public static int update(String bus_profile_id, Busprofile bus_profile) throws SQLException, ClassNotFoundException {
+    public static int update(String bus_profile_id, String reg_no, String driver_nic, String conductor_nic) throws SQLException, ClassNotFoundException {
         Connection con = dbConnection.initializeDatabase();
-        PreparedStatement pst = con.prepareStatement("UPDATE bus_profile SET bus_profile_id=?, bus_id=? , driver_id=?, conductor_id=? WHERE bus_profile_id=?");
-        pst.setString(1,bus_profile.getBusprofile_id());
-        pst.setString(2,bus_profile.getBus_id());
-        pst.setString(3,bus_profile.getDriver_id());
-        pst.setString(4,bus_profile.getConductor_id());
-        pst.setString(5,bus_profile_id);
-        int rawCount = pst.executeUpdate();
-        return rawCount;
+
+            // Update bus_profile with new values
+            String updateQuery = "UPDATE bus_profile SET bus_id=?, driver_id=?, conductor_id=? WHERE bus_profile_id=?";
+
+        try (PreparedStatement updatePst = con.prepareStatement(updateQuery)) {
+                updatePst.setString(1, reg_no);
+                updatePst.setString(2, driver_nic);
+                updatePst.setString(3, conductor_nic);
+                updatePst.setString(4, bus_profile_id);
+
+                int rowsAffected = updatePst.executeUpdate();
+                if (rowsAffected == 1) {
+                    return 1; // Successful update
+                } else {
+                    return -1; // Update failed
+                }
+        } catch (SQLException e) {
+            throw e; // Rethrow or handle exception
+        }
+    }
+    public static String retrieveBusId(String regNo) throws SQLException, ClassNotFoundException {
+        Connection con = dbConnection.initializeDatabase();
+        String busId = null;
+
+        try (
+             PreparedStatement pst = con.prepareStatement("SELECT bus_id FROM bus WHERE reg_no = ?");
+        ) {
+            pst.setString(1, regNo);
+            try (ResultSet rs = pst.executeQuery()) {
+                if (rs.next()) {
+                    busId = rs.getString("bus_id");
+                }
+            }
+        }
+
+        return busId;
     }
 
+
+    public static String retrieveDriverId(String driverNic) throws SQLException, ClassNotFoundException {
+        Connection con = dbConnection.initializeDatabase();
+        String driverId = null;
+
+        try (
+            PreparedStatement pst = con.prepareStatement("SELECT driver_id FROM driver WHERE p_id = (SELECT p_id FROM passenger WHERE nic = ?)");
+            ) {
+                pst.setString(1, driverNic);
+                try (ResultSet rs = pst.executeQuery()) {
+                    if (rs.next()) {
+                        driverId = rs.getString("driver_id");
+                    }
+                }
+            }
+
+            return driverId;
+        }
+
+    public static String retrieveConductorId(String conductorNic) throws SQLException, ClassNotFoundException {
+        Connection con = dbConnection.initializeDatabase();
+        String conductorId = null;
+
+        try (
+            PreparedStatement pst = con.prepareStatement("SELECT conductor_id FROM conductor WHERE p_id = (SELECT p_id FROM passenger WHERE nic = ?)");
+        ) {
+            pst.setString(1, conductorNic);
+            try (ResultSet rs = pst.executeQuery()) {
+                if (rs.next()) {
+                    conductorId = rs.getString("conductor_id");
+                }
+            }
+        }
+
+        return conductorId;
+    }
     public static int delete(String bus_profile_id) throws SQLException, ClassNotFoundException {
         Connection con = dbConnection.initializeDatabase();
         PreparedStatement pst = con.prepareStatement("DELETE FROM bus_profile WHERE bus_profile_id = ?");
