@@ -14,30 +14,54 @@ function refreshPage() {
 }
 // Fetch all data from the database
 function fetchAllData() {
-    fetch(`${ url }/busController`, {
+    document.getElementById("userName").textContent = session_user_name;
+    const authToken = localStorage.getItem('jwtToken');
+
+    // Validate the user session and get user data including p_id
+    fetch(`${url}/loginController?action=validate`, {
         method: 'GET',
         headers: {
-            'Content-Type': 'application/json'
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${authToken}`
         },
     })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error(`Failed to validate session: ${response.status}`);
+        }
+        return response.json();
+    })
+    .then(userData => {
+        const p_id = userData.p_id;
+
+        // Fetch bus data using p_id
+        fetch(`${url}/busController`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${authToken}`,
+                'p_id': p_id
+            },
+        })
         .then(response => {
-            if (response.ok) {
-                return response.json();
-            } else {
-                console.error('Error:', response.status);
+            if (!response.ok) {
+                throw new Error(`Failed to fetch bus data: ${response.status}`);
             }
+            return response.json();
         })
         .then(data => {
             allData = data;
-            console.log(allData)
             updatePage(currentPage);
         })
         .catch(error => {
-            console.error('Error:', error);
+            console.error('Error fetching bus data:', error);
         });
+    })
+    .catch(error => {
+        console.error('Error validating session:', error);
+    });
 }
 
-fetchAllData();
 
 function updatePageNumber(page) {
     document.getElementById("currentPageNumber").textContent = page;
@@ -113,7 +137,7 @@ function displayDataAsTable(data) {
                             <td>${item.reg_no}</td>
                             <td>${item.route_id}</td>
                             <td>${item.no_of_Seats}</td>
-                            <td>${item.reveiw_points}</td>
+                            <td>${item.review_points}</td>
                             <td>
                                 <span class="icon-container">
                                     <i onclick="updateRow('${item.bus_id}')"><img src="../../../images/vector_icons/update_icon.png" alt="update" class="action_icon"></i>
@@ -145,21 +169,17 @@ function renderPageControl(){
 document.getElementById("busRegForm").addEventListener("submit", function(event) {
     event.preventDefault();
 
-    const bus_id = document.getElementById("add_bus_id").value;
     const owner_id = document.getElementById("add_owner_id").value;
     const reg_no = document.getElementById("add_reg_no").value;
     const route_id = document.getElementById("add_route_id").value;
     const no_of_Seats = document.getElementById("add_no_of_Seats").value;
-    const reveiw_points = document.getElementById("add_reveiw_points").value;
 
 
     const userData = {
-        bus_id: bus_id,
         owner_id: owner_id,
         reg_no: reg_no,
         route_id: route_id,
         no_of_Seats: no_of_Seats,
-        reveiw_points: reveiw_points,
     };
     console.log(userData)
     const jsonData = JSON.stringify(userData);
@@ -212,12 +232,9 @@ function updateRow(bus_id){
                     existingData = data[0];
                     console.log("existingData:", existingData);
 
-                    document.getElementById("update_bus_id").value = existingData.bus_id;
-                    document.getElementById("update_owner_id").value = existingData.owner_id;
-                    document.getElementById("update_reg_no").value = existingData.reg_no;
                     document.getElementById("update_route_id").value = existingData.route_id;
                     document.getElementById("update_no_of_Seats").value = existingData.no_of_Seats;
-                    document.getElementById("update_reveiw_points").value = existingData.reveiw_points;
+
                 });
             } else if (response.status === 401) {
                 console.log('Unauthorized');
@@ -232,21 +249,15 @@ function updateRow(bus_id){
     document.getElementById("busUpdateForm").addEventListener("submit", function(event) {
         event.preventDefault();
 
-        const bus_id = document.getElementById("update_bus_id").value;
-        const owner_id = document.getElementById("update_owner_id").value;
-        const reg_no = document.getElementById("update_reg_no").value;
+
         const route_id = document.getElementById("update_route_id").value;
         const no_of_Seats = document.getElementById("update_no_of_Seats").value;
-        const reveiw_points = document.getElementById("update_reveiw_points").value;
 
 
         const updatedData = {
-            bus_id: bus_id,
-            owner_id: owner_id,
-            reg_no: reg_no,
             route_id: route_id,
             no_of_Seats: no_of_Seats,
-            reveiw_points: reveiw_points,
+
         };
 
         const jsonData = JSON.stringify(updatedData);
@@ -387,10 +398,6 @@ function createForm() {
     var form= `
         <div class="bus_form_left">
             <div class="form_div">
-                <label for="bus_id" class="bus_form_title">Bus Id <span class="bus_form_require">*</span></label>
-                <input type="text" name="bus_id" id="bus_id" class="form_data" placeholder="Enter the Bus ID" required="required" />
-            </div>
-            <div class="form_div">
                 <label for="owner_id" class="bus_form_title">Owner NIC <span class="reg_form_require">*</span></label>
                 <input type="text" name="owner_id" id="owner_id" class="form_data" placeholder="Enter Owner NIC" required="required" />
             </div>
@@ -409,8 +416,8 @@ function createForm() {
                 <input type="number" name="no_of_Seats" id="no_of_Seats" class="form_data" placeholder="Enter Number of Seats" required="required" />
             </div>
             <div class="form_div">
-                <label for="reveiw_points" class="bus_form_title">Reveiw Points <span class="bus_form_require">*</span></label>
-                <input type="text" name="reveiw_points" id="reveiw_points" class="form_data" placeholder="Enter Reveiw points" required="required" />
+                <label for="review_points" class="bus_form_title">Reveiw Points <span class="bus_form_require">*</span></label>
+                <input type="text" name="review_points" id="review_points" class="form_data" placeholder="Enter Reveiw points" required="required" />
             </div>
         </div>
         `;
