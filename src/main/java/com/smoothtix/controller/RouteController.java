@@ -37,7 +37,6 @@ public class RouteController extends HttpServlet {
                         routeData.put("distance", rs.getString("distance"));
                         routeData.put("price_per_ride", rs.getString("price_per_ride"));
                         routeData.put("number_of_buses", rs.getString("number_of_buses"));
-                        System.out.println(routeData);
                         routeDataArray.put(routeData);
                     }
                 }
