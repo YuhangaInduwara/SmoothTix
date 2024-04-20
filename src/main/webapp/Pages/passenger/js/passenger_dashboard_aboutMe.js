@@ -10,7 +10,7 @@ function fetchAllData() {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json',
-            'p_id': session_p_id_temp
+            'p_id': session_p_id
         },
     })
         .then(response => {

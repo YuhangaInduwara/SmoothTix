@@ -33,6 +33,22 @@ public class seatAvailabilityTable {
         return rs;
     }
 
+    public static int updateSeatNo(String scheduleId, int[] selectedSeats) throws SQLException {
+        Connection con = dbConnection.initializeDatabase();
+        PreparedStatement pst = con.prepareStatement("UPDATE seat_availability SET availability = ? WHERE schedule_id=? AND seat_no=?");
+
+        int rawCount = 0;
+        for (int seat : selectedSeats) {
+            pst.setBoolean(1, true);
+            pst.setString(2, scheduleId);
+            pst.setInt(3, seat);
+            int rowsAffected = pst.executeUpdate();
+            rawCount += rowsAffected;
+        }
+
+        return rawCount;
+    }
+
 //    public static ResultSet getByDriverId(String driver_id) throws SQLException, ClassNotFoundException {
 //        Connection con = dbConnection.initializeDatabase();
 //        PreparedStatement pst = con.prepareStatement("SELECT s.*, r.route_no, r.start, r.destination\n" +
