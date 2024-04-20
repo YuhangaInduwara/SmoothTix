@@ -137,7 +137,7 @@ a{
 .search_box{
     flex: 1;
     display: flex;
-    margin: 19px;
+    margin: 15px;
 }
 
 
@@ -275,7 +275,7 @@ select::after {
     max-width: 635px;
     border: 1px solid #cccccc;
     box-shadow: 0 0 5px rgba(0.1, 0.1, 0.1, 0.1);
-    background-color: white; width: 90%; display: flex; flex-direction: column; justify-content: space-between; align-items: center; border-radius: 10px; height:150px;
+    background-color: white; display: flex; flex-direction: column; justify-content: space-between; align-items: center; border-radius: 10px; height:150px;
 }
 
 .schedule_element_row1{
@@ -448,6 +448,37 @@ select::after {
     padding: 50px;
     gap:40px;
     display: none;
+}
+
+.deleteAlertBody{
+    height: 430px;
+    background: #ffffff;
+    border-radius: 10px;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+    z-index: 1001;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 50px;
+    gap:40px;
+    display: none;
+}
+
+.declaimer_msg{
+    display: flex;
+    flex-direction: row;
+    font-size: 10px;
+    color: red;
+}
+
+#vertical-line {
+    border-left: 2px solid #000000;
+    height: 100%;
 }
 
 .mapView{
@@ -790,4 +821,27 @@ body {
     height: 25px;
     cursor: pointer;
     margin-right: 1px;
+}
+
+.seatTile {
+    width: 40px;
+    height: 40px;
+    margin: 5px;
+    cursor: pointer;
+    background-color: #ffffff;
+    border: 1px solid #999;
+    display: inline-block;
+    text-align: center;
+    line-height: 40px;
+    font-size: 18px;
+}
+
+.selected {
+    background-color: #5cb85c;
+    color: white;
+    border: 1px solid #4cae4c;
+}
+
+.seatTile:hover{
+    background-color: #cccccc;
 }
