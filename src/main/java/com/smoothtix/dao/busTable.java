@@ -6,31 +6,17 @@ import com.smoothtix.model.Bus;
 import java.sql.*;
 
 public class busTable {
-    public static int insert(Bus bus, String ownerNic) throws SQLException, ClassNotFoundException {
+    public static int insert(Bus bus, String ownerid) throws SQLException, ClassNotFoundException {
         Connection con = dbConnection.initializeDatabase();
         PreparedStatement pst = con.prepareStatement("insert into bus(bus_id, owner_id, reg_no, route_id, no_of_Seats, review_points) values (?,?,?,?,?,?)");
         pst.setString(1, generateBusID());
-        pst.setString(2, generateOwnerID(ownerNic)); // Pass the NIC of the logged-in user
+        pst.setString(2, ownerid); // Pass the NIC of the logged-in user
         pst.setString(3, bus.getReg_no());
         pst.setString(4, bus.getRoute_id());
         pst.setInt(5, bus.getNoOfSeats());
         pst.setFloat(6, 0.0f);
         int rawCount = pst.executeUpdate();
         return rawCount;
-    }
-    private static String generateOwnerID(String nic) throws SQLException, ClassNotFoundException {
-        Connection con = dbConnection.initializeDatabase();
-        String query = "SELECT owner_id FROM owner WHERE p_id = ?";
-        PreparedStatement pst = con.prepareStatement(query);
-        pst.setString(1, nic);
-        ResultSet rs = pst.executeQuery();
-
-        String ownerID = null;
-        if (rs.next()) {
-            ownerID = rs.getString("owner_id");
-        }
-
-        return ownerID;
     }
 
     private static String generateBusID() throws SQLException, ClassNotFoundException {

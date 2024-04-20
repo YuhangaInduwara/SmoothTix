@@ -129,6 +129,15 @@
   </servlet-mapping>
 
   <servlet>
+    <servlet-name>OwnerController</servlet-name>
+    <servlet-class>com.smoothtix.controller.OwnerController</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>OwnerController</servlet-name>
+    <url-pattern>/ownerController</url-pattern>
+  </servlet-mapping>
+
+  <servlet>
     <servlet-name>MailController</servlet-name>
     <servlet-class>com.smoothtix.controller.MailController</servlet-class>
   </servlet>

@@ -90,14 +90,33 @@ function showSuggestions1(event) {
 
 
 function openForm_add() {
-    const existingForm = document.querySelector(".bus_add_form_body");
+    // Check if the user is an owner
+    fetch(`${url}/ownerController`, {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+            'p_id': session_p_id
+        },
+    })
 
-    if (!existingForm) {
-        createForm();
-    }
-
-    document.getElementById("busRegForm").style.display = "block";
-    document.getElementById("overlay").style.display = "block";
+    .then(response => {
+        if (response.ok) {
+            // If user is an owner, redirect to owner dashboard
+            window.location.href = "../../busemployee/html/owner_dashboard_home.html";
+        } else {
+            // If user is not an owner, display the add bus form
+            const existingForm = document.querySelector(".bus_add_form_body");
+            if (!existingForm) {
+                createForm();
+            }
+            document.getElementById("busRegForm").style.display = "block";
+            document.getElementById("overlay").style.display = "block";
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        // Handle error if fetch fails
+    });
 }
 
 function closeForm_add() {
