@@ -37,6 +37,32 @@ public class paymentTable {
         return "PMT" + String.format("%04d", nextPaymentID);
     }
 
+    public static int updateFlag(String payment_id, boolean flag) throws SQLException {
+        Connection con = dbConnection.initializeDatabase();
+        PreparedStatement pst = con.prepareStatement("UPDATE payment SET flag=? WHERE payment_id=?");
+        pst.setBoolean(1,flag);
+        pst.setString(2,payment_id);
+        int rawCount = pst.executeUpdate();
+        return rawCount;
+    }
+
+    public static int updateAmount(String payment_id, double priceDeduct) throws SQLException {
+        Connection con = dbConnection.initializeDatabase();
+        PreparedStatement pst = con.prepareStatement("UPDATE payment SET amount=amount-? WHERE payment_id=?");
+        pst.setDouble(1,priceDeduct);
+        pst.setString(2,payment_id);
+        int rawCount = pst.executeUpdate();
+        return rawCount;
+    }
+
+    public static ResultSet get_by_payment_id(String payment_id) throws SQLException, ClassNotFoundException {
+        Connection con = dbConnection.initializeDatabase();
+        PreparedStatement pst = con.prepareStatement("SELECT * FROM payment WHERE payment_id=?");
+        pst.setString(1,payment_id);
+        return pst.executeQuery();
+    }
+
+
 //    private static String generateOwnerID(String owner_nic) throws SQLException, ClassNotFoundException {
 //        Connection con = dbConnection.initializeDatabase();
 //        PreparedStatement pst = con.prepareStatement("SELECT owner_id FROM owner WHERE owner_nic=?");

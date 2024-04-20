@@ -271,6 +271,10 @@ select::after {
     display:flex; justify-content:flex-start;align-items:center;flex-direction:row;gap: 10px; margin-left: 20px; margin-right: 10px; white-space: nowrap;
 }
 
+.booking_list{
+    height: 550px; overflow-y: auto;display:flex; justify-content:flex-start;align-items:center;flex-direction:column;gap: 10px; margin-left: 20px; margin-right: 10px; white-space: nowrap;
+}
+
 .schedule_tiles{
     max-width: 635px;
     border: 1px solid #cccccc;
@@ -452,6 +456,7 @@ select::after {
 
 .deleteAlertBody{
     height: 430px;
+    width: 600px;
     background: #ffffff;
     border-radius: 10px;
     position: fixed;
@@ -460,6 +465,25 @@ select::after {
     transform: translate(-50%, -50%);
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
     z-index: 1001;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 50px;
+    gap:40px;
+    display: none;
+}
+
+.bookingListBody{
+    height: 560px;
+    background: #ffffff;
+    border-radius: 10px;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+    z-index: 1000;
     flex-direction: column;
     justify-content: center;
     align-items: center;
@@ -490,7 +514,7 @@ select::after {
     left: 50%;
     transform: translate(-50%, -50%);
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
-    z-index: 1000;
+    z-index: 1001;
     flex-direction: column;
     justify-content: center;
     align-items: center;

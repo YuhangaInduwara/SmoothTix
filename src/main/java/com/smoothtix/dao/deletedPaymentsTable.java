@@ -2,53 +2,49 @@ package com.smoothtix.dao;
 
 import com.smoothtix.database.dbConnection;
 import com.smoothtix.model.Booking;
-import com.smoothtix.model.Bus;
 
 import java.sql.*;
-import java.util.Arrays;
+import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
-public class bookingTable {
-    public static String insert(Booking booking) throws SQLException, ClassNotFoundException {
-        Connection con = dbConnection.initializeDatabase();
-        PreparedStatement pst1 = con.prepareStatement("insert into booking(booking_id, payment_id, schedule_id, p_id, status) values (?,?,?,?,?)");
-        String booking_id = generateBookingID();
-        pst1.setString(1, booking_id);
-        pst1.setString(2, booking.getPayment_id());
-        pst1.setString(3, booking.getSchedule_id());
-        pst1.setString(4, booking.getP_id());
-        pst1.setBoolean(5, booking.getStatus());
-        int rawCount1 = pst1.executeUpdate();
-        if(rawCount1 >= 0){
-            for (int seat : booking.getSelectedSeats()) {
-                PreparedStatement pst2 = con.prepareStatement("insert into booked_seats(p_id, booking_id, seat_no) values (?,?,?)");
-                pst2.setString(1, booking.getP_id());
-                pst2.setString(2, booking_id);
-                pst2.setInt(3, seat);
-                int rawCount2 = pst2.executeUpdate();
-                if(rawCount2 <= 0){
-                    return "Unsuccessful";
-                }
-                else{
-                    PreparedStatement pst3 = con.prepareStatement("UPDATE seat_availability SET availability=false WHERE schedule_id=? AND seat_no=?");
-                    pst3.setString(1, booking.getSchedule_id());
-                    pst3.setInt(2, seat);
-                    int rawCount3 = pst3.executeUpdate();
-                    if(rawCount3 <= 0){
-                        return "Unsuccessful";
-                    }
-                }
-            }
-
-            PreparedStatement pst4 = con.prepareStatement("SELECT email FROM passenger WHERE p_id = ?");
-            pst4.setString(1, booking.getP_id());
-            ResultSet rs = pst4.executeQuery();
-            if (rs.next()) {
-                return "{\"booking_id\":\"" + booking_id + "\", \"p_id\":\"" + booking.getP_id() + "\", \"email\":\"" + rs.getString("email") + "\"}";
-            } else {
-                return "Unsuccessful";
-            }
+public class deletedPaymentsTable {
+    public static int insert(String payment_id) throws SQLException, ClassNotFoundException {
+        ResultSet rs = paymentTable.get_by_payment_id(payment_id);
+        if (rs.next()) {
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+            LocalDateTime currentDateTime = LocalDateTime.now();
+            String date_time = currentDateTime.format(formatter);
+            double amount = rs.getDouble("amount");
+            Connection con = dbConnection.initializeDatabase();
+            PreparedStatement pst1 = con.prepareStatement("insert into deleted_payment(payment_id, date_time, amount) values (?,?,?)");
+            pst1.setString(1, payment_id);
+            pst1.setString(2, date_time);
+            pst1.setDouble(3, amount);
+            return pst1.executeUpdate();
         }
-        return "Unsuccessful";
+        else{
+            return 0;
+        }
+    }
+
+    public static int insertPartially(String payment_id, double amount) throws SQLException, ClassNotFoundException {
+        ResultSet rs = paymentTable.get_by_payment_id(payment_id);
+        if (rs.next()) {
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+            LocalDateTime currentDateTime = LocalDateTime.now();
+            String date_time = currentDateTime.format(formatter);
+            System.out.println(amount);
+            Connection con = dbConnection.initializeDatabase();
+            PreparedStatement pst1 = con.prepareStatement("insert into deleted_payment(payment_id, date_time, amount) values (?,?,?)");
+            pst1.setString(1, payment_id);
+            pst1.setString(2, date_time);
+            pst1.setDouble(3, amount);
+            return pst1.executeUpdate();
+        }
+        else{
+            return 0;
+        }
     }
 
     private static String generateBookingID() throws SQLException, ClassNotFoundException {
