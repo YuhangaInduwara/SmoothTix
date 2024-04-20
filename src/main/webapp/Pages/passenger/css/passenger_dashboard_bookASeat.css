@@ -137,7 +137,7 @@ a{
 .search_box{
     flex: 1;
     display: flex;
-    margin: 19px;
+    margin: 15px;
     /*height: 40px;*/
     /*gap: 5px;*/
     /*justify-content: flex-end;*/

@@ -93,6 +93,7 @@ public class bookingTable {
                         "    r.destination, \n" +
                         "    r.route_no, \n" +
                         "    b.status, \n" +
+                        "    p.amount, \n" +
                         "    GROUP_CONCAT(bs.seat_no) AS booked_seats\n" +
                         "FROM \n" +
                         "    booking b \n" +
@@ -106,6 +107,8 @@ public class bookingTable {
                         "    route r ON bu.route_id = r.route_id \n" +
                         "JOIN \n" +
                         "    booked_seats bs ON b.booking_id = bs.booking_id\n" +
+                        "JOIN \n" +
+                        "    payment p ON b.payment_id = p.payment_id\n" +
                         "WHERE \n" +
                         "    b.p_id = ?\n" +
                         "GROUP BY \n" +
@@ -126,16 +129,6 @@ public class bookingTable {
     public static ResultSet getByBooking_id(String booking_id) throws SQLException, ClassNotFoundException {
         Connection con = dbConnection.initializeDatabase();
         PreparedStatement pst = con.prepareStatement(
-//                "SELECT b.booking_id, bs.seat_no, bu.reg_no, s.date_time, r.start, r.destination, b.status" +
-//                        "FROM booking b" +
-//                        "JOIN booked_seats bs ON bs.booking_id = b.booking_id" +
-//                        "JOIN schedule s ON b.schedule_id = s.schedule_id" +
-//                        "JOIN bus_profile bp ON s.bus_profile_id = bp.bus_profile_id" +
-//                        "JOIN bus bu ON bp.bus_id = bu.bus_id" +
-//                        "JOIN route r ON bu.route_id = r.route_id" +
-//                        "WHERE b.p_id = ?" +
-//                        "ORDER BY s.date_time;"
-
                 "SELECT \n" +
                         "    b.booking_id, \n" +
                         "    bu.reg_no, \n" +
@@ -144,6 +137,7 @@ public class bookingTable {
                         "    r.start, \n" +
                         "    r.destination, \n" +
                         "    b.status, \n" +
+                        "    p.payment_id, \n" +
                         "    GROUP_CONCAT(bs.seat_no) AS booked_seats\n" +
                         "FROM \n" +
                         "    booking b\n" +
@@ -157,6 +151,8 @@ public class bookingTable {
                         "    route r ON bu.route_id = r.route_id\n" +
                         "JOIN \n" +
                         "    booked_seats bs ON b.booking_id = bs.booking_id\n" +
+                        "JOIN \n" +
+                        "    payment p ON b.payment_id = p.payment_id\n" +
                         "WHERE \n" +
                         "    b.booking_id = ?\n" +
                         "ORDER BY \n" +

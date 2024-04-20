@@ -3,6 +3,10 @@ let currentPage = 1;
 const pageSize = 3;
 let allData = [];
 let booking_id_review;
+let booking_id_delete;
+let seat_delete = [];
+let all_seats = [];
+const errorMessages = {};
 
 // document.addEventListener('DOMContentLoaded', function () {
 //    isAuthenticated().then(() => fetchAllData());
@@ -118,15 +122,10 @@ function displayDataAsScheduleTiles_0(data) {
                     <h1 id="busRegNo">${item.booking_id}</h1>
                 </div>
                 <div>
-                    <p>From: <span id="start">${item.start}</span></p>
-                    <p>To: <span id="destination">${item.destination}</span></p>
-                </div>
-                <div>
-                    <p>Date: <span id="bookingClosingDate">${item.date}</span></p>
-                    <p>Time: <span id="bookingClosingTime">${item.time}</span></p>
+                    <h3><span id="start">${item.start}-${item.destination}</span></h3>
+                    <p>Status: Pending</p>
                 </div>
                 <div class="seatAvailability">
-                    <h2>Booked <br> Seat/Seats</h2>
                     <h1 id="seatAvailability">${item.seat_no}</h1>
                 </div>
             </div>
@@ -135,14 +134,14 @@ function displayDataAsScheduleTiles_0(data) {
                     <h1 id="busRegNo">${item.reg_no}</h1>
                 </div>
                 <div>
-                    <h1>Status: Pending</h1>
+                    <h1><span id="destination">${item.date} ${item.time}</span></h1>
                 </div>
                 <div class="addBookingBtn">
                     <span class="icon-container">
                         <i onclick="updateRow('${item.timekpr_id}')"><img src="../../../images/vector_icons/update_icon.png" alt="update" class="action_icon"></i>
                     </span>
                     <span class="icon-container" style="margin-left: 1px;">
-                        <i onclick="openFlagConfirm('${item.timekpr_id}')"><img src="../../../images/vector_icons/delete_icon.png" alt="delete" class="action_icon"></i>
+                        <i onclick="deleteBooking_passenger('${item.booking_id}', '${item.seat_no}')"><img src="../../../images/vector_icons/delete_icon.png" alt="delete" class="action_icon"></i>
                     </span>                    
                 </div>              
             </div>
@@ -185,15 +184,10 @@ function displayDataAsScheduleTiles_1(data) {
                         <h1 id="busRegNo">${item.booking_id}</h1>
                     </div>
                     <div>
-                        <p>From: <span id="start">${item.start}</span></p>
-                        <p>To: <span id="destination">${item.destination}</span></p>
-                    </div>
-                    <div>
-                        <p>Date: <span id="bookingClosingDate">${item.date}</span></p>
-                        <p>Time: <span id="bookingClosingTime">${item.time}</span></p>
+                        <h3><span id="start">${item.start}-${item.destination}</span></h3>
+                        <p>Status: Pending</p>
                     </div>
                     <div class="seatAvailability">
-                        <h2>Booked <br> Seat/Seats</h2>
                         <h1 id="seatAvailability">${item.seat_no}</h1>
                     </div>
                 </div>
@@ -202,7 +196,7 @@ function displayDataAsScheduleTiles_1(data) {
                         <h1 id="busRegNo">${item.reg_no}</h1>
                     </div>
                     <div>
-                        <h1>Status: Checked In</h1>
+                        <h1><span id="destination">${item.date} ${item.time}</span></h1>
                     </div>
                     <div class="addBookingBtn">
                         <span class="icon-container">
@@ -428,4 +422,131 @@ function closeAlert(){
     }
     document.getElementById("overlay").style.display = "none";
     refreshPage();
+}
+
+function deleteBooking_passenger(booking_id, seat_no){
+    booking_id_delete = booking_id;
+    openDeleteConfirmation(seat_no);
+}
+
+function openDeleteConfirmation(seat_no) {
+    let seats = seat_no.split(',');
+    all_seats = seats;
+    let seatToBeDeletedDiv = document.getElementById("seatToBeDeleted");
+    seatToBeDeletedDiv.innerHTML = '';
+
+    seats.forEach(function(seat) {
+        let seatTile = document.createElement("div");
+        seatTile.classList.add("seatTile");
+        seatTile.textContent = seat;
+
+        seatTile.addEventListener("click", function() {
+            this.classList.toggle("selected");
+
+            if (this.classList.contains("selected")) {
+                seat_delete.push(seat);
+                console.log(seat)
+            } else {
+                let index = seat_delete.indexOf(seat);
+                if (index !== -1) {
+                    seat_delete.splice(index, 1);
+                }
+            }
+        });
+
+        seatToBeDeletedDiv.appendChild(seatTile);
+    });
+
+    document.getElementById("deleteConfirmation").style.display = "block";
+    document.getElementById("overlay").style.display = "block";
+}
+
+function closeDeleteConfirmation(){
+    booking_id_delete = '';
+    seat_delete = [];
+    all_seats = [];
+    document.getElementById("declaration").checked = false;
+    document.getElementById("deleteConfirmation").style.display = "none";
+    document.getElementById("overlay").style.display = "none";
+}
+
+function deleteBookingPayment(){
+    if(booking_id_delete === ''){
+        console.log('booking_id_delete is null');
+    }
+    else if(seat_delete.length === 0){
+        console.log(seat_delete)
+        showAlert(document.getElementById("seatToBeDeleted"), "Please select one or more seats to be deleted.");
+    }
+    else if(!document.getElementById("declaration").checked){
+        showAlert(document.getElementById("declaration"), "Please agree to the terms and conditions.");
+    }
+    else if(seat_delete.length === all_seats.length){
+        console.log("1: " + seat_delete + " all seats:" + all_seats)
+    }
+    else if(seat_delete.length < all_seats.length){
+        console.log("m: " + seat_delete + " all seats:" + all_seats)
+    }
+}
+
+document.getElementById("review_form").addEventListener("submit", function(event) {
+    event.preventDefault();
+
+    const driverRating = parseInt(document.getElementById("driverRating").value);
+    const busRating = parseInt(document.getElementById("busRating").value);
+    const conductorRating = parseInt(document.getElementById("conductorRating").value);
+    const comments = document.getElementById("comments").value;
+
+    if (!driverRating || !busRating || !conductorRating || !comments) {
+        alert("Please fill in all required fields.");
+        return;
+    }
+
+    const pointDetails = {
+        driverRating: driverRating,
+        busRating: busRating,
+        conductorRating: conductorRating,
+        booking_id: booking_id_review
+    };
+
+    const jsonData = JSON.stringify(pointDetails);
+    fetch(`${url}/pointController`, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: jsonData
+    })
+        .then(response => {
+            if (response.ok) {
+                return response.json();
+            } else {
+                openAlert( "You only can review a journey once!", "alertFail");
+                console.log("Error:", response.status);
+            }
+        })
+        .then(data => {
+            const pointID = data.point_id;
+            addReview(pointID, booking_id_review, comments);
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
+});
+
+function showAlert(inputElement, message) {
+    if (!errorMessages[inputElement.id]) {
+        const alertBox = document.createElement("div");
+        alertBox.className = "alert";
+        alertBox.innerHTML = message;
+
+        inputElement.parentNode.insertBefore(alertBox, inputElement.nextSibling);
+
+        errorMessages[inputElement.id] = true;
+
+        setTimeout(function () {
+            alertBox.parentNode.removeChild(alertBox);
+            errorMessages[inputElement.id] = false;
+        }, 3000);
+    }
 }

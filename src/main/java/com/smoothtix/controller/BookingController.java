@@ -59,6 +59,7 @@ public class BookingController extends HttpServlet {
                     bookingData.put("seat_no", rs.getString("booked_seats"));
                     bookingData.put("status", rs.getInt("status"));
                     bookingData.put("schedule_status", rs.getInt("schedule_status"));
+                    bookingData.put("amount", rs.getInt("amount"));
                     bookingDataArray.put(bookingData);
                 }
             }
@@ -100,7 +101,6 @@ public class BookingController extends HttpServlet {
             Booking booking = gson.fromJson(reader, Booking.class);
             System.out.println(booking.getP_id());
             String jsonResponse = bookingTable.insert(booking);
-
 
             if (!jsonResponse.equals("Unsuccessful")) {
 
@@ -154,14 +154,23 @@ public class BookingController extends HttpServlet {
         PrintWriter out = response.getWriter();
 
         try {
-            String booking_id = request.getParameter("booking_id");
-            int deleteSuccess = busTable.delete(booking_id);
+            Gson gson = new Gson();
+            BufferedReader reader = request.getReader();
+            Booking booking = gson.fromJson(reader, Booking.class);
 
-            if (deleteSuccess >= 1) {
-                response.setStatus(HttpServletResponse.SC_OK);
-            } else {
-                response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+            ResultSet rs = bookingTable.getByBooking_id(booking.getBooking_id());
+
+            if(rs.next()){
+                System.out.println("Booking_id: " + rs.getString("booking_id") + " schedule_id: " + rs.getString("schedule_id") + " payment_id: " + rs.getString("payment_id"));
             }
+
+//            int deleteSuccess = busTable.delete(booking_id);
+//
+//            if (deleteSuccess >= 1) {
+                response.setStatus(HttpServletResponse.SC_OK);
+//            } else {
+//                response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+//            }
         } catch (Exception e) {
             e.printStackTrace();
             response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
