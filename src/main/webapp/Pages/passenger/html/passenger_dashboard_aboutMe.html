@@ -34,12 +34,17 @@
       </div>
       <div class="empty"></div>
       <div class="sidebar_element">
+        <a href="#" onclick="openForm_add()">
+          <img src="../../../images/vector_icons/bus.png" alt="add_bus" class="sidebar_img">
+        </a>
+        <a href="#" onclick="openForm_add()">Add Bus</a>
+      </div>
+      <div class="sidebar_element">
         <a href="../../login/html/login.html" onclick="logout(); return false;"><img src="../../../images/vector_icons/logout.png" alt="logout" class="sidebar_img"></a>
         <button id="logoutButton" style="background: none; border: none; padding: 0; text-decoration: none; cursor: pointer;" ><a href="" onclick="logout(); return false;">Logout</a></button>
       </div>
     </div>
   </div>
-
   <div class="content_container">
     <div class="navbar">
       <div class="page_name">
@@ -69,6 +74,9 @@
 
         <div class="passwordForm">
           <form class="passenger_form" id="passengerPasswordForm">
+            <div class="passenger_form_header">
+              <h2>Update Password</h2>
+            </div>
             <div id="formContainer_updates"></div>
             <div class="passenger_form_footer">
               <button type="button" class="passenger_form_button" onclick="closeForm_update()">Close</button>
@@ -76,28 +84,23 @@
             </div>
           </form>
         </div>
-
-        <div class="alertBody" id="successAlert">
+        <div class="alertBody" id="alertSuccess">
           <img src="../../../images/Alert_icons/Success_icon.png" class="alertImg" alt="success">
-          <div class="alertMsgSuccess">Operation Successful!</div>
-          <button class="okButton" onclick="closeAlertSuccess()">Ok</button>
+          <div class="alertMsgSuccess" id="alertMsgSuccess"></div>
+          <button class="okButton" onclick="closeAlert()">Ok</button>
         </div>
-
-        <div class="alertBody" id="failAlert">
+        <div class="alertBody" id="alertFail">
           <img src="../../../images/Alert_icons/Error_icon.png" class="alertImg" alt="fail">
-          <div class="alertMsgFail" id="failMsg"></div>
-          <button class="okButton" onclick="closeAlertFail()">Ok</button>
+          <div class="alertMsgFail" id="alertMsg"></div>
+          <button class="okButton" onclick="closeAlert()">Ok</button>
         </div>
 
       </div>
-     <div class="list" style="width: 450px; margin: auto; padding: 0 20px 20px 20px; text-align: center; border-radius: 10px;">
-       <h2 style="color: #333; font-size: 30px">Passenger Information</h2>
-       <div class="dataList" id="dataList" style="list-style: none; padding: 0; text-align: center; font-size: 25px">
-         <!-- List items will be inserted here -->
-       </div>
-     </div>
-
-
+      <div class="list" style="width: 450px; margin: auto; padding: 0 20px 20px 20px; text-align: center; border-radius: 10px;">
+        <h2 style="color: #333; font-size: 30px">Passenger Information</h2>
+        <div class="dataList" id="dataList" style="list-style: none; padding: 0; text-align: center; font-size: 25px">
+        </div>
+      </div>
     </div>
   </div>
 </div>
@@ -106,13 +109,3 @@
 <script src="../js/passenger_dashboard_aboutMe.js"></script>
 </body>
 </html>
-
-
-
-
-
-
-
-
-
-

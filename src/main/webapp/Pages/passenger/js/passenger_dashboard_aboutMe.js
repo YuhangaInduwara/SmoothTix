@@ -10,7 +10,7 @@ function fetchAllData() {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json',
-            'p_id': session_p_id_temp
+            'p_id': session_p_id
         },
     })
         .then(response => {
@@ -28,7 +28,6 @@ function fetchAllData() {
         });
 }
 
-// Display all data
 function displayDataAsParagraphs(data) {
     const container = document.querySelector("#dataList");
     container.innerHTML = '';
@@ -45,7 +44,7 @@ function displayDataAsParagraphs(data) {
 
             <div class="editDeleteButtons">
              <button class="okButton" onclick="update('${item.p_id}')" style="margin-right: 10px; margin-left: 10px">Edit Information</button>
-             <button class="okButton" onclick="changePassword('${item.p_id}')" style="margin-right: 10px; margin-left: 10px">Change Password</button>
+             <button class="okButton" onclick="openForm_changePassword()" style="margin-right: 10px; margin-left: 10px">Change Password</button>
            </div>
         `;
 
@@ -89,6 +88,7 @@ function update(p_id){
         });
 
     document.getElementById("passengerUpdateForm").addEventListener("submit", function(event) {
+        event.preventDefault();
 
         const first_name = document.getElementById("update_first_name").value;
         const last_name = document.getElementById("update_last_name").value;
@@ -114,108 +114,90 @@ function update(p_id){
         })
             .then(response => {
                 if (response.ok) {
-                    openAlertSuccess();
                     closeForm_update();
+                    openAlert( "Profile Successfully Updated!", "alertSuccess");
                 } else if (response.status === 401) {
-                    openAlertFail(response.status);
+                    openAlert( "Update unsuccessful", "alertFail");
                     console.log('Update unsuccessful');
                 } else {
-                    openAlertFail(response.status);
+                    openAlert( "Update unsuccessful", "alertFail");
                     console.error('Error:', response.status);
                 }
             })
             .catch(error => {
+                openAlert( "Update unsuccessful", "alertFail");
                 console.error('Error:', error);
             });
     });
 }
 
-function changePassword(p_id){
-    openForm_changePassword();
+document.getElementById("passengerPasswordForm").addEventListener("submit", function(event) {
+    event.preventDefault();
 
-    document.getElementById("passengerUpdateForm").addEventListener("submit", function(event) {
+    const password = document.getElementById("update_current_password").value;
+    const new_password = document.getElementById("update_new_password").value;
+    const reenter_new_password = document.getElementById("update_reenter_new_password").value;
+    console.log(password + " " + reenter_new_password + " " + new_password )
+    console.log(session_p_id)
+    fetch('../../../passengerController', {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+            'p_id': session_p_id,
+            'password': password
+        },
+    })
+        .then(response => {
+            if(response.ok){
+                if(new_password === reenter_new_password){
+                    const updatedPassword = {
+                        password: new_password,
+                    };
+                    const jsonData = JSON.stringify(updatedPassword);
+                    changePassword(jsonData);
+                }
+                else{
+                    openAlert( "Passwords don't match", "alertFail");
+                    console.log('Passwords don\'t match');
+                }
+            }
+            else{
+                openAlert( "Enter old password correctly", "alertFail");
+            }
+        })
+        .catch(error => {
+            openAlert( "Password update unsuccessful", "alertFail");
+        });
+});
 
-            const password = document.getElementById("update_current_password").value;
-            const new_password = document.getElementById("update_new_password").value;
-            const reenter_new_password = document.getElementById("update_reenter_new_password").value;
-            debugger;
-            fetch('../../../passengerController', {
-                    method: 'GET',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'p_id': p_id,
-                        'password': password
-                    },
-            })
-                    .then(response => {
-                        if(response.ok){
-                            console.log("nicee");
-                            if(new_password == reenter_new_password){
-                                const updatedPassword = {
-                                    password: new_password,
-                                };
-                                const jsonData = JSON.stringify(updatedPassword);
-                                console.log(p_id);
-
-                                fetch(`../../../passengerController`, {
-                                    method: 'PUT',
-                                    headers: {
-                                        'Content-Type': 'application/json',
-                                        'p_id': p_id
-                                    },
-                                    body: jsonData
-                                })
-                                    .then(response => {
-                                        if (response.ok) {
-                                            openAlertSuccess();
-                                            closeForm_update();
-                                        } else if (response.status === 401) {
-                                            openAlertFail(response.status);
-                                            console.log('Update unsuccessful');
-                                        } else {
-                                            openAlertFail(response.status);
-                                            console.error('Error:', response.status);
-                                        }
-                                    })
-                                    .catch(error => {
-                                        console.error('Error:', error);
-                                    });
-                            }
-                            else{
-                                openAlertFail("Enter Equal Passwords");
-                            }
-                        }
-
-                    })
-                    .catch(error => {
-                        openAlertFail("Incorrect Password");
-                    });
-    });
+function changePassword(jsonData) {
+    console.log(session_p_id)
+    fetch(`../../../passengerController`, {
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json',
+            'p_id': session_p_id
+        },
+        body: jsonData
+    })
+        .then(response => {
+            if (response.ok) {
+                closeForm_changePassword();
+                openAlert( "Password Successfully Updated!", "alertSuccess");
+                console.log('Update successful');
+            } else if (response.status === 401) {
+                openAlert( "Password update unsuccessful", "alertFail");
+                console.log('Update unsuccessful');
+            } else {
+                openAlert( "Password update unsuccessful", "alertFail");
+                console.error('Error:', response.status);
+            }
+        })
+        .catch(error => {
+            openAlert( "Password update unsuccessful", "alertFail");
+            console.error('Error:', error);
+        });
 }
-
-//function deleteEntity(nic){
-//    fetch(`../../../passengerController`, {
-//        method: 'DELETE',
-//        headers: {
-//            'Content-Type': 'application/json',
-//            'nic': nic
-//        },
-//    })
-//        .then(response => {
-//            if (response.ok) {
-//                openAlertSuccess();
-//            } else if (response.status === 401) {
-//                openAlertFail(response.status);
-//                console.log('Delete unsuccessful');
-//            } else {
-//                openAlertFail(response.status);
-//                console.error('Error:', response.status);
-//            }
-//        })
-//        .catch(error => {
-//            console.error('Error:', error);
-//        });
-//}
 
 function openForm_update() {
     const existingForm = document.querySelector(".passenger_update_form_body");
@@ -231,47 +213,54 @@ function openForm_update() {
 function closeForm_update() {
     document.getElementById("passengerUpdateForm").style.display = "none";
     document.getElementById("overlay").style.display = "none";
-    window.location.href = "../html/passenger_dashboard_aboutMe.html";
 }
 
 function openForm_changePassword() {
-    const existingForm = document.querySelector(".passenger_update_form_body");
+    const existingForm = document.querySelector(".passenger_password_form_body");
 
     if (!existingForm) {
         createPasswordForm();
     }
 
-    document.getElementById("passengerUpdateForm").style.display = "block";
+    document.getElementById("passengerPasswordForm").style.display = "block";
     document.getElementById("overlay").style.display = "block";
 }
 
-function openAlertSuccess() {
-    document.getElementById("successAlert").style.display = "block";
-    document.getElementById("overlay").style.display = "block";
-}
-
-function openAlertFail(response) {
-    document.getElementById("failMsg").innerHTML = "Operation failed (" + response + ")";
-    document.getElementById("failAlert").style.display = "block";
-    document.getElementById("overlay").style.display = "block";
-}
-
-function closeAlertSuccess() {
-    document.getElementById("successAlert").style.display = "none";
+function closeForm_changePassword() {
+    document.getElementById("passengerPasswordForm").style.display = "none";
     document.getElementById("overlay").style.display = "none";
-    window.location.href = "../../../index.html";
 }
 
-function closeAlertFail() {
-    document.getElementById("failAlert").style.display = "none";
+function openAlert(text, alertBody){
+    if(alertBody === "alertFail"){
+        document.getElementById("alertMsg").textContent = text;
+    }
+    else{
+        document.getElementById("alertMsgSuccess").textContent = text;
+    }
+    document.getElementById(alertBody).style.display = "block";
+    document.getElementById("overlay").style.display = "block";
+}
+
+function closeAlert(){
+    const alertSuccess = document.getElementById("alertSuccess");
+    const alertFail = document.getElementById("alertFail");
+    if(alertSuccess.style.display === "block" && alertFail.style.display === "block"){
+        alertSuccess.style.display = "none";
+        alertFail.style.display = "none";
+    }
+    else if(alertSuccess.style.display === "block"){
+        alertSuccess.style.display = "none";
+    }
+    else if(alertFail.style.display === "block"){
+        alertFail.style.display = "none";
+    }
     document.getElementById("overlay").style.display = "none";
-    window.location.href = "./passenger_dashboard_aboutMe.html";
+    window.location.href = "../html/passenger_dashboard_aboutMe.html";
+    refreshPage();
 }
 
 function createForm() {
-//    const form_add = document.createElement('div');
-//    form_add.classList.add('bus_add_form_body');
-
     const form_update = document.createElement('div');
     form_update.classList.add('passenger_update_form_body');
 
@@ -299,65 +288,62 @@ function createForm() {
 
         `;
 
-//    form_add.innerHTML = form.replace(/id="/g, 'id="add_');
     form_update.innerHTML = form.replace(/id="/g, 'id="update_');
-//    const formContainer_add = document.getElementById('formContainer_add');
     const formContainer_update = document.getElementById('formContainer_update');
-
-//    formContainer_add.appendChild(form_add.cloneNode(true)); // Clone the form
-    formContainer_update.appendChild(form_update.cloneNode(true)); // Clone the form
+    formContainer_update.appendChild(form_update.cloneNode(true));
 }
 
 function createPasswordForm(){
     const form_update = document.createElement('div');
-    form_update.classList.add('passenger_update_form_body');
+    form_update.classList.add('passenger_password_form_body');
 
     var form= `
         <div class="passenger_form_left">
 
             <div class="form_div">
                 <label for="current_password" class="passenger_form_title">Current Password <span class="passenger_form_require">*</span></label>
-                <input type="text" name="current_password" id="current_password" class="form_data" placeholder="Enter current password" required="required" />
+                <div class="password_container">
+                    <input type="password" name="current_password" id="current_password" class="form_data" placeholder="Enter current password" required="required" />
+                    <i class="fas fa-eye password_toggle" toggle-target="current_password"></i>
+                </div>
             </div>
-           <div class="form_div">
+            <div class="form_div">
                 <label for="new_password" class="passenger_form_title">New Password <span class="passenger_form_require">*</span></label>
-                <input type="text" name="new_password" id="new_password" class="form_data" placeholder="Enter new password" required="required" />
-           </div>
-           <div class="form_div">
+                <div class="password_container">
+                    <input type="password" name="new_password" id="new_password" class="form_data" placeholder="Enter new password" required="required" />
+                    <i class="fas fa-eye password_toggle" toggle-target="new_password"></i>
+                </div>
+            </div>
+            <div class="form_div">
                 <label for="reenter_new_password" class="passenger_form_title">ReEnter New Password <span class="passenger_form_require">*</span></label>
-                <input type="text" name="reenter_new_password" id="reenter_new_password" class="form_data" placeholder="ReEnter new password" required="required" />
-           </div>
-
+                <div class="password_container">
+                    <input type="password" name="reenter_new_password" id="reenter_new_password" class="form_data" placeholder="ReEnter new password" required="required" />
+                    <i class="fas fa-eye password_toggle" toggle-target="reenter_new_password"></i>
+                </div>
+            </div>
         </div>
 
         `;
 
-//    form_add.innerHTML = form.replace(/id="/g, 'id="add_');
     form_update.innerHTML = form.replace(/id="/g, 'id="update_');
-//    const formContainer_add = document.getElementById('formContainer_add');
     const formContainer_updates = document.getElementById('formContainer_updates');
-
-//    formContainer_add.appendChild(form_add.cloneNode(true)); // Clone the form
-    formContainer_update.appendChild(form_update.cloneNode(true)); // Clone the form
+    formContainer_updates.appendChild(form_update.cloneNode(true));
 
 }
 
-// Attach the searchData function to the keyup event of the search input field
-//const searchInput = document.getElementById("searchInput");
-//searchInput.addEventListener("keyup", searchData);
+document.querySelectorAll('.password_toggle').forEach(function(toggle) {
+    toggle.addEventListener('click', function() {
+        let targetId = this.getAttribute('toggle-target');
+        let targetInput = document.getElementById(targetId);
 
-
-function checkSessionStatus() {
-    fetch("../../../checkSessionController")
-        .then(response => {
-            if (response.status === 200) {
-                return response.json();
-            } else {
-                window.location.href = "http://localhost:2000/SmoothTix_war_exploded/Pages/login/html/login.html"
-            }
-        })
-        .then(data => {
-            p_id = data.p_id;
-            fetchAllData();
-        });
-}
+        if (targetInput.getAttribute('type') === 'password') {
+            targetInput.setAttribute('type', 'text');
+            this.classList.remove('fa-eye');
+            this.classList.add('fa-eye-slash');
+        } else {
+            targetInput.setAttribute('type', 'password');
+            this.classList.remove('fa-eye-slash');
+            this.classList.add('fa-eye');
+        }
+    });
+});

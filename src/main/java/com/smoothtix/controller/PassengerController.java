@@ -30,20 +30,16 @@ public class PassengerController extends HttpServlet {
 
         try {
             ResultSet rs = null;
-            System.out.println("hello");
             if(p_id != null && password != null){
                 String hashedpwd = passengerTable.getPassword(p_id);
-                System.out.println("hasedpwd = " + hashedpwd);
                 if(checkPassword(password, hashedpwd)){
                     response.setStatus(HttpServletResponse.SC_OK);
-                    System.out.println("password matched");
-                    return;
+
                 }
                 else{
                     response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-                    System.out.println("password not matched");
-                    return;
                 }
+                return;
             }
             if(p_id == null){
                 if(flag == null){
@@ -82,7 +78,6 @@ public class PassengerController extends HttpServlet {
 
             out.println(passengerDataArray.toString());
             response.setStatus(HttpServletResponse.SC_OK);
-            System.out.println("methentath awwada");
         }catch (Exception e) {
             e.printStackTrace();
             response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
@@ -97,16 +92,13 @@ public class PassengerController extends HttpServlet {
         try {
             Gson gson = new Gson();
             String p_id = request.getHeader("p_id");
-            System.out.println(p_id);
 
             BufferedReader reader = request.getReader();
             Passenger passenger = gson.fromJson(reader, Passenger.class);
             int updateSuccess = 0;
             if(passenger.get_password() != null && !passenger.get_password().isEmpty()){
-                System.out.println(passenger.get_password());
                 String hashedPassword = PasswordHash.hashPassword(passenger.get_password());
                 passenger.set_password(hashedPassword);
-                System.out.println(hashedPassword);
                 updateSuccess = passengerTable.updatePassword(p_id, passenger);
             }
             else if(passenger.get_flag() != null){

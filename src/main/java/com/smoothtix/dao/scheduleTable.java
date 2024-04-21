@@ -45,7 +45,22 @@ public class scheduleTable {
 
     public static ResultSet getByScheduleId(String schedule_id) throws SQLException, ClassNotFoundException {
         Connection con = dbConnection.initializeDatabase();
-        PreparedStatement pst = con.prepareStatement("SELECT * FROM schedule WHERE schedule_id=?");
+        PreparedStatement pst = con.prepareStatement("SELECT \n" +
+                "s.schedule_id, \n" +
+                "    s.date_time, \n" +
+                "    s.bus_profile_id, \n" +
+                "    s.status,\n" +
+                "    r.price_per_ride \n" +
+                "FROM\n" +
+                "schedule s\n" +
+                "JOIN\n" +
+                "bus_profile bp ON s.bus_profile_id=bp.bus_profile_id\n" +
+                "JOIN\n" +
+                "bus b ON bp.bus_id=b.bus_id\n" +
+                "JOIN\n" +
+                "route r ON b.route_id=r.route_id\n" +
+                "WHERE\n" +
+                "schedule_id=?;");
         pst.setString(1,schedule_id);
         ResultSet rs = pst.executeQuery();
         return rs;
