@@ -14,6 +14,7 @@ function refreshPage() {
 }
 function fetchAllData() {
     document.getElementById("userName").textContent = session_user_name;
+
     fetch(`${ url }/busprofileController`, {
         method: 'GET',
         headers: {
@@ -81,7 +82,7 @@ function displayDataAsTable(data) {
 
     if (data.length === 0) {
         const noDataRow = document.createElement("tr");
-        noDataRow.innerHTML = `<td colspan="7">No data available</td>`;
+        noDataRow.innerHTML = `<td colspan="8">No data available</td>`;
         tableBody.appendChild(noDataRow);
         return;
     }
