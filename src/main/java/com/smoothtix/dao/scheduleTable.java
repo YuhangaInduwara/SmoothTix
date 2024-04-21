@@ -50,7 +50,9 @@ public class scheduleTable {
                 "    s.date_time, \n" +
                 "    s.bus_profile_id, \n" +
                 "    s.status,\n" +
-                "    r.price_per_ride \n" +
+                "    r.price_per_ride, \n" +
+                "    r.start, \n" +
+                "    r.destination \n" +
                 "FROM\n" +
                 "schedule s\n" +
                 "JOIN\n" +

@@ -1,6 +1,5 @@
-let p_id = "P0008";
 let timeKeeper_id = "";
-let timeKeeper_stand= "";
+let timeKeeper_stand= "colombo";
 let currentPage = 1;
 const pageSize = 10;
 let allData = [];
@@ -9,10 +8,9 @@ let allFeasibleData = [];
 let date_time;
 let bus_profile_id_schedule;
 
-getTimeKeeperData();
 
 document.addEventListener('DOMContentLoaded', function () {
-    isAuthenticated().then(() => fetchAllData());
+    isAuthenticated().then(() => getTimeKeeperData());
 });
 
 function refreshPage() {
@@ -66,7 +64,7 @@ function setSearchStands() {
 }
 
 function getTimeKeeperData(){
-    fetch(`${ url }/timekeeperController?p_id=${p_id}`, {
+    fetch(`${ url }/timekeeperController?p_id=${session_p_id}`, {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json'
@@ -243,8 +241,6 @@ document.getElementById("busRegForm").addEventListener("submit", function(event)
                         closeForm_add();
                         openForm_bpSelection();
                     })
-
-                openAlertSuccess("Successfully Added!");
             } else{
                 return response.json()
                     .then(data => {
