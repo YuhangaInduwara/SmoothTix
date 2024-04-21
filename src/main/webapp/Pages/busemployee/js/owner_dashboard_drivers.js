@@ -161,7 +161,8 @@ document.getElementById("driverRegForm").addEventListener("submit", function (ev
     fetch(`${url}/driverController`, {
         method: 'POST',
         headers: {
-            'Content-Type': 'application/json'
+            'Content-Type': 'application/json',
+            'p_id': session_p_id
         },
         body: jsonData
     })

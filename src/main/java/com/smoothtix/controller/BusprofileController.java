@@ -27,13 +27,16 @@ public class BusprofileController extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         response.setContentType("text/html");
         PrintWriter out = response.getWriter();
-        String conductor_id = request.getParameter("conductor_id");
-        String p_id = request.getParameter("p_id");
 
+        String conductor_id = request.getParameter("conductor_id");
+        String p_id = request.getHeader("p_id");
+
+        System.out.println(p_id);
+        System.out.println(conductor_id);
 
         try {
             JSONArray busprofileDataArray = new JSONArray();
-            if (p_id==null&& conductor_id==null){
+            if (p_id== null && conductor_id== null){
                 ResultSet rs = busprofileTable.getAll();
 
 
@@ -51,7 +54,7 @@ public class BusprofileController extends HttpServlet {
                 }
 
             }
-            else if (p_id==null){
+            else if (p_id == null){
                 ResultSet rs = busprofileTable.getBPbyc_id(conductor_id);
 
 

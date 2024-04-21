@@ -61,7 +61,6 @@ public class BusController extends HttpServlet {
 
         try {
             String p_id = request.getHeader("p_id");// Get passenger's ID from request header
-            System.out.println(p_id+ "1");
             Gson gson = new Gson();
             BufferedReader reader = request.getReader();
             Bus bus = gson.fromJson(reader, Bus.class);
@@ -87,7 +86,6 @@ public class BusController extends HttpServlet {
 
     // Retrieve owner ID based on passenger ID
     private String getOwnerID(String p_id) {
-        System.out.println(p_id + "2");
         try {
             // Check if the passenger is also an owner
             boolean isOwner = ownerTable.isOwner(p_id);

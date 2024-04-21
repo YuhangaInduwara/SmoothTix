@@ -6,7 +6,7 @@ import com.smoothtix.model.Driver;
 import java.sql.*;
 
 public class driverTable {
-    public static int insert(String nic, String license_no, Float review_points) throws SQLException, ClassNotFoundException {
+    public static int insert(String nic, String license_no, Float review_points,String owner_id) throws SQLException, ClassNotFoundException {
         Connection con = dbConnection.initializeDatabase();
         PreparedStatement pst = con.prepareStatement("SELECT * FROM passenger WHERE nic=?");
         pst.setString(1, nic);
@@ -18,12 +18,14 @@ public class driverTable {
             } else if (rs.getInt("privilege_level") == 1 || rs.getInt("privilege_level") == 2 || rs.getInt("privilege_level") == 3 || rs.getInt("privilege_level") == 5) {
                 return 4;
             } else if (rs.getInt("privilege_level") == 6) {
-                PreparedStatement ps = con.prepareStatement("insert into driver(driver_id, p_id,license_no ,review_points) values (?,?,?,?)");
+                PreparedStatement ps = con.prepareStatement("insert into driver(driver_id, p_id,license_no ,review_points, owner_id) values (?,?,?,?,?)");
 
                 ps.setString(1, generate_driver_id());
                 ps.setString(2, rs.getString("p_id"));
                 ps.setString(3, license_no);
                 ps.setFloat(4, review_points);
+                ps.setString(5, owner_id);
+
                 Passenger passenger = new Passenger(rs.getString("nic"), 4);
                 int success = passengerTable.updatePrivilegeLevel(rs.getString("p_id"), passenger);
                 if (success == 1) {
