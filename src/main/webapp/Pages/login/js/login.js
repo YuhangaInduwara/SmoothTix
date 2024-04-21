@@ -99,4 +99,7 @@ function closeAlertFail() {
     document.getElementById("overlay").style.display = "none";
 }
 
-
+function forgotPassword(){
+    document.getElementById("forgotPassword").style.display = "block";
+    document.getElementById("overlay").style.display = "block";
+}
