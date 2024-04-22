@@ -102,4 +102,63 @@ function closeAlertFail() {
 function forgotPassword(){
     document.getElementById("forgotPassword").style.display = "block";
     document.getElementById("overlay").style.display = "block";
+
 }
+
+document.querySelector(".getOTPButton").addEventListener("click", function(event) {
+        event.preventDefault();
+        const email = document.getElementById("email").value;
+        console.log(email);
+        if (!email) {
+            alert("Please enter your email address.");
+            return;
+        }
+
+        const OTP = generateOTP();
+        console.log(OTP);
+
+        const userData ={
+            email: email,
+            otp: OTP,
+        };
+        const jsonData = JSON.stringify(userData);
+        console.log(userData);
+        fetch(`${ url }/otpController`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: jsonData
+            })
+            .then(response => {
+                        if (response.ok) {
+                            console.log("success");
+                            document.getElementById("otpVerification").style.display = "block";
+                            document.getElementById("forgotPassword").style.display = "none";
+                        } else {
+                            console.log("fail");
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                    });
+
+
+});
+
+function closeForgotPassword(){
+    document.getElementById("forgotPassword").style.display = "none";
+    document.getElementById("overlay").style.display = "none";
+}
+
+function closeOTPVerification(){
+    document.getElementById("otpVerification").style.display = "none";
+    document.getElementById("overlay").style.display = "none";
+}
+
+function generateOTP(){
+    const OTP = Math.floor(1000 + Math.random() * 9000);
+    localStorage.setItem("OTP", OTP);
+    return OTP;
+}
+

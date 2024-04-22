@@ -200,6 +200,15 @@
     <url-pattern>/pointController</url-pattern>
   </servlet-mapping>
 
+  <servlet>
+    <servlet-name>OTPController</servlet-name>
+    <servlet-class>com.smoothtix.controller.OTPController</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>OTPController</servlet-name>
+    <url-pattern>/otpController</url-pattern>
+  </servlet-mapping>
+
 
   <listener>
     <listener-class>com.smoothtix.controller.MyServletContextListener</listener-class>
