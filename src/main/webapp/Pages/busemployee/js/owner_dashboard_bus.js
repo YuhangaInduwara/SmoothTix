@@ -146,12 +146,12 @@ document.getElementById("busRegForm").addEventListener("submit", function(event)
     event.preventDefault();
 
     const reg_no = document.getElementById("add_reg_no").value;
-    const route_id = document.getElementById("add_route_id").value;
+    const route_no = document.getElementById("add_route_no").value;
     const no_of_Seats = document.getElementById("add_no_of_Seats").value;
 
     const userData = {
         reg_no: reg_no,
-        route_id: route_id,
+        route_no: route_no,
         no_of_Seats: no_of_Seats,
     };
     console.log(userData)
@@ -206,7 +206,7 @@ function updateRow(bus_id){
                 response.json().then(data => {
                     existingData = data[0];
                     console.log("existingData:", existingData);
-                    document.getElementById("update_route_id").value = existingData.route_id;
+                    document.getElementById("update_route_no").value = existingData.route_no;
                     document.getElementById("update_no_of_Seats").value = existingData.no_of_Seats;
                 });
             } else if (response.status === 401) {
@@ -221,10 +221,10 @@ function updateRow(bus_id){
 
     document.getElementById("busUpdateForm").addEventListener("submit", function(event) {
         event.preventDefault();
-        const route_id = document.getElementById("update_route_id").value;
+        const route_no = document.getElementById("update_route_no").value;
         const no_of_Seats = document.getElementById("update_no_of_Seats").value;
         const updatedData = {
-            route_id: route_id,
+            route_no: route_no,
             no_of_Seats: no_of_Seats,
         };
 
@@ -374,8 +374,8 @@ if(action === 'add'){
                 <input type="text" name="reg_no" id="reg_no" class="form_data" placeholder="Enter Registration No" required="required" />
             </div>
             <div class="form_div">
-                <label for="route_id" class="bus_form_title">Route Id <span class="bus_form_require">*</span></label>
-                <input type="text" name="route_id" id="route_id" class="form_data" placeholder="Enter Route_id" required="required" oninput="showSuggestions1(event)" />
+                <label for="route_no" class="bus_form_title">Route No <span class="bus_form_require">*</span></label>
+                <input type="text" name="route_no" id="route_no" class="form_data" placeholder="Enter Route_No" required="required" oninput="showSuggestions1(event)" />
                 <ul id="bus_route_suggestions" class="autocomplete-list"></ul>
             </div>
             <div class="form_div">
@@ -397,8 +397,9 @@ if(action === 'add'){
         const form = `
             <div class="bus_form_left">
                 <div class="form_div">
-                    <label for="route_id" class="bus_form_title">Route Id <span class="bus_form_require">*</span></label>
-                    <input type="text" name="route_id" id="route_id" class="form_data" placeholder="Enter Route_id" required="required" />
+                    <label for="route_no" class="bus_form_title">Route No <span class="bus_form_require">*</span></label>
+                    <input type="text" name="route_no" id="route_no" class="form_data" placeholder="Enter Route_No" required="required" oninput="showSuggestions2(event)" />
+                    <ul id="bus_route_suggestions" class="autocomplete-list"></ul>
                 </div>
                 <div class="form_div">
                     <label for="no_of_Seats" class="bus_form_title">Number of Seats <span class="bus_form_require">*</span></label>
@@ -413,6 +414,7 @@ if(action === 'add'){
     }
 
 }
+
 function showSuggestions1(event) {
     const input = event.target;
     const inputValue = input.value.toUpperCase();
@@ -438,14 +440,14 @@ function showSuggestions1(event) {
             .then(data => {
                 const suggestions = data.map(item => {
                     return {
-                        route_id: item.route_id,
+                        route_no: item.route_no,
                         start: item.start,
                         destination: item.destination
                     };
                 });
                 suggestionsContainer.innerHTML = '';
                 const filteredSuggestions = suggestions.filter(suggestion =>
-                    suggestion.route_id.toUpperCase().includes(inputValue)
+                    suggestion.route_no.toUpperCase().includes(inputValue)
                 );
                 suggestionsContainer.style.maxHeight = '200px';
                 suggestionsContainer.style.overflowY = 'auto';
@@ -459,9 +461,9 @@ function showSuggestions1(event) {
                     filteredSuggestions.forEach(suggestion => {
                         const listItem = document.createElement('li');
                         listItem.classList.add('autocomplete-list-item');
-                        listItem.textContent = `${suggestion.route_id} - ${suggestion.start} to ${suggestion.destination}`;
+                        listItem.textContent = `${suggestion.route_no} - ${suggestion.start} to ${suggestion.destination}`;
                         listItem.addEventListener('click', () => {
-                            input.value = suggestion.route_id;
+                            input.value = suggestion.route_no;
                             suggestionsContainer.innerHTML = '';
                         });
                         suggestionsContainer.appendChild(listItem);
@@ -474,6 +476,69 @@ function showSuggestions1(event) {
     }
 }
 
+
+
+function showSuggestions2(event) {
+    const input = event.target;
+    const inputValue = input.value.toUpperCase();
+    const suggestionsContainer = document.getElementById(`autocomplete-container2`);
+    if(inputValue === ""){
+        suggestionsContainer.innerHTML = '';
+    }
+    else {
+        fetch(`${url}/routeController`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+        })
+            .then(response => {
+                if (response.ok) {
+                    return response.json();
+                } else {
+                    console.error('Error:', response.status);
+                    throw new Error(`HTTP error! Status: ${response.status}`);
+                }
+            })
+            .then(data => {
+                const suggestions = data.map(item => {
+                    return {
+                        route_no: item.route_no,
+                        start: item.start,
+                        destination: item.destination
+                    };
+                });
+                suggestionsContainer.innerHTML = '';
+                const filteredSuggestions = suggestions.filter(suggestion =>
+                    suggestion.route_no.toUpperCase().includes(inputValue)
+                );
+                suggestionsContainer.style.maxHeight = '200px';
+                suggestionsContainer.style.overflowY = 'auto';
+                suggestionsContainer.style.width = '100%';
+                suggestionsContainer.style.left = `18px`;
+                if (filteredSuggestions.length === 0) {
+                    const errorMessage = document.createElement('li');
+                    errorMessage.textContent = 'No suggestions found';
+                    suggestionsContainer.appendChild(errorMessage);
+                } else {
+                    filteredSuggestions.forEach(suggestion => {
+                        const listItem = document.createElement('li');
+                        listItem.classList.add('autocomplete-list-item');
+                        listItem.textContent = `${suggestion.route_no} - ${suggestion.start} to ${suggestion.destination}`;
+                        listItem.addEventListener('click', () => {
+                            input.value = suggestion.route_no;
+                            suggestionsContainer.innerHTML = '';
+                        });
+                        suggestionsContainer.appendChild(listItem);
+                    });
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+    }
+}
+document.getElementById("update_route_no").addEventListener("input", showSuggestions2);
 
 const searchInput = document.getElementById("searchInput");
 searchInput.addEventListener("keyup", searchData);

@@ -298,7 +298,7 @@ function updateRow(bus_profile_id) {
                     existingData = data[0];
                     console.log("existingData:", existingData);
 
-                    document.getElementById("update_bus_reg_no").value = existingData.bus_registration_no;
+                    document.getElementById("update_bus_reg_no").value = existingData.reg_no;
                     document.getElementById("update_driver_nic").value = existingData.driver_nic;
                     document.getElementById("update_conductor_nic").value = existingData.conductor_nic;
                 });
@@ -479,7 +479,7 @@ function createForm(action) {
                 <ul id="Driver_nic_suggestions" class="autocomplete-list"></ul>
             </div>
             <div class="form_div">
-                <label for="conductor_nic" class="busprofile_form_title">CONDUCTOR NIC <span class="busprofile_form_require">*</span></label>
+                <label for="conductor_nic" class="busprofile_form_title">Conductor NIC <span class="busprofile_form_require">*</span></label>
                 <input type="text" name="conductor_nic" id="conductor_nic" class="form_data" placeholder="Enter Conductor NIC" required="required" oninput="showSuggestions3(event)"/>
                 <ul id="Conductor_nic_suggestions" class="autocomplete-list"></ul>
             </div>
@@ -499,18 +499,18 @@ function createForm(action) {
             <div class="busprofile_form_left">
                 <div class="form_div">
                     <label for="bus_reg_no" class="busprofile_form_title">Bus Registration No.<span class="busprofile_form_require">*</span></label>
-                    <input type="text" name="bus_reg_no" id="bus_reg_no" class="form_data" placeholder="Update Bus Registration No"  />
-
+                    <input type="text" name="bus_reg_no" id="bus_reg_no" class="form_data" placeholder="Update Bus Registration No" oninput="showSuggestions4(event)" />
+                    <ul id="bus_reg_no_suggestions" class="autocomplete-list"></ul>
                 </div>
                 <div class="form_div">
                     <label for="driver_nic" class="busprofile_form_title">Driver NIC <span class="busprofile_form_require">*</span></label>
-                    <input type="text" name="driver_nic" id="driver_nic" class="form_data" placeholder="Update Driver NIC"  />
-
+                    <input type="text" name="driver_nic" id="driver_nic" class="form_data" placeholder="Update Driver NIC" oninput="showSuggestions5(event)" />
+                    <ul id="Driver_nic_suggestions" class="autocomplete-list"></ul>
                 </div>
                 <div class="form_div">
                     <label for="conductor_nic" class="busprofile_form_title"> Conductor NIC <span class="busprofile_form_require">*</span></label>
-                    <input type="text" name="conductor_nic" id="conductor_nic" class="form_data" placeholder="Update Conductor NIC"/>
-
+                    <input type="text" name="conductor_nic" id="conductor_nic" class="form_data" placeholder="Update Conductor NIC" oninput="showSuggestions6(event)"/>
+                    <ul id="Conductor_nic_suggestions" class="autocomplete-list"></ul>
                 </div>
             </div>
         `;
@@ -533,7 +533,8 @@ function showSuggestions1(event) {
         fetch(`${url}/busController`, {
             method: 'GET',
             headers: {
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                'p_id': session_p_id
             },
         })
             .then(response => {
@@ -579,13 +580,12 @@ function showSuggestions1(event) {
 function showSuggestions2(event) {
     const input = event.target;
     const inputValue = input.value.toUpperCase();
-    const suggestionsContainer = document.getElementById(`autocomplete-container1`);
-    fetch(`${ url }/passengerController`, {
+    const suggestionsContainer = document.getElementById(`autocomplete-container2`);
+    fetch(`${ url }/driverController`, {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json',
-            'flag': '0',
-            'privilege_level': '4',
+            'op_id': session_p_id
         },
     })
         .then(response => {
@@ -630,13 +630,12 @@ function showSuggestions2(event) {
 function showSuggestions3(event) {
     const input = event.target;
     const inputValue = input.value.toUpperCase();
-    const suggestionsContainer = document.getElementById(`autocomplete-container1`);
-    fetch(`${ url }/passengerController`, {
+    const suggestionsContainer = document.getElementById(`autocomplete-container3`);
+    fetch(`${ url }/conductorController`, {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json',
-            'flag': '0',
-            'privilege_level': '5',
+            'op_id': session_p_id
         },
     })
         .then(response => {
@@ -678,6 +677,167 @@ function showSuggestions3(event) {
             console.error('Error:', error);
         });
 }
+
+function showSuggestions4(event) {
+    const input = event.target;
+    const inputValue = input.value.toUpperCase();
+    const suggestionsContainer = document.getElementById(`autocomplete-container4`);
+    if(inputValue === ""){
+        suggestionsContainer.innerHTML = '';
+    }
+    else {
+        fetch(`${url}/busController`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'p_id': session_p_id
+            },
+        })
+            .then(response => {
+                if (response.ok) {
+                    return response.json();
+                } else {
+                    console.error('Error:', response.status);
+                    throw new Error(`HTTP error! Status: ${response.status}`);
+                }
+            })
+            .then(data => {
+                const suggestions = data.map(item => item.reg_no);
+                suggestionsContainer.innerHTML = '';
+                const filteredSuggestions = suggestions.filter(suggestion =>
+                    suggestion.toUpperCase().includes(inputValue)
+                );
+                suggestionsContainer.style.maxHeight = '200px';
+                suggestionsContainer.style.overflowY = 'auto';
+                suggestionsContainer.style.width = '100%';
+                suggestionsContainer.style.left = `18px`;
+                if (filteredSuggestions.length === 0) {
+                    const errorMessage = document.createElement('li');
+                    errorMessage.textContent = 'No suggestions found';
+                    suggestionsContainer.appendChild(errorMessage);
+                } else {
+                    filteredSuggestions.forEach(suggestion => {
+                        const listItem = document.createElement('li');
+                        listItem.classList.add('autocomplete-list-item');
+                        listItem.textContent = suggestion;
+                        listItem.addEventListener('click', () => {
+                            input.value = suggestion;
+                            suggestionsContainer.innerHTML = '';
+                        });
+                        suggestionsContainer.appendChild(listItem);
+                    });
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+    }
+}
+function showSuggestions5(event) {
+    const input = event.target;
+    const inputValue = input.value.toUpperCase();
+    const suggestionsContainer = document.getElementById(`autocomplete-container5`);
+    fetch(`${ url }/driverController`, {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+            'op_id': session_p_id
+        },
+    })
+        .then(response => {
+            if (response.ok) {
+                return response.json();
+            } else {
+                console.error('Error:', response.status);
+                throw new Error(`HTTP error! Status: ${response.status}`);
+            }
+        })
+        .then(data => {
+            const suggestions = data.map(item => item.nic);
+            suggestionsContainer.innerHTML = '';
+            const filteredSuggestions = suggestions.filter(suggestion =>
+                suggestion.toUpperCase().includes(inputValue)
+            );
+            suggestionsContainer.style.maxHeight = '200px';
+            suggestionsContainer.style.overflowY = 'auto';
+            suggestionsContainer.style.width = '100%';
+            suggestionsContainer.style.left = `18px`;
+            if (filteredSuggestions.length === 0) {
+                const errorMessage = document.createElement('li');
+                errorMessage.textContent = 'No suggestions found';
+                suggestionsContainer.appendChild(errorMessage);
+            } else {
+                filteredSuggestions.forEach(suggestion => {
+                    const listItem = document.createElement('li');
+                    listItem.classList.add('autocomplete-list-item');
+                    listItem.textContent = suggestion;
+                    listItem.addEventListener('click', () => {
+                        input.value = suggestion;
+                        suggestionsContainer.innerHTML = '';
+                    });
+                    suggestionsContainer.appendChild(listItem);
+                });
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
+}
+function showSuggestions6(event) {
+    const input = event.target;
+    const inputValue = input.value.toUpperCase();
+    const suggestionsContainer = document.getElementById(`autocomplete-container6`);
+    fetch(`${ url }/conductorController`, {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+            'op_id': session_p_id
+        },
+    })
+        .then(response => {
+            if (response.ok) {
+                return response.json();
+            } else {
+                console.error('Error:', response.status);
+                throw new Error(`HTTP error! Status: ${response.status}`);
+            }
+        })
+        .then(data => {
+            const suggestions = data.map(item => item.nic);
+            suggestionsContainer.innerHTML = '';
+            const filteredSuggestions = suggestions.filter(suggestion =>
+                suggestion.toUpperCase().includes(inputValue)
+            );
+            suggestionsContainer.style.maxHeight = '200px';
+            suggestionsContainer.style.overflowY = 'auto';
+            suggestionsContainer.style.width = '100%';
+            suggestionsContainer.style.left = `18px`;
+            if (filteredSuggestions.length === 0) {
+                const errorMessage = document.createElement('li');
+                errorMessage.textContent = 'No suggestions found';
+                suggestionsContainer.appendChild(errorMessage);
+            } else {
+                filteredSuggestions.forEach(suggestion => {
+                    const listItem = document.createElement('li');
+                    listItem.classList.add('autocomplete-list-item');
+                    listItem.textContent = suggestion;
+                    listItem.addEventListener('click', () => {
+                        input.value = suggestion;
+                        suggestionsContainer.innerHTML = '';
+                    });
+                    suggestionsContainer.appendChild(listItem);
+                });
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
+}
+
+document.getElementById("update_bus_reg_no").addEventListener("input", showSuggestions4);
+document.getElementById("update_driver_nic").addEventListener("input", showSuggestions5);
+document.getElementById("update_conductor_nic").addEventListener("input", showSuggestions6);
+
 
 const searchInput = document.getElementById("searchInput");
 searchInput.addEventListener("keyup", searchData);

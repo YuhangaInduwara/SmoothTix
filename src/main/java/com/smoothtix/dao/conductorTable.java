@@ -23,7 +23,7 @@ public class conductorTable {
 
                 ps.setString(1, generate_conductor_id());
                 ps.setString(2, rs.getString("p_id"));
-                ps.setFloat(3, review_points);
+                ps.setFloat(3, 1.0f);
                 ps.setString(4, owner_id);
                 System.out.println("nic: " + rs.getString("nic"));
                 System.out.println("p_id: " + rs.getString("p_id"));
@@ -57,7 +57,7 @@ public class conductorTable {
         ResultSet rs;
 
         con = dbConnection.initializeDatabase();
-        String query = "SELECT COALESCE(MAX(CAST(SUBSTRING(conductor_id, 3) AS SIGNED)), 0) + 1 AS next_conductor_id FROM conductor";
+        String query = "SELECT COALESCE(MAX(CAST(SUBSTRING(conductor_id, 4) AS SIGNED)), 0) + 1 AS next_conductor_id FROM conductor";
         stmt = con.createStatement();
         rs = stmt.executeQuery(query);
 
@@ -94,6 +94,30 @@ public class conductorTable {
         Connection con = dbConnection.initializeDatabase();
         PreparedStatement pst = con.prepareStatement("SELECT COUNT(*) AS record_count FROM conductor");
         return pst.executeQuery();
+    }
+
+    public static ResultSet get_NIC(String p_id) throws SQLException, ClassNotFoundException {
+        Connection con = dbConnection.initializeDatabase();
+            String sql = "SELECT p.nic " +
+                    "FROM owner o " +
+                    "JOIN conductor c ON o.owner_id = c.owner_id " +
+                    "JOIN passenger p ON c.p_id = p.p_id " +
+                    "WHERE o.p_id = ?;";
+
+        PreparedStatement pst = con.prepareStatement(sql);
+        pst.setString(1, p_id);
+        return pst.executeQuery();
+    }
+
+    public static ResultSet getAllByOwner(String p_id) throws SQLException, ClassNotFoundException {
+        Connection con = dbConnection.initializeDatabase();
+        PreparedStatement pst = con.prepareStatement(
+                "SELECT * FROM conductor " +
+                        "WHERE owner_id IN (SELECT owner_id FROM conductor WHERE owner_id IN (SELECT owner_id FROM owner WHERE p_id = ?))"
+        );
+        pst.setString(1, p_id);
+        ResultSet rs = pst.executeQuery();
+        return rs;
     }
 
     public static int update(String conductor_id,Conductor conductor) throws SQLException, ClassNotFoundException {

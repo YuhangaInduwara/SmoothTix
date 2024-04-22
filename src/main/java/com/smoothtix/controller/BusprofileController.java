@@ -54,9 +54,6 @@ public class BusprofileController extends HttpServlet {
             }
             else if (p_id == null&&driver_id==null){
                 ResultSet rs = busprofileTable.getBPbyc_id(conductor_id);
-
-
-
                 while (rs.next()) {
                     JSONObject busprofileData = new JSONObject();
                     busprofileData.put("reg_no", rs.getString("reg_no"));
@@ -92,7 +89,6 @@ public class BusprofileController extends HttpServlet {
             }
             else{
                 ResultSet rs = busprofileTable.getAllDetails(p_id);
-
 //                JSONArray busprofileDataArray = new JSONArray();
                 while (rs.next()) {
                     JSONObject busprofileData = new JSONObject();

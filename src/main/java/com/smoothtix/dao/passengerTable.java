@@ -65,12 +65,6 @@ public class passengerTable {
         return pst.executeQuery();
     }
 
-    public static ResultSet getDriver_id(String p_id) throws SQLException, ClassNotFoundException {
-        Connection con = dbConnection.initializeDatabase();
-        PreparedStatement pst = con.prepareStatement("SELECT driver_id FROM driver WHERE p_id=?");
-        pst.setString(1,p_id);
-        return pst.executeQuery();
-    }
 
     public static ResultSet getAll() throws SQLException, ClassNotFoundException {
         Connection con = dbConnection.initializeDatabase();
