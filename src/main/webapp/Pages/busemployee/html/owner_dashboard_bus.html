@@ -53,7 +53,18 @@
             </div>
         </div>
     </div>
-
+    <div class="requestContainer" id="requestContainer">
+        <div class="requestButtonDiv">
+            <div class="request">
+                <button class="request-button" onclick="showRequests(0)">Pending</button>
+            </div>
+            <div class="request">
+                <button class="request-button" onclick="showRequests(2)">Rejected</button>
+            </div>
+        </div>
+        <div id="requestBody"></div>
+        <button class="okButton" onclick="closeRequests()">Ok</button>
+    </div>
     <div class="content_container">
         <div class="navbar">
             <div class="page_name">
@@ -68,6 +79,9 @@
             <div class="functions">
                 <div class="add-new">
                     <button class="add-new-button" onclick="openForm_add()">Add New Bus</button>
+                </div>
+                <div class="add-new" style="margin-left: -10px">
+                    <button class="add-new-button" onclick="openRequests()">Requests</button>
                 </div>
                 <div class="overlay" id="overlay"></div>
                 <div class="body_content">

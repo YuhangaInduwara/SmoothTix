@@ -4,6 +4,7 @@ let currentPage = 1;
 const pageSize = 10;
 let dataSearch = [];
 let allData = [];
+let allRequestData = [];
 
 
 document.addEventListener('DOMContentLoaded', function () {
@@ -476,8 +477,6 @@ function showSuggestions1(event) {
     }
 }
 
-
-
 function showSuggestions2(event) {
     const input = event.target;
     const inputValue = input.value.toUpperCase();
@@ -559,4 +558,69 @@ searchSelect.addEventListener("change", (event) => {
     searchOption = event.target.value;
 });
 
+function openRequests(){
+    showRequests(0);
+    document.getElementById("requestContainer").style.display = "block";
+    document.getElementById("overlay").style.display = "block";
+}
 
+function closeRequests(){
+    document.getElementById("requestContainer").style.display = "none";
+    document.getElementById("overlay").style.display = "none";
+}
+
+function showRequests(status){
+    fetch(`${url}/busVerifyController?p_id=${session_p_id}`, {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+    })
+        .then(response => {
+            if (response.ok) {
+                return response.json();
+            } else {
+                console.error('Error:', response.status);
+                throw new Error(`HTTP error! Status: ${response.status}`);
+            }
+        })
+        .then(data=>{
+            allRequestData = data;
+            console.log(allRequestData);
+            if(status === 0){
+                console.log("0")
+                showRequestsBody(0)
+            }
+            else if(status === 2){
+                console.log("2")
+                showRequestsBody(2)
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
+}
+
+function showRequestsBody(status) {
+    var filteredRequests = allRequestData.filter(function(request) {
+        return request.status === status;
+    });
+
+    console.log(filteredRequests)
+
+    var requestBody = document.getElementById("requestBody");
+    requestBody.innerHTML = "";
+
+    if (filteredRequests.length === 0) {
+        var noDataMsg = document.createElement("p");
+        noDataMsg.textContent = "No requests found.";
+        requestBody.appendChild(noDataMsg);
+    } else {
+        filteredRequests.forEach(function (request) {
+            var requestInfo = document.createElement("p");
+            requestInfo.textContent = request.reg_no + " - " + request.route_no + " - " + request.route + " - " + request.no_of_Seats;
+            requestBody.appendChild(requestInfo);
+        });
+    }
+
+}

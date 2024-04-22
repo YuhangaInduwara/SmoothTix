@@ -26,7 +26,7 @@ public class busTable {
         pst.setString(3, bus.getReg_no());
         pst.setString(4, routeId);
         pst.setInt(5, bus.getNoOfSeats());
-        pst.setFloat(6, 0.0f);
+        pst.setDouble(6, 0);
 
         int rawCount = pst.executeUpdate();
         return rawCount;
@@ -36,7 +36,7 @@ public class busTable {
         Connection con = dbConnection.initializeDatabase();
         PreparedStatement pst = con.prepareStatement("insert into bus(bus_id, owner_id, reg_no, route_id, no_of_Seats, review_points) values (?,?,?,?,?,?)");
         pst.setString(1, bus.getBus_id());
-        pst.setString(2, bus.getOwner_id()); // Pass the NIC of the logged-in user
+        pst.setString(2, bus.getOwner_id());
         pst.setString(3, bus.getReg_no());
         pst.setString(4, bus.getRoute_id());
         pst.setInt(5, bus.getNoOfSeats());
@@ -47,7 +47,7 @@ public class busTable {
 
     private static String generateBusID() throws SQLException, ClassNotFoundException {
         Connection con = dbConnection.initializeDatabase();
-        String query = "SELECT MAX(CAST(SUBSTRING(bus_id, 2) AS SIGNED)) + 1 AS next_bus_id FROM bus";
+        String query = "SELECT MAX(CAST(SUBSTRING(bus_id, 2) AS SIGNED)) + 1 AS next_bus_id FROM bus_request";
         Statement stmt = con.createStatement();
         ResultSet rs = ((Statement) stmt).executeQuery(query);
 
@@ -84,7 +84,8 @@ public class busTable {
                 "    br.reg_no,\n" +
                 "    r.route_no,\n" +
                 "    CONCAT(r.start, ' - ', r.destination) AS route,\n" +
-                "    br.no_of_seats\n" +
+                "    br.no_of_seats,\n" +
+                "    br.status\n" +
                 "FROM\n" +
                 "bus_request br\n" +
                 "JOIN\n" +
@@ -93,6 +94,32 @@ public class busTable {
                 "passenger p ON o.p_id=p.p_id\n" +
                 "JOIN \n" +
                 "route r ON br.route_id=r.route_id");
+        ResultSet rs = pst.executeQuery();
+        return rs;
+    }
+
+    public static ResultSet getBusRequestByPID(String p_id) throws SQLException, ClassNotFoundException {
+        Connection con = dbConnection.initializeDatabase();
+        PreparedStatement pst = con.prepareStatement("SELECT\n" +
+                "    p.nic,\n" +
+                "    br.bus_id,\n" +
+                "    br.owner_id,\n" +
+                "    br.reg_no,\n" +
+                "    r.route_no,\n" +
+                "    CONCAT(r.start, ' - ', r.destination) AS route,\n" +
+                "    br.no_of_seats,\n" +
+                "    br.status\n" +
+                "FROM\n" +
+                "    bus_request br\n" +
+                "JOIN\n" +
+                "    owner o ON br.owner_id = o.owner_id\n" +
+                "JOIN\n" +
+                "    passenger p ON o.p_id = p.p_id\n" +
+                "JOIN\n" +
+                "    route r ON br.route_id = r.route_id\n" +
+                "WHERE\n" +
+                "    p.p_id = ?;");
+        pst.setString(1, p_id);
         ResultSet rs = pst.executeQuery();
         return rs;
     }
@@ -129,17 +156,18 @@ public class busTable {
         return rawCount;
     }
 
-    public static int delete(String bus_id) throws SQLException, ClassNotFoundException {
+    public static int updateRequestStatus(String bus_id, int status) throws SQLException, ClassNotFoundException {
         Connection con = dbConnection.initializeDatabase();
-        PreparedStatement pst = con.prepareStatement("DELETE FROM bus WHERE bus_id = ?");
-        pst.setString(1,bus_id);
+        PreparedStatement pst = con.prepareStatement("UPDATE bus_request SET status=? WHERE bus_id=?");
+        pst.setInt(1,status);
+        pst.setString(2,bus_id);
         int rawCount = pst.executeUpdate();
         return rawCount;
     }
 
-    public static int deleteBusRequest(String bus_id) throws SQLException, ClassNotFoundException {
+    public static int delete(String bus_id) throws SQLException, ClassNotFoundException {
         Connection con = dbConnection.initializeDatabase();
-        PreparedStatement pst = con.prepareStatement("DELETE FROM bus_request WHERE bus_id = ?");
+        PreparedStatement pst = con.prepareStatement("DELETE FROM bus WHERE bus_id = ?");
         pst.setString(1,bus_id);
         int rawCount = pst.executeUpdate();
         return rawCount;

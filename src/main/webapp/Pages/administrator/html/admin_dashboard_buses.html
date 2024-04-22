@@ -128,11 +128,15 @@
                     <span id="currentPageNumber" class="currentPageNumber">1</span>
                     <span id="nextPageIcon" onclick="changePage(currentPage + 1)"> <img class="arrow_img" src="../../../images/vector_icons/arrow_right.png" alt="arrow_right"></span>
                 </div>
-                <div class="alertBody" id="confirmAlert">
-                    <img src="../../../images/Alert_icons/Alert_icon.png" class="alertImg" alt="confirm">
-                    <div class="alertMsgSuccess" style="color: #ff0202">Are you sure to delete: <span id="deleteUser"></span>?</div>
-                    <button class="okButton" onclick="closeAlert()" style="margin-right: 20px">Cancel</button>
-                    <button class="okButton" onclick="deleteRow()" >Yes</button>
+                <div class="alertBody" id="alertSuccess">
+                    <img src="../../../images/Alert_icons/Success_icon.png" class="alertImg" alt="success">
+                    <div class="alertMsgSuccess" id="alertMsgSuccess"></div>
+                    <button class="okButton" onclick="closeAlert()">Ok</button>
+                </div>
+                <div class="alertBody" id="alertFail">
+                    <img src="../../../images/Alert_icons/Error_icon.png" class="alertImg" alt="fail">
+                    <div class="alertMsgFail" id="alertMsg"></div>
+                    <button class="okButton" onclick="closeAlert()">Ok</button>
                 </div>
             </div>
             <div id="requestTable" class="flag_table">
