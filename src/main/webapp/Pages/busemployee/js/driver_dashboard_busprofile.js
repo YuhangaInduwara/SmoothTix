@@ -1,13 +1,14 @@
-//document.addEventListener('DOMContentLoaded', function () {
-//   isAuthenticated().then(() => fetchAllData());
-//});
-fetchDriverId();
+document.addEventListener('DOMContentLoaded', function () {
+   isAuthenticated().then(() => fetchDriverId());
+});
+
 function fetchDriverId() {
     document.getElementById("userName").textContent = session_user_name;
-    fetch(`${ url }/driverController?p_id=${session_p_id}`, {
+    console.log(session_p_id)
+    fetch(`${ url }/driverController?conductor_id=${conductor_id}`, {
         method: 'GET',
         headers: {
-            'Content-Type': 'application/json'
+            'Content-Type': 'application/json',
         },
     })
         .then(response => {
