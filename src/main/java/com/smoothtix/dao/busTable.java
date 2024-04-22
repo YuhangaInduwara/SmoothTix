@@ -8,13 +8,26 @@ import java.sql.*;
 public class busTable {
     public static int insert(Bus bus, String ownerid) throws SQLException, ClassNotFoundException {
         Connection con = dbConnection.initializeDatabase();
-        PreparedStatement pst = con.prepareStatement("insert into bus_request(bus_id, owner_id, reg_no, route_id, no_of_Seats, review_points) values (?,?,?,?,?,?)");
+        PreparedStatement routeIdQuery = con.prepareStatement("SELECT route_id FROM route WHERE route_no = ?");
+        routeIdQuery.setString(1, bus.getRoute_id());
+        ResultSet rs = routeIdQuery.executeQuery();
+
+        String routeId = null;
+        if (rs.next()) {
+            routeId = rs.getString("route_id");
+        } else {
+            throw new SQLException("Route ID not found for route number: " + bus.getRoute_id());
+        }
+
+        PreparedStatement pst = con.prepareStatement("INSERT INTO bus_request (bus_id, owner_id, reg_no, route_id, no_of_Seats, review_points) VALUES (?, ?, ?, ?, ?, ?)");
+
         pst.setString(1, generateBusID());
-        pst.setString(2, ownerid); // Pass the NIC of the logged-in user
+        pst.setString(2, ownerid);
         pst.setString(3, bus.getReg_no());
-        pst.setString(4, bus.getRoute_id());
+        pst.setString(4, routeId);
         pst.setInt(5, bus.getNoOfSeats());
         pst.setFloat(6, 0.0f);
+
         int rawCount = pst.executeUpdate();
         return rawCount;
     }
