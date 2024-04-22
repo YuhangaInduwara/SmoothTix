@@ -1,13 +1,17 @@
-//document.addEventListener('DOMContentLoaded', function () {
-//   isAuthenticated().then(() => fetchAllData());
-//});
-fetchConductorId();
+let currentPage = 1;
+const pageSize = 3;
+
+document.addEventListener('DOMContentLoaded', function () {
+   isAuthenticated().then(() => fetchConductorId());
+});
+
+
 function fetchConductorId() {
     document.getElementById("userName").textContent = session_user_name;
     fetch(`${ url }/conductorController?p_id=${session_p_id}`, {
         method: 'GET',
         headers: {
-            'Content-Type': 'application/json'
+            'Content-Type': 'application/json',
         },
     })
         .then(response => {
@@ -18,7 +22,7 @@ function fetchConductorId() {
                 }
             })
             .then(data => {
-            console.log(data[0].conductor_id);
+//            console.log(data[0].conductor_id);
             fetchAllData(data[0].conductor_id)
 //                if (data && data.length > 0) {
                     displayDataAsForms(data);
