@@ -152,14 +152,15 @@ document.getElementById("conductorForm").addEventListener("submit", function(eve
         nic: nic,
         review_points: review_points,
     };
-    console.log(userData)
+    console.log(userData);
     const jsonData = JSON.stringify(userData);
-    console.log("test: "+jsonData)
+    console.log(session_p_id);
 
     fetch(`${url}/conductorController`, {
         method: 'POST',
         headers: {
-            'Content-Type': 'application/json'
+            'Content-Type': 'application/json',
+            'p_id': session_p_id
         },
         body: jsonData
     })

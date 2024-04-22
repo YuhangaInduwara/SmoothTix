@@ -2,6 +2,7 @@ package com.smoothtix.controller;
 
 import com.google.gson.Gson;
 import com.smoothtix.dao.busTable;
+import com.smoothtix.dao.ownerTable;
 import com.smoothtix.model.Bus;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -24,17 +25,13 @@ public class BusController extends HttpServlet {
         JSONArray busDataArray = new JSONArray();
 
         String bus_id = request.getHeader("bus_id");
-
-        HttpSession session = request.getSession();
-        String p_id = (String) session.getAttribute("p_id"); // Retrieve p_id from session
-        System.out.println(p_id);
-
+        String p_id = request.getHeader("p_id");
         try {
             ResultSet rs = null;
             if (bus_id != null) {
                 rs = busTable.get(bus_id);
             } else if (p_id != null) {
-                rs = busTable.getByOwner(p_id); // Filter by p_id instead of owner_id
+                rs = busTable.getByOwner(p_id);
             } else {
                 rs = busTable.getAll();
             }
@@ -57,30 +54,83 @@ public class BusController extends HttpServlet {
             response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
         }
     }
-
-
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         response.setContentType("text/html");
         PrintWriter out = response.getWriter();
 
         try {
+            String p_id = request.getHeader("p_id");// Get passenger's ID from request header
             Gson gson = new Gson();
-
             BufferedReader reader = request.getReader();
             Bus bus = gson.fromJson(reader, Bus.class);
-            int registrationSuccess = busTable.insert(bus);
 
-            if (registrationSuccess >= 1) {
-                response.setStatus(HttpServletResponse.SC_OK);
+            String ownerID = getOwnerID(p_id); // Retrieve owner ID or null if not found
+            System.out.println(ownerID);
+            if (ownerID != null) {
+                int registrationSuccess = busTable.insert(bus, ownerID); // Pass owner's ID to insert method
+
+                if (registrationSuccess >= 1) {
+                    response.setStatus(HttpServletResponse.SC_OK);
+                } else {
+                    response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+                }
             } else {
-                response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+                response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             }
         } catch (Exception e) {
             e.printStackTrace();
             response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
         }
     }
+
+    // Retrieve owner ID based on passenger ID
+    private String getOwnerID(String p_id) {
+        try {
+            // Check if the passenger is also an owner
+            boolean isOwner = ownerTable.isOwner(p_id);
+
+            if (isOwner) {
+                // If the passenger is an owner, retrieve their owner ID
+                System.out.println(ownerTable.getOwnerIDByPassengerID(p_id));
+                return ownerTable.getOwnerIDByPassengerID(p_id);
+
+            } else {
+                // If the passenger is not an owner, insert a new entry into the owner table
+                String ownerID = ownerTable.insertOwner(p_id);
+                System.out.println(ownerID);
+                return ownerID;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+//    @Override
+//    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+//        response.setContentType("text/html");
+//        PrintWriter out = response.getWriter();
+//
+//        String ownerNic = request.getHeader("p_id");
+//
+//        try {
+//            Gson gson = new Gson();
+//
+//            BufferedReader reader = request.getReader();
+//            Bus bus = gson.fromJson(reader, Bus.class);
+//            int registrationSuccess = busTable.insert(bus, ownerNic);
+//
+//            if (registrationSuccess >= 1) {
+//                response.setStatus(HttpServletResponse.SC_OK);
+//            } else {
+//                response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+//            }
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+//        }
+//    }
 
     @Override
     protected void doPut(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

@@ -41,8 +41,7 @@ document.getElementById("loginForm").addEventListener("submit", function(event) 
     })
         .then(response => {
             if (response.ok) {
-                // console.log(response)
-                console.log("Test5")
+
                 return response.json();
             } else {
                 return response.json()
@@ -100,4 +99,7 @@ function closeAlertFail() {
     document.getElementById("overlay").style.display = "none";
 }
 
-
+function forgotPassword(){
+    document.getElementById("forgotPassword").style.display = "block";
+    document.getElementById("overlay").style.display = "block";
+}

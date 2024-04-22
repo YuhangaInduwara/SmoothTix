@@ -1,15 +1,12 @@
-let session_p_id = 'P0007';
+let session_p_id = 'P0001';
 let session_user_role = '5';
 let session_user_name = 'UserName';
 
 async function isAuthenticated() {
 
-     console.log("hello1: ");
      const jwtToken = localStorage.getItem('jwtToken');
-     console.log("hello2: ");
 
      if (!jwtToken && !(window.location.href.includes("login.html"))) {
-         console.log("hello3: ");
          window.location.href = `${frontend_url}/Pages/login/html/login.html`;
      }
 
@@ -27,14 +24,12 @@ async function isAuthenticated() {
          console.log(response);
 
          if (response.ok) {
-             console.log("hello4: " )
+
              const decodedToken = decodeJWT(jwtToken);
              session_p_id = decodedToken.p_id;
              session_user_role = decodedToken.user_role;
              session_user_name = decodedToken.user_name;
-             console.log("hello5: " + session_p_id)
-             console.log("hello6: " + session_user_role)
-             console.log("hello7: " + session_user_name)
+
 
              if(window.location.href.includes("administrator") && session_user_role !== 1){
                  changePage(session_user_role);

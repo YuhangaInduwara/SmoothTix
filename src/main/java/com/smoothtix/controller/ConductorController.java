@@ -5,6 +5,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.smoothtix.dao.conductorTable;
+import com.smoothtix.dao.ownerTable;
 import com.smoothtix.dao.timeKprTable;
 import com.smoothtix.model.Conductor;
 import javax.servlet.ServletException;
@@ -67,16 +68,21 @@ public class ConductorController extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         response.setContentType("text/json");
         PrintWriter out = response.getWriter();
+        String p_id = request.getHeader("p_id");
+
         try {
             BufferedReader reader = request.getReader();
             JsonElement jsonElement = JsonParser.parseReader(reader);
+
+            String ownerID = ownerTable.getOwnerIDByPassengerID(p_id);
+
             int result;
 
             if (jsonElement.isJsonObject()) {
                 JsonObject jsonObject = jsonElement.getAsJsonObject();
                 String nic = jsonObject.get("nic").getAsString();
                 Float review_points = jsonObject.get("review_points").getAsFloat();
-                result = conductorTable.insert(nic, review_points);
+                result = conductorTable.insert(nic, review_points,ownerID);
                 System.out.println(result);
             } else{
                 return;

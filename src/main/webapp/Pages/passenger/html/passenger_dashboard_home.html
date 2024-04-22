@@ -29,20 +29,13 @@
                 <a href="./passenger_dashboard_myBookings.html">My Bookings</a>
             </div>
             <div class="sidebar_element">
-                <a href="#" onclick="openForm_add()">
-                    <img src="../../../images/vector_icons/bus.png" alt="add_bus" class="sidebar_img">
-                </a>
-                <a href="#" onclick="openForm_add()">Add Bus</a>
-            </div>
-
-            <div class="sidebar_element">
                 <a href="./passenger_dashboard_bookASeat.html"><img src="../../../images/vector_icons/bookASeat.png" alt="book_a_seat" class="sidebar_img"></a>
                 <a href="./passenger_dashboard_bookASeat.html"> Book a Seat</a>
             </div>
             <div class="empty"></div>
             <div class="sidebar_element">
-                <a href="../../login/html/login.html"><img src="../../../images/vector_icons/logout.png" alt="logout" class="sidebar_img"></a>
-                <a href="../../login/html/login.html">Logout</a>
+                <a href="../../login/html/login.html" onclick="logout(); return false;"><img src="../../../images/vector_icons/logout.png" alt="logout" class="sidebar_img"></a>
+                <button id="logoutButton" style="background: none; border: none; padding: 0; text-decoration: none; cursor: pointer;" ><a href="" onclick="logout(); return false;">Logout</a></button>
             </div>
         </div>
     </div>
@@ -54,7 +47,7 @@
             </div>
             <div class="user_profile">
                 <h3 id="userName">Username</h3>
-                <img src="../../../images/vector_icons/user.png" alt="userimage" class="user_img">
+                <img src="../../../images/vector_icons/passenger_avatar.png" alt="userimage" class="user_img">
             </div>
         </div>
         <div class="body_content">
@@ -63,9 +56,10 @@
                 <div class="form">
                     <form class="bus_form" id="busRegForm">
                         <div class="bus_form_header">
-                            <h2>Add New Bus</h2>
+                            <h2>Add a Bus to become an Owner</h2>
                         </div>
                         <div id="formContainer_add"></div>
+                        <div id="autocomplete-container1"></div>
                         <div class="bus_form_footer">
                             <button type="button" class="bus_form_button" onclick="closeForm_add()">Close</button>
                             <input type="submit" class="bus_form_button" value="Add" id="busRegFormSubmit">
@@ -90,23 +84,22 @@
                 <div class="raw_2">
                     <a href="./passenger_dashboard_myBookings.html">
                         <div class="tile">
-                            <h1>Number of Total Bookings</h1>
-                            <h1 class="count" id="total_booking">3</h1>
+                            <h1>Smooth Points</h1>
+                            <h1 class="count" id="smooth_points">3</h1>
                             <img src="../../../images/vector_icons/myBookings.png" alt="bookings" class="sidebar_img">
                         </div>
                     </a>
                     <a href="./passenger_dashboard_myBookings.html">
                         <div class="tile">
-                            <h1>Number of Current Bookings</h1>
-                            <h1 class="count" id="current_booking">0</h1>
+                            <h1>Next Booking</h1>
+                            <h1 class="count" id="current_booking" style="font-size: x-large">2024-04-21 14:00</h1>
                             <img src="../../../images/vector_icons/bookASeat.png" alt="bookings" class="sidebar_img">
                         </div>
                     </a>
-                    <a href="./passenger_dashboard_home.html">
+                    <a href="#" onclick="openForm_add()">
                         <div class="tile">
-                            <h1>Next Booking Date & Time</h1>
-                            <h1 class="count" id="date_time">N/A</h1>
-                            <img src="../../../images/vector_icons/timeKeeper.png" alt="time" class="sidebar_img">
+                            <h1>Owner Dashboard</h1>
+                            <img src="../../../images/vector_icons/owner.png" alt="time" class="sidebar_img">
                         </div>
                     </a>
                 </div>
@@ -119,13 +112,3 @@
 <script src="../js/passenger_dashboard_home.js"></script>
 </body>
 </html>
-
-
-
-
-
-
-
-
-
-

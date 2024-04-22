@@ -330,5 +330,35 @@ a{
     background: #D1191D;
 }
 
+.autocomplete {
+    position: relative;
+    display: inline-block;
+}
+
+.autocomplete-input {
+    width: 100%;
+    padding: 10px;
+    box-sizing: border-box;
+}
+
+.autocomplete-list {
+    position: absolute;
+    z-index: 1;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+}
+
+.autocomplete-list,
+.autocomplete-list-item {
+    list-style-type: none;
+    padding: 10px;
+    cursor: pointer;
+}
+
+.autocomplete-list-item:hover {
+    background-color: #cccccc;
+}
+
 
 

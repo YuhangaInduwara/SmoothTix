@@ -22,6 +22,11 @@ public class Booking {
         this.status = status;
     }
 
+    public Booking(String booking_id, int[] selectedSeats){
+        this.booking_id = booking_id;
+        this.selectedSeats = selectedSeats;
+    }
+
     public String getBooking_id(){
         return booking_id;
     }

@@ -52,8 +52,8 @@
                 <a href="../../passenger/html/passenger_dashboard_home.html">Login as a Passenger</a>
             </div>
             <div class="sidebar_element">
-                <a href="../../login/html/login.html"><img src="../../../images/vector_icons/logout.png" alt="logout" class="sidebar_img"></a>
-                <a href="../../login/html/login.html">Logout</a>
+                <a href="../../login/html/login.html" onclick="logout(); return false;"><img src="../../../images/vector_icons/logout.png" alt="logout" class="sidebar_img"></a>
+                <button id="logoutButton" style="background: none; border: none; padding: 0; text-decoration: none; cursor: pointer;" ><a href="" onclick="logout(); return false;">Logout</a></button>
             </div>
         </div>
     </div>
@@ -81,6 +81,7 @@
                                 <h2>Add New Bus</h2>
                             </div>
                             <div id="formContainer_add"></div>
+                            <div id="autocomplete-container1"></div>
                             <div class="bus_form_footer">
                                 <button type="button" class="bus_form_button" onclick="closeForm_add()">Close</button>
                                 <input type="submit" class="bus_form_button" value="Add" id="busRegFormSubmit">
@@ -101,7 +102,7 @@
                     </div>
                     <div class="alertBody" id="successAlert">
                         <img src="../../../images/Alert_icons/Success_icon.png" class="alertImg" alt="success">
-                        <div class="alertMsgSuccess">Operation Successful!</div>
+                        <div class="alertMsgSuccess" id="alertMsgSuccess"></div>
                         <button class="okButton" onclick="closeAlertSuccess()">Ok</button>
                     </div>
                     <div class="alertBody" id="failAlert">

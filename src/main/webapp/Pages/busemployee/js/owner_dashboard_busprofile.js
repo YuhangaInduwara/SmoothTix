@@ -14,50 +14,27 @@ function refreshPage() {
 }
 function fetchAllData() {
     document.getElementById("userName").textContent = session_user_name;
-    const authToken = localStorage.getItem('jwtToken');
 
-    // Validate the user session and get user data including p_id
-    fetch(`${url}/loginController?action=validate`, {
+    fetch(`${ url }/busprofileController`, {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json',
-            'Authorization': `Bearer ${authToken}`
+            'p_id': session_p_id
         },
     })
     .then(response => {
         if (!response.ok) {
-            throw new Error(`Failed to validate session: ${response.status}`);
+            throw new Error(`Failed to fetch bus data: ${response.status}`);
         }
         return response.json();
     })
-    .then(userData => {
-        const p_id = userData.p_id;
-
-        // Fetch bus data using p_id
-        fetch(`${ url }/busprofileController`, {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${authToken}`,
-                'p_id': p_id
-            },
-        })
-        .then(response => {
-            if (!response.ok) {
-                throw new Error(`Failed to fetch bus data: ${response.status}`);
-            }
-            return response.json();
-        })
-        .then(data => {
-            allData = data;
-            updatePage(currentPage);
-        })
-        .catch(error => {
-            console.error('Error fetching bus data:', error);
-        });
+    .then(data => {
+        allData = data;
+        console.log(data);
+        updatePage(currentPage);
     })
     .catch(error => {
-        console.error('Error validating session:', error);
+        console.error('Error fetching bus data:', error);
     });
 }
 
@@ -105,7 +82,7 @@ function displayDataAsTable(data) {
 
     if (data.length === 0) {
         const noDataRow = document.createElement("tr");
-        noDataRow.innerHTML = `<td colspan="7">No data available</td>`;
+        noDataRow.innerHTML = `<td colspan="8">No data available</td>`;
         tableBody.appendChild(noDataRow);
         return;
     }

@@ -5,6 +5,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.smoothtix.dao.driverTable;
+import com.smoothtix.dao.ownerTable;
 import com.smoothtix.model.Driver;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -72,9 +73,12 @@ public class DriverController extends HttpServlet {
         response.setContentType("text/json");
         PrintWriter out = response.getWriter();
 
+        String p_id = request.getHeader("p_id");
+
         try {
             BufferedReader reader = request.getReader();
             JsonElement jsonElement = JsonParser.parseReader(reader);
+            String ownerID = ownerTable.getOwnerIDByPassengerID(p_id);
             int result;
 
             if (jsonElement.isJsonObject()) {
@@ -82,7 +86,7 @@ public class DriverController extends HttpServlet {
                 String nic = jsonObject.get("nic").getAsString();
                 String license_no = jsonObject.get("license_no").getAsString();
                 Float review_points = jsonObject.get("review_points").getAsFloat();
-                result = driverTable.insert(nic, license_no, review_points);
+                result = driverTable.insert(nic, license_no, review_points,ownerID);
                 System.out.println(result);
             } else{
                 return;
