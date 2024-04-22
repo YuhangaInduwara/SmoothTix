@@ -135,141 +135,51 @@ a{
     justify-content: center;
 }
 
-.search_box{
-    flex: 1;
-    display: flex;
-    /*gap: 5px;*/
-    justify-content: flex-end;
-    transition: transform 0.1s;
-}
+
+/* Style for search box container */
 .search_box {
-    margin: 20px;
-}
-
-.search_box input{
-  border: 1px solid #ccc;
-  border-radius: 5px;
-}
-
-#reportTitle{
-  font-weight: bold;
-  font-size: 25px;
-}
-#reportPadding{
-  font-weight: bold;
-}
-
-#reportContainer{
-  border: 1px solid black;
-  border-radius: 3px;
-  margin: 25px;
-  padding: 10px;
-  text-align: center;
-}
-
-#reportContent{
-  display: flex;
-  flex-wrap: wrap;
-  background:#F0EDED;
-}
-
-#reportContent p{
-            flex: 1 1 calc(33.33% - 20px);
-            margin: 10px;
-            color:#F50D0D;
-            padding: 10px;
-            box-sizing: border-box;
-        }
-
-/*  table */
-.table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-top: 20px;
-}
-
-.table th, .table td {
-    border: 1px solid #ddd;
-    padding: 8px;
-    text-align: left;
-}
-
-.table th {
-    background-color: #f2f2f2;
-}
-
-
-
-#page_control,
-#flag_page_control{
-    width: calc(100% - 20px);
-    height: 40px;
-    display: none;
-    justify-content: flex-end;
+    display: flex;
     align-items: center;
-    margin-top: 10px;
-    padding-right: 20px;
 }
 
-.arrow_img {
-    width: 15px;
-    height: 15px;
-    opacity: 0.7;
-    cursor: pointer;
-    transition: transform 0.3s ease;
-}
-
-.arrow_img:hover {
-    transform: scale(1.1);
-}
-
-#prevPageIcon,
-#nextPageIcon,
-#flag_prevPageIcon,
-#flag_nextPageIcon{
-    cursor: pointer;
-    margin: 0 10px;
-}
-
-.currentPageNumber {
-    font-size: 16px;
-    font-weight: bold;
-    color: #333;
-    margin-bottom: 3px;
-}
-
-#nextPageIcon,
-#flag_nextPageIcon{
-    margin-right: 0;
-}
-
-
-
-.button{
-width: 140px; height: 30px; border: none; border-radius: 10px; background: #EA2427; color: #fff; font-size: 16px; cursor: pointer;}
-.button_02{
-width: 140px; height: 30px; border: none; border-radius: 10px; background: #EA2427; color: #fff; font-size: 16px; cursor: pointer;}
-
-select {
-    padding: 10px;
-    font-size: 16px;
+/* Style for date input */
+.search_box input[type="date"],
+.search_box input[type="time"] {
+    padding: 8px;
     border: 1px solid #ccc;
     border-radius: 5px;
-    width: 150px;
-    background-color: #fff;
-}
-
-select option {
-    padding: 10px;
+    margin-right: 10px;
     font-size: 16px;
 }
 
-select::after {
-    content: "\25BC";
-    position: absolute;
-    top: 50%;
-    right: 10px;
-    transform: translateY(-50%);
+/* Style for "Generate Report" button */
+.search_box button {
+    padding: 10px 20px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
 }
+
+/* Style for "Generate Report" button on hover */
+.search_box button:hover {
+    background-color: #45a049;
+}
+
+/* Style for the container of the date and time inputs */
+.search_box > div {
+    margin-right: 10px;
+}
+
+/* Style for the label (optional) */
+.search_box label {
+    margin-right: 10px;
+    font-weight: bold;
+}
+
+
+
 
 

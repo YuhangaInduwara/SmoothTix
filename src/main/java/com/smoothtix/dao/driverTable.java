@@ -6,7 +6,7 @@ import com.smoothtix.model.Driver;
 import java.sql.*;
 
 public class driverTable {
-    public static int insert(String nic, String license_no, Float review_points,String owner_id) throws SQLException, ClassNotFoundException {
+    public static int insert(String nic, String license_no,String owner_id) throws SQLException, ClassNotFoundException {
         Connection con = dbConnection.initializeDatabase();
         PreparedStatement pst = con.prepareStatement("SELECT * FROM passenger WHERE nic=?");
         pst.setString(1, nic);
@@ -23,7 +23,7 @@ public class driverTable {
                 ps.setString(1, generate_driver_id());
                 ps.setString(2, rs.getString("p_id"));
                 ps.setString(3, license_no);
-                ps.setFloat(4, review_points);
+                ps.setFloat(4, 1.0f);
                 ps.setString(5, owner_id);
 
                 Passenger passenger = new Passenger(rs.getString("nic"), 4);
@@ -81,6 +81,30 @@ public class driverTable {
         pst.setString(1,p_id);
         return pst.executeQuery();
     }
+    public static ResultSet get_NIC(String p_id) throws SQLException, ClassNotFoundException {
+        Connection con = dbConnection.initializeDatabase();
+        String sql = "SELECT p.nic " +
+                "FROM owner o " +
+                "JOIN driver d ON o.owner_id = d.owner_id " +
+                "JOIN passenger p ON d.p_id = p.p_id " +
+                "WHERE o.p_id = ?;";
+
+        PreparedStatement pst = con.prepareStatement(sql);
+        pst.setString(1, p_id);
+        return pst.executeQuery();
+    }
+
+    public static ResultSet getAllByOwner(String p_id) throws SQLException, ClassNotFoundException {
+        Connection con = dbConnection.initializeDatabase();
+        PreparedStatement pst = con.prepareStatement(
+                "SELECT * FROM driver " +
+                        "WHERE owner_id IN (SELECT owner_id FROM driver WHERE owner_id IN (SELECT owner_id FROM owner WHERE p_id = ?))"
+        );
+        pst.setString(1, p_id);
+        ResultSet rs = pst.executeQuery();
+        return rs;
+    }
+
 
 
     public static ResultSet getAll() throws SQLException, ClassNotFoundException {
@@ -98,10 +122,9 @@ public class driverTable {
 
     public static int update(String driver_id, Driver driver) throws SQLException, ClassNotFoundException {
         Connection con = dbConnection.initializeDatabase();
-        PreparedStatement pst = con.prepareStatement("UPDATE driver SET license_no=? ,review_points=? WHERE driver_id=?");
+        PreparedStatement pst = con.prepareStatement("UPDATE driver SET license_no=? WHERE driver_id=?");
         pst.setString(1,driver.getLicense_no());
-        pst.setFloat(2,driver.getPoints());
-        pst.setString(3,driver_id);
+        pst.setString(2,driver_id);
 
         int rawCount = pst.executeUpdate();
         return rawCount;

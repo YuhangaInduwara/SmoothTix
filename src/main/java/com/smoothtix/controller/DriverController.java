@@ -24,36 +24,69 @@ import java.sql.SQLOutput;
 public class DriverController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        response.setContentType("text/json");
+        response.setContentType("application/json");
         PrintWriter out = response.getWriter();
         JSONArray passengerDataArray = new JSONArray();
 
         String driver_id = request.getHeader("driver_id");
         String p_id = request.getHeader("p_id");
+        String op_id = request.getHeader("op_id");
+        String dp_id = request.getHeader("dp_id");
 
         try {
-            ResultSet rs;
+            ResultSet rs = null;
 
-            if(driver_id == null){
-                if(p_id == null){
-
-                    rs = driverTable.getAll();
+            if (driver_id == null && p_id == null && op_id != null) {
+                rs = driverTable.get_NIC(op_id);
+                while (rs != null && rs.next()) {
+                    JSONObject nicData = new JSONObject();
+                    nicData.put("nic", rs.getString("nic"));
+                    passengerDataArray.put(nicData);
                 }
-                else{
-                    rs = driverTable.get_by_p_id(p_id);
-                }
-            }
-            else{
+            } else if (driver_id != null) {
+                // Fetch driver data by driver_id
                 rs = driverTable.get(driver_id);
-            }
-
-            while (rs.next()) {
-                JSONObject driverData = new JSONObject();
-                driverData.put("driver_id", rs.getString("driver_id"));
-                driverData.put("p_id", rs.getString("p_id"));
-                driverData.put("license_no", rs.getString("license_no"));
-                driverData.put("review_points", rs.getString("review_points"));
-                passengerDataArray.put(driverData);
+                while (rs != null && rs.next()) {
+                    JSONObject driverData = new JSONObject();
+                    driverData.put("driver_id", rs.getString("driver_id"));
+                    driverData.put("p_id", rs.getString("p_id"));
+                    driverData.put("license_no", rs.getString("license_no"));
+                    driverData.put("review_points", rs.getDouble("review_points"));
+                    passengerDataArray.put(driverData);
+                }
+            } else if (p_id != null) {
+                // Fetch driver data by p_id
+                rs = driverTable.get_by_p_id(p_id);
+                while (rs != null && rs.next()) {
+                    JSONObject driverData = new JSONObject();
+                    driverData.put("driver_id", rs.getString("driver_id"));
+                    driverData.put("p_id", rs.getString("p_id"));
+                    driverData.put("license_no", rs.getString("license_no"));
+                    driverData.put("review_points", rs.getDouble("review_points"));
+                    passengerDataArray.put(driverData);
+                }
+            } else if (dp_id != null) { // Check if dp_id is provided
+                // Call getAllByOwner method when dp_id is provided
+                rs = driverTable.getAllByOwner(dp_id);
+                while (rs != null && rs.next()) {
+                    JSONObject driverData = new JSONObject();
+                    driverData.put("driver_id", rs.getString("driver_id"));
+                    driverData.put("p_id", rs.getString("p_id"));
+                    driverData.put("license_no", rs.getString("license_no"));
+                    driverData.put("review_points", rs.getDouble("review_points"));
+                    passengerDataArray.put(driverData);
+                }
+            } else {
+                // Fetch all driver data
+                rs = driverTable.getAll();
+                while (rs != null && rs.next()) {
+                    JSONObject driverData = new JSONObject();
+                    driverData.put("driver_id", rs.getString("driver_id"));
+                    driverData.put("p_id", rs.getString("p_id"));
+                    driverData.put("license_no", rs.getString("license_no"));
+                    driverData.put("review_points", rs.getDouble("review_points"));
+                    passengerDataArray.put(driverData);
+                }
             }
             out.println(passengerDataArray);
             response.setStatus(HttpServletResponse.SC_OK);
@@ -61,6 +94,8 @@ public class DriverController extends HttpServlet {
             response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
         }
     }
+
+
 
 
     @Override
@@ -80,8 +115,7 @@ public class DriverController extends HttpServlet {
                 JsonObject jsonObject = jsonElement.getAsJsonObject();
                 String nic = jsonObject.get("nic").getAsString();
                 String license_no = jsonObject.get("license_no").getAsString();
-                Float review_points = jsonObject.get("review_points").getAsFloat();
-                result = driverTable.insert(nic, license_no, review_points,ownerID);
+                result = driverTable.insert(nic, license_no,ownerID);
                 System.out.println(result);
             } else{
                 return;

@@ -23,46 +23,83 @@ import java.sql.ResultSet;
 public class ConductorController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        response.setContentType("text/json");
+        response.setContentType("application/json");
         PrintWriter out = response.getWriter();
         JSONArray conductorDataArray = new JSONArray();
 
         String p_id = request.getParameter("p_id");
         String conductor_id = request.getHeader("conductor_id");
-        System.out.println("conductor "+ p_id);
+        String op_id = request.getHeader("op_id");
+        String cp_id = request.getHeader("cp_id");
+
+        System.out.println("conductor " + p_id);
+
         try {
-            ResultSet rs;
+            ResultSet rs = null;
 
-            if(conductor_id == null){
-                if(p_id == null){
+            if (conductor_id == null) {
+                if (p_id == null) {
+                    if (op_id != null) {
+                        rs = conductorTable.get_NIC(op_id);
+                        while (rs != null && rs.next()) {
+                            JSONObject nicData = new JSONObject();
+                            nicData.put("nic", rs.getString("nic"));
+                            conductorDataArray.put(nicData);
+                        }
+                    } else if (cp_id != null) { // Check if cp_id is provided
+                        // Call getAllByOwner method when cp_id is provided
+                        rs = conductorTable.getAllByOwner(cp_id);
+                        while (rs != null && rs.next()) {
+                            JSONObject conductorData = new JSONObject();
+                            conductorData.put("conductor_id", rs.getString("conductor_id"));
+                            conductorData.put("p_id", rs.getString("p_id"));
+                            conductorData.put("review_points", rs.getFloat("review_points"));
 
-                    rs = conductorTable.getAll();
-                }
-                else{
+                            conductorDataArray.put(conductorData);
+                        }
+                    } else {
+                        rs = conductorTable.getAll();
+                        while (rs != null && rs.next()) {
+                            JSONObject conductorData = new JSONObject();
+                            conductorData.put("conductor_id", rs.getString("conductor_id"));
+                            conductorData.put("p_id", rs.getString("p_id"));
+                            conductorData.put("review_points", rs.getFloat("review_points"));
+
+                            conductorDataArray.put(conductorData);
+                        }
+                    }
+                } else {
                     rs = conductorTable.get_by_p_id(p_id);
-                    System.out.println("conductorDataArray");
+                    while (rs != null && rs.next()) {
+                        JSONObject conductorData = new JSONObject();
+                        conductorData.put("conductor_id", rs.getString("conductor_id"));
+                        conductorData.put("p_id", rs.getString("p_id"));
+                        conductorData.put("review_points", rs.getFloat("review_points"));
+
+                        conductorDataArray.put(conductorData);
+                    }
                 }
-            }
-            else{
+            } else {
                 rs = conductorTable.get(conductor_id);
-            }
+                while (rs != null && rs.next()) {
+                    JSONObject conductorData = new JSONObject();
+                    conductorData.put("conductor_id", rs.getString("conductor_id"));
+                    conductorData.put("p_id", rs.getString("p_id"));
+                    conductorData.put("review_points", rs.getFloat("review_points"));
 
-            while (rs.next()) {
-                JSONObject conductorData = new JSONObject();
-                conductorData.put("conductor_id", rs.getString("conductor_id"));
-                conductorData.put("p_id", rs.getString("p_id"));
-                conductorData.put("review_points", rs.getFloat("review_points"));
-
-                conductorDataArray.put(conductorData);
+                    conductorDataArray.put(conductorData);
+                }
             }
             System.out.println(conductorDataArray);
             out.println(conductorDataArray); // Send JSON data as a response
             response.setStatus(HttpServletResponse.SC_OK);
-        }catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
             response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
         }
     }
+
+
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -73,9 +110,7 @@ public class ConductorController extends HttpServlet {
         try {
             BufferedReader reader = request.getReader();
             JsonElement jsonElement = JsonParser.parseReader(reader);
-
             String ownerID = ownerTable.getOwnerIDByPassengerID(p_id);
-
             int result;
 
             if (jsonElement.isJsonObject()) {
