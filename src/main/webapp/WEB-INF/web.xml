@@ -201,13 +201,14 @@
   </servlet-mapping>
 
   <servlet>
-      <servlet-name>SmoothPointController</servlet-name>
-      <servlet-class>com.smoothtix.controller.SmoothPointController</servlet-class>
-    </servlet>
-    <servlet-mapping>
-      <servlet-name>SmoothPointController</servlet-name>
-      <url-pattern>/smoothPointController</url-pattern>
-    </servlet-mapping>
+    <servlet-name>OTPController</servlet-name>
+    <servlet-class>com.smoothtix.controller.OTPController</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>OTPController</servlet-name>
+    <url-pattern>/otpController</url-pattern>
+  </servlet-mapping>
+
 
 
   <listener>
