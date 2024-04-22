@@ -18,24 +18,25 @@ function fetchAllData() {
     fetch(`${url}/driverController`, {
         method: 'GET',
         headers: {
-            'Content-Type': 'application/json'
+            'Content-Type': 'application/json',
+            'dp_id': session_p_id,
         },
     })
     .then(response => {
-            if (response.ok) {
-                return response.json();
-            } else {
-                console.error('Error:', response.status);
-            }
-        })
-        .then(data => {
-            allData = data;
-            console.log(allData)
-            updatePage(currentPage, false);
-        })
-        .catch(error => {
-            console.error('Error:', error);
-        });
+        if (!response.ok) {
+            throw new Error(`Failed to fetch bus data: ${response.status}`);
+        }
+        return response.json();
+    })
+    .then(data => {
+        allData = data;
+        console.log(data);
+        currentPage = 1;
+        updatePage(currentPage);
+    })
+    .catch(error => {
+        console.error('Error fetching bus data:', error);
+    });
 }
 
 
@@ -90,7 +91,7 @@ function displayDataAsTable(data) {
     }
 
     if (rowCount >= 10) {
-        renderPageControl();
+        renderPageControl()
     }
     data.forEach(item => {
         const row = document.createElement("tr");
@@ -140,20 +141,14 @@ function displayDataAsTable(data) {
     });
 }
 
-function renderPageControl(){
-    document.getElementById("page_control").style.display = "flex";
-}
-
 document.getElementById("driverRegForm").addEventListener("submit", function (event) {
     event.preventDefault();
     const nic = document.getElementById("add_nic").value;
     const license_no = document.getElementById("add_license_no").value;
-    const review_points = document.getElementById("add_review_points").value;
 
     const userData = {
         nic: nic,
         license_no: license_no,
-        review_points: review_points,
     };
     const jsonData = JSON.stringify(userData);
 
@@ -210,7 +205,6 @@ function updateRow(driver_id){
                     existingData = data[0];
                     console.log("existingData:", existingData);
                     document.getElementById("update_license_no").value = existingData.license_no;
-                    document.getElementById("update_review_points").value = existingData.review_points;
                 });
             } else if (response.status === 401) {
                 console.log('Unauthorized');
@@ -225,11 +219,9 @@ function updateRow(driver_id){
     document.getElementById("driverUpdateForm").addEventListener("submit", function(event) {
         event.preventDefault();
         const license_no = document.getElementById("update_license_no").value;
-        const review_points = document.getElementById("update_review_points").value;
 
         const updatedData = {
             license_no: license_no,
-            review_points: review_points
         };
 
         const jsonData = JSON.stringify(updatedData);
@@ -304,10 +296,6 @@ function createForm(action) {
                 <label for="license_no" class="driver_form_title">Driving License Number <span class="driver_form_require">*</span></label>
                 <input type="text" name="license_no" id="license_no" class="form_data" placeholder="Enter driving license no" required="required" />
             </div>
-            <div class="form_div">
-                <label for="review_points" class="driver_form_title">CONDUCTOR POINTS <span class="driver_form_require">*</span></label>
-                <input type="text" name="review_points" id="review_points" class="form_data" placeholder="Enter Driver Points" required="required"/>
-            </div>
         </div>
         `;
 
@@ -326,10 +314,6 @@ function createForm(action) {
                 <div class="form_div">
                     <label for="license_no" class="driver_form_title">Driving License Number <span class="driver_form_require">*</span></label>
                     <input type="text" name="license_no" id="license_no" class="form_data" placeholder=" update driving License Number"  />
-                </div>
-                <div class="form_div">
-                    <label for="review_points" class="driver_form_title"> Driver Points <span class="driver_form_require">*</span></label>
-                    <input type="text" name="review_points" id="review_points" class="form_data" placeholder=" Update Driver Points" />
                 </div>
             </div>
         `;

@@ -8,7 +8,6 @@ body{
     display: flex;
     flex-direction: row;
 }
-
 .sidebar{
     background-color: #cccccc;
     display: flex;
@@ -47,7 +46,12 @@ body{
     text-decoration: none;
     padding-top: 10px;
     padding-left: 20px;
+    margin-top: 10px;
     transition: transform 0.3s;
+}
+
+.empty{
+    margin-top: 40%;
 }
 
 .sidebar_element:hover{

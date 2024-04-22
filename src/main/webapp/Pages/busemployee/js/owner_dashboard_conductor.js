@@ -19,6 +19,7 @@ function fetchAllData() {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json',
+            'cp_id': session_p_id,
         },
     })
         .then(response => {
@@ -30,7 +31,9 @@ function fetchAllData() {
         })
         .then(data => {
             allData = data;
-            console.log(allData)
+            console.log(allData);
+            console.log(currentPage);
+            currentPage = 1;
             updatePage(currentPage, false);
         })
         .catch(error => {
@@ -46,7 +49,6 @@ function updatePage(page, search) {
 
     let dataToShow;
     if(search){
-        console.log("hello: " + dataSearch)
         dataToShow = dataSearch.slice(startIndex, endIndex);
     }
     else{
@@ -69,7 +71,7 @@ const nextPageIcon = document.getElementById("nextPageIcon");
 nextPageIcon.addEventListener("click", () => changePage(currentPage));
 
 function changePage(newPage) {
-    console.log(currentPage + "  " + newPage)
+    console.log('Attempting to change from page ' + currentPage + ' to ' + newPage);
     if (currentPage !== newPage) {
         currentPage = Math.max(1, newPage);
         updatePage(currentPage, false);
@@ -114,9 +116,6 @@ function displayDataAsTable(data) {
                             <td>${existingData.email}</td>
                             <td>${item.review_points}</td>
                             <td>
-                              <span class="icon-container">
-                                  <i onclick="updateRow('${item.conductor_id}')"><img src="../../../images/vector_icons/update_icon.png" alt="update" class="action_icon"></i>
-                              </span>
                                 <span class="icon-container" style="margin-left: 1px;">
                                   <i onclick="openFlagConfirm('${item.conductor_id}')"><img src="../../../images/vector_icons/delete_icon.png" alt="delete" class="action_icon"></i>
                               </span>
@@ -146,11 +145,9 @@ document.getElementById("conductorForm").addEventListener("submit", function(eve
     event.preventDefault();
 
     const nic = document.getElementById("add_nic").value;
-    const review_points = document.getElementById("add_review_points").value;
 
     const userData = {
         nic: nic,
-        review_points: review_points,
     };
     console.log(userData);
     const jsonData = JSON.stringify(userData);
@@ -183,79 +180,6 @@ document.getElementById("conductorForm").addEventListener("submit", function(eve
 });
 
 createForm('add');
-createForm('update');
-
-// Handle update
-function updateRow(conductor_id){
-    openForm_update();
-
-    let existingData = {};
-
-    const urlParams = new URLSearchParams(window.location.search);
-    document.getElementById("header_conductor_id").innerHTML = conductor_id
-
-    fetch(`${url}/conductorController`, {
-        method: 'GET',
-        headers: {
-            'Content-Type': 'application/json',
-            'conductor_id': conductor_id
-        },
-    })
-        .then(response => {
-            if (response.ok) {
-                response.json().then(data => {
-                    existingData = data[0];
-                    console.log("existingData:", existingData);
-                    document.getElementById("update_nic").value = existingData.nic;
-                    document.getElementById("update_review_points").value = existingData.review_points;
-                });
-            } else if (response.status === 401) {
-                console.log('Unauthorized');
-            } else {
-                console.error('Error:', response.status);
-            }
-        })
-        .catch(error => {
-            console.error('Error:', error);
-        });
-
-    document.getElementById("conductorUpdateForm").addEventListener("submit", function(event) {
-        event.preventDefault();
-
-        const review_points = document.getElementById("update_review_points").value;
-
-        const updatedData = {
-            review_points: review_points,
-        };
-
-        const jsonData = JSON.stringify(updatedData);
-        console.log(jsonData)
-
-    fetch(`${url}/conductorController`, {
-            method: 'PUT',
-            headers: {
-                'Content-Type': 'application/json',
-                'conductor_id': conductor_id
-            },
-            body: jsonData
-        })
-            .then(response => {
-                if (response.ok) {
-                    closeForm_update();
-                    openAlertSuccess("Successfully");
-                } else if (response.status === 401) {
-                    openAlertFail(response.status);
-                    console.log('Update unsuccessful');
-                } else {
-                    openAlertFail(response.status);
-                    console.error('Error:', response.status);
-                }
-            })
-            .catch(error => {
-                console.error('Error:', error);
-            });
-    });
-}
 
 // Handle delete
 function deleteRow(){
@@ -301,21 +225,6 @@ function closeForm_add() {
     document.getElementById("overlay").style.display = "none";
 }
 
-function openForm_update() {
-    const existingForm = document.querySelector(".conductor_update_form_body");
-
-    if (!existingForm) {
-        createForm('update');
-    }
-
-    document.getElementById("conductorUpdateForm").style.display = "block";
-    document.getElementById("overlay").style.display = "block";
-}
-
-function closeForm_update() {
-    document.getElementById("conductorUpdateForm").style.display = "none";
-    document.getElementById("overlay").style.display = "none";
-}
 
 function openAlertSuccess(msg) {
     conductor_id = "";
@@ -367,39 +276,13 @@ function createForm(action) {
                 <input type="text" name="nic" id="nic" class="form_data" placeholder="Enter NIC" required="required" oninput="showSuggestions1(event)"/>
                 <ul id="nic_suggestions" class="autocomplete-list"></ul>
             </div>
-            <div class="form_div">
-                <label for="review_points" class="conductor_form_title">Conductor Points <span class="conductor_form_require">*</span></label>
-                <input type="text" name="review_points" id="review_points" class="form_data" placeholder="Enter Conductor Points" required="required"/>
-            </div>
+
         </div>
         `;
 
         form_add.innerHTML = form.replace(/id="/g, 'id="add_');
         const formContainer_add = document.getElementById('formContainer_add');
         formContainer_add.appendChild(form_add.cloneNode(true)); // Clone the form
-
-    }
-    else if(action === 'update'){
-        const form_update = document.createElement('div');
-        form_update.classList.add('conductor_update_form_body');
-
-        const form= `
-        <div class="bus_form_left">
-            <div class="form_div">
-                <label for="nic" class="conductor_form_title">NIC<span class="conductor_form_require">*</span></label>
-                <input type="text" name="nic" id="nic" class="form_data" placeholder="Enter NIC" required="required" disabled/>
-            </div>
-            <div class="form_div">
-                <div class="form_div">
-                    <label for="review_points" class="conductor_form_title">Conductor Points <span class="conductor_form_require">*</span></label>
-                    <input type="text" name="review_points" id="review_points" class="form_data" placeholder="Enter Conductor Points" required="required"/>
-                </div>
-        </div>
-        `;
-
-        form_update.innerHTML = form.replace(/id="/g, 'id="update_');
-        const formContainer_update = document.getElementById('formContainer_update');
-        formContainer_update.appendChild(form_update.cloneNode(true)); // Clone the form
 
     }
 }

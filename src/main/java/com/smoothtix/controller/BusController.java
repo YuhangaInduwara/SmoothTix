@@ -30,21 +30,41 @@ public class BusController extends HttpServlet {
             ResultSet rs = null;
             if (bus_id != null) {
                 rs = busTable.get(bus_id);
+                while (rs.next()) {
+                    JSONObject busData = new JSONObject();
+                    busData.put("bus_id", rs.getString("bus_id"));
+                    busData.put("owner_id", rs.getString("owner_id"));
+                    busData.put("reg_no", rs.getString("reg_no"));
+                    busData.put("route_no", rs.getString("route_no"));
+                    busData.put("no_of_Seats", rs.getInt("no_of_Seats"));
+                    busData.put("review_points", rs.getFloat("review_points"));
+                    busDataArray.put(busData);
+                }
+
             } else if (p_id != null) {
                 rs = busTable.getByOwner(p_id);
+                while (rs.next()) {
+                    JSONObject busData = new JSONObject();
+                    busData.put("bus_id", rs.getString("bus_id"));
+                    busData.put("owner_id", rs.getString("owner_id"));
+                    busData.put("reg_no", rs.getString("reg_no"));
+                    busData.put("route_id", rs.getString("route_id"));
+                    busData.put("no_of_Seats", rs.getInt("no_of_Seats"));
+                    busData.put("review_points", rs.getFloat("review_points"));
+                    busDataArray.put(busData);
+                }
             } else {
                 rs = busTable.getAll();
-            }
-
-            while (rs.next()) {
-                JSONObject busData = new JSONObject();
-                busData.put("bus_id", rs.getString("bus_id"));
-                busData.put("owner_id", rs.getString("owner_id"));
-                busData.put("reg_no", rs.getString("reg_no"));
-                busData.put("route_id", rs.getString("route_id"));
-                busData.put("no_of_Seats", rs.getInt("no_of_Seats"));
-                busData.put("review_points", rs.getFloat("review_points"));
-                busDataArray.put(busData);
+                while (rs.next()) {
+                    JSONObject busData = new JSONObject();
+                    busData.put("bus_id", rs.getString("bus_id"));
+                    busData.put("owner_id", rs.getString("owner_id"));
+                    busData.put("reg_no", rs.getString("reg_no"));
+                    busData.put("route_id", rs.getString("route_id"));
+                    busData.put("no_of_Seats", rs.getInt("no_of_Seats"));
+                    busData.put("review_points", rs.getFloat("review_points"));
+                    busDataArray.put(busData);
+                }
             }
 
             out.println(busDataArray.toString()); // Send JSON data as a response
@@ -66,7 +86,6 @@ public class BusController extends HttpServlet {
             Bus bus = gson.fromJson(reader, Bus.class);
 
             String ownerID = getOwnerID(p_id); // Retrieve owner ID or null if not found
-            System.out.println(ownerID);
             if (ownerID != null) {
                 int registrationSuccess = busTable.insert(bus, ownerID); // Pass owner's ID to insert method
 
@@ -107,30 +126,6 @@ public class BusController extends HttpServlet {
         }
     }
 
-//    @Override
-//    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-//        response.setContentType("text/html");
-//        PrintWriter out = response.getWriter();
-//
-//        String ownerNic = request.getHeader("p_id");
-//
-//        try {
-//            Gson gson = new Gson();
-//
-//            BufferedReader reader = request.getReader();
-//            Bus bus = gson.fromJson(reader, Bus.class);
-//            int registrationSuccess = busTable.insert(bus, ownerNic);
-//
-//            if (registrationSuccess >= 1) {
-//                response.setStatus(HttpServletResponse.SC_OK);
-//            } else {
-//                response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-//            }
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-//        }
-//    }
 
     @Override
     protected void doPut(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

@@ -1,93 +1,45 @@
 document.addEventListener('DOMContentLoaded', function() {
-        function searchData() {
-            // Fetch form data
-            const timePeriod = document.getElementById('dropdown_start').value;
-            const reportType = document.getElementById('dropdown_destination').value;
-            const busId = document.getElementById('dropdown_busId').value;
+    const generateReportButton = document.getElementById('generateReportButton');
+    const reportContainer = document.getElementById('reportContainer');
 
+    // Populate the bus profile select dropdown
+    populateBusProfileSelect();
 
-            // Basic validation
-            if (!timePeriod || !reportType || !busId ) {
-                alert("Please fill in all fields.");
-                return;
-            }
+    generateReportButton.addEventListener('click', function() {
+        const fromDate = document.getElementById('fromDate').value;
+        const fromTime = document.getElementById('fromTime').value;
+        const toDate = document.getElementById('toDate').value;
+        const toTime = document.getElementById('toTime').value;
+        const busProfileId = document.getElementById('busprofileSelect').value;
 
-            // Generate a title for the report
-            const reportTitle = `  ${reportType} Report `;
+        if (fromDate && fromTime && toDate && toTime && busProfileId) {
+            const fromDateTime = new Date(`${fromDate}T${fromTime}`).toISOString();
+            const toDateTime = new Date(`${toDate}T${toTime}`).toISOString();
 
-            // Generate a simple report content
-            const reportContent = `
-                <p><strong>Time Period:</strong> ${timePeriod}</p>
-                <p><strong>Report Type:</strong> ${reportType}</p>
-                <p><strong>Bus ID:</strong> ${busId}</p>
-                <table class="table" ">
-                    <thead>
-                        <tr>
-                            <th>Date</th>
-                            <th>Number of Trips</th>
-                            <th> ${reportType} </th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>02/05/2024</td>
-                            <td>4</td>
-                            <td>200</td>
-                        </tr>
-                        <tr>
-                            <td>02/05/2024</td>
-                            <td>5</td>
-                            <td>200</td>
-                        </tr>
-                        <tr>
-                            <td>02/05/2024</td>
-                            <td>5</td>
-                            <td>200</td>
-                        </tr>
-                        <tr>
-                            <td>02/05/2024</td>
-                            <td>5</td>
-                            <td>200</td>
-                        </tr>
-                        <tr>
-                            <td>02/05/2024</td>
-                            <td>5</td>
-                            <td>200</td>
-                        </tr>
-                        <tr>
-                            <td>02/05/2024</td>
-                            <td>4</td>
-                            <td>200</td>
-                        </tr>
-                        <tr>
-                            <td>02/05/2024</td>
-                            <td>3</td>
-                            <td>200</td>
-                        </tr>
-
-
-
-                    </tbody>
-                </table>
-
-
-            `;
-
-            const reportPadding = ` All ${reportType} within ${timePeriod} `;
-
-
-
-            // Display the report title and content
-            document.getElementById('reportTitle').innerText = reportTitle;
-            document.getElementById('reportContent').innerHTML = reportContent;
-            document.getElementById('reportPadding').innerText = reportPadding;
-            document.getElementById('reportContainer').style.display = 'block';
+            generateReport(busProfileId, fromDateTime, toDateTime)
+                .then(reportData => {
+                    displayReport(reportData);
+                })
+                .catch(error => {
+                    console.error('Error generating report:', error);
+                });
+        } else {
+            alert('Please fill in all fields.');
         }
-
-
-
-
-        // Add this line to expose searchData globally
-        window.searchData = searchData;
     });
+});
 
+function populateBusProfileSelect() {
+    const busprofileSelect = document.getElementById('busprofileSelect');
+    // Fetch bus profile IDs from the server and populate the select dropdown
+}
+
+function generateReport(busProfileId, fromDateTime, toDateTime) {
+    // Send an AJAX request to the server to generate the report
+    // Return a Promise that resolves with the report data
+}
+
+function displayReport(reportData) {
+    const reportContainer = document.getElementById('reportContainer');
+    // Render the report data in the reportContainer div
+}
