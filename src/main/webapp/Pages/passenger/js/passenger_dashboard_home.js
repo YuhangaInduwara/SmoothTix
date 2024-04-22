@@ -196,8 +196,8 @@ document.addEventListener('DOMContentLoaded', function () {
     isAuthenticated().then(() => init_page());
 });
 
-function updateCount(request_table, targetElement) {
-    fetch(`${url}/itemCountController?request_table=${request_table}`, {
+function updateCount(targetElement) {
+    fetch(`${url}/smoothPointController?p_id=${session_p_id}`, {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json'
@@ -211,7 +211,7 @@ function updateCount(request_table, targetElement) {
             }
         })
         .then(data => {
-            const totalRecords = data[0].record_count;
+            const totalRecords = data.smooth_points;
 
             let currentCount = 0;
             const incrementInterval = 100; // Adjust the interval as needed (in milliseconds)
@@ -235,9 +235,7 @@ function updateCount(request_table, targetElement) {
 function init_page(){
     document.getElementById("userName").textContent = session_user_name;
     document.getElementById("user").textContent = session_user_name;
-    updateCount("passenger", document.getElementById("total_booking"));
-    updateCount("timekeeper", document.getElementById("current_booking"));
-    updateCount("bus", document.getElementById("date_time"));
+    updateCount(document.getElementById("smooth_points"));
 }
 
 

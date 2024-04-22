@@ -20,10 +20,6 @@
                 <a href="./timekpr_dashboard_home.html">Home</a>
             </div>
             <div class="sidebar_element">
-                <a href="./timekpr_dashboard_about.html"><img src="../../../images/vector_icons/aboutMe.png" alt="aboutMe" class="sidebar_img"></a>
-                <a href="./timekpr_dashboard_about.html">About Me</a>
-            </div>
-            <div class="sidebar_element">
                 <a href="./timekpr_dashboard_schedule.html"><img src="../../../images/vector_icons/report.png" alt="report" class="sidebar_img"></a>
                 <a href="./timekpr_dashboard_schedule.html">Schedules</a>
             </div>
@@ -45,8 +41,8 @@
                 <a href="../../passenger/html/passenger_dashboard_home.html">Login as a Passenger</a>
             </div>
             <div class="sidebar_element">
-                <a href="../../login/html/login.html"><img src="../../../images/vector_icons/logout.png" alt="logout" class="sidebar_img"></a>
-                <a href="../../login/html/login.html">Logout</a>
+                <a href="../../login/html/login.html" onclick="logout(); return false;"><img src="../../../images/vector_icons/logout.png" alt="logout" class="sidebar_img"></a>
+                <button id="logoutButton" style="background: none; border: none; padding: 0; text-decoration: none; cursor: pointer;" ><a href="" onclick="logout(); return false;">Logout</a></button>
             </div>
         </div>
     </div>

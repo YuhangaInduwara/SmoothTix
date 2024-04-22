@@ -155,8 +155,28 @@ function displayDataAsScheduleTiles_0(data) {
         return;
     }
 
+    let buttonsHTML = '';
     data.forEach(item => {
-        if(counter < 2 && item.status === 0){
+        const now = new Date();
+        const itemDateTime = new Date(item.date + 'T' + item.time);
+        const timeDiff = itemDateTime - now;
+        const diffInHours = timeDiff / (1000 * 60 * 60);
+        console.log("Diftime: " + diffInHours + " date+time: " + itemDateTime + " test: " + item.date + " " + item.time)
+
+        if (counter < 2 && item.status === 0) {
+            if (item.schedule_status === 0 && diffInHours > 2) {
+                buttonsHTML = `
+                <span class="icon-container">
+                    <i onclick="updateRow('${item.timekpr_id}')"><img src="../../../images/vector_icons/update_icon.png" alt="update" class="action_icon"></i>
+                </span>
+                <span class="icon-container" style="margin-left: 1px;">
+                    <i onclick="deleteBooking_passenger('${item.booking_id}', '${item.seat_no}')"><img src="../../../images/vector_icons/delete_icon.png" alt="delete" class="action_icon"></i>
+                </span>
+            `;
+            } else if (item.schedule_status === 1 || item.schedule_status === 2) {
+                buttonsHTML = `
+            `;
+            }
             const scheduleElement = document.createElement("div");
             scheduleElement.classList.add("schedule_tiles");
             scheduleElement.innerHTML = `
@@ -180,12 +200,7 @@ function displayDataAsScheduleTiles_0(data) {
                     <h1><span id="destination">${item.date} ${item.time}</span></h1>
                 </div>
                 <div class="addBookingBtn">
-                    <span class="icon-container">
-                        <i onclick="updateRow('${item.timekpr_id}')"><img src="../../../images/vector_icons/update_icon.png" alt="update" class="action_icon"></i>
-                    </span>
-                    <span class="icon-container" style="margin-left: 1px;">
-                        <i onclick="deleteBooking_passenger('${item.booking_id}', '${item.seat_no}')"><img src="../../../images/vector_icons/delete_icon.png" alt="delete" class="action_icon"></i>
-                    </span>                    
+                     ${buttonsHTML}                   
                 </div>              
             </div>
         `;
@@ -216,10 +231,31 @@ function displayDataAsScheduleTiles_1(data) {
         return;
     }
 
+    let buttonsHTML = '';
     data.forEach(item => {
         console.log(item)
         if(counter < 2 && item.status === 1){
-            counter += 1;
+            if (item.schedule_status === 1) {
+                buttonsHTML = `
+                <span class="icon-container">
+                    <i onclick="ViewLocation('${item.schedule_id}')"><img src="../../../images/vector_icons/location_icon.png" alt="location" class="action_icon"></i>
+                </span>
+                <span class="icon-container" style="margin-left: 1px;">
+                    <i onclick="openReview('${item.schedule_id}', '${item.booking_id}')"><img src="../../../images/vector_icons/review_icon.png" alt="review" class="action_icon"></i>
+                </span>  
+            `;
+            }
+            else if (item.schedule_status === 2) {
+                buttonsHTML = `
+                <span class="icon-container" style="margin-left: 1px;">
+                    <i onclick="openReview('${item.schedule_id}', '${item.booking_id}')"><img src="../../../images/vector_icons/review_icon.png" alt="review" class="action_icon"></i>
+                </span>  
+            `;
+            }
+            else if (item.schedule_status === 0) {
+                buttonsHTML = `
+            `;
+            }
             const scheduleElement = document.createElement("div");
             scheduleElement.classList.add("schedule_tiles");
             scheduleElement.innerHTML = `
@@ -229,7 +265,7 @@ function displayDataAsScheduleTiles_1(data) {
                     </div>
                     <div>
                         <h3><span id="start">${item.start}-${item.destination}</span></h3>
-                        <p>Status: Pending</p>
+                        <p>Status: Checked In</p>
                     </div>
                     <div class="seatAvailability">
                         <h1 id="seatAvailability">${item.seat_no}</h1>
@@ -243,17 +279,13 @@ function displayDataAsScheduleTiles_1(data) {
                         <h1><span id="destination">${item.date} ${item.time}</span></h1>
                     </div>
                     <div class="addBookingBtn">
-                        <span class="icon-container">
-                            <i onclick="ViewLocation('${item.schedule_id}')"><img src="../../../images/vector_icons/location_icon.png" alt="location" class="action_icon"></i>
-                        </span>
-                        <span class="icon-container" style="margin-left: 1px;">
-                            <i onclick="openReview('${item.schedule_id}', '${item.booking_id}')"><img src="../../../images/vector_icons/review_icon.png" alt="review" class="action_icon"></i>
-                        </span>                     
+                        ${buttonsHTML}                  
                     </div>
                 </div>
             `;
 
             scheduleList.appendChild(scheduleElement);
+            counter += 1;
         }
         if(counter >= 2){
             document.getElementById("see_more_previous").style.display = "flex";
@@ -600,6 +632,7 @@ function showAlert(inputElement, message) {
 function deleteFetch(booking_id, selected_seat, action){
     const userData = {
         booking_id: booking_id,
+        p_id: session_p_id,
         selectedSeats: selected_seat,
     };
     console.log(selected_seat)

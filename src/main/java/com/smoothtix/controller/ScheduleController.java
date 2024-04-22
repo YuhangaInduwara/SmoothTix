@@ -65,6 +65,18 @@ public class ScheduleController extends HttpServlet {
             }
             else if(driver_id == null && conductor_id == null){
                 rs = scheduleTable.getByScheduleId(schedule_id);
+                while (rs.next()) {
+                    JSONObject scheduleData = new JSONObject();
+                    scheduleData.put("schedule_id", rs.getString("schedule_id"));
+                    scheduleData.put("date", rs.getDate("date_time"));
+                    scheduleData.put("time", rs.getTime("date_time"));
+                    scheduleData.put("bus_profile_id", rs.getString("bus_profile_id"));
+                    scheduleData.put("start", rs.getString("start"));
+                    scheduleData.put("destination", rs.getString("destination"));
+                    scheduleData.put("status", rs.getInt("status"));
+                    scheduleData.put("price_per_ride", rs.getDouble("price_per_ride"));
+                    scheduleDataArray.put(scheduleData);
+                }
             }
             else if(schedule_id == null && conductor_id == null){
                 rs = scheduleTable.getByDriverId(driver_id);
@@ -126,7 +138,7 @@ public class ScheduleController extends HttpServlet {
             response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
         }
     }
-//
+
     @Override
     protected void doPut(HttpServletRequest request, HttpServletResponse response) {
         response.setContentType("text/html");

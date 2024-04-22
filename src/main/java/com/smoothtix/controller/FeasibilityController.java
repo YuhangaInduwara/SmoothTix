@@ -76,6 +76,7 @@ public class FeasibilityController extends HttpServlet {
         String date = request.getParameter("date");
         String time = request.getParameter("time");
         ResultSet rs;
+        System.out.println("start: " + start + " destination: " + destination + " date: " + date + " time: " + time);
 
         try {
             rs = feasibilityTable.get_by_date(start, destination, date);

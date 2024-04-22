@@ -69,12 +69,6 @@
       </div>
       <div class="empty"></div>
       <div class="sidebar_element">
-        <a href="#" onclick="openForm_add()">
-          <img src="../../../images/vector_icons/bus.png" alt="add_bus" class="sidebar_img">
-        </a>
-        <a href="#" onclick="openForm_add()">Add Bus</a>
-      </div>
-      <div class="sidebar_element">
         <a href="../../login/html/login.html" onclick="logout(); return false;"><img src="../../../images/vector_icons/logout.png" alt="logout" class="sidebar_img"></a>
         <button id="logoutButton" style="background: none; border: none; padding: 0; text-decoration: none; cursor: pointer;" ><a href="" onclick="logout(); return false;">Logout</a></button>
       </div>
@@ -87,7 +81,7 @@
       </div>
       <div class="user_profile">
         <h3 id="userName">Username</h3>
-        <img src="../../../images/vector_icons/user.png" alt="userimage" class="user_img">
+        <img src="../../../images/vector_icons/passenger_avatar.png" alt="userimage" class="user_img">
       </div>
     </div>
     <div class="body_content">
@@ -188,14 +182,14 @@
         <div>
           <div class="upcoming_booking_title">
             <h2>Upcoming Bookings</h2>
-            <h5 class="see_more" id="see_more_upcoming"><a onclick="openSeeMore(0)">see more...</a></h5>
+            <h5 class="see_more" id="see_more_upcoming"><a onclick="openSeeMore(0)">see all...</a></h5>
           </div>
           <div class="schedule_list" id="schedule_list"></div>
         </div>
         <div>
           <div class="upcoming_booking_title">
             <h2>Previous Bookings</h2>
-            <h5 class="see_more" id="see_more_previous"><a onclick="openSeeMore(1)">see more...</a></h5>
+            <h5 class="see_more" id="see_more_previous"><a onclick="openSeeMore(1)">see all...</a></h5>
           </div>
           <div class="schedule_list" id="schedule_list_old"></div>
         </div>

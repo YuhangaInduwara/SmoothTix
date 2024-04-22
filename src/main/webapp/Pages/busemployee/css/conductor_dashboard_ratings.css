@@ -182,13 +182,13 @@ a{
         background-color:#F8F9F9;
     }
 
-    /*.stars-input {
-        padding-left: 25px; /* Adjust according to the size of the icon */
-        background-image: url("../../../images/vector_icons/star.png" ); /* URL of the icon */
-        background-repeat: no-repeat;
-        background-size: 20px; /* Adjust according to the size of the icon */
-        background-position: 5px center; /* Adjust according to the size of the icon */
-    }*/
+    /*!*.stars-input {*/
+    /*    padding-left: 25px; !* Adjust according to the size of the icon *!*/
+    /*    background-image: url("../../../images/vector_icons/star.png" ); !* URL of the icon *!*/
+    /*    background-repeat: no-repeat;*/
+    /*    background-size: 20px; !* Adjust according to the size of the icon *!*/
+    /*    background-position: 5px center; !* Adjust according to the size of the icon *!*/
+    /*}*!*/
 
 
     .stars-container {

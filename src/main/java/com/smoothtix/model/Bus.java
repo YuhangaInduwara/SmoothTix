@@ -6,9 +6,9 @@ public class Bus {
     String reg_no;
     String route_no;
     Integer no_of_Seats;
-    Float review_points;
+    double review_points;
 
-    public Bus(String bus_id, String owner_id, String reg_no, String route_id, Integer no_of_Seats, Float reveiw_points){
+    public Bus(String bus_id, String owner_id, String reg_no, String route_id, Integer no_of_Seats, double review_points){
         this.bus_id = bus_id;
         this.owner_id = owner_id;
         this.reg_no = reg_no;
@@ -28,7 +28,7 @@ public class Bus {
     public Integer getNoOfSeats(){
         return no_of_Seats;
     }
-    public Float getReview_points(){
+    public double getReview_points(){
         return review_points;
     }
 
@@ -41,7 +41,7 @@ public class Bus {
     public void setReg_no(String reg_no){this.reg_no = reg_no; }
     public void setRoute_id(String route_id){ this.route_no = route_id; }
     public void setNoOfSeats(Integer no_of_Seats){ this.no_of_Seats = no_of_Seats; }
-    public void setReview_points(Float review_points){
+    public void setReview_points(double review_points){
         this.review_points = review_points;
     }
 

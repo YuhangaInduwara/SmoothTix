@@ -1,6 +1,5 @@
-let p_id = "P0008";
 let timeKeeper_id = "";
-let timeKeeper_stand= "";
+let timeKeeper_stand= "colombo";
 let currentPage = 1;
 const pageSize = 10;
 let allData = [];
@@ -8,11 +7,11 @@ let standData = [];
 let allFeasibleData = [];
 let date_time;
 let bus_profile_id_schedule;
-
-getTimeKeeperData();
+let isUpdate = false;
+let update_schedule_id;
 
 document.addEventListener('DOMContentLoaded', function () {
-    isAuthenticated().then(() => fetchAllData());
+    isAuthenticated().then(() => getTimeKeeperData());
 });
 
 function refreshPage() {
@@ -66,7 +65,7 @@ function setSearchStands() {
 }
 
 function getTimeKeeperData(){
-    fetch(`${ url }/timekeeperController?p_id=${p_id}`, {
+    fetch(`${ url }/timekeeperController?p_id=${session_p_id}`, {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json'
@@ -243,8 +242,6 @@ document.getElementById("busRegForm").addEventListener("submit", function(event)
                         closeForm_add();
                         openForm_bpSelection();
                     })
-
-                openAlertSuccess("Successfully Added!");
             } else{
                 return response.json()
                     .then(data => {
@@ -291,18 +288,20 @@ function searchData() {
         });
 }
 
-function updateRow(bus_id){
+function updateRow(schedule_id){
+    update_schedule_id = schedule_id;
+    isUpdate = true;
+    var submitButton = document.getElementById('bpSelectionSubmit');
+    submitButton.value = 'Update';
     openForm_update();
 
     let existingData = {};
-    new URLSearchParams(window.location.search);
-    document.getElementById("header_bus_id").innerHTML = bus_id
 
-    fetch(`${ url }/busController`, {
+    fetch(`${ url }/scheduleController`, {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json',
-            'bus_id': bus_id
+            'schedule_id': schedule_id
         },
     })
         .then(response => {
@@ -310,15 +309,9 @@ function updateRow(bus_id){
                 response.json().then(data => {
                     existingData = data[0];
                     console.log("existingData:", existingData);
-
-                    document.getElementById("update_owner_nic").value = existingData.owner_id;
-                    document.getElementById("update_engineNo").value = existingData.engineNo;
-                    document.getElementById("update_route").value = existingData.route;
-                    document.getElementById("update_chassisNo").value = existingData.chassisNo;
-                    document.getElementById("update_noOfSeats").value = existingData.noOfSeats;
-                    document.getElementById("update_manufact_year").value = existingData.manufact_year;
-                    document.getElementById("update_brand").value = existingData.brand;
-                    document.getElementById("update_model").value = existingData.model;
+                    document.getElementById("update_destination").value = existingData.destination;
+                    document.getElementById("update_date").value = existingData.date;
+                    document.getElementById("update_time").value = existingData.time;
                 });
             } else if (response.status === 401) {
                 console.log('Unauthorized');
@@ -333,46 +326,35 @@ function updateRow(bus_id){
     document.getElementById("busUpdateForm").addEventListener("submit", function(event) {
         event.preventDefault();
 
-        const owner_nic = document.getElementById("update_owner_nic").value;
-        const engineNo = document.getElementById("update_engineNo").value;
-        const route = document.getElementById("update_route").value;
-        const chassisNo = document.getElementById("update_chassisNo").value;
-        const noOfSeats = document.getElementById("update_noOfSeats").value;
-        const manufact_year = document.getElementById("update_manufact_year").value;
-        const brand = document.getElementById("update_brand").value;
-        const model = document.getElementById("update_model").value;
+        const start = timeKeeper_stand;
+        const destination = document.getElementById("update_destination").value;
+        const date = document.getElementById("update_date").value;
+        const time = document.getElementById("update_time").value;
 
-        const updatedData = {
-            owner_nic: owner_nic,
-            engineNo: engineNo,
-            route: route,
-            chassisNo: chassisNo,
-            noOfSeats: noOfSeats,
-            manufact_year: manufact_year,
-            brand: brand,
-            model: model
-        };
+        date_time = date + " " + time;
 
-        const jsonData = JSON.stringify(updatedData);
-
-        fetch(`${ url }/busController`, {
-            method: 'PUT',
+        fetch(`${ url }/feasibilityController?start=${start}&destination=${destination}&date=${date}&time=${time}`, {
+            method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
-                'bus_id': bus_id
             },
-            body: jsonData
         })
             .then(response => {
                 if (response.ok) {
-                    closeForm_update();
-                    openAlertSuccess();
-                } else if (response.status === 401) {
-                    openAlertFail(response.status);
-                    console.log('Update unsuccessful');
-                } else {
-                    openAlertFail(response.status);
-                    console.error('Error:', response.status);
+                    return response.json()
+                        .then(data =>{
+                            allFeasibleData = data;
+                            console.log(allFeasibleData);
+                            closeForm_update();
+                            openForm_bpSelection();
+                        })
+                } else{
+                    return response.json()
+                        .then(data => {
+                            const error_msg = data.error;
+                            openAlertFail(error_msg);
+                            throw new Error("Failed");
+                        });
                 }
             })
             .catch(error => {
@@ -592,13 +574,27 @@ function createTableRows(data) {
 function handleRowClick(data) {
     const tbody = document.querySelector('#bpSelection_container tbody');
     tbody.innerHTML = '';
-    const row = createTableRow(data);
-    bus_profile_id_schedule = data.bus_profile_id;
-    tbody.appendChild(row);
+    console.log(data)
+
+    if (data === []) {
+        const messageRow = document.createElement('tr');
+        const messageCell = document.createElement('td');
+        messageCell.textContent = 'No data available';
+        messageCell.colSpan = 3;
+        messageRow.appendChild(messageCell);
+        tbody.appendChild(messageRow);
+    } else {
+        const row = createTableRow(data);
+        bus_profile_id_schedule = data.bus_profile_id;
+        tbody.appendChild(row);
+    }
 }
+
 
 document.getElementById("bpSelection").addEventListener("submit", function(event) {
     event.preventDefault();
+
+    console.log(isUpdate)
 
     const userData = {
         bus_profile_id: bus_profile_id_schedule,
@@ -607,29 +603,61 @@ document.getElementById("bpSelection").addEventListener("submit", function(event
     };
     const jsonData = JSON.stringify(userData);
 
-    fetch(`${ url }/scheduleController`, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: jsonData
-    })
-        .then(response => {
-            if (response.ok) {
-                closeForm_bpSelection();
-                openAlertSuccess("Successfully Added!");
-            } else{
-                return response.json()
-                    .then(data => {
-                        const error_msg = data.error;
-                        openAlertFail(error_msg);
-                        throw new Error("Failed");
-                    });
-            }
+    console.log(isUpdate)
+
+    if(isUpdate === true){
+        fetch(`${ url }/scheduleController?schedule_id=${update_schedule_id}`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: jsonData
         })
-        .catch(error => {
-            console.error('Error:', error);
-        });
+            .then(response => {
+                if (response.ok) {
+                    closeForm_bpSelection();
+                    openAlertSuccess("Successfully Updated!");
+                    update_schedule_id = '';
+                    isUpdate = false;
+                } else{
+                    return response.json()
+                        .then(data => {
+                            const error_msg = data.error;
+                            openAlertFail(error_msg);
+                            throw new Error("Failed");
+                        });
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+    }
+    else{
+        fetch(`${ url }/scheduleController`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: jsonData
+        })
+            .then(response => {
+                if (response.ok) {
+                    closeForm_bpSelection();
+                    openAlertSuccess("Successfully Added!");
+                } else{
+                    return response.json()
+                        .then(data => {
+                            const error_msg = data.error;
+                            openAlertFail(error_msg);
+                            throw new Error("Failed");
+                        });
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+    }
+
 });
 
 

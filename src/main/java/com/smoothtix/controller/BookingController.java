@@ -78,7 +78,7 @@ public class BookingController extends HttpServlet {
                 }
 
                 if(start != null || destination != null || date != null || startTime != null || endTime != null){
-                    bookingDataArray = filterScheduleData(bookingDataArray, start, destination, date, startTime, endTime);
+                    bookingDataArray = filterBookingData(bookingDataArray, start, destination, date, startTime, endTime);
                 }
             }
             else if(p_id == null){
@@ -181,6 +181,8 @@ public class BookingController extends HttpServlet {
             BufferedReader reader = request.getReader();
             Booking booking = gson.fromJson(reader, Booking.class);
 
+            String p_id = booking.getP_id();
+
             ResultSet rs = bookingTable.getByBooking_id(booking.getBooking_id());
             System.out.println(Arrays.toString(booking.getSelectedSeats()));
 
@@ -197,7 +199,7 @@ public class BookingController extends HttpServlet {
                         if(deleteSuccess2 > 0){
                             updateSuccess1 = paymentTable.updateFlag(payment_id, true);
                             if(updateSuccess1 > 0){
-                                insertSuccess1 = deletedPaymentsTable.insert(payment_id);
+                                insertSuccess1 = deletedPaymentsTable.insert(payment_id, p_id);
                                 if(insertSuccess1 > 0){
                                     updateSuccess2 = seatAvailabilityTable.updateSeatNo(schedule_id, booking.getSelectedSeats());
                                     if(updateSuccess2 > 0){
@@ -228,7 +230,7 @@ public class BookingController extends HttpServlet {
                                 System.out.println(priceDeduct);
                                 updateSuccess3 = paymentTable.updateAmount(payment_id, priceDeduct);
                                 if(updateSuccess3 > 0){
-                                    insertSuccess2 = deletedPaymentsTable.insertPartially(payment_id, priceDeduct);
+                                    insertSuccess2 = deletedPaymentsTable.insertPartially(payment_id, priceDeduct, p_id);
                                     if(insertSuccess2 > 0){
                                         updateSuccess4 = seatAvailabilityTable.updateSeatNo(schedule_id, booking.getSelectedSeats());
                                         if(updateSuccess4 > 0){
@@ -268,7 +270,7 @@ public class BookingController extends HttpServlet {
         }
     }
 
-    private JSONArray filterScheduleData(JSONArray originalArray, String start, String destination, String date, String startTime, String endTime) throws JSONException, ParseException {
+    private JSONArray filterBookingData(JSONArray originalArray, String start, String destination, String date, String startTime, String endTime) throws JSONException, ParseException {
         JSONArray filteredArray = new JSONArray();
         SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm");
 

@@ -8,6 +8,26 @@ function isValidEmail(email) {
     return emailRegex.test(email);
 }
 
+function isStrongPassword(password) {
+    if (password.length < 8) {
+        return false;
+        }
+    if (!/[a-z]/.test(password)) {
+        return false;
+    }
+    if (!/[A-Z]/.test(password)) {
+        return false;
+    }
+    if (!/\d/.test(password)) {
+        return false;
+    }
+    if (!/[^a-zA-Z0-9]/.test(password)) {
+        return false;
+    }
+    return true;
+}
+
+
 const nicInput = document.getElementById("nic");
 const nicError = document.getElementById("nicError");
 
@@ -59,6 +79,8 @@ const emailInput = document.getElementById("email");
 const confirmPasswordInput = document.getElementById("password_confirm");
 const confirmPasswordInputError = document.getElementById("password_confirm_error");
 const emailError = document.getElementById("emailError");
+const passwordInput = document.getElementById("password");
+const passwordInputError = document.getElementById("passwordError");
 
 confirmPasswordInput.addEventListener("change", function() {
     if (document.getElementById("password").value !== document.getElementById("password_confirm").value) {
@@ -69,6 +91,18 @@ confirmPasswordInput.addEventListener("change", function() {
         confirmPasswordInput.setCustomValidity("");
         confirmPasswordInputError.textContent = "";
         confirmPasswordInputError.style.display = "none";
+    }
+});
+
+passwordInput.addEventListener("change", function() {
+    if (!isStrongPassword(passwordInput.value)) {
+        passwordInput.setCustomValidity("Password should be at least 8 characters long and contain at least one lowercase letter, one uppercase letter, one digit, and one special character.");
+        passwordInputError.textContent = "Password should be at least 8 characters long and contain at least one lowercase letter, one uppercase letter, one digit, and one special character.";
+        passwordInputError.style.display = "block";
+    } else {
+        passwordInput.setCustomValidity("");
+        passwordInputError.textContent = "";
+        passwordInputError.style.display = "none";
     }
 });
 

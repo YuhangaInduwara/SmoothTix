@@ -22,8 +22,9 @@ public class Booking {
         this.status = status;
     }
 
-    public Booking(String booking_id, int[] selectedSeats){
+    public Booking(String booking_id, String p_id, int[] selectedSeats){
         this.booking_id = booking_id;
+        this.p_id = p_id;
         this.selectedSeats = selectedSeats;
     }
 

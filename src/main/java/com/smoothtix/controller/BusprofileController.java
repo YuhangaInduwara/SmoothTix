@@ -29,16 +29,17 @@ public class BusprofileController extends HttpServlet {
         PrintWriter out = response.getWriter();
 
         String bus_profile_id = request.getHeader("bus_profile_id");
-        String conductor_id = request.getHeader("conductor_id");
+        String conductor_id = request.getParameter("conductor_id");
+        String driver_id = request.getParameter("driver_id");
         String p_id = request.getHeader("p_id");
 
-        System.out.println(p_id);
-        System.out.println(conductor_id);
+        System.out.println("BP_P_ID"+p_id);
+        System.out.println("BP_C_ID"+conductor_id);
 
         try {
             JSONArray busprofileDataArray = new JSONArray();
 
-            if (p_id== null && conductor_id== null){
+            if (p_id== null && conductor_id== null&& driver_id==null){
                 ResultSet rs = busprofileTable.getByBPId(bus_profile_id);
 
                 while (rs.next()) {
@@ -51,8 +52,27 @@ public class BusprofileController extends HttpServlet {
                 }
 
             }
-            else if (p_id == null){
+            else if (p_id == null&&driver_id==null){
                 ResultSet rs = busprofileTable.getBPbyc_id(conductor_id);
+                while (rs.next()) {
+                    JSONObject busprofileData = new JSONObject();
+                    busprofileData.put("reg_no", rs.getString("reg_no"));
+                    busprofileData.put("route_no", rs.getString("route_no"));
+                    busprofileData.put("route", rs.getString("start") + " - " + rs.getString("destination"));
+                    busprofileData.put("driver_name", rs.getString("driver_name") );
+                    //busprofileData.put("driver_id", rs.getString("driver_id"));
+                    busprofileData.put("conductor_name", rs.getString("conductor_name") );
+                    //busprofileData.put("conductor_id", rs.getString("conductor_id"));
+
+                    busprofileDataArray.put(busprofileData);
+                }
+
+            }
+            else if (p_id == null&& conductor_id==null){
+                ResultSet rs = busprofileTable.getBPbyc_id(driver_id);
+
+
+
                 while (rs.next()) {
                     JSONObject busprofileData = new JSONObject();
                     busprofileData.put("reg_no", rs.getString("reg_no"));
