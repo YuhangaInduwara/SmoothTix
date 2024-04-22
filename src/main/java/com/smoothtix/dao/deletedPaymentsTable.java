@@ -1,7 +1,7 @@
 package com.smoothtix.dao;
 
 import com.smoothtix.database.dbConnection;
-import com.smoothtix.model.Booking;
+import com.smoothtix.model.SmoothPoint;
 
 import java.sql.*;
 import java.text.SimpleDateFormat;
@@ -9,7 +9,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 public class deletedPaymentsTable {
-    public static int insert(String payment_id) throws SQLException, ClassNotFoundException {
+    public static int insert(String payment_id, String p_id) throws SQLException, ClassNotFoundException {
         ResultSet rs = paymentTable.get_by_payment_id(payment_id);
         if (rs.next()) {
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
@@ -21,14 +21,21 @@ public class deletedPaymentsTable {
             pst1.setString(1, payment_id);
             pst1.setString(2, date_time);
             pst1.setDouble(3, amount);
-            return pst1.executeUpdate();
+            int insertSuccess = pst1.executeUpdate();
+            if (insertSuccess > 0) {
+                SmoothPoint smoothPoint = new SmoothPoint(p_id, amount);
+                return smoothPointTable.updateAdd(smoothPoint);
+            }
+            else{
+                return 0;
+            }
         }
         else{
             return 0;
         }
     }
 
-    public static int insertPartially(String payment_id, double amount) throws SQLException, ClassNotFoundException {
+    public static int insertPartially(String payment_id, double amount, String p_id) throws SQLException, ClassNotFoundException {
         ResultSet rs = paymentTable.get_by_payment_id(payment_id);
         if (rs.next()) {
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
@@ -40,7 +47,14 @@ public class deletedPaymentsTable {
             pst1.setString(1, payment_id);
             pst1.setString(2, date_time);
             pst1.setDouble(3, amount);
-            return pst1.executeUpdate();
+            int insertSuccess = pst1.executeUpdate();
+            if (insertSuccess > 0) {
+                SmoothPoint smoothPoint = new SmoothPoint(p_id, amount);
+                return smoothPointTable.updateAdd(smoothPoint);
+            }
+            else{
+                return 0;
+            }
         }
         else{
             return 0;

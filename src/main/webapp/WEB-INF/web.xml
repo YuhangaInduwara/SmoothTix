@@ -209,6 +209,15 @@
       <url-pattern>/smoothPointController</url-pattern>
     </servlet-mapping>
 
+  <servlet>
+      <servlet-name>BusVerifyController</servlet-name>
+      <servlet-class>com.smoothtix.controller.BusVerifyController</servlet-class>
+    </servlet>
+    <servlet-mapping>
+      <servlet-name>BusVerifyController</servlet-name>
+      <url-pattern>/busVerifyController</url-pattern>
+    </servlet-mapping>
+
 
   <listener>
     <listener-class>com.smoothtix.controller.MyServletContextListener</listener-class>

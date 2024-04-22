@@ -230,16 +230,11 @@ public class scheduleTable {
     public static int update(String schedule_id, Schedule schedule) throws SQLException, ClassNotFoundException {
         Connection con = dbConnection.initializeDatabase();
 
-        PreparedStatement pst = con.prepareStatement("UPDATE schedule SET schedule_id=?, date=?, route_id=?, start=?, destination=?, start_time=?, end_time=? WHERE schedule_id=?");
-        pst.setString(1,schedule.getSchedule_id());
-        pst.setString(2,schedule.getDate());
-        pst.setString(3,schedule.getRoute_id());
-        pst.setString(4,schedule.getStart());
-        pst.setString(5,schedule.getDestination());
-        pst.setString(6,schedule.getStart_time());
-        pst.setString(7,schedule.getEnd_time());
-        pst.setString(8,schedule_id);
-
+        PreparedStatement pst = con.prepareStatement("UPDATE schedule SET bus_profile_id=?, date_time=?, status=? WHERE schedule_id=?");
+        pst.setString(1,schedule.getBus_profile_id());
+        pst.setString(2,schedule.getDate_time());
+        pst.setInt(3,schedule.getStatus());
+        pst.setString(4,schedule_id);
         int rawCount = pst.executeUpdate();
         return rawCount;
     }
