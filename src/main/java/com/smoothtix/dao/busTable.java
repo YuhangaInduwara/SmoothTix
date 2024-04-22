@@ -32,6 +32,18 @@ public class busTable {
         return rawCount;
     }
 
+    public static int insert_bus(Bus bus) throws SQLException, ClassNotFoundException {
+        Connection con = dbConnection.initializeDatabase();
+        PreparedStatement pst = con.prepareStatement("insert into bus(bus_id, owner_id, reg_no, route_id, no_of_Seats, review_points) values (?,?,?,?,?,?)");
+        pst.setString(1, bus.getBus_id());
+        pst.setString(2, bus.getOwner_id()); // Pass the NIC of the logged-in user
+        pst.setString(3, bus.getReg_no());
+        pst.setString(4, bus.getRoute_id());
+        pst.setInt(5, bus.getNoOfSeats());
+        pst.setDouble(6, bus.getReview_points());
+        int rawCount = pst.executeUpdate();
+        return rawCount;
+    }
 
     private static String generateBusID() throws SQLException, ClassNotFoundException {
         Connection con = dbConnection.initializeDatabase();

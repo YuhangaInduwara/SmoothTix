@@ -42,7 +42,7 @@ public class DriverController extends HttpServlet {
                 while (rs != null && rs.next()) {
                     JSONObject nicData = new JSONObject();
                     nicData.put("nic", rs.getString("nic"));
-                    passengerDataArray.put(nicData);
+                    driverDataArray.put(nicData);
 
                 }
             } else if (driver_id != null) {
@@ -55,7 +55,7 @@ public class DriverController extends HttpServlet {
                     driverData.put("p_id", rs.getString("p_id"));
                     driverData.put("license_no", rs.getString("license_no"));
                     driverData.put("review_points", rs.getDouble("review_points"));
-                    passengerDataArray.put(driverData);
+                    driverDataArray.put(driverData);
                 }
             } else if (p_id != null) {
                 // Fetch driver data by p_id
@@ -66,7 +66,7 @@ public class DriverController extends HttpServlet {
                     driverData.put("p_id", rs.getString("p_id"));
                     driverData.put("license_no", rs.getString("license_no"));
                     driverData.put("review_points", rs.getDouble("review_points"));
-                    passengerDataArray.put(driverData);
+                    driverDataArray.put(driverData);
                 }
             } else if (dp_id != null) { // Check if dp_id is provided
                 // Call getAllByOwner method when dp_id is provided
@@ -77,7 +77,7 @@ public class DriverController extends HttpServlet {
                     driverData.put("p_id", rs.getString("p_id"));
                     driverData.put("license_no", rs.getString("license_no"));
                     driverData.put("review_points", rs.getDouble("review_points"));
-                    passengerDataArray.put(driverData);
+                    driverDataArray.put(driverData);
                 }
             } else {
                 // Fetch all driver data
@@ -88,7 +88,7 @@ public class DriverController extends HttpServlet {
                     driverData.put("p_id", rs.getString("p_id"));
                     driverData.put("license_no", rs.getString("license_no"));
                     driverData.put("review_points", rs.getDouble("review_points"));
-                    passengerDataArray.put(driverData);
+                    driverDataArray.put(driverData);
                 }
 
             }
