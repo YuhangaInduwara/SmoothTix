@@ -28,12 +28,13 @@ public class BusprofileController extends HttpServlet {
         response.setContentType("text/html");
         PrintWriter out = response.getWriter();
         String conductor_id = request.getParameter("conductor_id");
+        String driver_id = request.getParameter("driver_id");
         String p_id = request.getParameter("p_id");
 
 
         try {
             JSONArray busprofileDataArray = new JSONArray();
-            if (p_id==null&& conductor_id==null){
+            if (p_id==null&& conductor_id==null&& driver_id==null){
                 ResultSet rs = busprofileTable.getAll();
 
 
@@ -51,10 +52,8 @@ public class BusprofileController extends HttpServlet {
                 }
 
             }
-            else if (p_id==null){
+            else if (p_id==null&& driver_id==null){
                 ResultSet rs = busprofileTable.getBPbyc_id(conductor_id);
-
-
 
                 while (rs.next()) {
                     JSONObject busprofileData = new JSONObject();
@@ -70,6 +69,25 @@ public class BusprofileController extends HttpServlet {
                 }
 
             }
+
+
+            else if (p_id==null&& conductor_id==null){
+                ResultSet rs = busprofileTable.getBPbyd_id(driver_id);
+
+                while (rs.next()) {
+                    JSONObject busprofileData = new JSONObject();
+                    busprofileData.put("reg_no", rs.getString("reg_no"));
+                    busprofileData.put("route_no", rs.getString("route_no"));
+                    busprofileData.put("route", rs.getString("start") + " - " + rs.getString("destination"));
+                    busprofileData.put("driver_name", rs.getString("driver_name") );
+                    busprofileData.put("conductor_name", rs.getString("conductor_name") );
+
+                    busprofileDataArray.put(busprofileData);
+                }
+
+            }
+
+
             else{
                 ResultSet rs = busprofileTable.getAllDetails(p_id);
 
