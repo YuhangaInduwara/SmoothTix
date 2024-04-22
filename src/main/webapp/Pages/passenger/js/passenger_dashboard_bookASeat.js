@@ -1,5 +1,6 @@
 let currentPage = 1;
 const pageSize = 3;
+let smooth_points;
 let allData = [];
 let price_per_ride = 0;
 const seatsPerRow = 5;
@@ -62,6 +63,9 @@ function setSearchStands() {
 
 
 function fetchAllData() {
+    if(!session_user_name === ''){
+        document.getElementById("userName").textContent = session_user_name;
+    }
     fetch(`${ url }/scheduleController`, {
         method: 'GET',
         headers: {
@@ -378,11 +382,36 @@ function payment() {
         openAlert( "Please,select at least one seat!", "alertFail");
     }
     else{
+        getSmoothPoints();
         document.getElementById('selected-seats-payment').textContent = selectedSeats.length === 0 ? 'None' : selectedSeats.join(', ');
         document.getElementById('total-price-payment').textContent = totalPrice;
         document.getElementById("paymentContainer").style.display = "flex";
         document.getElementById("overlay").style.display = "block";
     }
+}
+
+function getSmoothPoints(){
+    fetch(`${url}/smoothPointController?p_id=${session_p_id}`, {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+    })
+        .then(response => {
+            if (response.ok) {
+                return response.json();
+            } else {
+                console.error('Error:', response.status);
+            }
+        })
+        .then(data => {
+            smooth_points = data.smooth_points;
+            document.getElementById('smooth_points').textContent = smooth_points;
+            console.log(smooth_points + " " + data.smooth_points)
+        })
+        .catch(error => {
+            console.error('Fetch error:', error);
+        });
 }
 
 function closePayment() {
@@ -432,6 +461,15 @@ function pay() {
             const payment_id = parsedResponse.payment_id;
             addBooking(booking_schedule_id, session_p_id, payment_id, selectedSeats);
         })
+}
+
+function payByPoints(){
+    if(smooth_points*100 >= totalPrice){
+        openConfirmAlert('points');
+    }
+    else{
+        openAlert("No enough SmoothPoints!", "alertFail");
+    }
 }
 
 function addBooking(schedule_id, p_id, payment_id, selectedSeats) {
@@ -534,8 +572,21 @@ function deletePayment(payment_id){
         });
 }
 
-function openConfirmAlert(){
-    const isValid = validatePayment();
+function openConfirmAlert(action){
+    let isValid
+    if(action === 'card'){
+        isValid = validatePayment();
+    }
+    else if(action === 'points'){
+        const agreementCheckbox = document.getElementById("declaration");
+        if (!agreementCheckbox.checked) {
+            showAlert(agreementCheckbox, "Please agree to the terms and conditions.");
+            isValid = false;
+        }
+        else{
+            isValid = true;
+        }
+    }
 
     if (isValid) {
         document.getElementById('confirmationMsg').textContent = "Are you sure to pay?";
@@ -642,4 +693,37 @@ function resetPaymentDetails() {
     document.getElementById("expYear").value = "";
     document.getElementById("cvn").value = "";
     document.getElementById("declaration").checked = false;
+}
+
+function reduceSmoothPoints(amount){
+    const updatedData = {
+        p_id: session_p_id,
+        amount: amount,
+    };
+
+    const jsonData = JSON.stringify(updatedData);
+
+    fetch(`../../../smoothPointController?action=subtract`, {
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: jsonData
+    })
+        .then(response => {
+            if (response.ok) {
+                closeForm_update();
+                openAlert( "Profile Successfully Updated!", "alertSuccess");
+            } else if (response.status === 401) {
+                openAlert( "Update unsuccessful", "alertFail");
+                console.log('Update unsuccessful');
+            } else {
+                openAlert( "Update unsuccessful", "alertFail");
+                console.error('Error:', response.status);
+            }
+        })
+        .catch(error => {
+            openAlert( "Update unsuccessful", "alertFail");
+            console.error('Error:', error);
+        });
 }

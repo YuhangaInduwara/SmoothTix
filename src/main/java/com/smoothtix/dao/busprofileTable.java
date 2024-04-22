@@ -85,7 +85,7 @@ public class busprofileTable {
 
         return "BP" + String.format("%04d", next_busprofileID);
     }
-
+     //this method retrieves the details of a bus profile from the database based on the provided bus_profile_id and returns the result set containing the query results
     public static ResultSet get(String bus_profile_id) throws SQLException, ClassNotFoundException {
         Connection con = dbConnection.initializeDatabase();
         PreparedStatement pst = con.prepareStatement("SELECT * FROM bus_profile WHERE bus_profile_id=?");
@@ -93,6 +93,8 @@ public class busprofileTable {
         ResultSet rs = pst.executeQuery();
         return rs;
     }
+
+    //his method retrieves detailed information about bus profiles, including related data such as driver and conductor details, based on the provided passenger ID (p_id) and returns the result set containing the query results.
     public static ResultSet getAllDetails(String p_id) throws SQLException, ClassNotFoundException {
         Connection con = dbConnection.initializeDatabase();
         PreparedStatement pst = con.prepareStatement("SELECT\n" +
@@ -133,7 +135,7 @@ public class busprofileTable {
         ResultSet rs = pst.executeQuery();
         return rs;
     }
-
+    //this method retrieves all data from the bus_profile table in the database and returns the result set containing the query results.
     public static ResultSet getAll() throws SQLException, ClassNotFoundException {
         Connection con = dbConnection.initializeDatabase();
         PreparedStatement pst = con.prepareStatement("SELECT * FROM bus_profile");
@@ -175,7 +177,7 @@ public class busprofileTable {
         ResultSet rs = pst.executeQuery();
         return rs;
     }
-
+    // this method fetches the start and destination points of a route from the database based on the provided bus profile ID.
     public static ResultSet get_start_dest(String bus_profile_id) throws SQLException, ClassNotFoundException {
         Connection con = dbConnection.initializeDatabase();
         PreparedStatement pst = con.prepareStatement("SELECT\n" +
@@ -304,6 +306,36 @@ public class busprofileTable {
                 "WHERE \n" +
                 "    bp.conductor_id = ?;");
         pst.setString(1,conductor_id);
+        ResultSet rs = pst.executeQuery();
+        return rs;
+    }
+
+    public static ResultSet getBPbyd_id(String driver_id) throws SQLException {
+        Connection con = dbConnection.initializeDatabase();
+        PreparedStatement pst = con.prepareStatement("SELECT \n" +
+                "    bu.reg_no, \n" +
+                "    CONCAT(pd.first_name, ' ', pd.last_name) AS driver_name,\n" +
+                "    CONCAT(pc.first_name, ' ', pc.last_name) AS conductor_name,\n" +
+                "    r.route_no,\n" +
+                "    r.start,\n" +
+                "    r.destination\n" +
+                "FROM \n" +
+                "    bus_profile bp\n" +
+                "JOIN \n" +
+                "    bus bu ON bp.bus_id = bu.bus_id\n" +
+                "JOIN \n" +
+                "    driver d ON bp.driver_id = d.driver_id\n" +
+                "JOIN \n" +
+                "    passenger pd ON d.p_id = pd.p_id\n" +
+                "JOIN \n" +
+                "    conductor c ON bp.conductor_id = c.conductor_id\n" +
+                "JOIN \n" +
+                "    passenger pc ON c.p_id = pc.p_id\n" +
+                "JOIN \n" +
+                "    route r ON bu.route_id = r.route_id\n" +
+                "WHERE \n" +
+                "    bp.driver_id = ?;");
+        pst.setString(1,driver_id);
         ResultSet rs = pst.executeQuery();
         return rs;
     }
