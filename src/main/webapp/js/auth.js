@@ -37,9 +37,9 @@ async function isAuthenticated() {
              else if(window.location.href.includes("timekpr") && session_user_role !== 2){
                  changePage(session_user_role);
              }
-             else if(window.location.href.includes("owner") && session_user_role !== 3){
-                 changePage(session_user_role);
-             }
+             // else if(window.location.href.includes("owner") && session_user_role !== 3){
+             //     changePage(session_user_role);
+             // }
              else if(window.location.href.includes("driver") && session_user_role !== 4){
                  changePage(session_user_role);
              }

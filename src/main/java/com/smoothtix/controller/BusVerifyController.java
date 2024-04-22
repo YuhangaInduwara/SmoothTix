@@ -22,22 +22,42 @@ public class BusVerifyController extends HttpServlet {
         response.setContentType("text/html");
         PrintWriter out = response.getWriter();
         JSONArray busDataArray = new JSONArray();
+        String p_id = request.getParameter("p_id");
 
         try {
-            ResultSet rs = busTable.getBusRequest();
+            if(p_id == null){
+                ResultSet rs = busTable.getBusRequest();
 
-            while (rs.next()) {
-                JSONObject busData = new JSONObject();
-                busData.put("bus_id", rs.getString("bus_id"));
-                busData.put("owner_id", rs.getString("owner_id"));
-                busData.put("nic", rs.getString("nic"));
-                busData.put("reg_no", rs.getString("reg_no"));
-                busData.put("route_no", rs.getString("route_no"));
-                busData.put("route", rs.getString("route"));
-                busData.put("no_of_Seats", rs.getInt("no_of_Seats"));
-                busDataArray.put(busData);
+                while (rs.next()) {
+                    JSONObject busData = new JSONObject();
+                    busData.put("bus_id", rs.getString("bus_id"));
+                    busData.put("owner_id", rs.getString("owner_id"));
+                    busData.put("nic", rs.getString("nic"));
+                    busData.put("reg_no", rs.getString("reg_no"));
+                    busData.put("route_no", rs.getString("route_no"));
+                    busData.put("route", rs.getString("route"));
+                    busData.put("no_of_Seats", rs.getInt("no_of_Seats"));
+                    busData.put("status", rs.getInt("status"));
+                    busDataArray.put(busData);
+                }
             }
-
+            else{
+                ResultSet rs = busTable.getBusRequestByPID(p_id);
+                System.out.println("BR PID: " + p_id);
+                while (rs.next()) {
+                    JSONObject busData = new JSONObject();
+                    busData.put("bus_id", rs.getString("bus_id"));
+                    busData.put("owner_id", rs.getString("owner_id"));
+                    busData.put("nic", rs.getString("nic"));
+                    busData.put("reg_no", rs.getString("reg_no"));
+                    busData.put("route_no", rs.getString("route_no"));
+                    busData.put("route", rs.getString("route"));
+                    busData.put("no_of_Seats", rs.getInt("no_of_Seats"));
+                    busData.put("status", rs.getInt("status"));
+                    busDataArray.put(busData);
+                }
+            }
+            System.out.println(busDataArray);
             out.println(busDataArray.toString());
             response.setStatus(HttpServletResponse.SC_OK);
         } catch (Exception e) {
@@ -60,8 +80,8 @@ public class BusVerifyController extends HttpServlet {
                     Bus bus = new Bus(rs.getString("bus_id"), rs.getString("owner_id"), rs.getString("reg_no"), rs.getString("route_id"), rs.getInt("no_of_seats"), rs.getDouble("review_points"));
                     int insertSuccess = busTable.insert_bus(bus);
                     if(insertSuccess > 0) {
-                        int deleteSuccess = busTable.deleteBusRequest(bus_id);
-                        if(deleteSuccess > 0) {
+                        int updateSuccess = busTable.updateRequestStatus(bus_id, 1);
+                        if(updateSuccess > 0) {
                             System.out.println(rs.getString("bus_id")+ rs.getString("owner_id")+ rs.getString("reg_no")+ rs.getString("route_id")+ rs.getInt("no_of_seats")+rs.getDouble("review_points"));
                             response.setStatus(HttpServletResponse.SC_OK);
                         }
@@ -75,8 +95,8 @@ public class BusVerifyController extends HttpServlet {
                 }
             }
             else if(action.equals("decline")) {
-                int deleteSuccess = busTable.deleteBusRequest(bus_id);
-                if(deleteSuccess > 0) {
+                int updateSuccess = busTable.updateRequestStatus(bus_id, 2);
+                if(updateSuccess > 0) {
                     response.setStatus(HttpServletResponse.SC_OK);
                 }
                 else{

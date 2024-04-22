@@ -69,9 +69,11 @@ function openAlertSuccess(user_role) {
         landingPage = 'http://localhost:2000/SmoothTix_war_exploded/Pages/administrator/html/admin_dashboard_home.html';
     } else if (user_role === 2) {
         landingPage = 'http://localhost:2000/SmoothTix_war_exploded/Pages/timekeeper/html/timekpr_dashboard_home.html';
-    } else if (user_role === 3) {
-        landingPage = 'http://localhost:2000/SmoothTix_war_exploded/Pages/busemployee/html/owner_dashboard_home.html';
-    } else if (user_role === 4) {
+    }
+    // else if (user_role === 3) {
+    //     landingPage = 'http://localhost:2000/SmoothTix_war_exploded/Pages/busemployee/html/owner_dashboard_home.html';
+    // }
+    else if (user_role === 4) {
         landingPage = 'http://localhost:2000/SmoothTix_war_exploded/Pages/busemployee/html/driver_dashboard_home.html';
     } else if (user_role === 5) {
         landingPage = 'http://localhost:2000/SmoothTix_war_exploded/Pages/busemployee/html/conductor_dashboard_home.html';

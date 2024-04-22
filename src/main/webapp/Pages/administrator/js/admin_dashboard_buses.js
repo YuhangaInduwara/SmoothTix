@@ -171,9 +171,10 @@ function displayRequestDataAsTable(data) {
         renderPageControl()
     }
     data.forEach(item => {
-        const row = document.createElement("tr");
+        if(item.status === 0){
+            const row = document.createElement("tr");
 
-        row.innerHTML = `
+            row.innerHTML = `
             <td>${item.nic}</td>
             <td>${item.reg_no}</td>
             <td>${item.route_no}</td>
@@ -189,7 +190,8 @@ function displayRequestDataAsTable(data) {
             </td>
         `;
 
-        tableBody.appendChild(row);
+            tableBody.appendChild(row);
+        }
     });
 }
 
@@ -202,14 +204,66 @@ function updateBusRequest(bus_id, action){
     })
         .then(response => {
             if (response.ok) {
+                if(action === 'decline'){
+                    openAlert( "Request Declined", "alertSuccess");
+                }
+                else if(action === 'accept'){
+                    openAlert( "Successfully accepted", "alertSuccess");
+                }
                 console.log('success');
             } else if (response.status === 401) {
-                console.log('Unauthorized');
+                if(action === 'decline'){
+                    openAlert( "Request Decline Failed", "alertFail");
+                }
+                else if(action === 'accept'){
+                    openAlert( "Request Accept Failed", "alertFail");
+                }
             } else {
                 console.error('Error:', response.status);
+                if(action === 'decline'){
+                    openAlert( "Request Decline Failed", "alertFail");
+                }
+                else if(action === 'accept'){
+                    openAlert( "Request Accept Failed", "alertFail");
+                }
             }
         })
         .catch(error => {
             console.error('Error:', error);
+            if(action === 'decline'){
+                openAlert( "Request Decline Failed", "alertFail");
+            }
+            else if(action === 'accept'){
+                openAlert( "Request Accept Failed", "alertFail");
+            }
         });
+}
+
+function openAlert(text, alertBody){
+    if(alertBody === "alertFail"){
+        document.getElementById("alertMsg").textContent = text;
+    }
+    else{
+        document.getElementById("alertMsgSuccess").textContent = text;
+    }
+    document.getElementById(alertBody).style.display = "block";
+    document.getElementById("overlay").style.display = "block";
+}
+
+function closeAlert(){
+    const alertSuccess = document.getElementById("alertSuccess");
+    const alertFail = document.getElementById("alertFail");
+    if(alertSuccess.style.display === "block" && alertFail.style.display === "block"){
+        alertSuccess.style.display = "none";
+        alertFail.style.display = "none";
+    }
+    else if(alertSuccess.style.display === "block"){
+        alertSuccess.style.display = "none";
+    }
+    else if(alertFail.style.display === "block"){
+        alertFail.style.display = "none";
+    }
+    document.getElementById("overlay").style.display = "none";
+    window.location.href = "../html/passenger_dashboard_aboutMe.html";
+    refreshPage();
 }
