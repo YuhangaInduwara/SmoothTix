@@ -632,6 +632,7 @@ function showAlert(inputElement, message) {
 function deleteFetch(booking_id, selected_seat, action){
     const userData = {
         booking_id: booking_id,
+        p_id: session_p_id,
         selectedSeats: selected_seat,
     };
     console.log(selected_seat)

@@ -8,13 +8,26 @@ import java.sql.*;
 public class busTable {
     public static int insert(Bus bus, String ownerid) throws SQLException, ClassNotFoundException {
         Connection con = dbConnection.initializeDatabase();
-        PreparedStatement pst = con.prepareStatement("insert into bus(bus_id, owner_id, reg_no, route_id, no_of_Seats, review_points) values (?,?,?,?,?,?)");
+        PreparedStatement pst = con.prepareStatement("insert into bus_request(bus_id, owner_id, reg_no, route_id, no_of_Seats, review_points) values (?,?,?,?,?,?)");
         pst.setString(1, generateBusID());
         pst.setString(2, ownerid); // Pass the NIC of the logged-in user
         pst.setString(3, bus.getReg_no());
         pst.setString(4, bus.getRoute_id());
         pst.setInt(5, bus.getNoOfSeats());
         pst.setFloat(6, 0.0f);
+        int rawCount = pst.executeUpdate();
+        return rawCount;
+    }
+
+    public static int insert_bus(Bus bus) throws SQLException, ClassNotFoundException {
+        Connection con = dbConnection.initializeDatabase();
+        PreparedStatement pst = con.prepareStatement("insert into bus(bus_id, owner_id, reg_no, route_id, no_of_Seats, review_points) values (?,?,?,?,?,?)");
+        pst.setString(1, bus.getBus_id());
+        pst.setString(2, bus.getOwner_id()); // Pass the NIC of the logged-in user
+        pst.setString(3, bus.getReg_no());
+        pst.setString(4, bus.getRoute_id());
+        pst.setInt(5, bus.getNoOfSeats());
+        pst.setDouble(6, bus.getReview_points());
         int rawCount = pst.executeUpdate();
         return rawCount;
     }
@@ -37,6 +50,36 @@ public class busTable {
         Connection con = dbConnection.initializeDatabase();
         PreparedStatement pst = con.prepareStatement("SELECT  * FROM bus WHERE bus_id=?");
         pst.setString(1,bus_id);
+        ResultSet rs = pst.executeQuery();
+        return rs;
+    }
+
+    public static ResultSet getRequestData(String bus_id) throws SQLException, ClassNotFoundException {
+        Connection con = dbConnection.initializeDatabase();
+        PreparedStatement pst = con.prepareStatement("SELECT  * FROM bus_request WHERE bus_id=?");
+        pst.setString(1,bus_id);
+        ResultSet rs = pst.executeQuery();
+        return rs;
+    }
+
+    public static ResultSet getBusRequest() throws SQLException, ClassNotFoundException {
+        Connection con = dbConnection.initializeDatabase();
+        PreparedStatement pst = con.prepareStatement("SELECT \n" +
+                "p.nic,\n" +
+                "br.bus_id,\n" +
+                "br.owner_id,\n" +
+                "    br.reg_no,\n" +
+                "    r.route_no,\n" +
+                "    CONCAT(r.start, ' - ', r.destination) AS route,\n" +
+                "    br.no_of_seats\n" +
+                "FROM\n" +
+                "bus_request br\n" +
+                "JOIN\n" +
+                "owner o ON br.owner_id=o.owner_id\n" +
+                "JOIN\n" +
+                "passenger p ON o.p_id=p.p_id\n" +
+                "JOIN \n" +
+                "route r ON br.route_id=r.route_id");
         ResultSet rs = pst.executeQuery();
         return rs;
     }
@@ -76,6 +119,14 @@ public class busTable {
     public static int delete(String bus_id) throws SQLException, ClassNotFoundException {
         Connection con = dbConnection.initializeDatabase();
         PreparedStatement pst = con.prepareStatement("DELETE FROM bus WHERE bus_id = ?");
+        pst.setString(1,bus_id);
+        int rawCount = pst.executeUpdate();
+        return rawCount;
+    }
+
+    public static int deleteBusRequest(String bus_id) throws SQLException, ClassNotFoundException {
+        Connection con = dbConnection.initializeDatabase();
+        PreparedStatement pst = con.prepareStatement("DELETE FROM bus_request WHERE bus_id = ?");
         pst.setString(1,bus_id);
         int rawCount = pst.executeUpdate();
         return rawCount;

@@ -11,6 +11,7 @@ let seatAvailabilityArray = [];
 let booking_schedule_id = "";
 const errorMessages = {};
 let standData = [];
+let isPayByPoints = false;
 
 setSearchStands();
 
@@ -421,6 +422,9 @@ function closePayment() {
 
 function pay() {
     closeConfirmAlert();
+    if(isPayByPoints === true){
+        reduceSmoothPoints(totalPrice);
+    }
     document.getElementById('loading-spinner').style.display = 'block';
     const currentDate = new Date();
 
@@ -522,6 +526,7 @@ function addBooking(schedule_id, p_id, payment_id, selectedSeats) {
                         closePayment();
                         closeSeatSelection();
                         resetPaymentDetails();
+                        isPayByPoints = false;
                     } else {
                         deleteBooking(booking_id);
                         deletePayment(payment_id);
@@ -578,6 +583,7 @@ function openConfirmAlert(action){
         isValid = validatePayment();
     }
     else if(action === 'points'){
+        isPayByPoints = true;
         const agreementCheckbox = document.getElementById("declaration");
         if (!agreementCheckbox.checked) {
             showAlert(agreementCheckbox, "Please agree to the terms and conditions.");
@@ -712,18 +718,14 @@ function reduceSmoothPoints(amount){
     })
         .then(response => {
             if (response.ok) {
-                closeForm_update();
-                openAlert( "Profile Successfully Updated!", "alertSuccess");
+                console.log('Update successful');
             } else if (response.status === 401) {
-                openAlert( "Update unsuccessful", "alertFail");
                 console.log('Update unsuccessful');
             } else {
-                openAlert( "Update unsuccessful", "alertFail");
                 console.error('Error:', response.status);
             }
         })
         .catch(error => {
-            openAlert( "Update unsuccessful", "alertFail");
             console.error('Error:', error);
         });
 }
