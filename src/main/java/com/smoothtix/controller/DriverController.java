@@ -26,7 +26,8 @@ public class DriverController extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         response.setContentType("text/json");
         PrintWriter out = response.getWriter();
-        JSONArray passengerDataArray = new JSONArray();
+        //JSONArray passengerDataArray = new JSONArray();
+        JSONArray driverDataArray = new JSONArray();
 
         String driver_id = request.getHeader("driver_id");
         String p_id = request.getHeader("p_id");
@@ -41,6 +42,7 @@ public class DriverController extends HttpServlet {
                 }
                 else{
                     rs = driverTable.get_by_p_id(p_id);
+                    System.out.println("driverDataArray");
                 }
             }
             else{
@@ -53,9 +55,12 @@ public class DriverController extends HttpServlet {
                 driverData.put("p_id", rs.getString("p_id"));
                 driverData.put("license_no", rs.getString("license_no"));
                 driverData.put("review_points", rs.getString("review_points"));
-                passengerDataArray.put(driverData);
+                //passengerDataArray.put(driverData);
+                driverDataArray.put(driverData);
             }
-            out.println(passengerDataArray);
+            System.out.println(driverDataArray);
+            //out.println(passengerDataArray);
+            out.println(driverDataArray);
             response.setStatus(HttpServletResponse.SC_OK);
         } catch (Exception e) {
             response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);

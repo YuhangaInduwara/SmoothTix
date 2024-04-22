@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Home</title>
-    <link rel="stylesheet" type="text/css" href="../css/driver_dashboard_home.css">
+    <link rel="stylesheet" type="text/css" href="../css/driver_dashboard_busprofile.css">
 </head>
 <body>
 <div class="dashboard">
@@ -47,17 +47,21 @@
                 <h1>Bus Profile</h1>
             </div>
             <div class="user_profile">
-                <h3>Username</h3>
+                <h3 id="userName">Username</h3>
                 <img src="../../../images/vector_icons/driver_avatar.png" alt="userimage" class="user_img">
             </div>
         </div>
         <div class="body_content">
-
-
-
+            <div class="container" id="formContainer">
+                <!-- Forms will be dynamically generated here -->
+            </div>
         </div>
+
+    </div>
     </div>
 </div>
-<script src="../js/driver_dashboard_home.js.js"></script>
+<script src="../../../js/url.js"></script>
+<script src="../../../js/auth.js"></script>
+<script src="../js/driver_dashboard_busprofile.js"></script>
 </body>
 </html>
