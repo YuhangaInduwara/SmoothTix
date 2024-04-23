@@ -72,7 +72,7 @@ public class BusprofileController extends HttpServlet {
 
             }
             else if (p_id == null&& conductor_id==null){
-                ResultSet rs = busprofileTable.getBPbyc_id(driver_id);
+                ResultSet rs = busprofileTable.getBPbyd_id(driver_id);
 
 
 

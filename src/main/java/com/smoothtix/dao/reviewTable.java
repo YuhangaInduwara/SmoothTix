@@ -51,6 +51,58 @@ public class reviewTable {
     }
 
 
+    public static ResultSet getByc_Id(String conductor_id) throws SQLException {
+        Connection con = dbConnection.initializeDatabase();
+        PreparedStatement pst = con.prepareStatement("SELECT\n" +
+                "    s.date_time,\n" +
+                "    CONCAT(r.start, '-', r.destination) AS route,\n" +
+                "    b.reg_no,\n" +
+                "    p.conductor_points\n" +
+                "FROM\n" +
+                "    schedule s\n" +
+                "JOIN\n" +
+                "    bus_profile bp ON s.bus_profile_id = bp.bus_profile_id\n" +
+                "JOIN\n" +
+                "    bus b ON bp.bus_id = b.bus_id\n" +
+                "JOIN\n" +
+                "    route r ON b.route_id = r.route_id\n" +
+                "JOIN\n" +
+                "    conductor c ON bp.conductor_id = c.conductor_id\n" +
+                "JOIN\n" +
+                "    review rw ON s.schedule_id = rw.schedule_id\n" +
+                "JOIN\n" +
+                "    points p ON rw.point_id = p.point_id\n" +
+                "WHERE\n" +
+                "    c.conductor_id = ?;");
+        pst.setString(1,conductor_id);
+        ResultSet rs = pst.executeQuery();
+        return rs;
+    }
 
+    public static ResultSet getByd_Id(String driver_id) throws SQLException {
+        Connection con = dbConnection.initializeDatabase();
+        PreparedStatement pst = con.prepareStatement("SELECT\n" +
+                "    s.date_time AS schedule_date_time,\n" +
+                "    CONCAT(r.start, '-', r.destination) AS route,\n" +
+                "    b.reg_no AS bus_registration_number,\n" +
+                "    p.driver_points AS driver_points\n" +
+                "FROM\n" +
+                "    schedule s\n" +
+                "JOIN\n" +
+                "    bus_profile bp ON s.bus_profile_id = bp.bus_profile_id\n" +
+                "JOIN\n" +
+                "    bus b ON bp.bus_id = b.bus_id\n" +
+                "JOIN\n" +
+                "    route r ON b.route_id = r.route_id\n" +
+                "JOIN\n" +
+                "    driver d ON bp.driver_id = d.driver_id\n" +
+                "JOIN\n" +
+                "    points p ON c.p_id = p.point_id\n" +
+                "WHERE\n" +
+                "    c.driver_id = ?;");
+        pst.setString(1,driver_id);
+        ResultSet rs = pst.executeQuery();
+        return rs;
+    }
 
 }
