@@ -5,7 +5,9 @@ function isValidNIC(nic) {
     return nicRegex.test(nic);
 }
 
+let email = '';
 const nicInput = document.getElementById("nic");
+const nicForgot = document.getElementById("nicForgot");
 const nicError = document.getElementById("nicError");
 
 nicInput.addEventListener("change", function() {
@@ -15,6 +17,18 @@ nicInput.addEventListener("change", function() {
         nicError.style.display = "block";
     } else {
         nicInput.setCustomValidity("");
+        nicError.textContent = "";
+        nicError.style.display = "none";
+    }
+});
+
+nicForgot.addEventListener("change", function() {
+    if (!isValidNIC(nicForgot.value)) {
+        nicForgot.setCustomValidity("Please enter a valid NIC number.");
+        nicError.textContent = "Please enter a valid NIC number.";
+        nicError.style.display = "block";
+    } else {
+        nicForgot.setCustomValidity("");
         nicError.textContent = "";
         nicError.style.display = "none";
     }
@@ -107,10 +121,10 @@ function forgotPassword(){
 
 document.querySelector(".getOTPButton").addEventListener("click", function(event) {
         event.preventDefault();
-        const email = document.getElementById("email").value;
-        console.log(email);
-        if (!email) {
-            alert("Please enter your email address.");
+        const nic = document.getElementById("nicForgot").value;
+        console.log(nic);
+        if (!nic) {
+            alert("Please enter your NIC.");
             return;
         }
 
@@ -118,7 +132,6 @@ document.querySelector(".getOTPButton").addEventListener("click", function(event
         console.log(OTP);
 
         const userData ={
-            email: email,
             otp: OTP,
         };
         const jsonData = JSON.stringify(userData);
@@ -126,23 +139,36 @@ document.querySelector(".getOTPButton").addEventListener("click", function(event
         fetch(`${ url }/otpController`, {
                 method: 'POST',
                 headers: {
-                    'Content-Type': 'application/json'
+                    'Content-Type': 'application/json',
+                    'nic': nic
                 },
                 body: jsonData
             })
             .then(response => {
-                        if (response.ok) {
-                            console.log("success");
-                            document.getElementById("otpVerification").style.display = "block";
-                            document.getElementById("forgotPassword").style.display = "none";
-                        } else {
-                            console.log("fail");
-                        }
-                    })
-                    .catch(error => {
-                        console.error('Error:', error);
-                    });
+                if (response.ok) {
+                    response.json().then(data => {
+                    email = data.email;
+                    console.log("email : "+ email);
+                    openAlert("OTP Has Sent To Your Email", "alertSuccess");
+                    document.getElementById("otpVerification").style.display = "block";
+                    document.getElementById("forgotPassword").style.display = "none";
+                });
+                } else {
+                    openAlert("Invalid NIC", "alertFail");
+                    document.getElementById("overlay").style.display = "none";
+                    document.getElementById("forgotPassword").style.display = "none";
+                }
+                })
+            .catch(error => {
+                console.error('Error:', error);
+            });
 
+
+});
+
+document.querySelector(".resend").addEventListener("click", function(event){
+    event.preventDefault();
+    
 
 });
 
@@ -162,3 +188,28 @@ function generateOTP(){
     return OTP;
 }
 
+function openAlert(text, alertBody){
+    if(alertBody === "alertFail"){
+        document.getElementById("alertMsg").textContent = text;
+    }
+    else{
+        document.getElementById("alertMsgSuccess").textContent = text;
+    }
+    document.getElementById(alertBody).style.display = "block";
+    document.getElementById("overlay").style.display = "block";
+}
+
+function closeAlert(){
+    const alertSuccess = document.getElementById("alertSuccess");
+    const alertFail = document.getElementById("alertFail");
+    if(alertSuccess.style.display === "block" && alertFail.style.display === "block"){
+        alertSuccess.style.display = "none";
+        alertFail.style.display = "none";
+    }
+    else if(alertSuccess.style.display === "block"){
+        alertSuccess.style.display = "none";
+    }
+    else if(alertFail.style.display === "block"){
+        alertFail.style.display = "none";
+    }
+}
