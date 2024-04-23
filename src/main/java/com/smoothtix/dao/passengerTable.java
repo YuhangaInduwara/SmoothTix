@@ -137,4 +137,15 @@ public class passengerTable {
         }
         else return null;
     }
+
+    public static String getEmail(String nic) throws SQLException{
+        Connection con = dbConnection.initializeDatabase();
+        PreparedStatement pst = con.prepareStatement("SELECT email FROM passenger WHERE nic=?");
+        pst.setString(1,nic);
+        ResultSet rs = pst.executeQuery();
+        if(rs.next()){
+            return rs.getString("email");
+        }
+        else return null;
+    }
 }

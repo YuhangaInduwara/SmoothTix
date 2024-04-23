@@ -232,3 +232,13 @@ a{
     #flag_nextPageIcon{
         margin-right: 0;
     }
+#page_control {
+    display: flex;
+    align-items: center;
+}
+
+#prevPageIcon,
+#nextPageIcon {
+    cursor: pointer;
+    margin: 0 10px;
+}
