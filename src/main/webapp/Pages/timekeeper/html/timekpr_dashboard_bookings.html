@@ -23,10 +23,6 @@
                 <a href="./timekpr_dashboard_schedule.html"><img src="../../../images/vector_icons/report.png" alt="report" class="sidebar_img"></a>
                 <a href="./timekpr_dashboard_schedule.html">Schedules</a>
             </div>
-            <div class="sidebar_element">
-                <a href="./timekpr_dashboard_buses.html"><img src="../../../images/vector_icons/bus.png" alt="bus" class="sidebar_img"></a>
-                <a href="./timekpr_dashboard_buses.html">Buses</a>
-            </div>
             <div class="sidebar_element_main">
                 <a href="./timekpr_dashboard_bookings.html"><img src="../../../images/vector_icons/bookASeat.png" alt="bookASeat" class="sidebar_img"></a>
                 <a href="./timekpr_dashboard_bookings.html">Bookings</a>
@@ -54,132 +50,51 @@
         </div>
         <div class="body_content">
             <div class="functions">
-
                 <div class="search_box">
+                    <div class="search" style="margin-right: 10px">
+                        <label>
+                            <select class="search_input" id="searchSelect">
+                                <option value="booking_id" selected>Booking ID</option>
+                                <option value="nic">NIC</option>
+                                <option value="reg_no">Bus No</option>
+                                <option value="route_no">Route No</option>
+                                <option value="status">Status</option>
+                            </select>
+                        </label>
+                    </div>
                     <div class="search">
                         <label>
                             <input class="search_input" type="text" placeholder="Search" id="searchInput">
                         </label>
-                        <button id="searchButton" onclick="searchData()">
+                        <button id="searchButton" onclick="searchData()" >
                             <img src="../../../images/vector_icons/search_icon.png" alt="Search" class="search_img">
                         </button>
                     </div>
+                    <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24" width="24" onclick="refreshPage()" style="margin-top: 5px"><path d="M0 0h24v24H0z" fill="none"/><path d="M17.65 6.35C16.2 4.9 14.21 4 12 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08c-.82 2.33-3.04 4-5.65 4-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"/></svg>
                 </div>
             </div>
             <div>
-                <div class ="title"style="margin-top: -45px" >
-                    <p>Current Bookings</p>
-                </div>
-                <table  class="bus_table">
+                <table id="bookingContainer" class="bus_table">
                     <thead>
                     <tr>
-                        <th>Booked Reference ID</th>
-                        <th>Start Location</th>
-                        <th>End Location</th>
+                        <th>Booking ID</th>
+                        <th>NIC</th>
+                        <th>Date and Time</th>
+                        <th>Route No</th>
+                        <th>Route</th>
                         <th>Bus No</th>
-                        <th>Booked Date</th>
-                        <th>Departure Time</th>
                         <th>Seat No</th>
-                        <!--<th>Actions</th>-->
-
+                        <th>Status</th>
                     </tr>
                     </thead>
                     <tbody>
-                    <tr>
-                        <th>PH001</th>
-                        <th>Colombo</th>
-                        <th>Galle</th>
-                        <th>105</th>
-                        <th>03/24</th>
-                        <th>4.15</th>
-                        <th>05</th>
-                        <!--<td><a class="bus-profile" href="./timekpr_dashboard_busprofile.js">Add a review </a></td>-->
-                    </tr>
-                    <tr>
-                        <th>PH001</th>
-                        <th>Colombo</th>
-                        <th>Galle</th>
-                        <th>105</th>
-                        <th>03/24</th>
-                        <th>4.15</th>
-                        <th>05</th>
-                        <!--<td><a class="bus-profile" href="./timekpr_dashboard_busprofile.js">Add a review </a></td>-->
-                    </tr>
-                    <tr>
-                        <th>PH001</th>
-                        <th>Colombo</th>
-                        <th>Galle</th>
-                        <th>105</th>
-                        <th>03/24</th>
-                        <th>4.15</th>
-                        <th>05</th>
-                        <!--<td><a class="bus-profile" href="./timekpr_dashboard_busprofile.js">Add a review </a></td>-->
-                    </tr>
                     </tbody>
                 </table>
-                <div class="page_control" >
-                    <img class="arrow_img" src="../../../images/vector_icons/arrow_left.png" alt="arrow_left">
-                    <img class="arrow_img" src="../../../images/vector_icons/arrow_right.png" alt="arrow_right">
+                <div id="page_control">
+                    <span id="prevPageIcon" onclick="changePage(currentPage - 1)"><img class="arrow_img" src="../../../images/vector_icons/arrow_left.png" alt="arrow_left"></span>
+                    <span id="currentPageNumber" class="currentPageNumber">1</span>
+                    <span id="nextPageIcon" onclick="changePage(currentPage + 1)"> <img class="arrow_img" src="../../../images/vector_icons/arrow_right.png" alt="arrow_right"></span>
                 </div>
-
-                <div class ="title" style="margin-top: -25px">
-                    <p>History</p>
-                </div>
-
-
-                <table id="dataTable" class="bus_table" >
-                    <thead>
-                    <tr>
-                        <th>Booked Reference ID</th>
-                        <th>Start Location</th>
-                        <th>End Location</th>
-                        <th>Bus No</th>
-                        <th>Booked Date</th>
-                        <th>Departure Time</th>
-                        <th>Seat No</th>
-                        <!--<th>Actions</th>-->
-
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <tr>
-                        <th>PH001</th>
-                        <th>Colombo</th>
-                        <th>Galle</th>
-                        <th>105</th>
-                        <th>03/24</th>
-                        <th>4.15</th>
-                        <th>05</th>
-                        <!--<td><a class="bus-profile" href="./timekpr_dashboard_busprofile.js">Add a review </a></td>-->
-                    </tr>
-                    <tr>
-                        <th>PH001</th>
-                        <th>Colombo</th>
-                        <th>Galle</th>
-                        <th>105</th>
-                        <th>03/24</th>
-                        <th>4.15</th>
-                        <th>05</th>
-                        <!--<td><a class="bus-profile" href="./timekpr_dashboard_busprofile.js">Add a review</a></td>-->
-                    </tr>
-                    <tr>
-                        <th>PH001</th>
-                        <th>Colombo</th>
-                        <th>Galle</th>
-                        <th>105</th>
-                        <th>03/24</th>
-                        <th>4.15</th>
-                        <th>05</th>
-                        <!--<td><a class="bus-profile" href="./timekpr_dashboard_busprofile.js">Add a review </a></td>-->
-                    </tr>
-                    </tbody>
-                </table>
-                <div class="page_control" id="page_control">
-                    <img class="arrow_img" src="../../../images/vector_icons/arrow_left.png" alt="arrow_left">
-                    <img class="arrow_img" src="../../../images/vector_icons/arrow_right.png" alt="arrow_right">
-                </div>
-
-
             </div>
         </div>
     </div>

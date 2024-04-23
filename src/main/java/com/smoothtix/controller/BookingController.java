@@ -34,7 +34,8 @@ public class BookingController extends HttpServlet {
         JSONArray bookingDataArray = new JSONArray();
         String p_id = request.getParameter("p_id");
         String booking_id = request.getParameter("booking_id");
-        System.out.println("Booking_p_id: " + booking_id);
+        String timeKeeper_id = request.getParameter("timeKeeper_id");
+        System.out.println("Booking_p_id: " + timeKeeper_id);
 
         String start = request.getParameter("start");
         String destination = request.getParameter("destination");
@@ -45,18 +46,21 @@ public class BookingController extends HttpServlet {
         try {
             ResultSet rs;
             if(p_id == null && booking_id == null){
-                rs = bookingTable.getAll();
+                rs = bookingTable.getAllByTKID(timeKeeper_id);
                 while (rs.next()) {
                     JSONObject bookingData = new JSONObject();
                     bookingData.put("booking_id", rs.getString("booking_id"));
                     bookingData.put("schedule_id", rs.getString("schedule_id"));
-                    bookingData.put("route_id", rs.getString("route_id"));
-                    bookingData.put("date", rs.getString("date"));
-                    bookingData.put("time", rs.getString("time"));
-//                    bookingData.put("seat_no", rs.getInt("seat_no"));
-                    bookingData.put("price", rs.getString("price"));
+                    bookingData.put("reg_no", rs.getString("reg_no"));
+                    bookingData.put("route_no", rs.getString("route_no"));
+                    bookingData.put("route", rs.getString("route"));
+                    bookingData.put("date_time", rs.getString("date_time"));
+                    bookingData.put("seat_no", rs.getString("booked_seats"));
+                    bookingData.put("status", rs.getString("status"));
+                    bookingData.put("nic", rs.getString("nic"));
                     bookingDataArray.put(bookingData);
                 }
+                System.out.println(bookingDataArray);
             }
             else if(booking_id == null){
                 rs = bookingTable.getByP_id(p_id);

@@ -435,7 +435,7 @@ tbody tr:hover {
 .search_box{
     flex: 1;
     display: flex;
-    margin: 19px;
+    margin: 15px;
     /*height: 40px;*/
     /*gap: 5px;*/
     /*justify-content: flex-end;*/
@@ -584,7 +584,37 @@ select::after {
     background-color: #cccccc;
 }
 
+.mapView{
+    width: 1500px;
+    height: 600px;
+    border-radius: 10px;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+    z-index: 1001;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 50px;
+    gap:40px;
+    display: none;
+}
 
+.closeButton {
+    color: #000000;
+    cursor: pointer;
+    transition: background 0.3s ease;
+    background-color: white;
+    border: none;
+    border-radius: 50%;
+}
+
+.closeButton:hover {
+    transform: scale(1.1);
+}
 
 
 
