@@ -183,9 +183,32 @@ function displayDataAsTable(data) {
         renderPageControl();
     }
 
+    let buttonsHTML = '';
     data.forEach(item => {
         console.log(item.start +" " + timeKeeper_stand + " " + item.destination)
         if(item.start.toLowerCase() === timeKeeper_stand.toLowerCase() || item.destination.toLowerCase() === timeKeeper_stand.toLowerCase()){
+            if (item.status === 1) {
+                buttonsHTML = `
+                    <span class="icon-container">
+                        <i onclick="ViewLocation('${item.schedule_id}')"><img src="../../../images/vector_icons/location_icon.png" alt="update" class="action_icon"></i>
+                    </span>
+                    <span class="icon-container">
+                        <i onclick="updateRow('${item.schedule_id}')"><img src="../../../images/vector_icons/update_icon.png" alt="update" class="action_icon"></i>
+                    </span>
+                    <span class="icon-container" style="margin-left: 1px;">
+                        <i onclick="deleteRow('${item.schedule_id}')"><img src="../../../images/vector_icons/delete_icon.png" alt="delete" class="action_icon"></i>
+                    </span>
+                `;
+            } else{
+                buttonsHTML = `
+                    <span class="icon-container">
+                        <i onclick="updateRow('${item.schedule_id}')"><img src="../../../images/vector_icons/update_icon.png" alt="update" class="action_icon"></i>
+                    </span>
+                    <span class="icon-container" style="margin-left: 1px;">
+                        <i onclick="deleteRow('${item.schedule_id}')"><img src="../../../images/vector_icons/delete_icon.png" alt="delete" class="action_icon"></i>
+                    </span>
+                `;
+            }
             const row = document.createElement("tr");
             row.innerHTML = `
                 <td>${item.schedule_id}</td>
@@ -199,12 +222,7 @@ function displayDataAsTable(data) {
                 <td>${item.available_seats}</td>
                 <td>${item.status}</td>
                 <td>
-                    <span class="icon-container">
-                    <i onclick="updateRow('${item.schedule_id}')"><img src="../../../images/vector_icons/update_icon.png" alt="update" class="action_icon"></i>
-                </span>
-                <span class="icon-container" style="margin-left: 1px;">
-                    <i onclick="deleteRow('${item.schedule_id}')"><img src="../../../images/vector_icons/delete_icon.png" alt="delete" class="action_icon"></i>
-                </span>
+                    ${buttonsHTML} 
                 </td>
             `;
 
@@ -660,4 +678,91 @@ document.getElementById("bpSelection").addEventListener("submit", function(event
 
 });
 
+var map = L.map('map').setView([0, 0], 2);
 
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: '© OpenStreetMap contributors'
+}).addTo(map);
+
+let marker;
+let fetchInterval;
+
+function fetchAndUpdateLocation(schedule_id) {
+    fetch(`../../../locationController?schedule_id=${schedule_id}`, {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+        }
+    })
+        .then(response => response.json())
+        .then(data => {
+            if (data.length > 0) {
+                const lat = data[0].latitude;
+                const lng = data[0].longitude;
+                console.log("lat: " + lat + " lng: " + lng);
+                updateMarkerPosition(lat, lng);
+            }
+        })
+        .catch(error => {
+            console.error('Error fetching coordinates:', error);
+        });
+}
+
+function updateMarkerPosition(lat, lng) {
+    if (!marker) {
+        marker = L.marker([lat, lng]).addTo(map);
+
+        const initialZoomLevel = 14;
+        map.setView([lat, lng], initialZoomLevel);
+    } else {
+        marker.setLatLng([lat, lng]);
+    }
+
+    const currentZoomLevel = map.getZoom();
+
+    map.setView([lat, lng], currentZoomLevel);
+}
+
+function startFetchingLocation(schedule_id) {
+    fetchAndUpdateLocation(schedule_id);
+    fetchInterval = setInterval(() => {
+        fetchAndUpdateLocation(schedule_id);
+    }, 1000); // Fetch location every 1 second
+}
+
+
+function stopFetchingLocation() {
+    clearInterval(fetchInterval);
+}
+
+function ViewLocation(schedule_id){
+    console.log(schedule_id)
+    document.getElementById("locationView").style.display = "flex";
+    document.getElementById("overlay").style.display = "block";
+
+    startFetchingLocation(schedule_id)
+    resizeMap();
+}
+
+let previousMapSize = { width: 0, height: 0 };
+
+function resizeMap() {
+    const currentMapSize = {
+        width: document.getElementById('map').clientWidth,
+        height: document.getElementById('map').clientHeight
+    };
+
+    if (
+        currentMapSize.width !== previousMapSize.width ||
+        currentMapSize.height !== previousMapSize.height
+    ) {
+        previousMapSize = currentMapSize;
+        map.invalidateSize();
+    }
+}
+
+function RemoveLocation(){
+    stopFetchingLocation()
+    document.getElementById("locationView").style.display = "none";
+    document.getElementById("overlay").style.display = "none";
+}

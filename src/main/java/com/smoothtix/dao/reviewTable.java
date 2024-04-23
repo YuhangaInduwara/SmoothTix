@@ -37,9 +37,9 @@ public class reviewTable {
         Connection con = dbConnection.initializeDatabase();
         PreparedStatement pst = con.prepareStatement(
                 "SELECT s.bus_profile_id " +
-                "FROM booking b " +
-                "JOIN schedule s ON b.schedule_id = s.schedule_id " +
-                "WHERE b.booking_id = ?");
+                        "FROM booking b " +
+                        "JOIN schedule s ON b.schedule_id = s.schedule_id " +
+                        "WHERE b.booking_id = ?");
         pst.setString(1, bookingID);
         ResultSet rs = pst.executeQuery();
         String busProfileID = null;
@@ -66,7 +66,6 @@ public class reviewTable {
         }
         return schedule_id;
     }
-
 
     public static ResultSet getByc_Id(String conductor_id) throws SQLException {
         Connection con = dbConnection.initializeDatabase();

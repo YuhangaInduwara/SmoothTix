@@ -12,6 +12,7 @@ public class pointTable {
         Connection con = dbConnection.initializeDatabase();
         PreparedStatement pst = con.prepareStatement("insert into points(point_id, driver_points, conductor_points, bus_points) values (?,?,?,?)");
         String bookingID = point.getBooking_id();
+        System.out.println("Point_2");
 
         String point_id = generatePointID(bookingID);
 

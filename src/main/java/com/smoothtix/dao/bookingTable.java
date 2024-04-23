@@ -72,6 +72,43 @@ public class bookingTable {
         return rs;
     }
 
+    public static ResultSet getAllByTKID(String timeKeeper_id) throws SQLException, ClassNotFoundException {
+        Connection con = dbConnection.initializeDatabase();
+        PreparedStatement pst = con.prepareStatement("SELECT \n" +
+                "    b.booking_id,\n" +
+                "    s.schedule_id,\n" +
+                "    s.date_time,\n" +
+                "    b.status,\n" +
+                "    CONCAT(r.start, ' - ', r.destination) AS route,\n" +
+                "    GROUP_CONCAT(bs.seat_no) AS booked_seats,\n" +
+                "    bu.reg_no,\n" +
+                "    r.route_no,\n" +
+                "    p.nic\n" +
+                "FROM \n" +
+                "    booking b\n" +
+                "JOIN \n" +
+                "    booked_seats bs ON b.booking_id = bs.booking_id\n" +
+                "JOIN \n" +
+                "    schedule s ON b.schedule_id = s.schedule_id\n" +
+                "JOIN \n" +
+                "    bus_profile bp ON s.bus_profile_id = bp.bus_profile_id\n" +
+                "JOIN \n" +
+                "    bus bu ON bp.bus_id = bu.bus_id\n" +
+                "JOIN \n" +
+                "    route r ON bu.route_id = r.route_id\n" +
+                "JOIN \n" +
+                "    timekeeper tk ON (r.start = tk.stand OR r.destination = tk.stand)\n" +
+                "JOIN \n" +
+                "    passenger p ON b.p_id = p.p_id\n" +
+                "WHERE \n" +
+                "    tk.timekpr_id = ?\n" +
+                "GROUP BY \n" +
+                "    b.booking_id;");
+        pst.setString(1, timeKeeper_id);
+        ResultSet rs = pst.executeQuery();
+        return rs;
+    }
+
 //    public static ResultSet counter() throws SQLException, ClassNotFoundException {
 //        Connection con = dbConnection.initializeDatabase();
 //        PreparedStatement pst = con.prepareStatement("SELECT COUNT(*) AS record_count FROM booking");
