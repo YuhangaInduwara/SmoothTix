@@ -9,11 +9,11 @@ public class Bus {
     double review_points;
     int status;
 
-    public Bus(String bus_id, String owner_id, String reg_no, String route_id, Integer no_of_Seats, double review_points){
+    public Bus(String bus_id, String owner_id, String reg_no, String route_no, Integer no_of_Seats, double review_points){
         this.bus_id = bus_id;
         this.owner_id = owner_id;
         this.reg_no = reg_no;
-        this.route_no = route_id;
+        this.route_no = route_no;
         this.no_of_Seats = no_of_Seats;
         this.review_points = review_points;
     }

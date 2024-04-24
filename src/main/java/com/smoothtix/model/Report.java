@@ -1,72 +1,75 @@
 package com.smoothtix.model;
 
 public class Report {
-    private String reportId;
-    private String ownerId;
-    private String dateTime;
-    private String reportDetails;
-    private double totalRevenue;
-    private byte[] pdfData;
+    private String timePeriod;
+    private String busRegNo;
+    private int totalSeatsBooked;
+    private double totalPaymentsDeleted;
+    private double finalAmount;
+    private String startDate;
+    private String endDate;
 
-    public Report() {
-        // Default constructor
+    // Constructor, getters, and setters
+    public Report(String timePeriod, String busRegNo, int totalSeatsBooked, double totalPaymentsDeleted, double finalAmount) {
+        this.timePeriod = timePeriod;
+        this.busRegNo = busRegNo;
+        this.totalSeatsBooked = totalSeatsBooked;
+        this.totalPaymentsDeleted = totalPaymentsDeleted;
+        this.finalAmount = finalAmount;
     }
 
-    public Report(String reportId, String ownerId, String dateTime, String reportDetails, double totalRevenue, byte[] pdfData) {
-        this.reportId = reportId;
-        this.ownerId = ownerId;
-        this.dateTime = dateTime;
-        this.reportDetails = reportDetails;
-        this.totalRevenue = totalRevenue;
-        this.pdfData = pdfData;
+    public Report(String startDate, String endDate, String busRegNo) {
+        this.startDate = startDate;
+        this.endDate = endDate;
+        this.busRegNo = busRegNo;
     }
 
-    // Getters and Setters
-    public String getReportId() {
-        return reportId;
+
+    public String getStartDate() {
+        return startDate;
     }
 
-    public void setReportId(String reportId) {
-        this.reportId = reportId;
+    public String getEndDate() {
+        return endDate;
     }
 
-    public String getOwnerId() {
-        return ownerId;
+    public String getTimePeriod() {
+        return timePeriod;
     }
 
-    public void setOwnerId(String ownerId) {
-        this.ownerId = ownerId;
+    public void setTimePeriod(String timePeriod) {
+        this.timePeriod = timePeriod;
     }
 
-    public String getDateTime() {
-        return dateTime;
+    public String getBusRegNo() {
+        return busRegNo;
     }
 
-    public void setDateTime(String dateTime) {
-        this.dateTime = dateTime;
+    public void setBusRegNo(String busRegNo) {
+        this.busRegNo = busRegNo;
     }
 
-    public String getReportDetails() {
-        return reportDetails;
+    public int getTotalSeatsBooked() {
+        return totalSeatsBooked;
     }
 
-    public void setReportDetails(String reportDetails) {
-        this.reportDetails = reportDetails;
+    public void setTotalSeatsBooked(int totalSeatsBooked) {
+        this.totalSeatsBooked = totalSeatsBooked;
     }
 
-    public double getTotalRevenue() {
-        return totalRevenue;
+    public double getTotalPaymentsDeleted() {
+        return totalPaymentsDeleted;
     }
 
-    public void setTotalRevenue(double totalRevenue) {
-        this.totalRevenue = totalRevenue;
+    public void setTotalPaymentsDeleted(double totalPaymentsDeleted) {
+        this.totalPaymentsDeleted = totalPaymentsDeleted;
     }
 
-    public byte[] getPdfData() {
-        return pdfData;
+    public double getFinalAmount() {
+        return finalAmount;
     }
 
-    public void setPdfData(byte[] pdfData) {
-        this.pdfData = pdfData;
+    public void setFinalAmount(double finalAmount) {
+        this.finalAmount = finalAmount;
     }
 }

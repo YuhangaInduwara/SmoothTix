@@ -6,6 +6,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.smoothtix.dao.conductorTable;
 import com.smoothtix.dao.ownerTable;
+import com.smoothtix.dao.passengerTable;
 import com.smoothtix.model.OTP;
 import com.smoothtix.model.Payment;
 
@@ -19,27 +20,44 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.sql.ResultSet;
 import java.util.Properties;
 
 public class OTPController extends HttpServlet {
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         response.setContentType("text/json");
+        String nic = request.getHeader("nic");
         PrintWriter out = response.getWriter();
         Gson gson = new Gson();
 
         BufferedReader reader = request.getReader();
         OTP otp = gson.fromJson(reader, OTP.class);
+        String email = null;
 
-        response.setStatus(HttpServletResponse.SC_OK);
+        try{
+            email = passengerTable.getEmail(nic);
+            JsonObject jsonResponse = new JsonObject();
+            jsonResponse.addProperty("email", email);
+            out.println(jsonResponse);
 
-//        int sendSuccess = sendEmail(otp.getEmail(), otp.getOTP());
-//
-//        if(sendSuccess > 0){
+        }catch(Exception e){
+            e.printStackTrace();
+            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+        }
+
+        if(email != null){
+            response.setStatus(HttpServletResponse.SC_OK);
+//          int sendSuccess = sendEmail(email, otp.getOTP());
+//          if(sendSuccess > 0){
 //            response.setStatus(HttpServletResponse.SC_OK);
-//        }
-//        else{
+//          }
+//          else{
 //            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-//        }
+//          }
+        }else{
+            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+        }
+
 
     }
 

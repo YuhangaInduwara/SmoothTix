@@ -160,6 +160,7 @@ function fetchRequestData() {
 
 function displayRequestDataAsTable(data) {
     const tableBody = document.querySelector("#requestTable tbody");
+    tableBody.innerHTML = ''
     const rowCount = data.length;
     if(rowCount === 0){
         const noDataRow = document.createElement("tr");
@@ -182,7 +183,7 @@ function displayRequestDataAsTable(data) {
             <td>${item.no_of_Seats}</td>
             <td>
                 <span class="icon-container">
-                    <i onclick="updateBusRequest('${item.bus_id}','decilne')"><img src="../../../images/vector_icons/decline_icon.png" alt="decline" class="action_icon"></i>
+                    <i onclick="updateBusRequest('${item.bus_id}','decline')"><img src="../../../images/vector_icons/decline_icon.png" alt="decline" class="action_icon"></i>
                 </span>
                 <span class="icon-container">
                     <i onclick="updateBusRequest('${item.bus_id}','accept')"><img src="../../../images/vector_icons/accept_icon.png" alt="accept" class="action_icon"></i>

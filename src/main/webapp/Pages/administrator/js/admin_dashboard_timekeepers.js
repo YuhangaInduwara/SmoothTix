@@ -293,7 +293,7 @@ function showSuggestions2(event) {
     if(inputValue === ""){
         suggestionsContainer.innerHTML = '';
     }
-    else {x
+    else {
         fetch(`${url}/routeController?request_data=stand_list`, {
             method: 'GET',
             headers: {

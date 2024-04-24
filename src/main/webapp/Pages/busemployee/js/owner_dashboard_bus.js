@@ -537,7 +537,6 @@ function showSuggestions2(event) {
             });
     }
 }
-document.getElementById("update_route_no").addEventListener("input", showSuggestions2);
 
 const searchInput = document.getElementById("searchInput");
 searchInput.addEventListener("keyup", searchData);
@@ -602,22 +601,22 @@ function showRequests(status){
 }
 
 function showRequestsBody(status) {
-    var filteredRequests = allRequestData.filter(function(request) {
+    let filteredRequests = allRequestData.filter(function(request) {
         return request.status === status;
     });
 
     console.log(filteredRequests)
 
-    var requestBody = document.getElementById("requestBody");
+    let requestBody = document.getElementById("requestBody");
     requestBody.innerHTML = "";
 
     if (filteredRequests.length === 0) {
-        var noDataMsg = document.createElement("p");
+        let noDataMsg = document.createElement("p");
         noDataMsg.textContent = "No requests found.";
         requestBody.appendChild(noDataMsg);
     } else {
         filteredRequests.forEach(function (request) {
-            var requestInfo = document.createElement("p");
+            let requestInfo = document.createElement("p");
             requestInfo.textContent = request.reg_no + " - " + request.route_no + " - " + request.route + " - " + request.no_of_Seats;
             requestBody.appendChild(requestInfo);
         });

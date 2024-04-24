@@ -2,6 +2,7 @@ package com.smoothtix.controller;
 
 import com.google.gson.Gson;
 import com.smoothtix.dao.scheduleTable;
+import com.smoothtix.dao.routeTable;
 import com.smoothtix.model.Schedule;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -222,4 +223,17 @@ public class ScheduleController extends HttpServlet {
         return filteredArray;
     }
 
+    private static void generateSchedule(){
+        try{
+            ResultSet rs1 = routeTable.getAll();
+            while (rs1.next()) {
+                ResultSet rs2 = scheduleTable.getWeekSchedules(rs1.getString("route_id"));
+            }
+        }
+        catch (Exception e){
+
+        }
+    }
 }
+
+

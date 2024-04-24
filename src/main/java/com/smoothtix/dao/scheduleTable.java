@@ -258,4 +258,46 @@ public class scheduleTable {
         return rawCount;
     }
 
+    public static ResultSet getWeekSchedules(String route_id) throws SQLException, ClassNotFoundException {
+        Connection con = dbConnection.initializeDatabase();
+        PreparedStatement pst = con.prepareStatement("SELECT s.schedule_id, s.bus_profile_id, s.date_time\n" +
+                "FROM schedule s\n" +
+                "JOIN bus_profile bp ON s.bus_profile_id = bp.bus_profile_id\n" +
+                "JOIN bus b ON bp.bus_id = b.bus_id\n" +
+                "WHERE b.route_id = ?\n" +
+                "AND s.date_time >= DATE_SUB(NOW(), INTERVAL 1 WEEK)\n" +
+                "AND s.date_time < NOW();");
+        pst.setString(1,route_id);
+        ResultSet rs = pst.executeQuery();
+        return rs;
+    }
+
+    public static ResultSet getMonthSchedules(String route_id) throws SQLException, ClassNotFoundException {
+        Connection con = dbConnection.initializeDatabase();
+        PreparedStatement pst = con.prepareStatement("SELECT s.schedule_id, s.bus_profile_id, s.date_time\n" +
+                "FROM schedule s\n" +
+                "JOIN bus_profile bp ON s.bus_profile_id = bp.bus_profile_id\n" +
+                "JOIN bus b ON bp.bus_id = b.bus_id\n" +
+                "WHERE b.route_id = ?\n" +
+                "AND s.date_time >= DATE_SUB(NOW(), INTERVAL 1 MONTH)\n" +
+                "AND s.date_time < NOW();");
+        pst.setString(1,route_id);
+        ResultSet rs = pst.executeQuery();
+        return rs;
+    }
+
+    public static ResultSet getYearSchedules(String route_id) throws SQLException, ClassNotFoundException {
+        Connection con = dbConnection.initializeDatabase();
+        PreparedStatement pst = con.prepareStatement("SELECT s.schedule_id, s.bus_profile_id, s.date_time\n" +
+                "FROM schedule s\n" +
+                "JOIN bus_profile bp ON s.bus_profile_id = bp.bus_profile_id\n" +
+                "JOIN bus b ON bp.bus_id = b.bus_id\n" +
+                "WHERE b.route_id = ?\n" +
+                "AND s.date_time >= DATE_SUB(NOW(), INTERVAL 1 YEAR)\n" +
+                "AND s.date_time < NOW();");
+        pst.setString(1,route_id);
+        ResultSet rs = pst.executeQuery();
+        return rs;
+    }
+
 }

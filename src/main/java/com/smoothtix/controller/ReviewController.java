@@ -4,7 +4,6 @@ import com.google.gson.Gson;
 import com.smoothtix.dao.busprofileTable;
 import com.smoothtix.dao.reviewTable;
 import com.smoothtix.model.Review;
-import org.jetbrains.annotations.NotNull;
 import org.json.JSONArray;
 import org.json.JSONObject;
 

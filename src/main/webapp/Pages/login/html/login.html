@@ -52,7 +52,7 @@
                     <div class="form-group">
                         <label for="password">Password<span class="required">*</span></label>
                         <input type="password" name="password" id="password" class="form-control" placeholder="Enter Your Password" required>
-                        <span class="forgot" id="forgot" onclick="forgotPassword()">forgot password?</span>
+                        <span class="forgot" onclick="forgotPassword()">forgot password?</span>
                     </div>
                     <div class="form-group-btn">
                         <button type="submit" class="btn-login">Login</button>
@@ -74,8 +74,7 @@
                 </div>
                 <div class="forgotPassword" id="forgotPassword">
                     <h2>Forgot Password</h2>
-                    <input type="email" name="email" id="email" class="form-control" placeholder="Enter Your Valid Email Address" required>
-                    <!--        <span class="resend">Resend OTP</span>-->
+                    <input type="text" name="nic" id="nicForgot" class="form-control" placeholder="Enter Your NIC" required>
                     <button class="cancelButton" onclick="closeForgotPassword()">Cancel</button>
                     <button type="submit" class="getOTPButton">Get OTP</button>
                 </div>
@@ -87,6 +86,16 @@
                     <span class="resend">Resend OTP</span>
                     <button class="cancelButton" onclick="closeOTPVerification()">Cancel</button>
                     <button type="submit" class="proceedButton">Proceed</button>
+                </div>
+                <div class="alertBody" id="alertSuccess">
+                    <img src="../../../images/Alert_icons/Success_icon.png" class="alertImg" alt="success">
+                    <div class="alertMsgSuccess" id="alertMsgSuccess"></div>
+                    <button class="okButton" onclick="closeAlert()">Ok</button>
+                </div>
+                <div class="alertBody" id="alertFail">
+                    <img src="../../../images/Alert_icons/Error_icon.png" class="alertImg" alt="fail">
+                    <div class="alertMsgFail" id="alertMsg"></div>
+                    <button class="okButton" onclick="closeAlert()">Ok</button>
                 </div>
             </div>
         </div>

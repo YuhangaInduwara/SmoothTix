@@ -23,10 +23,13 @@ public class PointController extends HttpServlet {
             Gson gson = new Gson();
             BufferedReader reader = request.getReader();
             Point point = gson.fromJson(reader, Point.class);
+            System.out.println("point1");
+
             String jsonResponse = pointTable.insert(point);
 
 
             if (!jsonResponse.equals("Unsuccessful")) {
+                System.out.println("point3");
 
                 out.write(jsonResponse);
                 response.setStatus(HttpServletResponse.SC_OK);

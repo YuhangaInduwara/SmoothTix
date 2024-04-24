@@ -1,25 +1,24 @@
 package com.smoothtix.model;
 
 public class OTP {
-    String email;
     int otp;
-    public OTP(String email, int otp){
-        this.email = email;
+    String email;
+    public OTP( int otp, String email){
         this.otp = otp;
-    }
-
-    public String getEmail(){
-        return email;
+        this.email = email;
     }
     public int getOTP(){ return otp; }
 
-    public void setEmail(String email){
-        this.email = email;
+    public String getEmail() {
+        return email;
     }
+
     public void setOTP(int otp){
         this.otp = otp;
     }
 
-
+    public void setEmail(String email) {
+        this.email = email;
+    }
 }
 

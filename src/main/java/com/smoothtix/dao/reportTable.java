@@ -1,105 +1,131 @@
 package com.smoothtix.dao;
 
+import com.smoothtix.database.dbConnection;
+import com.smoothtix.model.Report;
+
 import java.sql.*;
-import java.util.UUID;
 
 public class reportTable {
-    private Connection conn;
+    public static Report generateReport(String startDate, String endDate, String busRegNo) throws SQLException, ClassNotFoundException {
+        Connection con = dbConnection.initializeDatabase();
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        System.out.println(startDate);
+        System.out.println(endDate);
+        System.out.println(busRegNo);
 
-    public reportTable(Connection dbConnection) {
-        this.conn = dbConnection;
+            String sql1 = "SELECT owner_id FROM bus WHERE reg_no = ?";
+            ps = con.prepareStatement(sql1);
+            ps.setString(1, busRegNo);
+            rs = ps.executeQuery();
+            if (!rs.next()) {
+                throw new SQLException("No owner found for the provided bus registration number");
+            }
+            String ownerId = rs.getString("owner_id");
+
+            // Get total seats booked
+            String sql2 = " SELECT COUNT(bs.seat_no) AS totalSeats \n" +
+                    " FROM booking b \n" +
+                    " JOIN booked_seats bs ON b.booking_id = bs.booking_id \n" +
+                    " JOIN schedule sc ON b.schedule_id = sc.schedule_id\n" +
+                    " JOIN bus_profile bp ON sc.bus_profile_id = bp.bus_profile_id \n" +
+                    " JOIN bus bu ON bp.bus_id = bu.bus_id \n" +
+                    " JOIN payment p ON b.payment_id = p.payment_id\n" +
+                    " WHERE bu.reg_no = ? AND sc.date_time BETWEEN ? AND ?;";
+            ps = con.prepareStatement(sql2);
+            ps.setString(1, busRegNo);
+            ps.setString(2, startDate);
+            ps.setString(3, endDate);
+            rs = ps.executeQuery();
+            int totalSeatsBooked = rs.next() ? rs.getInt("totalSeats") : 0;
+
+            // Get total payments and deleted payments
+            String sql3 = "SELECT \n" +
+                    "    SUM(p.amount) AS totalPayments  \n" +
+                    "FROM \n" +
+                    "    booking b \n" +
+                    "    JOIN booked_seats bs ON b.booking_id = bs.booking_id \n" +
+                    "    JOIN schedule s ON b.schedule_id = s.schedule_id \n" +
+                    "    JOIN bus_profile bp ON bp.bus_profile_id = s.bus_profile_id\n" +
+                    "\tJOIN bus bu ON bu.bus_id = bp.bus_id\n" +
+                    "    LEFT JOIN payment p ON b.payment_id = p.payment_id \n" +
+                    "    LEFT JOIN deleted_payment d ON p.payment_id = d.payment_id\n" +
+                    "    WHERE bu.reg_no = ? AND p.date_time BETWEEN ? AND ? And flag != 1;";
+            ps = con.prepareStatement(sql3);
+            ps.setString(1, busRegNo);
+            ps.setString(2, startDate);
+            ps.setString(3, endDate);
+            rs = ps.executeQuery();
+            double finalAmount = rs.next() ? rs.getDouble("totalPayments") : 0;
+
+            String sql4 = "SELECT COUNT(dp.payment_id) AS deletedPayments\n" +
+                    "FROM booking b\n" +
+                    "JOIN booked_seats bs ON b.booking_id = bs.booking_id\n" +
+                    "JOIN schedule s ON b.schedule_id = s.schedule_id\n" +
+                    "JOIN bus_profile bp ON s.bus_profile_id = bp.bus_profile_id\n" +
+                    "JOIN bus bu ON bp.bus_id = bu.bus_id\n" +
+                    "JOIN deleted_payment dp ON b.payment_id = dp.payment_id\n" +
+                    "WHERE bu.reg_no = ? AND dp.date_time BETWEEN ? AND ?;";
+            ps = con.prepareStatement(sql4);
+            ps.setString(1, busRegNo);
+            ps.setString(2, startDate);
+            ps.setString(3, endDate);
+            rs = ps.executeQuery();
+            int totalPaymentsDeleted = rs.next() ? rs.getInt("deletedPayments") : 0;
+
+            // Create a report entry
+            String sql5 = "INSERT INTO owner_report (report_id,owner_id, date_time, report_details) VALUES (?, ?, NOW(), ?)";
+            ps = con.prepareStatement(sql5);
+            ps.setString(1, generateReportID());
+            System.out.println(generateReportID());
+            ps.setString(2, ownerId);
+            ps.setString(3, String.format("Total Amount: %f, Total Seats Booked: %d, Total Payments Deleted: %d", finalAmount, totalSeatsBooked, totalPaymentsDeleted));
+            ps.executeUpdate();
+
+            Report report = new Report(startDate + " to " + endDate, busRegNo, totalSeatsBooked, totalPaymentsDeleted, finalAmount);
+            return report;
+
     }
+    private static String generateReportID() throws SQLException, ClassNotFoundException {
+        Connection con = dbConnection.initializeDatabase();
+        String query = "SELECT COALESCE(MAX(CAST(SUBSTRING(report_id, 3) AS SIGNED)), 0) + 1 AS next_report_id FROM owner_report";
+        Statement stmt = con.createStatement();
+        ResultSet rs = ((Statement) stmt).executeQuery(query);
 
-    public ReportData generateReport(String busProfileId, String fromDateTime, String toDateTime) throws SQLException {
-        String query = "SELECT SUM(p.amount) AS total_revenue " +
-                "FROM booking b " +
-                "INNER JOIN booked_seats bs ON b.booking_id = bs.booking_id " +
-                "INNER JOIN schedule s ON b.schedule_id = s.schedule_id " +
-                "INNER JOIN bus_profile bp ON s.bus_profile_id = bp.bus_profile_id " +
-                "LEFT JOIN payment p ON b.payment_id = p.payment_id " +
-                "WHERE bp.bus_profile_id = ? " +
-                "AND b.date_time BETWEEN ? AND ? " +
-                "AND (p.flag = 0 OR p.flag IS NULL)";
-
-        PreparedStatement stmt = conn.prepareStatement(query);
-        stmt.setString(1, busProfileId);
-        stmt.setString(2, fromDateTime);
-        stmt.setString(3, toDateTime);
-        ResultSet result = stmt.executeQuery();
-
-        if (result.next()) {
-            double totalRevenue = result.getDouble("total_revenue");
-
-            String currentUserId = getCurrentUserId(); // Replace with your method to get the current user ID
-            String ownerId = getOwnerIdByUserId(currentUserId);
-
-            String reportId = generateUniqueReportId();
-            String currentDateTime = getCurrentDateTime();
-            String reportDetails = "Total revenue for bus profile ID: " + busProfileId + " from " + fromDateTime + " to " + toDateTime + " is " + totalRevenue;
-
-            insertReportDetails(reportId, ownerId, currentDateTime, reportDetails);
-
-            // Generate the PDF report
-            byte[] pdfData = generatePdfReport(reportId, reportDetails);
-
-            return new ReportData(totalRevenue, reportDetails, pdfData);
-        } else {
-            throw new SQLException("No bookings found for the specified criteria.");
+        int nextReportID = 1;
+        if (rs.next()) {
+            nextReportID = rs.getInt("next_report_id");
         }
+
+        return "RP" + String.format("%04d", nextReportID);
     }
+    public static Report getReportDetails(String startDate, String endDate, String busRegNo) throws SQLException, ClassNotFoundException {
+        Connection con = dbConnection.initializeDatabase();
+        PreparedStatement ps = null;
+        ResultSet rs = null;
 
-    private String getOwnerIdByUserId(String userId) throws SQLException {
-        String query = "SELECT owner_id FROM owner WHERE p_id = ?";
-        PreparedStatement stmt = conn.prepareStatement(query);
-        stmt.setString(1, userId);
-        ResultSet result = stmt.executeQuery();
+        System.out.println(busRegNo);
+        System.out.println(startDate);
+        System.out.println(endDate);
+        String sql = "SELECT report_details FROM owner_report WHERE owner_id = (SELECT owner_id FROM bus WHERE reg_no = ?) AND date_time BETWEEN ? AND ? ORDER BY date_time DESC LIMIT 1;";
+        ps = con.prepareStatement(sql);
+        ps.setString(1, busRegNo);
+        ps.setString(2, startDate + " 00:00:00");
+        ps.setString(3, endDate + " 23:59:59");
+        rs = ps.executeQuery();
 
-        if (result.next()) {
-            return result.getString("owner_id");
+        if (rs.next()) {
+            String reportDetails = rs.getString("report_details");
+            String[] details = reportDetails.split(",");
+
+            double finalAmount = Double.parseDouble(details[0].split(":")[1].trim());
+            int totalSeatsBooked = Integer.parseInt(details[1].split(":")[1].trim());
+            int totalPaymentsDeleted = Integer.parseInt(details[2].split(":")[1].trim());
+
+            Report report = new Report(startDate + " to " + endDate, busRegNo, totalSeatsBooked, totalPaymentsDeleted, finalAmount);
+            return report;
         } else {
-            throw new SQLException("Owner not found for the given user ID.");
-        }
-    }
-
-    private String generateUniqueReportId() {
-        return "report_" + UUID.randomUUID().toString();
-    }
-
-    private String getCurrentDateTime() {
-        // Get the current date and time in the desired format
-        return new java.util.Date().toString();
-    }
-
-    private String getCurrentUserId() {
-        // Replace with your method to get the current user ID
-        return "user_123";
-    }
-
-    private void insertReportDetails(String reportId, String ownerId, String dateTime, String reportDetails) throws SQLException {
-        String query = "INSERT INTO owner_report (report_id, owner_id, date_time, report_details) VALUES (?, ?, ?, ?)";
-        PreparedStatement stmt = conn.prepareStatement(query);
-        stmt.setString(1, reportId);
-        stmt.setString(2, ownerId);
-        stmt.setString(3, dateTime);
-        stmt.setString(4, reportDetails);
-        stmt.executeUpdate();
-    }
-
-    private byte[] generatePdfReport(String reportId, String reportDetails) {
-        // Use a PDF generation library to create the PDF report
-        // Return the PDF data or save the PDF file and return the file path
-        return new byte[0]; // Replace with actual PDF generation code
-    }
-
-    public static class ReportData {
-        public double totalRevenue;
-        public String reportDetails;
-        public byte[] pdfData;
-
-        public ReportData(double totalRevenue, String reportDetails, byte[] pdfData) {
-            this.totalRevenue = totalRevenue;
-            this.reportDetails = reportDetails;
-            this.pdfData = pdfData;
+            return null;
         }
     }
 }
