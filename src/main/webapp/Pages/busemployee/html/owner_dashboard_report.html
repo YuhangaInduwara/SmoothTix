@@ -59,30 +59,66 @@
                 <h1>Report</h1>
             </div>
             <div class="user_profile">
-                <h3>Username</h3>
+                <h3 id="userName">Username</h3>
                 <img src="../../../images/vector_icons/user.png" alt="userimage" class="user_img">
             </div>
         </div>
         <div class="body_content">
-            <div class="search_box">
-                <label for="fromDate">From Date:</label>
-                <input type="date" id="fromDate">
-                <label for="fromTime">From Time:</label>
-                <input type="time" id="fromTime">
-                <label for="toDate">To Date:</label>
-                <input type="date" id="toDate">
-                <label for="toTime">To Time:</label>
-                <input type="time" id="toTime">
-                <label for="busprofileSelect">Select Bus Profile ID:</label>
-                <select id="busprofileSelect"></select>
-                <button class="button" id="generateReportButton">Generate Report</button>
+            <div class="functions">
+                <div class="search_box">
+                    <label for="StartdatePicker">Date From</label>
+                    <label for="startdatePicker"></label><input type="date" id="StartdatePicker">
+                </div>
+                <div class="search_box">
+                    <label for="EnddatePicker">Date to</label>
+                    <label for="EnddatePicker"></label><input type="date" id="EnddatePicker">
+                </div>
+                <div class="search_box" >
+                    <div>
+                        <label>
+                            <select id="busregNoSelect">
+                                <option value="" disabled selected>Select Bus Reg No:</option>
+                            </select>
+                        </label>
+                    </div>
+                </div>
+                <div class="search_box">
+                    <button class="Searchbutton" onclick="generateReport()">Generate Report</button>
+                </div>
             </div>
-            <div id="reportContainer"></div>
+            <div id="reportContainer" style="display: flex;flex-direction: column; justify-content: center; align-items: center;">
+                <table id="reportTable">
+                    <tbody>
+                    <tr>
+                        <th>Time Period</th>
+                        <td id="timePeriod">-</td>
+                    </tr>
+                    <tr>
+                        <th>Bus Reg No</th>
+                        <td id="busRegNo">-</td>
+                    </tr>
+                    <tr>
+                        <th>Total Seats Booked</th>
+                        <td id="totalSeatsBooked">-</td>
+                    </tr>
+                    <tr>
+                        <th>Total Payments Deleted</th>
+                        <td id="totalPaymentsDeleted">-</td>
+                    </tr>
+                    <tr>
+                        <th>Final Amount</th>
+                        <td id="finalAmount">-</td>
+                    </tr>
+                    </tbody>
+                </table>
+                <button class="button" id="downloadReportButton">Download Report</button>
+            </div>
+
         </div>
     </div>
-    </div>
 </div>
+<script src="../../../js/url.js"></script>
+<script src="../../../js/auth.js"></script>
 <script src="../js/owner_dashboard_report.js"></script>
 </body>
 </html>
-

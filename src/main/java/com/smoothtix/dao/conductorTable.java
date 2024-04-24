@@ -7,7 +7,7 @@ import com.smoothtix.model.Passenger;
 import java.sql.*;
 
 public class conductorTable {
-    public static int insert(String nic, Float review_points,String owner_id) throws SQLException, ClassNotFoundException {
+    public static int insert(String nic,String owner_id) throws SQLException, ClassNotFoundException {
         Connection con = dbConnection.initializeDatabase();
         PreparedStatement pst = con.prepareStatement("SELECT * FROM passenger WHERE nic=?");
         pst.setString(1, nic);
@@ -27,7 +27,6 @@ public class conductorTable {
                 ps.setString(4, owner_id);
                 System.out.println("nic: " + rs.getString("nic"));
                 System.out.println("p_id: " + rs.getString("p_id"));
-                System.out.println("review_points: " + review_points);
                 Passenger passenger = new Passenger(rs.getString("nic"), 5);
                 int success = passengerTable.updatePrivilegeLevel(rs.getString("p_id"), passenger);
                 if (success == 1) {

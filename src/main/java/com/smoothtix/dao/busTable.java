@@ -47,7 +47,7 @@ public class busTable {
 
     private static String generateBusID() throws SQLException, ClassNotFoundException {
         Connection con = dbConnection.initializeDatabase();
-        String query = "SELECT MAX(CAST(SUBSTRING(bus_id, 2) AS SIGNED)) + 1 AS next_bus_id FROM bus";
+        String query = "SELECT MAX(CAST(SUBSTRING(bus_id, 2) AS SIGNED)) + 1 AS next_bus_id FROM bus_request";
         Statement stmt = con.createStatement();
         ResultSet rs = ((Statement) stmt).executeQuery(query);
 
@@ -61,7 +61,10 @@ public class busTable {
 
     public static ResultSet get(String bus_id) throws SQLException, ClassNotFoundException {
         Connection con = dbConnection.initializeDatabase();
-        PreparedStatement pst = con.prepareStatement("SELECT  * FROM bus WHERE bus_id=?");
+        PreparedStatement pst = con.prepareStatement("SELECT b.*, r.route_no\n" +
+        "FROM bus b\n" +
+        "JOIN route r ON b.route_id = r.route_id\n" +
+        "WHERE b.bus_id = ?;\n");
         pst.setString(1,bus_id);
         ResultSet rs = pst.executeQuery();
         return rs;
@@ -121,7 +124,7 @@ public class busTable {
 
     public static int update(String bus_id, Bus bus) throws SQLException, ClassNotFoundException {
         Connection con = dbConnection.initializeDatabase();
-        PreparedStatement pst = con.prepareStatement("UPDATE bus SET route_id=?, no_of_Seats=? WHERE bus_id=?");
+        PreparedStatement pst = con.prepareStatement("UPDATE bus SET route_id=(SELECT route_id FROM route WHERE route_no = ?), no_of_Seats=? WHERE bus_id=?");
         pst.setString(1,bus.getRoute_id());
         pst.setInt(2,bus.getNoOfSeats());
         pst.setString(3,bus_id);

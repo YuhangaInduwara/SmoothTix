@@ -41,7 +41,6 @@ document.getElementById("loginForm").addEventListener("submit", function(event) 
     })
         .then(response => {
             if (response.ok) {
-
                 return response.json();
             } else {
                 return response.json()

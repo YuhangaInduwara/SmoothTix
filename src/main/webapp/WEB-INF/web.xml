@@ -219,6 +219,15 @@
   </servlet-mapping>
 
   <servlet>
+    <servlet-name>ReportController</servlet-name>
+    <servlet-class>com.smoothtix.controller.ReportController</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>ReportController</servlet-name>
+    <url-pattern>/reportController</url-pattern>
+  </servlet-mapping>
+
+  <servlet>
       <servlet-name>BusVerifyController</servlet-name>
       <servlet-class>com.smoothtix.controller.BusVerifyController</servlet-class>
     </servlet>
