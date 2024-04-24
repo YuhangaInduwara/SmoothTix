@@ -134,6 +134,35 @@ label {
     gap:40px;
 }
 
+.changePassword{
+    display: none;
+    width: 512px;
+    height: 190px;
+    background: #ffffff;
+    border-radius: 10px;
+    position: fixed;
+    top: 62%;
+    left: 74%;
+    transform: translate(-50%, -50%);
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+    z-index: 1000;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 40px;
+    gap:40px;
+}
+
+.password-control {
+    width: 96%;
+    padding: 10px;
+    border: 1px solid #333;
+    border-radius: 5px;
+    font-size: 16px;
+    margin-bottom: 5px;
+}
+
 .otp-input {
     height: 30px;
     border: 1px solid #ccc;
@@ -176,7 +205,30 @@ label {
 }
 
 .cancelButton:hover,
-.getOTPButton:hover{
+.getOTPButton:hover,
+.proceedButton:hover{
+    background: #D1191D;
+}
+
+.cancelPasswordButton,
+.changePasswordButton{
+    width: 150px;
+    height: 40px;
+    border: none;
+    border-radius: 20px;
+    background: #EA2427;
+    color: #fff;
+    font-size: 16px;
+    cursor: pointer;
+    position: relative;
+    margin-right: 50px;
+    margin-left: 50px;
+    top: 10%;
+    transition: background 0.3s ease;
+}
+
+.cancelPasswordButton:hover,
+.changePasswordButton:hover{
     background: #D1191D;
 }
 
@@ -410,4 +462,68 @@ body{
     background-size: cover;
     background-repeat: no-repeat;
     background-position: center;
+}
+
+#loading-spinner{
+    display: none;
+    border-radius: 10px;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 1000;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 50px;
+    gap:40px;
+    margin: 0;
+}
+
+#loading-spinner2{
+    display: none;
+    border-radius: 10px;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 1000;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 50px;
+    gap:40px;
+    margin: 0;
+}
+
+.spinner-container {
+    display: block;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(255, 255, 255, 0.7);
+    z-index: 9999;
+}
+
+.spinner {
+    border: 4px solid rgba(255, 255, 255, 0.3);
+    border-radius: 50%;
+    border-top: 4px solid #3498db;
+    width: 40px;
+    height: 40px;
+    animation: spin 1s linear infinite;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    margin-top: -20px;
+    margin-left: -20px;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
 }

@@ -26,40 +26,23 @@ import java.util.Properties;
 public class OTPController extends HttpServlet {
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         response.setContentType("text/json");
-        String nic = request.getHeader("nic");
         PrintWriter out = response.getWriter();
         Gson gson = new Gson();
-
         BufferedReader reader = request.getReader();
         OTP otp = gson.fromJson(reader, OTP.class);
-        String email = null;
+        System.out.println("email : " + otp.getEmail());
+        System.out.println("otp : " + otp.getOTP());
 
-        try{
-            email = passengerTable.getEmail(nic);
-            JsonObject jsonResponse = new JsonObject();
-            jsonResponse.addProperty("email", email);
-            out.println(jsonResponse);
-
-        }catch(Exception e){
-            e.printStackTrace();
-            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+//        int sendSuccess = sendEmail(otp.getEmail(), otp.getOTP());
+        int sendSuccess = 1;
+        if(sendSuccess > 0){
+          response.setStatus(HttpServletResponse.SC_OK);
+        }
+        else{
+          response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
         }
 
-        if(email != null){
-            response.setStatus(HttpServletResponse.SC_OK);
-//          int sendSuccess = sendEmail(email, otp.getOTP());
-//          if(sendSuccess > 0){
-//            response.setStatus(HttpServletResponse.SC_OK);
-//          }
-//          else{
-//            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-//          }
-        }else{
-            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-        }
-
-
-    }
+}
 
 //    protected static int sendEmail(String email, int otp){
 //        final String fromEmail = "smoothtix@gmail.com";
