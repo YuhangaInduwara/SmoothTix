@@ -98,10 +98,10 @@ public class reviewTable {
     public static ResultSet getByd_Id(String driver_id) throws SQLException {
         Connection con = dbConnection.initializeDatabase();
         PreparedStatement pst = con.prepareStatement("SELECT\n" +
-                "    s.date_time AS schedule_date_time,\n" +
+                "    s.date_time,\n" +
                 "    CONCAT(r.start, '-', r.destination) AS route,\n" +
-                "    b.reg_no AS bus_registration_number,\n" +
-                "    p.driver_points AS driver_points\n" +
+                "    b.reg_no,\n" +
+                "    p.driver_points\n" +
                 "FROM\n" +
                 "    schedule s\n" +
                 "JOIN\n" +
@@ -113,9 +113,11 @@ public class reviewTable {
                 "JOIN\n" +
                 "    driver d ON bp.driver_id = d.driver_id\n" +
                 "JOIN\n" +
-                "    points p ON c.p_id = p.point_id\n" +
+                "    review rw ON s.schedule_id = rw.schedule_id\n" +
+                "JOIN\n" +
+                "    points p ON rw.point_id = p.point_id\n" +
                 "WHERE\n" +
-                "    c.driver_id = ?;");
+                "    d.driver_id = ?;");
         pst.setString(1,driver_id);
         ResultSet rs = pst.executeQuery();
         return rs;
