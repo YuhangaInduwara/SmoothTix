@@ -136,9 +136,12 @@ a{
 .container {
         display: flex;
         justify-content: space-around;
+        gap: 20px
     }
 
     .box {
+        min-width: 250px;
+        max-width: 300px;
         position: relative;
         transition: box-shadow 0.3s;
         width: 25%;
