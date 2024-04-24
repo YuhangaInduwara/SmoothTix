@@ -81,8 +81,7 @@ function fetchAllData() {
             }
         })
         .then(data => {
-            allData = data;
-            document.getElementById("noOfPages").textContent = parseInt(allData.length / 3) + 1;
+            allData = data.filter(booking => booking.status === 0);
             updatePage(currentPage);
         })
         .catch(error => {
@@ -152,7 +151,7 @@ function displayDataAsScheduleTiles(data) {
         return;
     }
 
-    if(dataCount >= 3){
+    if(dataCount > 3){
         renderPageControl();
     }
 
