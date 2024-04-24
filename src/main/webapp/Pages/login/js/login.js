@@ -6,9 +6,11 @@ function isValidNIC(nic) {
 }
 
 let email = '';
+let pid = '';
 const nicInput = document.getElementById("nic");
-const nicForgot = document.getElementById("nicForgot");
 const nicError = document.getElementById("nicError");
+const nicForgot = document.getElementById("nicForgot");
+const nicForgotError = document.getElementById("nicForgotError");
 
 nicInput.addEventListener("change", function() {
     if (!isValidNIC(nicInput.value)) {
@@ -25,12 +27,12 @@ nicInput.addEventListener("change", function() {
 nicForgot.addEventListener("change", function() {
     if (!isValidNIC(nicForgot.value)) {
         nicForgot.setCustomValidity("Please enter a valid NIC number.");
-        nicError.textContent = "Please enter a valid NIC number.";
-        nicError.style.display = "block";
+        nicForgotError.textContent = "Please enter a valid NIC number.";
+        nicForgotError.style.display = "block";
     } else {
         nicForgot.setCustomValidity("");
-        nicError.textContent = "";
-        nicError.style.display = "none";
+        nicForgotError.textContent = "";
+        nicForgotError.style.display = "none";
     }
 });
 
@@ -129,48 +131,73 @@ document.querySelector(".getOTPButton").addEventListener("click", function(event
             return;
         }
 
-        const OTP = generateOTP();
-        console.log(OTP);
+        document.getElementById("loading-spinner").style.display = "block";
 
-        const userData ={
-            otp: OTP,
-        };
-        const jsonData = JSON.stringify(userData);
-        console.log(userData);
-        fetch(`${ url }/otpController`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'nic': nic
-                },
-                body: jsonData
+        fetch(`${ url }/passengerController`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'nic': nic
+            }
+        })
+        .then(response => {
+            if (response.ok) {
+                return response.json();
+            }else {
+                document.getElementById("loading-spinner").style.display = "none";
+                openAlert("Invalid NIC", "alertFail");
+            }
+       })
+            .then(data => {
+                email = data.email;
+                pid = data.p_id;
+                sendOTP(email);
             })
-            .then(response => {
-                if (response.ok) {
-                    response.json().then(data => {
-                    email = data.email;
-                    console.log("email : "+ email);
-                    openAlert("OTP Has Sent To Your Email", "alertSuccess");
-                    document.getElementById("otpVerification").style.display = "block";
-                    document.getElementById("forgotPassword").style.display = "none";
-                });
-                } else {
-                    openAlert("Invalid NIC", "alertFail");
-                    document.getElementById("overlay").style.display = "none";
-                    document.getElementById("forgotPassword").style.display = "none";
-                }
-                })
-            .catch(error => {
-                console.error('Error:', error);
-            });
-
-
+        .catch(error => {
+            console.error('Error:', error);
+        });
 });
+
+function sendOTP(email){
+    const OTP = generateOTP();
+
+    const userData ={
+        otp: OTP,
+        email: email
+    };
+    const jsonData = JSON.stringify(userData);
+    console.log(userData);
+    fetch(`${ url }/otpController`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: jsonData
+    })
+        .then(response => {
+            if (response.ok) {
+                document.getElementById("loading-spinner").style.display = "none";
+                document.getElementById("loading-spinner2").style.display = "none";
+                openAlert("OTP Has Sent To Your Email", "alertSuccess");
+                document.getElementById("otpVerification").style.display = "block";
+                document.getElementById("forgotPassword").style.display = "none";
+            } else {
+                document.getElementById("loading-spinner").style.display = "none";
+                document.getElementById("loading-spinner2").style.display = "none";
+                openAlert("Invalid NIC", "alertFail");
+                document.getElementById("overlay").style.display = "none";
+                document.getElementById("forgotPassword").style.display = "none";
+            }
+            })
+        .catch(error => {
+            console.error('Error:', error);
+        });
+}
 
 document.querySelector(".resend").addEventListener("click", function(event){
     event.preventDefault();
-    
-
+    document.getElementById("loading-spinner2").style.display = "block";
+    sendOTP(email);
 });
 
 function closeForgotPassword(){
@@ -183,10 +210,72 @@ function closeOTPVerification(){
     document.getElementById("overlay").style.display = "none";
 }
 
+function closeChangePassword(){
+    document.getElementById("changePassword").style.display = "none";
+    document.getElementById("overlay").style.display = "none";
+}
+
 function generateOTP(){
     const OTP = Math.floor(1000 + Math.random() * 9000);
     localStorage.setItem("OTP", OTP);
     return OTP;
+}
+
+function verifyOTP(){
+    const OTP = localStorage.getItem("OTP");
+    console.log("=system otp : " , OTP , "type : ", typeof(OTP));
+    const userOTP = document.getElementById("otp").value;
+    console.log("user otp : " , userOTP , "type : ", typeof(userOTP));
+
+    if(OTP === userOTP){
+        document.getElementById("otpVerification").style.display = "none";
+        document.getElementById("changePassword").style.display = "block";
+        const newPassword = document.getElementById("newPassword").value;
+        const confirmPassword = document.getElementById("confirmPassword").value;
+
+        if(newPassword === confirmPassword){
+            const updatedPassword = {
+                password: newPassword,
+            };
+            const jsonData = JSON.stringify(updatedPassword);
+            fetch(`../../../passengerController`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'p_id': pid
+                },
+                body: jsonData
+            })
+                .then(response => {
+                    if (response.ok) {
+                        openAlert( "Password Successfully Updated!", "alertSuccess");
+                        document.getElementById("changePassword").style.display = "none";
+                        document.getElementById("overlay").style.display = "none";
+                        console.log('Update successful');
+                    } else if (response.status === 401) {
+                        openAlert( "Password update unsuccessful", "alertFail");
+                        document.getElementById("changePassword").style.display = "none";
+                        document.getElementById("overlay").style.display = "none";
+                        console.log('Update unsuccessful');
+                    } else {
+                        openAlert( "Password update unsuccessful", "alertFail");
+                        document.getElementById("changePassword").style.display = "none";
+                        document.getElementById("overlay").style.display = "none";
+                        console.error('Error:', response.status);
+                    }
+                })
+                .catch(error => {
+                    openAlert( "Password update unsuccessful", "alertFail");
+                    document.getElementById("changePassword").style.display = "none";
+                    document.getElementById("overlay").style.display = "none";
+                    console.error('Error:', error);
+                });
+        }
+    }else{
+        openAlert("OTP Verification Failed !", "alertFail");
+        document.getElementById("otpVerification").style.display = "none";
+        document.getElementById("overlay").style.display = "none";
+    }
 }
 
 function openAlert(text, alertBody){

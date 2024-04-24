@@ -77,6 +77,9 @@
                     <input type="text" name="nic" id="nicForgot" class="form-control" placeholder="Enter Your NIC" required>
                     <button class="cancelButton" onclick="closeForgotPassword()">Cancel</button>
                     <button type="submit" class="getOTPButton">Get OTP</button>
+                    <div id="loading-spinner" >
+                        <div class="spinner"></div>
+                    </div>
                 </div>
                 <div class="otpVerification" id="otpVerification">
                     <h2>Enter Your 4-digit OTP</h2>
@@ -84,8 +87,18 @@
                         <input type="text" name="otp" id="otp" class="otp-input" maxlength="4" placeholder="Here" required>
                     </div>
                     <span class="resend">Resend OTP</span>
+                    <div id="loading-spinner2" >
+                        <div class="spinner"></div>
+                    </div>
                     <button class="cancelButton" onclick="closeOTPVerification()">Cancel</button>
-                    <button type="submit" class="proceedButton">Proceed</button>
+                    <button type="submit" class="proceedButton" onclick="verifyOTP()">Proceed</button>
+                </div>
+                <div class="changePassword" id="changePassword">
+                    <h2 style="color: #ff6666;">OTP Verification Success</h2>
+                    <input type="password" name="password" id="newPassword" class="password-control" placeholder="Enter Your New Password" required>
+                    <input type="password" name="password" id="confirmPassword" class="password-control" placeholder="Confirm Your Password" required>
+                    <button class="cancelPasswordButton" onclick="closeChangePassword()">Cancel</button>
+                    <button type="submit" class="changePasswordButton">Change Password</button>
                 </div>
                 <div class="alertBody" id="alertSuccess">
                     <img src="../../../images/Alert_icons/Success_icon.png" class="alertImg" alt="success">
