@@ -537,7 +537,6 @@ function showSuggestions2(event) {
             });
     }
 }
-document.getElementById("update_route_no").addEventListener("input", showSuggestions2);
 
 const searchInput = document.getElementById("searchInput");
 searchInput.addEventListener("keyup", searchData);

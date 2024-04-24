@@ -1,45 +1,97 @@
-document.addEventListener('DOMContentLoaded', function() {
-    const generateReportButton = document.getElementById('generateReportButton');
-    const reportContainer = document.getElementById('reportContainer');
+let busData = [];
+let busRegNo = 'BR001';
+let allData = [];
 
-    // Populate the bus profile select dropdown
-    populateBusProfileSelect();
-
-    generateReportButton.addEventListener('click', function() {
-        const fromDate = document.getElementById('fromDate').value;
-        const fromTime = document.getElementById('fromTime').value;
-        const toDate = document.getElementById('toDate').value;
-        const toTime = document.getElementById('toTime').value;
-        const busProfileId = document.getElementById('busprofileSelect').value;
-
-        if (fromDate && fromTime && toDate && toTime && busProfileId) {
-            const fromDateTime = new Date(`${fromDate}T${fromTime}`).toISOString();
-            const toDateTime = new Date(`${toDate}T${toTime}`).toISOString();
-
-            generateReport(busProfileId, fromDateTime, toDateTime)
-                .then(reportData => {
-                    displayReport(reportData);
-                })
-                .catch(error => {
-                    console.error('Error generating report:', error);
-                });
-        } else {
-            alert('Please fill in all fields.');
-        }
-    });
+document.addEventListener('DOMContentLoaded', function () {
+    isAuthenticated().then(() => getBusRegNos() );
 });
 
-function populateBusProfileSelect() {
-    const busprofileSelect = document.getElementById('busprofileSelect');
-    // Fetch bus profile IDs from the server and populate the select dropdown
+const searchSelect = document.getElementById("busregNoSelect");
+searchSelect.addEventListener("change", (event) => {
+    busRegNo = event.target.value;
+    console.log(busRegNo)
+});
+
+function getBusRegNos(){
+    document.getElementById("userName").textContent = session_user_name;
+
+    fetch(`${url}/busController`, {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+            'p_id': session_p_id
+        },
+    })
+    .then(response => {
+        if (response.ok) {
+            return response.json();
+        } else {
+            console.error('Error:', response.status);
+        }
+    })
+    .then(data => {
+            if (data) {
+                busData = data;
+
+                let busregNoSelect = document.getElementById("busregNoSelect");
+
+                for (let i = 0; i < busData.length; i++) {
+                    let option_bus = document.createElement("option");
+                    option_bus.text = busData[i].reg_no;
+                    option_bus.value = busData[i].reg_no;
+                    busregNoSelect.add(option_bus);
+                }
+            } else {
+                console.error('Error: Invalid or missing data.bus property');
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
 }
 
-function generateReport(busProfileId, fromDateTime, toDateTime) {
-    // Send an AJAX request to the server to generate the report
-    // Return a Promise that resolves with the report data
-}
+function generateReport() {
+    const startDate = document.getElementById('StartdatePicker').value + " 00:00:00";
+    const endDate = document.getElementById('EnddatePicker').value + " 23:59:59";
+    console.log("startDate: " + startDate + " endDate: " + endDate + " reg_no: " + busregNoSelect);
 
-function displayReport(reportData) {
-    const reportContainer = document.getElementById('reportContainer');
-    // Render the report data in the reportContainer div
+    const jsonData = JSON.stringify({
+            startDate: startDate,
+            endDate: endDate,
+            busRegNo: busRegNo
+        });
+       console.log(jsonData)
+
+    fetch(`${ url }/reportController`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: jsonData
+    })
+    .then(response => {
+        if (response.ok) {
+            return response.json();
+        } else {
+            throw new Error('Failed to fetch report data');
+        }
+    })
+    .then(data => {
+      if (data) {
+      allData = data;
+      console.log(data);
+        document.getElementById("timePeriod").textContent = `${startDate.split("T")[0]} - ${endDate.split("T")[0]}`;
+        document.getElementById("busRegNo").textContent = busRegNo;
+        document.getElementById("totalSeatsBooked").textContent = data.totalSeatsBooked;
+        document.getElementById("totalPaymentsDeleted").textContent = data.totalPaymentsDeleted;
+        document.getElementById("finalAmount").textContent = data.finalAmount;
+        document.getElementById("downloadReportButton").disabled = false;
+      } else {
+        console.error('Error: Invalid or missing data in response');
+      }
+    })
+    .catch(error => {
+      console.error('Error:', error);
+    });
+
 }

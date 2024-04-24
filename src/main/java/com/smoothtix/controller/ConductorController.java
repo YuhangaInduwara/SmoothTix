@@ -116,8 +116,7 @@ public class ConductorController extends HttpServlet {
             if (jsonElement.isJsonObject()) {
                 JsonObject jsonObject = jsonElement.getAsJsonObject();
                 String nic = jsonObject.get("nic").getAsString();
-                Float review_points = jsonObject.get("review_points").getAsFloat();
-                result = conductorTable.insert(nic, review_points,ownerID);
+                result = conductorTable.insert(nic, ownerID);
                 System.out.println(result);
             } else{
                 return;
