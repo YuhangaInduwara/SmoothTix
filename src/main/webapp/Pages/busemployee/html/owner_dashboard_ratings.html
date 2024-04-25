@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Ratings</title>
     <link rel="stylesheet" type="text/css" href="../css/owner_dashboard_ratings.css">
+    <link rel="icon" type="image/x-icon" href="../../../images/favicon/favicon.png">
 </head>
 <body>
 <div class="dashboard">
@@ -59,12 +60,20 @@
                 <h1>Ratings</h1>
             </div>
             <div class="user_profile">
-                <h3>Username</h3>
+                <h3 id="userName">Username</h3>
                 <img src="../../../images/vector_icons/user.png" alt="userimage" class="user_img">
             </div>
         </div>
+        <div class="body_content">
+            <div class="container" id="formContainer">
+                <!-- Forms will be dynamically generated here -->
+            </div>
+
+        </div>
     </div>
 </div>
-<script src="../js/owner_dashboard_home.js"></script>
+<script src="../../../js/url.js"></script>
+<script src="../../../js/auth.js"></script>
+<script src="../js/owner_dashboard_ratings.js"></script>
 </body>
 </html>

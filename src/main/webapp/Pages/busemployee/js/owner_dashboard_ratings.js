@@ -1,10 +1,10 @@
 document.addEventListener('DOMContentLoaded', function () {
-   isAuthenticated().then(() => fetchDriverId());
+   isAuthenticated().then(() => fetchOwnerId());
 });
 
-function fetchDriverId() {
+function fetchOwnerId() {
     document.getElementById("userName").textContent = session_user_name;
-    fetch(`${ url }/driverController`, {
+    fetch(`${ url }/ownerController?action=owner_id`, {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json',
@@ -20,7 +20,8 @@ function fetchDriverId() {
             })
             .then(data => {
 //
-            fetchAllData(data[0].driver_id)
+            fetchAllData(data.owner_id)
+            console.log(data.owner_id)
 //                if (data && data.length > 0) {
 //                    displayDataAsForms(data);
 //                } else {
@@ -32,9 +33,9 @@ function fetchDriverId() {
             });
 }
 
-function fetchAllData(driver_id) {
-console.log(driver_id)
-    fetch(`${ url }/reviewController?driver_id=${driver_id}`, {
+function fetchAllData(owner_id) {
+console.log(owner_id)
+    fetch(`${ url }/reviewController?owner_id=${owner_id}`, {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json'
@@ -58,7 +59,7 @@ console.log(driver_id)
             .catch(error => {
                 console.error('Error:', error);
             });
-        }
+}
 
 function displayDataAsForms(data) {
     const formContainer = document.getElementById("formContainer");
@@ -82,7 +83,8 @@ function displayDataAsForms(data) {
             { label: "Time :", key: "schedule_time" },
             { label: "Route:", key: "route" },
             { label: "Bus:", key: "reg_no" },
-            { label: "Points:", key: "driver_points" }
+            { label: "Points:", key: "bus_points" },
+            { label: "Review:", key: "comments" }
         ];
 
         console.log(inputs)
@@ -108,7 +110,7 @@ function displayDataAsForms(data) {
         starsContainer.id = `stars-container${index + 1}`;
         starsContainer.classList.add('stars-container');
 
-        for (let i = 0; i < item.driver_points; i++) {
+        for (let i = 0; i < item.bus_points; i++) {
             const star = document.createElement('span');
             star.textContent = '\u2B50'; // Unicode character for star
             starsContainer.appendChild(star);
@@ -131,3 +133,4 @@ function displayDataAsForms(data) {
     averagePointsElement.classList.add("average-points");
     document.body.appendChild(averagePointsElement);
 }
+

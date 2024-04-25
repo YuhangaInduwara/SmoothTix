@@ -145,7 +145,8 @@ a{
         max-width: 300px;
         position: relative;
         transition: box-shadow 0.3s;
-        width: 25%;
+        /*width: 25%;*/
+        width: auto;
         padding: 20px;
         border: 1px solid #ccc;
         /margin-bottom: 20px;/
