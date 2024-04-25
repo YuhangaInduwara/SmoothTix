@@ -10,8 +10,8 @@
                 <input type="text" name="reg_no" id="reg_no" class="form_data" placeholder="Enter Registration No" required="required" />
             </div>
         <div class="form_div">
-            <label for="route_id" class="bus_form_title">Route Id <span class="bus_form_require">*</span></label>
-            <input type="text" name="route_id" id="route_id" class="form_data" placeholder="Enter Route_id" required="required" oninput="showSuggestions1(event)" />
+            <label for="route_no" class="bus_form_title">Route Id <span class="bus_form_require">*</span></label>
+            <input type="text" name="route_no" id="route_no" class="form_data" placeholder="Enter Route_id" required="required" oninput="showSuggestions1(event)" />
             <ul id="bus_route_suggestions" class="autocomplete-list"></ul>
         </div>
             <div class="form_div">
@@ -52,14 +52,14 @@ function showSuggestions1(event) {
             .then(data => {
                 const suggestions = data.map(item => {
                     return {
-                        route_id: item.route_id,
+                        route_no: item.route_no,
                         start: item.start,
                         destination: item.destination
                     };
                 });
                 suggestionsContainer.innerHTML = '';
                 const filteredSuggestions = suggestions.filter(suggestion =>
-                    suggestion.route_id.toUpperCase().includes(inputValue)
+                    suggestion.route_no.toUpperCase().includes(inputValue)
                 );
                 suggestionsContainer.style.maxHeight = '200px';
                 suggestionsContainer.style.overflowY = 'auto';
@@ -73,9 +73,9 @@ function showSuggestions1(event) {
                     filteredSuggestions.forEach(suggestion => {
                         const listItem = document.createElement('li');
                         listItem.classList.add('autocomplete-list-item');
-                        listItem.textContent = `${suggestion.route_id} - ${suggestion.start} to ${suggestion.destination}`;
+                        listItem.textContent = `${suggestion.route_no} - ${suggestion.start} to ${suggestion.destination}`;
                         listItem.addEventListener('click', () => {
-                            input.value = suggestion.route_id;
+                            input.value = suggestion.route_no;
                             suggestionsContainer.innerHTML = '';
                         });
                         suggestionsContainer.appendChild(listItem);
@@ -150,13 +150,13 @@ function closeAlertFail() {
 document.getElementById("busRegForm").addEventListener("submit", function(event) {
     event.preventDefault();
     const reg_no = document.getElementById("add_reg_no").value;
-    const route_id = document.getElementById("add_route_id").value;
+    const route_no = document.getElementById("add_route_no").value;
     const no_of_Seats = document.getElementById("add_no_of_Seats").value;
 
 
     const userData = {
         reg_no: reg_no,
-        route_id: route_id,
+        route_no: route_no,
         no_of_Seats: no_of_Seats,
     };
     console.log(userData)

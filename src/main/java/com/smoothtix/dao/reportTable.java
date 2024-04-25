@@ -79,7 +79,8 @@ public class reportTable {
             ps.setString(1, generateReportID());
             System.out.println(generateReportID());
             ps.setString(2, ownerId);
-            ps.setString(3, String.format("Total Amount: %f, Total Seats Booked: %d, Total Payments Deleted: %d", finalAmount, totalSeatsBooked, totalPaymentsDeleted));
+            ps.setString(3, String.format("Bus Reg No: %s, Date Range: %s to %s, Total Amount: Rs.%f, Total Seats Booked: %d, Total Payments Deleted: %d",
+                    busRegNo, startDate, endDate, finalAmount, totalSeatsBooked, totalPaymentsDeleted));
             ps.executeUpdate();
 
             Report report = new Report(startDate + " to " + endDate, busRegNo, totalSeatsBooked, totalPaymentsDeleted, finalAmount);
@@ -116,13 +117,15 @@ public class reportTable {
 
         if (rs.next()) {
             String reportDetails = rs.getString("report_details");
-            String[] details = reportDetails.split(",");
+            String[] details = reportDetails.split(", ");
 
-            double finalAmount = Double.parseDouble(details[0].split(":")[1].trim());
-            int totalSeatsBooked = Integer.parseInt(details[1].split(":")[1].trim());
-            int totalPaymentsDeleted = Integer.parseInt(details[2].split(":")[1].trim());
+            String busRegNoExtracted = details[0].split(":")[1].trim();
+            String dateRange = details[1].split(":")[1].trim(); // You might need further splitting if needed
+            double finalAmount = Double.parseDouble(details[2].split(":")[1].trim().substring(3)); // Adjust index if more details are added
+            int totalSeatsBooked = Integer.parseInt(details[3].split(":")[1].trim());
+            int totalPaymentsDeleted = Integer.parseInt(details[4].split(":")[1].trim());
 
-            Report report = new Report(startDate + " to " + endDate, busRegNo, totalSeatsBooked, totalPaymentsDeleted, finalAmount);
+            Report report = new Report(dateRange, busRegNoExtracted, totalSeatsBooked, totalPaymentsDeleted, finalAmount);
             return report;
         } else {
             return null;
