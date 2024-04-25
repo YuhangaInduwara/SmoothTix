@@ -60,7 +60,7 @@ public class DriverController extends HttpServlet {
             } else if (p_id != null) {
                 // Fetch driver data by p_id
                 rs = driverTable.get_by_p_id(p_id);
-                while (rs != null && rs.next()) {
+                if(rs.next()) {
                     JSONObject driverData = new JSONObject();
                     driverData.put("driver_id", rs.getString("driver_id"));
                     driverData.put("p_id", rs.getString("p_id"));
@@ -68,6 +68,7 @@ public class DriverController extends HttpServlet {
                     driverData.put("review_points", rs.getDouble("review_points"));
                     driverDataArray.put(driverData);
                 }
+                System.out.println("hellO:" + driverDataArray);
             } else if (dp_id != null) { // Check if dp_id is provided
                 // Call getAllByOwner method when dp_id is provided
                 rs = driverTable.getAllByOwner(dp_id);
@@ -82,6 +83,8 @@ public class DriverController extends HttpServlet {
             } else {
                 // Fetch all driver data
                 rs = driverTable.getAll();
+                System.out.println("Con: "+p_id);
+
                 while (rs != null && rs.next()) {
                     JSONObject driverData = new JSONObject();
                     driverData.put("driver_id", rs.getString("driver_id"));
@@ -94,7 +97,7 @@ public class DriverController extends HttpServlet {
             }
             System.out.println(driverDataArray);
             //out.println(passengerDataArray);
-            out.println(driverDataArray);
+            out.print(driverDataArray);
             response.setStatus(HttpServletResponse.SC_OK);
         } catch (Exception e) {
             response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);

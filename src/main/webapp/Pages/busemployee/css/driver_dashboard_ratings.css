@@ -8,7 +8,6 @@ body{
     display: flex;
     flex-direction: row;
 }
-
 .sidebar{
     background-color: #cccccc;
     display: flex;
@@ -131,204 +130,86 @@ a{
 .functions{
     display: flex;
     flex-direction: row;
-    margin: 20px;
 }
 
-/* Style the list container */
-.list {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    margin: 20px;
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
-    background-color: #fff;
-    /*max-width: 300px;*/
-    /*height: 300px;*/
-}
 
-/* Style each data item in the list */
-.dataList {
-    padding: 10px;
-}
+.container {
+        display: flex;
+        justify-content: space-around;
+    }
 
-/* Style the Edit and Delete buttons */
-.editDeleteButtons {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin: 40px 0 0 0;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    gap: 50px;
-}
+    .box {
+        position: relative;
+        transition: box-shadow 0.3s;
+        width: 25%;
+        padding: 20px;
+        border: 1px solid #ccc;
+        /*margin-bottom: 20px;*/
+        margin-top: 70px;
+        border-radius: 20px;
+        background-color: #F8F9F9;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.8);
+    }
+    .box:hover {
 
-/* Style the buttons on hover */
-.editDeleteButtons button:hover {
-    /*background-color: #0056b3;*/
-}
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
 
-.passenger_form {
-    display: none;
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
-    z-index: 1000;
-    margin: auto auto;
-    padding: 30px;
-    border: 1px solid #ccc;
-    border-radius: 10px;
-    background-color: #f5f5f5;
-}
+    .form-heading {
+        text-align: center;
+        margin-bottom: 20px;
+    }
 
-.overlay {
-    display: none;
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.5);
-    z-index: 999;
-}
+    form {
+        display: flex;
+        flex-direction: column;
+    }
 
-.passenger_form_header{
-    text-align: center;
-    font-size: 20px;
-}
+    label {
+        margin-bottom: 10px;
+        color:#5D6D7E;
+        font-weight: bold;
 
-.passenger_update_form_body{
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    margin-top: 20px;
-}
+    }
 
-.passenger_form_left,
-.passenger_form_right {
-    flex: 1;
-}
+    input {
+        padding: 8px;
+        outline: none;
+        margin-bottom: 10px;
+        border:none;
+        box-sizing: border-box;
+        border-radius: 10px;
+        background-color:#F8F9F9;
+        font-weight: bold;
+    }
 
-.form_div {
-    width: 90%;
-}
+    .stars-container {
+        margin-left: 80px;
+        padding:20px;
+    }
 
-.passenger_form_require{
-    color: #ff0202;
-}
+    .star {
+        display: inline-block;
+        width: 40px; /* Adjust size of stars */
+        font-size: 40px; /* Adjust size of stars */
+        color: gold;
+    }
 
-.form_data {
-    width: 100%;
-    padding: 10px;
-    margin-bottom: 20px;
-    border: 2px solid #ccc;
-    border-radius: 5px;
-    font-size: 16px;
-    transition: border-color 0.3s, box-shadow 0.3s;
-}
+    .average-points{
+         display: flex;
+         justify-content: center; /* Horizontally center the content */
+         align-items: center; /* Vertically center the content */
+         position: fixed;
+         font-size: 30px;
+         font-weight: bold;
+         bottom: 70px; /* Adjust as needed */
+         left: 0;
+         right: 0;
+         margin: 0 auto; /* Horizontally center the element */
+         width: max-content; /* Set width to content width */
+         background-color: rgba(255, 255, 255, 0.9); /* Semi-transparent background */
+         padding: 10px 20px;
+         border-radius: 5px; /* Rounded corners */
+         box-shadow: 0 0 10px rgba(0, 0, 0, 0.2); /* Box shadow for better visibility *
 
-.form_data:hover{
-    border-color: #8a8a8a;
-    box-shadow: 0 0 5px rgba(159, 159, 159, 0.5);
-    transform: scale(1.1);
-}
-
-.passenger_form_footer {
-    text-align: center;
-    margin-top: 20px;
-}
-
-.passenger_form_button {
-    display: inline-block;
-    padding: 10px 20px;
-    background-color: #ff0000;
-    color: #fff;
-    text-decoration: none;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 16px;
-    transition: background-color 0.3s;
-}
-
-.passenger_form_button:hover {
-    background-color: rgba(255, 1, 1, 0.32);
-}
-
-.alertBody {
-    width: 512px;
-    height: 246px;
-    background: #ffffff;
-    border-radius: 10px;
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
-    z-index: 1000;
-    display: none;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    text-align: center;
-    padding: 50px;
-    gap:40px;
-}
-
-.alertImg {
-    width: 80px;
-    margin-bottom: 40px;
-}
-
-.alertMsgSuccess,
-.alertMsgFail {
-    font-size: 25px;
-    font-family: Times New Roman, serif;
-    font-weight: 700;
-    line-height: 1.5;
-    word-wrap: break-word;
-    margin-bottom: 40px;
-}
-
-.alertMsgSuccess{
-    color: #109046;
-}
-
-.alertMsgFail{
-    color: #ff0202;
-}
-
-.okButton {
-    width: 150px;
-    height: 40px;
-    border: none;
-    border-radius: 20px;
-    background: #EA2427;
-    color: #fff;
-    font-size: 16px;
-    cursor: pointer;
-    transition: background 0.3s ease;
-}
-
-.okButton:hover {
-    background: #D1191D;
-}
-
-.dataParagraph {
-    border-radius: 5px;
-    margin-bottom: 0px;
-}
-
-.data_box{
-    background-color: #DFE3E5;
-    border: 1px solid #ccc;
-    border-radius: 8px;
-    width: 400px;
-    padding: 10px;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
-}
+    }

@@ -4,7 +4,6 @@ import com.google.gson.Gson;
 import com.smoothtix.dao.busprofileTable;
 import com.smoothtix.dao.reviewTable;
 import com.smoothtix.model.Review;
-import org.jetbrains.annotations.NotNull;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -42,7 +41,7 @@ public class ReviewController extends HttpServlet {
                     reviewDataArray.put(reviewData);
                 }
             }
-            else{
+            else if (conductor_id==null){
 
                 ResultSet rs = reviewTable.getByd_Id(driver_id);
 
@@ -51,10 +50,13 @@ public class ReviewController extends HttpServlet {
                     reviewData.put("date_time", rs.getString("date_time"));
                     reviewData.put("route", rs.getString("route"));
                     reviewData.put("reg_no", rs.getString("reg_no"));
-                    reviewData.put("conductor_points", rs.getString("conductor_points"));
+                    reviewData.put("driver_points", rs.getString("driver_points"));
                     reviewDataArray.put(reviewData);
                 }
+                System.out.println("Test: " + reviewDataArray);
             }
+            System.out.println("Test2: " + reviewDataArray);
+
             out.println(reviewDataArray);
             response.setStatus(HttpServletResponse.SC_OK);
 

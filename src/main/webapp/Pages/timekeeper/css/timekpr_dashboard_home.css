@@ -125,6 +125,7 @@ a{
 
 .body_content{
     height: 100%;
+    max-width: 1300px;
 }
 
 .tile_grid{

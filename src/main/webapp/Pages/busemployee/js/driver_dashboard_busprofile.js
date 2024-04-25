@@ -5,10 +5,11 @@ document.addEventListener('DOMContentLoaded', function () {
 function fetchDriverId() {
     document.getElementById("userName").textContent = session_user_name;
     console.log(session_p_id)
-    fetch(`${ url }/driverController?conductor_id=${conductor_id}`, {
+    fetch(`${ url }/driverController`, {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json',
+            'p_id': session_p_id,
         },
     })
         .then(response => {
@@ -20,6 +21,7 @@ function fetchDriverId() {
             })
             .then(data => {
             console.log(data[0].driver_id);
+            console.log(session_p_id);
             fetchAllData(data[0].driver_id)
 //                if (data && data.length > 0) {
                     displayDataAsForms(data);
@@ -47,7 +49,7 @@ function fetchAllData(driver_id) {
                     }
                 })
                 .then(data => {
-    //                if (data && data.length > 0) {
+  console.log(data);
                         displayDataAsForms(data);
     //                } else {
     //                    console.log('No data available.');
@@ -63,6 +65,7 @@ function displayDataAsForms(data) {
     formContainer.innerHTML = ""; // Clear existing forms
 
     data.forEach((item, index) => {
+    console.log(item);
         const form = document.createElement("div");
         form.classList.add("box");
 
@@ -75,7 +78,7 @@ function displayDataAsForms(data) {
         innerForm.id = `form${index + 1}`;
 
         const inputs = [
-            { label: "Bus Number:", key: "bus_registration_no" },
+            { label: "Bus Number:", key: "reg_no" },
             { label: "Route:", key: "route" },
             { label: "Driver's Name:", key: "driver_name" },
             { label: "Conductor's Name:", key: "conductor_name" }

@@ -567,51 +567,6 @@ function deleteBookingPayment(){
     }
 }
 
-document.getElementById("review_form").addEventListener("submit", function(event) {
-    event.preventDefault();
-
-    const driverRating = parseInt(document.getElementById("driverRating").value);
-    const busRating = parseInt(document.getElementById("busRating").value);
-    const conductorRating = parseInt(document.getElementById("conductorRating").value);
-    const comments = document.getElementById("comments").value;
-
-    if (!driverRating || !busRating || !conductorRating || !comments) {
-        alert("Please fill in all required fields.");
-        return;
-    }
-
-    const pointDetails = {
-        driverRating: driverRating,
-        busRating: busRating,
-        conductorRating: conductorRating,
-        booking_id: booking_id_review
-    };
-
-    const jsonData = JSON.stringify(pointDetails);
-    fetch(`${url}/pointController`, {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json"
-        },
-        body: jsonData
-    })
-        .then(response => {
-            if (response.ok) {
-                return response.json();
-            } else {
-                openAlert( "You only can review a journey once!", "alertFail");
-                console.log("Error:", response.status);
-            }
-        })
-        .then(data => {
-            const pointID = data.point_id;
-            addReview(pointID, booking_id_review, comments);
-        })
-        .catch(error => {
-            console.error('Error:', error);
-        });
-});
-
 function showAlert(inputElement, message) {
     if (!errorMessages[inputElement.id]) {
         const alertBox = document.createElement("div");

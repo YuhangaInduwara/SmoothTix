@@ -77,6 +77,7 @@ public class driverTable {
 
     public static ResultSet get_by_p_id(String p_id) throws SQLException, ClassNotFoundException {
         Connection con = dbConnection.initializeDatabase();
+        System.out.println("dao: "+p_id);
         PreparedStatement pst = con.prepareStatement("SELECT * FROM driver WHERE p_id=?");
         pst.setString(1,p_id);
         return pst.executeQuery();

@@ -228,10 +228,59 @@ function updateCount(targetElement) {
         });
 }
 
+function fetchNextBooking(){
+    fetch(`${ url }/bookingController?p_id=${session_p_id}`, {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+    })
+        .then(response => {
+            if (response.ok) {
+                return response.json();
+            } else {
+                console.error('Error:', response.status);
+            }
+        })
+        .then(data => {
+            console.log(data);
+            const currentTime = new Date();
+            console.log(currentTime);
+            // Filter the bookings
+            const latestBooking = data.filter(booking => {
+                // Convert booking date and time to JavaScript Date object
+                const bookingDateTime = new Date(`${booking.date}T${booking.time}`);
+                console.log(bookingDateTime);
+                console.log(booking.status === 0);
+                console.log(bookingDateTime > currentTime);
+                // Check if booking status is 0 and booking date and time is greater than current time
+                return booking.status === 0 && bookingDateTime > currentTime;
+            });
+
+            console.log(latestBooking);
+            // Sort the filtered bookings by date and time in ascending order
+            latestBooking.sort((a, b) => {
+                const dateA = new Date(`${a.date}T${a.time}`);
+                const dateB = new Date(`${b.date}T${b.time}`);
+                return dateA - dateB;
+            });
+
+            // Get the latest booking
+            const latestBookingInfo = latestBooking[0];
+
+            // Do something with the latest booking information
+            console.log(latestBookingInfo);
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
+}
+
 function init_page(){
     document.getElementById("userName").textContent = session_user_name;
     document.getElementById("user").textContent = session_user_name;
     updateCount(document.getElementById("smooth_points"));
+    fetchNextBooking();
 }
 
 

@@ -1,6 +1,7 @@
 package com.smoothtix.controller;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonObject;
 import com.smoothtix.dao.passengerTable;
 import com.smoothtix.model.Passenger;
 import javax.servlet.ServletException;
@@ -25,14 +26,16 @@ public class PassengerController extends HttpServlet {
         String p_id = request.getHeader("p_id");
         String flag = request.getHeader("flag");
         String nic = request.getParameter("nic");
+        String nicForgot = request.getHeader("nic");
         String privilege_level = request.getHeader("privilege_level");
         String password = request.getHeader("password");
 
         try {
             ResultSet rs = null;
+
             if(p_id != null && password != null){
-                String hashedpwd = passengerTable.getPassword(p_id);
-                if(checkPassword(password, hashedpwd)){
+                String hashedPassword = passengerTable.getPassword(p_id);
+                if(checkPassword(password, hashedPassword)){
                     response.setStatus(HttpServletResponse.SC_OK);
 
                 }
@@ -41,6 +44,34 @@ public class PassengerController extends HttpServlet {
                 }
                 return;
             }
+
+//            if(nicForgot != null){
+//                String validEmail = passengerTable.getEmail(nicForgot);
+//                if(validEmail != null) {
+//                    JsonObject passengerData = new JsonObject();
+//                    passengerData.addProperty("email", validEmail);
+//                    out.println(passengerData);
+//                    response.setStatus(HttpServletResponse.SC_OK);
+//                }else{
+//                    response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+//                }
+//                return;
+//            }
+
+            if(nicForgot != null){
+                rs = passengerTable.getEmailPid(nicForgot);
+                if(rs.next()) {
+                    JsonObject passengerData = new JsonObject();
+                    passengerData.addProperty("email", rs.getString("email"));
+                    passengerData.addProperty("p_id", rs.getString("p_id"));
+                    out.print(passengerData);
+                    response.setStatus(HttpServletResponse.SC_OK);
+                }else{
+                    response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+                }
+                return;
+            }
+
             if(p_id == null){
                 if(flag == null){
                     if(nic == null){
@@ -76,7 +107,7 @@ public class PassengerController extends HttpServlet {
                 passengerDataArray.put(passengerData);
             }
 
-            out.println(passengerDataArray.toString());
+            out.println(passengerDataArray);
             response.setStatus(HttpServletResponse.SC_OK);
         }catch (Exception e) {
             e.printStackTrace();
@@ -96,6 +127,7 @@ public class PassengerController extends HttpServlet {
             BufferedReader reader = request.getReader();
             Passenger passenger = gson.fromJson(reader, Passenger.class);
             int updateSuccess = 0;
+            System.out.println("pid eka : " + p_id);
             if(passenger.get_password() != null && !passenger.get_password().isEmpty()){
                 String hashedPassword = PasswordHash.hashPassword(passenger.get_password());
                 passenger.set_password(hashedPassword);

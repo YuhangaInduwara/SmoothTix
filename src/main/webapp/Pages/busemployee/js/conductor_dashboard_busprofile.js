@@ -1,6 +1,3 @@
-let currentPage = 1;
-const pageSize = 3;
-
 document.addEventListener('DOMContentLoaded', function () {
    isAuthenticated().then(() => fetchConductorId());
 });
@@ -66,6 +63,8 @@ function displayDataAsForms(data) {
     const formContainer = document.getElementById("formContainer");
     formContainer.innerHTML = ""; // Clear existing forms
 
+     let formCount = 0;
+
     data.forEach((item, index) => {
     console.log(item);
         const form = document.createElement("div");
@@ -103,5 +102,15 @@ function displayDataAsForms(data) {
 
         form.appendChild(innerForm);
         formContainer.appendChild(form);
+        formCount++;
     });
+    if (formCount > 3) {
+            enableHorizontalScroll();
+        }
+}
+
+function enableHorizontalScroll() {
+//    const formContainer = document.getElementById("formContainer");
+//    formContainer.classList.add("horizontal-scroll"); // Add class to enable horizontal scrolling
+document.body.classList.add("horizontal-scroll"); // Add class to enable horizontal scrolling for body
 }

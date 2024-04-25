@@ -136,15 +136,19 @@ a{
 .container {
         display: flex;
         justify-content: space-around;
+        gap: 25px;
+        margin-left: 20px;
     }
 
     .box {
+        min-width: 250px;
+        max-width: 300px;
         position: relative;
         transition: box-shadow 0.3s;
         width: 25%;
         padding: 20px;
         border: 1px solid #ccc;
-        /*margin-bottom: 20px;*/
+        /margin-bottom: 20px;/
         margin-top: 70px;
         border-radius: 20px;
         background-color: #EAEDED;
