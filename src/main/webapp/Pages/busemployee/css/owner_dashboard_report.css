@@ -256,3 +256,83 @@ a{
     font-weight: bold;
     width: 50%; /* Ensure headers take up 50% of the table width */
 }
+
+.alertBody{
+    width: 512px;
+    height: 246px;
+    background: #ffffff;
+    border-radius: 10px;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+    z-index: 1000;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 50px;
+    gap:40px;
+    display: none;
+}
+
+.alertImg {
+    width: 80px;
+    margin-bottom: 40px;
+}
+
+.alertMsgSuccess,
+.alertMsgFail {
+    font-size: 25px;
+    font-family: Times New Roman, serif;
+    font-weight: 700;
+    line-height: 1.5;
+    word-wrap: break-word;
+    margin-bottom: 40px;
+}
+
+.alertMsgSuccess{
+    color: #109046;
+}
+
+.alertMsgFail{
+    color: #ff0202;
+}
+
+.okButton {
+    width: 150px;
+    height: 40px;
+    border: none;
+    border-radius: 20px;
+    background: #EA2427;
+    color: #fff;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background 0.3s ease;
+}
+
+.okButton:hover {
+    background: #D1191D;
+}
+.overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 999;
+}
+.search_box {
+    position: relative;
+}
+
+.error-message {
+    color: red;
+    font-size: 12px;
+    position: absolute;
+    bottom: -18px;
+    left: 0;
+}
