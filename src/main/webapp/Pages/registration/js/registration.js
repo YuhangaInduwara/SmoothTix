@@ -135,7 +135,7 @@ document.getElementById("regForm").addEventListener("submit", function(event) {
         email: email,
         password: password,
     };
-    // console.log(userData)
+
     const jsonData = JSON.stringify(userData);
 
     fetch('/SmoothTix_war_exploded/registerController', {
