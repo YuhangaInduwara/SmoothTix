@@ -331,6 +331,55 @@ function createPasswordForm(){
 
 }
 
+const confirmPasswordInput = document.getElementById("update_reenter_new_password");
+const confirmPasswordInputError = document.getElementById("update_reenter_new_passwordError");
+const passwordInput = document.getElementById("update_new_password");
+const passwordInputError = document.getElementById("update_new_passwordError");
+
+function isStrongPassword(password) {
+    if (password.length < 8) {
+        return false;
+        }
+    if (!/[a-z]/.test(password)) {
+        return false;
+    }
+    if (!/[A-Z]/.test(password)) {
+        return false;
+    }
+    if (!/\d/.test(password)) {
+        return false;
+    }
+    if (!/[^a-zA-Z0-9]/.test(password)) {
+        return false;
+    }
+    return true;
+}
+
+confirmPasswordInput.addEventListener("input", function() {
+    if (document.getElementById("update_new_password").value !== document.getElementById("update_reenter_new_password").value) {
+        confirmPasswordInput.setCustomValidity("Password should be matched.");
+        confirmPasswordInputError.textContent = "Password should be matched.";
+        confirmPasswordInputError.style.display = "block";
+    } else {
+        confirmPasswordInput.setCustomValidity("");
+        confirmPasswordInputError.textContent = "";
+        confirmPasswordInputError.style.display = "none";
+    }
+});
+
+passwordInput.addEventListener("input", function() {
+    if (!isStrongPassword(passwordInput.value)) {
+        passwordInput.setCustomValidity("Password should be at least 8 characters long and contain at least one lowercase letter, one uppercase letter, one digit, and one special character.");
+        passwordInputError.textContent = "Password should be at least 8 characters long and contain at least one lowercase letter, one uppercase letter, one digit, and one special character.";
+        passwordInputError.style.display = "block";
+    } else {
+        passwordInput.setCustomValidity("");
+        passwordInputError.textContent = "";
+        passwordInputError.style.display = "none";
+    }
+});
+
+
 document.querySelectorAll('.password_toggle').forEach(function(toggle) {
     toggle.addEventListener('click', function() {
         let targetId = this.getAttribute('toggle-target');

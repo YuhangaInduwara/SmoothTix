@@ -158,6 +158,12 @@ document.querySelector(".getOTPButton").addEventListener("click", function(event
         });
 });
 
+function formatEmail(email) {
+    const atIndex = email.indexOf("@");
+    const formattedEmail = email.charAt(0) + "*".repeat(atIndex - 1) + email.substring(atIndex);
+    return formattedEmail;
+}
+
 function sendOTP(email){
     const OTP = generateOTP();
 
@@ -178,7 +184,7 @@ function sendOTP(email){
             if (response.ok) {
                 document.getElementById("loading-spinner").style.display = "none";
                 document.getElementById("loading-spinner2").style.display = "none";
-                openAlert("OTP Has Sent To Your Email", "alertSuccess");
+                document.getElementById("user_email").value = formatEmail(email);
                 document.getElementById("otpVerification").style.display = "block";
                 document.getElementById("forgotPassword").style.display = "none";
             } else {
@@ -198,6 +204,7 @@ document.querySelector(".resend").addEventListener("click", function(event){
     event.preventDefault();
     document.getElementById("loading-spinner2").style.display = "block";
     sendOTP(email);
+    openAlert("OTP Has Sent To Your Email", "alertSuccess");
 });
 
 function closeForgotPassword(){
@@ -215,6 +222,72 @@ function closeChangePassword(){
     document.getElementById("overlay").style.display = "none";
 }
 
+const confirmPasswordInput = document.getElementById("confirmPassword");
+const confirmPasswordInputError = document.getElementById("confirmPasswordError");
+const passwordInput = document.getElementById("newPassword");
+const passwordInputError = document.getElementById("newPasswordError");
+
+function isStrongPassword(password) {
+    if (password.length < 8) {
+        return false;
+        }
+    if (!/[a-z]/.test(password)) {
+        return false;
+    }
+    if (!/[A-Z]/.test(password)) {
+        return false;
+    }
+    if (!/\d/.test(password)) {
+        return false;
+    }
+    if (!/[^a-zA-Z0-9]/.test(password)) {
+        return false;
+    }
+    return true;
+}
+
+confirmPasswordInput.addEventListener("input", function() {
+    if (document.getElementById("newPassword").value !== document.getElementById("confirmPassword").value) {
+        confirmPasswordInput.setCustomValidity("Password should be matched.");
+        confirmPasswordInputError.textContent = "Password should be matched.";
+        confirmPasswordInputError.style.display = "block";
+    } else {
+        confirmPasswordInput.setCustomValidity("");
+        confirmPasswordInputError.textContent = "";
+        confirmPasswordInputError.style.display = "none";
+    }
+});
+
+passwordInput.addEventListener("input", function() {
+    if (!isStrongPassword(passwordInput.value)) {
+        passwordInput.setCustomValidity("Password should be at least 8 characters long and contain at least one lowercase letter, one uppercase letter, one digit, and one special character.");
+        passwordInputError.textContent = "Password should be at least 8 characters long and contain at least one lowercase letter, one uppercase letter, one digit, and one special character.";
+        passwordInputError.style.display = "block";
+    } else {
+        passwordInput.setCustomValidity("");
+        passwordInputError.textContent = "";
+        passwordInputError.style.display = "none";
+    }
+});
+
+document.querySelectorAll('.password_toggle').forEach(function(toggle) {
+    toggle.addEventListener('click', function() {
+        let targetId = this.getAttribute('toggle-target');
+        let targetInput = document.getElementById(targetId);
+
+        if (targetInput.getAttribute('type') === 'password') {
+            targetInput.setAttribute('type', 'text');
+            this.classList.remove('fa-eye');
+            this.classList.add('fa-eye-slash');
+        } else {
+            targetInput.setAttribute('type', 'password');
+            this.classList.remove('fa-eye-slash');
+            this.classList.add('fa-eye');
+        }
+    });
+});
+
+
 function generateOTP(){
     const OTP = Math.floor(1000 + Math.random() * 9000);
     localStorage.setItem("OTP", OTP);
@@ -230,51 +303,67 @@ function verifyOTP(){
     if(OTP === userOTP){
         document.getElementById("otpVerification").style.display = "none";
         document.getElementById("changePassword").style.display = "block";
-        const newPassword = document.getElementById("newPassword").value;
-        const confirmPassword = document.getElementById("confirmPassword").value;
 
-        if(newPassword === confirmPassword){
-            const updatedPassword = {
-                password: newPassword,
-            };
-            const jsonData = JSON.stringify(updatedPassword);
-            fetch(`../../../passengerController`, {
-                method: 'PUT',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'p_id': pid
-                },
-                body: jsonData
-            })
-                .then(response => {
-                    if (response.ok) {
-                        openAlert( "Password Successfully Updated!", "alertSuccess");
-                        document.getElementById("changePassword").style.display = "none";
-                        document.getElementById("overlay").style.display = "none";
-                        console.log('Update successful');
-                    } else if (response.status === 401) {
-                        openAlert( "Password update unsuccessful", "alertFail");
-                        document.getElementById("changePassword").style.display = "none";
-                        document.getElementById("overlay").style.display = "none";
-                        console.log('Update unsuccessful');
-                    } else {
-                        openAlert( "Password update unsuccessful", "alertFail");
-                        document.getElementById("changePassword").style.display = "none";
-                        document.getElementById("overlay").style.display = "none";
-                        console.error('Error:', response.status);
-                    }
+        document.getElementById("updatePassword"),addEventListener("submit", function(event) {
+            event.preventDefault();
+            const newPassword = document.getElementById("newPassword").value;
+            const confirmPassword = document.getElementById("confirmPassword").value;
+
+            if(newPassword === confirmPassword && newPassword != null){
+                const updatedPassword = {
+                    password: newPassword,
+                };
+                const jsonData = JSON.stringify(updatedPassword);
+                console.log("new password : " , newPassword);
+                fetch(`${ url }/passengerController`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'p_id': pid
+                    },
+                    body: jsonData
                 })
-                .catch(error => {
-                    openAlert( "Password update unsuccessful", "alertFail");
-                    document.getElementById("changePassword").style.display = "none";
-                    document.getElementById("overlay").style.display = "none";
-                    console.error('Error:', error);
-                });
-        }
+                    .then(response => {
+                        if (response.ok) {
+                            openAlert( "Password Successfully Updated!", "alertSuccess");
+                            document.getElementById("changePassword").style.display = "none";
+                            document.getElementById("overlay").style.display = "none";
+                            console.log('Update successful');
+                            setTimeout(function()
+                                {location.reload(true)},2000);
+
+                        } else if (response.status === 401) {
+                            openAlert( "Password Update Failed!", "alertFail");
+                            document.getElementById("changePassword").style.display = "none";
+                            document.getElementById("overlay").style.display = "none";
+                            console.log('Update unsuccessful');
+                        } else {
+                            openAlert( "Password Update Unsuccessful", "alertFail");
+                            document.getElementById("changePassword").style.display = "none";
+                            document.getElementById("overlay").style.display = "none";
+                            console.error('Error:', response.status);
+                        }
+                    })
+                    .catch(error => {
+                        openAlert( "Password Update Unsuccessful", "alertFail");
+                        document.getElementById("changePassword").style.display = "none";
+                        document.getElementById("overlay").style.display = "none";
+                        console.error('Error:', error);
+                    });
+            }else{
+                openAlert( "Passwords Unmatched", "alertFail");
+                document.getElementById("changePassword").style.display = "none";
+                document.getElementById("overlay").style.display = "none";
+                console.log('Password mismatch');
+            }
+        });
     }else{
         openAlert("OTP Verification Failed !", "alertFail");
         document.getElementById("otpVerification").style.display = "none";
         document.getElementById("overlay").style.display = "none";
+        console.log('OTP mismatch');
+        setTimeout(function()
+            {location.reload(true)},2000);
     }
 }
 
