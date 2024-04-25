@@ -56,7 +56,7 @@ public class ReportController extends HttpServlet {
             JSONObject reportData = new JSONObject();
             reportData.put("totalSeatsBooked", report.getTotalSeatsBooked());
             reportData.put("totalPaymentsDeleted", report.getTotalPaymentsDeleted());
-            reportData.put("finalAmount", report.getFinalAmount());
+            reportData.put("finalAmount", "Rs." + String.format("%.2f", report.getFinalAmount()));
 
             out.print(reportData);
             response.setStatus(HttpServletResponse.SC_OK);

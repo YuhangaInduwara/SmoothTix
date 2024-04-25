@@ -4,7 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Reports</title>
+    <link rel="icon" type="image/x-icon" href="../../../images/favicon/favicon.png">
     <link rel="stylesheet" type="text/css" href="../css/owner_dashboard_report.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+
 </head>
 <body>
 <div class="dashboard">
@@ -67,15 +71,15 @@
             <div class="functions">
                 <div class="search_box">
                     <label for="StartdatePicker">Date From</label>
-                    <label for="startdatePicker"></label><input type="date" id="StartdatePicker">
+                    <input type="date" id="StartdatePicker">
                 </div>
                 <div class="search_box">
                     <label for="EnddatePicker">Date to</label>
-                    <label for="EnddatePicker"></label><input type="date" id="EnddatePicker">
+                    <input type="date" id="EnddatePicker">
                 </div>
                 <div class="search_box" >
                     <div>
-                        <label>
+                        <label for="busregNoSelect">Select Bus Reg No:</label>
                             <select id="busregNoSelect">
                                 <option value="" disabled selected>Select Bus Reg No:</option>
                             </select>
@@ -86,32 +90,46 @@
                     <button class="Searchbutton" onclick="generateReport()">Generate Report</button>
                 </div>
             </div>
-            <div id="reportContainer" style="display: flex;flex-direction: column; justify-content: center; align-items: center;">
-                <table id="reportTable">
-                    <tbody>
-                    <tr>
-                        <th>Time Period</th>
-                        <td id="timePeriod">-</td>
-                    </tr>
-                    <tr>
-                        <th>Bus Reg No</th>
-                        <td id="busRegNo">-</td>
-                    </tr>
-                    <tr>
-                        <th>Total Seats Booked</th>
-                        <td id="totalSeatsBooked">-</td>
-                    </tr>
-                    <tr>
-                        <th>Total Payments Deleted</th>
-                        <td id="totalPaymentsDeleted">-</td>
-                    </tr>
-                    <tr>
-                        <th>Final Amount</th>
-                        <td id="finalAmount">-</td>
-                    </tr>
-                    </tbody>
-                </table>
-                <button class="button" id="downloadReportButton">Download Report</button>
+            <div id="reportContainer" >
+                <div id="tableContainer" >
+                    <table id="reportTable">
+                        <tbody>
+                        <tr>
+                            <th>Time Period</th>
+                            <td id="timePeriod">-</td>
+                        </tr>
+                        <tr>
+                            <th>Bus Reg No</th>
+                            <td id="busRegNo">-</td>
+                        </tr>
+                        <tr>
+                            <th>Total Number of Seats Booked</th>
+                            <td id="totalSeatsBooked">-</td>
+                        </tr>
+                        <tr>
+                            <th>Total Number of Payments Deleted</th>
+                            <td id="totalPaymentsDeleted">-</td>
+                        </tr>
+                        <tr>
+                            <th>Total Revenue</th>
+                            <td id="finalAmount">-</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <button class="button" id="downloadReportButton" disabled>Download Report</button>
+            </div>
+
+            <div class="overlay" id="overlay"></div>
+            <div class="alertBody" id="successAlert">
+                <img src="../../../images/Alert_icons/Success_icon.png" class="alertImg" alt="success">
+                <div class="alertMsgSuccess" id="alertMsgSuccess"></div>
+                <button class="okButton" onclick="closeAlertSuccess()">Ok</button>
+            </div>
+            <div class="alertBody" id="failAlert">
+                <img src="../../../images/Alert_icons/Error_icon.png" class="alertImg" alt="fail">
+                <div class="alertMsgFail" id="failMsg"></div>
+                <button class="okButton" onclick="closeAlertFail()">Ok</button>
             </div>
 
         </div>
