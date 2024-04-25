@@ -34,7 +34,7 @@ function displayDataAsParagraphs(data) {
 
     data.forEach(item => {
         const paragraph = document.createElement("p");
-         paragraph.classList.add("dataParagraph");
+        paragraph.classList.add("dataParagraph");
 
         paragraph.innerHTML = `
             <p class="data_box"><strong>First Name:</strong> ${item.first_name}</p>
@@ -339,7 +339,7 @@ const passwordInputError = document.getElementById("update_new_passwordError");
 function isStrongPassword(password) {
     if (password.length < 8) {
         return false;
-        }
+    }
     if (!/[a-z]/.test(password)) {
         return false;
     }
