@@ -127,7 +127,6 @@ public class PassengerController extends HttpServlet {
             BufferedReader reader = request.getReader();
             Passenger passenger = gson.fromJson(reader, Passenger.class);
             int updateSuccess = 0;
-            System.out.println("pid eka : " + p_id);
             if(passenger.get_password() != null && !passenger.get_password().isEmpty()){
                 String hashedPassword = PasswordHash.hashPassword(passenger.get_password());
                 passenger.set_password(hashedPassword);
