@@ -131,3 +131,85 @@ a{
     display: flex;
     flex-direction: row;
 }
+
+
+.container {
+        display: flex;
+        justify-content: space-around;
+    }
+
+    .box {
+        position: relative;
+        transition: box-shadow 0.3s;
+        width: 25%;
+        padding: 20px;
+        border: 1px solid #ccc;
+        /*margin-bottom: 20px;*/
+        margin-top: 70px;
+        border-radius: 20px;
+        background-color: #F8F9F9;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.8);
+    }
+    .box:hover {
+
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+    .form-heading {
+        text-align: center;
+        margin-bottom: 20px;
+    }
+
+    form {
+        display: flex;
+        flex-direction: column;
+    }
+
+    label {
+        margin-bottom: 10px;
+        color:#5D6D7E;
+        font-weight: bold;
+
+    }
+
+    input {
+        padding: 8px;
+        outline: none;
+        margin-bottom: 10px;
+        border:none;
+        box-sizing: border-box;
+        border-radius: 10px;
+        background-color:#F8F9F9;
+        font-weight: bold;
+    }
+
+    .stars-container {
+        margin-left: 80px;
+        padding:20px;
+    }
+
+    .star {
+        display: inline-block;
+        width: 40px; /* Adjust size of stars */
+        font-size: 40px; /* Adjust size of stars */
+        color: gold;
+    }
+
+    .average-points{
+         display: flex;
+         justify-content: center; /* Horizontally center the content */
+         align-items: center; /* Vertically center the content */
+         position: fixed;
+         font-size: 30px;
+         font-weight: bold;
+         bottom: 40px; /* Adjust as needed */
+         left: 0;
+         right: 0;
+         margin: 0 auto; /* Horizontally center the element */
+         width: max-content; /* Set width to content width */
+         background-color: rgba(255, 255, 255, 0.9); /* Semi-transparent background */
+         padding: 10px 20px;
+         border-radius: 5px; /* Rounded corners */
+         box-shadow: 0 0 10px rgba(0, 0, 0, 0.2); /* Box shadow for better visibility *
+
+    }

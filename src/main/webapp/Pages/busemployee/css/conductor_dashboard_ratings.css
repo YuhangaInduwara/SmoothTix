@@ -141,7 +141,8 @@ a{
     .box {
         position: relative;
         transition: box-shadow 0.3s;
-        width: 25%;
+        /*width: 15%;*/
+        width: auto;
         padding: 20px;
         border: 1px solid #ccc;
         /*margin-bottom: 20px;*/
@@ -155,10 +156,6 @@ a{
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
         }
 
-    .form-heading {
-        text-align: center;
-        margin-bottom: 20px;
-    }
 
     form {
         display: flex;
@@ -183,26 +180,14 @@ a{
         font-weight: bold;
     }
 
-    .stars-container {
-        margin-left: 80px;
-        padding:20px;
-    }
-
-    .star {
-        display: inline-block;
-        width: 40px; /* Adjust size of stars */
-        font-size: 40px; /* Adjust size of stars */
-        color: gold;
-    }
-
     .average-points{
          display: flex;
          justify-content: center; /* Horizontally center the content */
          align-items: center; /* Vertically center the content */
          position: fixed;
-         font-size: 30px;
+         font-size: 20px;
          font-weight: bold;
-         bottom: 70px; /* Adjust as needed */
+         bottom: 60px; /* Adjust as needed */
          left: 0;
          right: 0;
          margin: 0 auto; /* Horizontally center the element */
@@ -210,6 +195,12 @@ a{
          background-color: rgba(255, 255, 255, 0.9); /* Semi-transparent background */
          padding: 10px 20px;
          border-radius: 5px; /* Rounded corners */
-         box-shadow: 0 0 10px rgba(0, 0, 0, 0.2); /* Box shadow for better visibility *
+         box-shadow: 0 0 10px rgba(0, 0, 0, 0.2); /* Box shadow for better visibility */
 
     }
+
+    .heading {
+            padding-top: 5px;
+
+            color:#115295;
+        }
