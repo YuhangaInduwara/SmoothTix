@@ -267,9 +267,9 @@ function fetchNextBooking(){
 
             // Get the latest booking
             const latestBookingInfo = latestBooking[0];
-
-            // Do something with the latest booking information
+            document.getElementById("current_booking").textContent = latestBookingInfo.date + " " + latestBookingInfo.time;
             console.log(latestBookingInfo);
+            console.log(latestBookingInfo.date + " " + latestBookingInfo.time);
         })
         .catch(error => {
             console.error('Error:', error);
