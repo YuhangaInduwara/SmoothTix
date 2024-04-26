@@ -57,7 +57,16 @@ console.log(owner_id)
 //                }
             })
             .catch(error => {
-                console.error('Error:', error);
+               console.error('Error:', error);
+                                      // Display error message as a form
+                                      const errorMessageForm = document.createElement("div");
+                                      errorMessageForm.classList.add("box");
+
+                                      const errorMessage = document.createElement("p");
+                                      errorMessage.textContent = "Error fetching data. Please try again later.";
+
+                                      errorMessageForm.appendChild(errorMessage);
+                                      document.getElementById("formContainer").appendChild(errorMessageForm);
             });
 }
 
@@ -68,23 +77,27 @@ function displayDataAsForms(data) {
     let totalPoints = 0;
     let formCount = 0;
 
+ if (Array.isArray(data) && data.length > 0) {
     data.forEach((item, index) => {
         console.log(item);
         const form = document.createElement("div");
         form.classList.add("box");
 
-        // Remove heading creation
+        const dateHeading = document.createElement("h3");
+        dateHeading.textContent = item.schedule_date;
+        dateHeading.classList.add('heading');
+        form.appendChild(dateHeading);
 
         const innerForm = document.createElement("form");
         innerForm.id = `form${index + 1}`;
 
         const inputs = [
-            { label: "Date :", key: "schedule_date" },
-            { label: "Time :", key: "schedule_time" },
-            { label: "Route:", key: "route" },
-            { label: "Bus:", key: "reg_no" },
-            { label: "Points:", key: "bus_points" },
-            { label: "Review:", key: "comments" }
+                    { label: "Date :", key: "schedule_date" },
+                    { label: "Time :", key: "schedule_time" },
+                    { label: "Route:", key: "route" },
+                    { label: "Bus:", key: "reg_no" },
+                    { label: "Points:", key: "bus_points" },
+                    { label: "Review:", key: "comments" }
         ];
 
         console.log(inputs)
@@ -132,5 +145,18 @@ function displayDataAsForms(data) {
     averagePointsElement.textContent = `Average Points: ${averagePoints.toFixed(2)}`; // Display average with two decimal places
     averagePointsElement.classList.add("average-points");
     document.body.appendChild(averagePointsElement);
+}else {
+         // Display error message as a form
+         const errorMessageForm = document.createElement("div");
+         errorMessageForm.classList.add("box", "errorMgForm"); // Apply box style and error message form style
+
+         const errorMessage = document.createElement("h2");
+         errorMessage.classList.add("errorMgText"); // Apply error message text style
+         errorMessage.textContent = "Your bus have no any points !";
+         errorMessageForm.appendChild(errorMessage);
+         formContainer.appendChild(errorMessageForm);
+     }
+
 }
+
 

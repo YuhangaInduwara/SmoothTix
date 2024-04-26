@@ -141,11 +141,13 @@ a{
     .box {
         position: relative;
         transition: box-shadow 0.3s;
-        width: 25%;
+        width: auto;
         padding: 20px;
         border: 1px solid #ccc;
-        /*margin-bottom: 20px;*/
+        margin-bottom: 110px;
         margin-top: 70px;
+        margin-right:10px;
+        margin-left:10px;
         border-radius: 20px;
         background-color: #F8F9F9;
         box-shadow: 0 0 10px rgba(0, 0, 0, 0.8);
@@ -183,17 +185,7 @@ a{
         font-weight: bold;
     }
 
-    .stars-container {
-        margin-left: 80px;
-        padding:20px;
-    }
 
-    .star {
-        display: inline-block;
-        width: 40px; /* Adjust size of stars */
-        font-size: 40px; /* Adjust size of stars */
-        color: gold;
-    }
 
     .average-points{
          display: flex;
@@ -210,6 +202,36 @@ a{
          background-color: rgba(255, 255, 255, 0.9); /* Semi-transparent background */
          padding: 10px 20px;
          border-radius: 5px; /* Rounded corners */
-         box-shadow: 0 0 10px rgba(0, 0, 0, 0.2); /* Box shadow for better visibility *
+         box-shadow: 0 0 10px rgba(0, 0, 0, 0.2); /* Box shadow for better visibility */
 
     }
+
+    .heading {
+                padding-top: 5px;
+
+                color:#115295;
+            }
+    .errorMgForm {
+           display: flex;
+           justify-content: center;
+           align-items: center;
+           position: fixed; /* Ensures that the form stays centered even when scrolling */
+           top: 300px;
+           left: 650px;
+           width: 100hv;
+           height: 100hv;
+           background-color: #F8F9F9;
+           z-index: 999; /* Ensures the form is above other content */
+       }
+
+       .errorMgFormContent {
+            background-color: #F8F9F9;
+           padding: 20px; /* Adjust as needed */
+           border-radius: 5px;
+           box-shadow: 0 0 10px rgba(0, 0, 0, 0.5); /* Box shadow for a subtle elevation effect */
+       }
+
+       .errorMgText {
+          font-weight:bold;
+          color:red;
+       }
