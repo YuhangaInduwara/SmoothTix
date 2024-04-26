@@ -76,6 +76,9 @@
                     <div class="form-group-btn">
                         <button type="submit" class="btn-login">Register</button><br>
                     </div>
+                    <div id="loading-spinner" >
+                        <div class="spinner"></div>
+                    </div>
                     <p style="font-size: large">Already has an account? <a href="../../login/html/login.html" style="text-decoration: none; color: red; font-family: Roboto, serif; font-style: normal; font-weight: 500; line-height: normal;">Login</a> </p>
                 </div>
             </form>
@@ -89,6 +92,32 @@
                 <img src="../../../images/Alert_icons/Error_icon.png" class="failImg" alt="fail">
                 <div class="alertMsgFail" id="failMsg">Registration Failed!</div>
                 <button class="tryButton" onclick="closeAlertFail()">Try Again</button>
+            </div>
+            <div class="otpVerification" id="otpVerification">
+                <h2 style="color:green">4 Digit OTP Has Sent To <span id="user_email">Your Email</span> For Verification.</h2>
+                <h3>Please check your inbox and enter the code.</h3>
+                <div class="otp-container">
+                    <input type="number" name="otp" id="otp" class="otp-input" maxlength="4" placeholder="XXXX" required>
+                </div>
+                <div id="empty_otp" style="color:red"></div>
+                <span class="resend">Resend OTP</span>
+                <div id="loading-spinner2" >
+                    <div class="spinner"></div>
+                </div>
+                <div style="display:flex; flex-direction:row; gap: 40px; margin-top: 20px;">
+                    <button class="cancelButton" onclick="closeOTPVerification()">Cancel</button>
+                    <button type="submit" class="proceedButton" onclick="verifyOTP()">Proceed</button>
+                </div>
+            </div>
+            <div class="alertBody" id="alertSuccess">
+                <img src="../../../images/Alert_icons/Success_icon.png" class="alertImg" alt="success">
+                <div class="alertMsgSuccess" id="alertMsgSuccess"></div>
+                <button class="okButton" onclick="closeAlert()">Ok</button>
+            </div>
+            <div class="alertBody" id="alertFail">
+                <img src="../../../images/Alert_icons/Error_icon.png" class="alertImg" alt="fail">
+                <div class="alertMsgFail" id="alertMsg"></div>
+                <button class="okButton" onclick="closeAlert()">Ok</button>
             </div>
         </div>
     </div>
