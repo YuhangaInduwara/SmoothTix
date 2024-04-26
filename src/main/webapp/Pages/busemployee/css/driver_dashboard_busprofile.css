@@ -140,13 +140,13 @@ a{
         width: 25%;
         padding: 20px;
         border: 1px solid #ccc;
-        margin-bottom: 110px;
-                margin-top: 70px;
-                margin-right:10px;
-                margin-left:10px;
+        margin-left:10px;
         border-radius: 20px;
         background-color: #EAEDED;
         box-shadow: 0 0 10px rgba(0, 0, 0, 0.8);
+        margin-top: 70px;
+        margin-bottom: 110px;
+        margin-right: 10px;
     }
     .box:hover {
             background-color:#E5E8E8;

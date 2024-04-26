@@ -61,6 +61,7 @@ function refreshPage() {
 }
 
 function fetchAllData(){
+    document.getElementById('loading-spinner').style.display = 'block';
     document.getElementById("userName").textContent = session_user_name;
     fetch(`${ url }/bookingController?p_id=${session_p_id}`, {
         method: 'GET',
@@ -70,6 +71,7 @@ function fetchAllData(){
     })
         .then(response => {
             if (response.ok) {
+                document.getElementById('loading-spinner').style.display = 'none';
                 return response.json();
             } else {
                 console.error('Error:', response.status);
@@ -166,9 +168,6 @@ function displayDataAsScheduleTiles_0(data) {
         if (counter < 2 && item.status === 0) {
             if (item.schedule_status === 0 && diffInHours > 2) {
                 buttonsHTML = `
-                <span class="icon-container">
-                    <i onclick="updateRow('${item.timekpr_id}')"><img src="../../../images/vector_icons/update_icon.png" alt="update" class="action_icon"></i>
-                </span>
                 <span class="icon-container" style="margin-left: 1px;">
                     <i onclick="deleteBooking_passenger('${item.booking_id}', '${item.seat_no}')"><img src="../../../images/vector_icons/delete_icon.png" alt="delete" class="action_icon"></i>
                 </span>
@@ -625,9 +624,6 @@ function openSeeMore(page){
             let buttonsHTML = "";
             if (page === 0) {
                 buttonsHTML = `
-                <span class="icon-container">
-                    <i onclick="updateRow('${item.timekpr_id}')"><img src="../../../images/vector_icons/update_icon.png" alt="update" class="action_icon"></i>
-                </span>
                 <span class="icon-container" style="margin-left: 1px;">
                     <i onclick="deleteBooking_passenger('${item.booking_id}', '${item.seat_no}')"><img src="../../../images/vector_icons/delete_icon.png" alt="delete" class="action_icon"></i>
                 </span>
