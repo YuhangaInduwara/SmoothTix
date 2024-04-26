@@ -60,18 +60,13 @@ public class BusprofileController extends HttpServlet {
                     busprofileData.put("route_no", rs.getString("route_no"));
                     busprofileData.put("route", rs.getString("start") + " - " + rs.getString("destination"));
                     busprofileData.put("driver_name", rs.getString("driver_name") );
-                    //busprofileData.put("driver_id", rs.getString("driver_id"));
                     busprofileData.put("conductor_name", rs.getString("conductor_name") );
-                    //busprofileData.put("conductor_id", rs.getString("conductor_id"));
-
                     busprofileDataArray.put(busprofileData);
                 }
 
             }
             else if (p_id == null&& conductor_id==null){
                 ResultSet rs = busprofileTable.getBPbyd_id(driver_id);
-
-
 
                 while (rs.next()) {
                     JSONObject busprofileData = new JSONObject();
@@ -87,6 +82,8 @@ public class BusprofileController extends HttpServlet {
                 }
 
             }
+
+
             else{
                 ResultSet rs = busprofileTable.getAllDetails(p_id);
 //                JSONArray busprofileDataArray = new JSONArray();
