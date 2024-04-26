@@ -26,6 +26,7 @@ public class BusController extends HttpServlet {
 
         String bus_id = request.getHeader("bus_id");
         String p_id = request.getHeader("p_id");
+
         try {
             ResultSet rs = null;
             if (bus_id != null) {
@@ -78,14 +79,15 @@ public class BusController extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         response.setContentType("text/html");
         PrintWriter out = response.getWriter();
-
+        System.out.println("hello");
         try {
             String p_id = request.getHeader("p_id");// Get passenger's ID from request header
             Gson gson = new Gson();
             BufferedReader reader = request.getReader();
             Bus bus = gson.fromJson(reader, Bus.class);
-
+            System.out.println(bus.getReg_no());
             boolean busExists = busTable.isBusExists(bus.getReg_no());
+            System.out.println(busExists);
             if (busExists) {
                 response.setStatus(HttpServletResponse.SC_CONFLICT);
                 out.println("Bus with registration number already exists.");
