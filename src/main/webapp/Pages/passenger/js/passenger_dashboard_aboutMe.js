@@ -1,3 +1,4 @@
+let isMatched;
 document.addEventListener('DOMContentLoaded', function () {
     isAuthenticated().then(() => fetchAllData());
 });
@@ -34,7 +35,7 @@ function displayDataAsParagraphs(data) {
 
     data.forEach(item => {
         const paragraph = document.createElement("p");
-        paragraph.classList.add("dataParagraph");
+         paragraph.classList.add("dataParagraph");
 
         paragraph.innerHTML = `
             <p class="data_box"><strong>First Name:</strong> ${item.first_name}</p>
@@ -104,7 +105,7 @@ function update(p_id){
 
         const jsonData = JSON.stringify(updatedData);
 
-        fetch(`../../../passengerController`, {
+        fetch('../../../passengerController', {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',
@@ -134,9 +135,10 @@ function update(p_id){
 document.getElementById("passengerPasswordForm").addEventListener("submit", function(event) {
     event.preventDefault();
 
-    const password = document.getElementById("update_current_password").value;
-    const new_password = document.getElementById("update_new_password").value;
-    const reenter_new_password = document.getElementById("update_reenter_new_password").value;
+    const password = document.getElementById("current_password").value;
+    const new_password = document.getElementById("new_password").value;
+    const reenter_new_password = document.getElementById("reenter_new_password").value;
+
     console.log(password + " " + reenter_new_password + " " + new_password )
     console.log(session_p_id)
     fetch('../../../passengerController', {
@@ -157,7 +159,7 @@ document.getElementById("passengerPasswordForm").addEventListener("submit", func
                     changePassword(jsonData);
                 }
                 else{
-                    openAlert( "Passwords don't match", "alertFail");
+                    openAlert( "Passwords are not matching", "alertFail");
                     console.log('Passwords don\'t match');
                 }
             }
@@ -172,7 +174,7 @@ document.getElementById("passengerPasswordForm").addEventListener("submit", func
 
 function changePassword(jsonData) {
     console.log(session_p_id)
-    fetch(`../../../passengerController`, {
+    fetch('../../../passengerController', {
         method: 'PUT',
         headers: {
             'Content-Type': 'application/json',
@@ -216,12 +218,6 @@ function closeForm_update() {
 }
 
 function openForm_changePassword() {
-    const existingForm = document.querySelector(".passenger_password_form_body");
-
-    if (!existingForm) {
-        createPasswordForm();
-    }
-
     document.getElementById("passengerPasswordForm").style.display = "block";
     document.getElementById("overlay").style.display = "block";
 }
@@ -256,8 +252,6 @@ function closeAlert(){
         alertFail.style.display = "none";
     }
     document.getElementById("overlay").style.display = "none";
-    window.location.href = "../html/passenger_dashboard_aboutMe.html";
-    refreshPage();
 }
 
 function createForm() {
@@ -293,48 +287,22 @@ function createForm() {
     formContainer_update.appendChild(form_update.cloneNode(true));
 }
 
-function createPasswordForm(){
-    const form_update = document.createElement('div');
-    form_update.classList.add('passenger_password_form_body');
+document.querySelectorAll('.password_toggle').forEach(function(toggle) {
+    toggle.addEventListener('click', function() {
+        let targetId = this.getAttribute('toggle-target');
+        let targetInput = document.getElementById(targetId);
 
-    var form= `
-        <div class="passenger_form_left">
-
-            <div class="form_div">
-                <label for="current_password" class="passenger_form_title">Current Password <span class="passenger_form_require">*</span></label>
-                <div class="password_container">
-                    <input type="password" name="current_password" id="current_password" class="form_data" placeholder="Enter current password" required="required" />
-                    <i class="fas fa-eye password_toggle" toggle-target="current_password"></i>
-                </div>
-            </div>
-            <div class="form_div">
-                <label for="new_password" class="passenger_form_title">New Password <span class="passenger_form_require">*</span></label>
-                <div class="password_container">
-                    <input type="password" name="new_password" id="new_password" class="form_data" placeholder="Enter new password" required="required" />
-                    <i class="fas fa-eye password_toggle" toggle-target="new_password"></i>
-                </div>
-            </div>
-            <div class="form_div">
-                <label for="reenter_new_password" class="passenger_form_title">ReEnter New Password <span class="passenger_form_require">*</span></label>
-                <div class="password_container">
-                    <input type="password" name="reenter_new_password" id="reenter_new_password" class="form_data" placeholder="ReEnter new password" required="required" />
-                    <i class="fas fa-eye password_toggle" toggle-target="reenter_new_password"></i>
-                </div>
-            </div>
-        </div>
-
-        `;
-
-    form_update.innerHTML = form.replace(/id="/g, 'id="update_');
-    const formContainer_updates = document.getElementById('formContainer_updates');
-    formContainer_updates.appendChild(form_update.cloneNode(true));
-
-}
-
-const confirmPasswordInput = document.getElementById("update_reenter_new_password");
-const confirmPasswordInputError = document.getElementById("update_reenter_new_passwordError");
-const passwordInput = document.getElementById("update_new_password");
-const passwordInputError = document.getElementById("update_new_passwordError");
+        if (targetInput.getAttribute('type') === 'password') {
+            targetInput.setAttribute('type', 'text');
+            this.classList.remove('fa-eye');
+            this.classList.add('fa-eye-slash');
+        } else {
+            targetInput.setAttribute('type', 'password');
+            this.classList.remove('fa-eye-slash');
+            this.classList.add('fa-eye');
+        }
+    });
+});
 
 function isStrongPassword(password) {
     if (password.length < 8) {
@@ -355,8 +323,15 @@ function isStrongPassword(password) {
     return true;
 }
 
-confirmPasswordInput.addEventListener("input", function() {
-    if (document.getElementById("update_new_password").value !== document.getElementById("update_reenter_new_password").value) {
+const confirmPasswordInput = document.getElementById("reenter_new_password");
+const confirmPasswordInputError = document.getElementById("reenter_new_password_error");
+const passwordInput = document.getElementById("new_password");
+const passwordInputError = document.getElementById("new_passwordError");
+const password = document.getElementById("password");
+const passwordError = document.getElementById("passwordError");
+
+confirmPasswordInput.addEventListener("change", function() {
+    if (document.getElementById("password").value !== document.getElementById("password_confirm").value) {
         confirmPasswordInput.setCustomValidity("Password should be matched.");
         confirmPasswordInputError.textContent = "Password should be matched.";
         confirmPasswordInputError.style.display = "block";
@@ -367,7 +342,7 @@ confirmPasswordInput.addEventListener("input", function() {
     }
 });
 
-passwordInput.addEventListener("input", function() {
+passwordInput.addEventListener("change", function() {
     if (!isStrongPassword(passwordInput.value)) {
         passwordInput.setCustomValidity("Password should be at least 8 characters long and contain at least one lowercase letter, one uppercase letter, one digit, and one special character.");
         passwordInputError.textContent = "Password should be at least 8 characters long and contain at least one lowercase letter, one uppercase letter, one digit, and one special character.";
@@ -379,20 +354,14 @@ passwordInput.addEventListener("input", function() {
     }
 });
 
-
-document.querySelectorAll('.password_toggle').forEach(function(toggle) {
-    toggle.addEventListener('click', function() {
-        let targetId = this.getAttribute('toggle-target');
-        let targetInput = document.getElementById(targetId);
-
-        if (targetInput.getAttribute('type') === 'password') {
-            targetInput.setAttribute('type', 'text');
-            this.classList.remove('fa-eye');
-            this.classList.add('fa-eye-slash');
-        } else {
-            targetInput.setAttribute('type', 'password');
-            this.classList.remove('fa-eye-slash');
-            this.classList.add('fa-eye');
-        }
-    });
+password.addEventListener("change", function() {
+    if (!isStrongPassword(passwordInput.value)) {
+        password.setCustomValidity("Password should be at least 8 characters long and contain at least one lowercase letter, one uppercase letter, one digit, and one special character.");
+        passwordError.textContent = "Password should be at least 8 characters long and contain at least one lowercase letter, one uppercase letter, one digit, and one special character.";
+        passwordError.style.display = "block";
+    } else {
+        password.setCustomValidity("");
+        passwordError.textContent = "";
+        passwordError.style.display = "none";
+    }
 });

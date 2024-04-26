@@ -173,6 +173,7 @@ a{
 
 .passenger_form {
     display: none;
+    width: 400px;
     position: fixed;
     top: 50%;
     left: 50%;
