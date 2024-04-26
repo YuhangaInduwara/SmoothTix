@@ -150,6 +150,15 @@ document.getElementById("busRegForm").addEventListener("submit", function(event)
     const route_no = document.getElementById("add_route_no").value;
     const no_of_Seats = document.getElementById("add_no_of_Seats").value;
 
+    const userData = {
+        reg_no: reg_no,
+        route_no: route_no,
+        no_of_Seats: no_of_Seats,
+    };
+    const jsonData = JSON.stringify(userData);
+
+    const regNoInput = document.getElementById("add_reg_no");
+
     fetch(`${url}/busController?reg_no=${reg_no}`, {
         method: 'GET',
         headers: {
@@ -158,50 +167,57 @@ document.getElementById("busRegForm").addEventListener("submit", function(event)
     })
     .then(response => {
         if (response.ok) {
-            // Bus registration number doesn't exist, proceed with adding the bus
             return response.json();
+        } else {
+            throw new Error(`Failed to check bus existence: ${response.status}`);
+        }
+    })
+    .then(data => {
+        if (data.length === 0) {
+            // Reset custom validity when the bus registration number changes
+            regNoInput.setCustomValidity("");
+
+            // Bus registration number doesn't exist, proceed with adding the bus
+            return fetch(`${url}/busController`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'p_id': session_p_id
+                },
+                body: jsonData
+            });
         } else {
             // Bus registration number already exists, display error message
             throw new Error(`Bus with registration number ${reg_no} already exists.`);
         }
     })
-    .then(data => {
-        const userData = {
-            reg_no: reg_no,
-            route_no: route_no,
-            no_of_Seats: no_of_Seats,
-        };
-        console.log(userData)
-        const jsonData = JSON.stringify(userData);
-
-        fetch(`${ url }/busController`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'p_id': session_p_id
-            },
-            body: jsonData
-        })
-        .then(response => {
-            if (response.ok) {
-                closeForm_add();
-                openAlertSuccess("Successfully Added!");
-            } else{
-                return response.json()
-                    .then(data => {
-                        const error_msg = data.error;
-                        openAlertFail(error_msg);
-                        throw new Error("Failed");
-                    });
-            }
-        })
+    .then(response => {
+        if (response.ok) {
+            closeForm_add();
+            openAlertSuccess("Successfully Added!");
+            regNoInput.setCustomValidity("");
+        } else {
+            // Display error message returned from the server
+            return response.json()
+                .then(data => {
+                    const error_msg = data.error;
+                    openAlertFail(error_msg);
+                    throw new Error("Failed");
+                });
+        }
+    })
     .catch(error => {
         // Display error message for existing registration number
-        const regNoInput = document.getElementById("add_reg_no");
         regNoInput.setCustomValidity(error.message); // Set custom validity message
         regNoInput.reportValidity(); // Show the validation message
+        console.error('Error:', error);
     });
 });
+
+// Reset custom validity when the bus registration number input changes
+document.getElementById("add_reg_no").addEventListener("input", function(event) {
+    const regNoInput = event.target;
+    regNoInput.setCustomValidity("");
 });
 
 
