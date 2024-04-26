@@ -4,8 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SmoothTix</title>
-    <link rel="stylesheet" type="text/css" href="../css/admin_dashboard_passengers.css">
+    <link rel="stylesheet" type="text/css" href="../css/admin_dashboard_reports.css">
     <link rel="icon" type="image/x-icon" href="../../../images/favicon/favicon.png">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+
 </head>
 <body>
 <div class="dashboard">
@@ -70,76 +73,69 @@
         </div>
         <div class="body_content">
             <div class="functions">
-                <div class="add-new">
-                    <button class="add-new-button" onclick="openForm_add()">Add New Bus</button>
+                <div class="search_box">
+                    <label for="StartdatePicker">Date From</label>
+                    <input type="date" id="StartdatePicker">
                 </div>
-                <div class="overlay" id="overlay"></div>
-                <div class="body_content">
-                    <div class="form">
-                        <form class="bus_form" id="busRegForm">
-                            <div class="bus_form_header">
-                                <h2>Add New Bus</h2>
-                            </div>
-                            <div id="formContainer_add"></div>
-                            <div class="bus_form_footer">
-                                <button type="button" class="bus_form_button" onclick="closeForm_add()">Close</button>
-                                <input type="submit" class="bus_form_button" value="Add" id="busRegFormSubmit">
-                            </div>
-                        </form>
-                    </div>
-                    <div class="form">
-                        <form class="bus_form" id="busUpdateForm">
-                            <div class="bus_form_header">
-                                <h2>Update <span id="header_bus_id"></span> Details</h2>
-                            </div>
-                            <div id="formContainer_update"></div>
-                            <div class="bus_form_footer">
-                                <button type="button" class="bus_form_button" onclick="closeForm_update()">Close</button>
-                                <input type="submit" class="bus_form_button" value="Update">
-                            </div>
-                        </form>
-                    </div>
-                    <div class="alertBody" id="successAlert">
-                        <img src="../../../images/Alert_icons/Success_icon.png" class="alertImg" alt="success">
-                        <div class="alertMsgSuccess">Operation Successful!</div>
-                        <button class="okButton" onclick="closeAlertSuccess()">Ok</button>
-                    </div>
-                    <div class="alertBody" id="failAlert">
-                        <img src="../../../images/Alert_icons/Error_icon.png" class="alertImg" alt="fail">
-                        <div class="alertMsgFail" id="failMsg"></div>
-                        <button class="okButton" onclick="closeAlertFail()">Ok</button>
+                <div class="search_box">
+                    <label for="EnddatePicker">Date to</label>
+                    <input type="date" id="EnddatePicker">
+                </div>
+                <div class="search_box" >
+                    <div>
+                        <label for="routeNoSelect">Select Route No:</label>
+                        <select id="routeNoSelect">
+                            <option value="" disabled selected>Select Route No:</option>
+                        </select>
+                        </label>
                     </div>
                 </div>
                 <div class="search_box">
-                    <div class="search">
-                        <label>
-                            <input class="search_input" type="text" placeholder="Search" id="searchInput">
-                        </label>
-                        <button id="searchButton" onclick="searchData()">
-                            <img src="../../../images/vector_icons/search_icon.png" alt="Search" class="search_img">
-                        </button>
-                    </div>
+                    <button class="Searchbutton" onclick="generateReport()">Generate Report</button>
                 </div>
             </div>
-            <div>
-                <table id="dataTable" class="bus_table">
-                    <thead>
-                    <tr>
-                        <th>Bus ID</th>
-                        <th>Owner ID</th>
-                        <th>Engine Number</th>
-                        <th>Chassis Number</th>
-                        <th>Number of Seats</th>
-                        <th>Manufacturing Year</th>
-                        <th>Brand</th>
-                        <th>Model</th>
-                        <th>Actions</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    </tbody>
-                </table>
+            <div id="reportContainer" >
+                <div id="tableContainer" >
+                    <table id="reportTable">
+                        <tbody>
+                        <tr>
+                            <th>Time Period</th>
+                            <td id="timePeriod">-</td>
+                        </tr>
+                        <tr>
+                            <th>Route No</th>
+                            <td id="routeNo">-</td>
+                        </tr>
+                        <tr>
+                            <th>Total Number of Seats Booked On This Route</th>
+                            <td id="totalSeatsBooked">-</td>
+                        </tr>
+                        <tr>
+                            <th>Total Number of buses scheduled On This Route</th>
+                            <td id="totalBusesScheduled">-</td>
+                        </tr>
+                        <tr>
+                            <th>Total Revenue from the route</th>
+                            <td id="TotalAmount">-</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <button class="button" id="downloadReportButton" disabled>Download Report</button>
             </div>
+
+            <div class="overlay" id="overlay"></div>
+            <div class="alertBody" id="successAlert">
+                <img src="../../../images/Alert_icons/Success_icon.png" class="alertImg" alt="success">
+                <div class="alertMsgSuccess" id="alertMsgSuccess"></div>
+                <button class="okButton" onclick="closeAlertSuccess()">Ok</button>
+            </div>
+            <div class="alertBody" id="failAlert">
+                <img src="../../../images/Alert_icons/Error_icon.png" class="alertImg" alt="fail">
+                <div class="alertMsgFail" id="failMsg"></div>
+                <button class="okButton" onclick="closeAlertFail()">Ok</button>
+            </div>
+
         </div>
     </div>
 </div>

@@ -1,3 +1,5 @@
+let counter = 3;
+
 function isValidNIC(nic) {
     const nicRegex = /^(\d{9}[vVxX]|\d{12})$/;
     return nicRegex.test(nic);
@@ -118,27 +120,46 @@ emailInput.addEventListener("change", function() {
     }
 });
 
-
+let userEmail = '';
 document.getElementById("regForm").addEventListener("submit", function(event) {
     event.preventDefault();
-
     const first_name = document.getElementById("first_name").value;
     const last_name = document.getElementById("last_name").value;
     const nic = document.getElementById("nic").value;
-    const email = document.getElementById("email").value;
+    userEmail = document.getElementById("email").value;
     const password = document.getElementById("password").value;
 
     const userData = {
         first_name: first_name,
         last_name: last_name,
         nic: nic,
-        email: email,
+        email: userEmail,
         password: password,
     };
 
     const jsonData = JSON.stringify(userData);
+    localStorage.setItem("jsonData", jsonData);
 
-    fetch('/SmoothTix_war_exploded/registerController', {
+    document.getElementById("loading-spinner").style.display = "block";
+    document.getElementById("overlay").style.display = "block";
+    sendOTP(userEmail);
+});
+
+function generateOTP(){
+    const OTP = Math.floor(1000 + Math.random() * 9000);
+    localStorage.setItem("OTP", OTP);
+    return OTP;
+}
+
+function sendOTP(email){
+    const OTP = generateOTP();
+
+    const userData ={
+        otp: OTP,
+        email: email
+    };
+    const jsonData = JSON.stringify(userData);
+    fetch(`${ url }/otpController`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
@@ -147,18 +168,82 @@ document.getElementById("regForm").addEventListener("submit", function(event) {
     })
         .then(response => {
             if (response.ok) {
-                openAlertSuccess()
-            } else if (response.status === 401) {
-                openAlertFail()
-                console.log('Registration unsuccessful');
+                document.getElementById("loading-spinner").style.display = "none";
+                document.getElementById("loading-spinner2").style.display = "none";
+                document.getElementById("otpVerification").style.display = "flex";
             } else {
-                openAlertFail()
-                console.error('Error:', response.status);
+                document.getElementById("loading-spinner").style.display = "none";
+                document.getElementById("loading-spinner2").style.display = "none";
+                openAlert("Email Verification Failed!", "alertFail");
+                document.getElementById("overlay").style.display = "none";
+                setTimeout(function()
+                               {location.reload(true)},2000);
             }
-        })
+            })
         .catch(error => {
             console.error('Error:', error);
         });
+}
+
+function verifyOTP(){
+    const OTP = localStorage.getItem("OTP");
+    const userOTP = document.getElementById("otp").value;
+
+    if(OTP === userOTP && counter >= 1){
+        document.getElementById("otpVerification").style.display = "none";
+        const getJSON = localStorage.getItem("jsonData");
+
+        fetch('/SmoothTix_war_exploded/registerController', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: getJSON
+        })
+            .then(response => {
+                if (response.ok) {
+                    openAlertSuccess()
+                } else if (response.status === 401) {
+                    openAlertFail()
+                    console.log('Registration unsuccessful');
+                } else {
+                    openAlertFail()
+                    console.error('Error:', response.status);
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+
+    }else if(counter > 1){
+        counter -= 1;
+        console.log(counter)
+        if(userOTP === ''){
+            document.getElementById("empty_otp").textContent = "OTP can not be empty. Remaining attempts " + counter + "." ;
+            return;
+        }
+        document.getElementById("empty_otp").textContent = "Entered OTP is incorrect. Remaining attempts " + counter + ".";
+        console.log(userOTP);
+    }else{
+        openAlert("Too many attempts!", "alertFail");
+            setTimeout(function() {
+                location.reload(true);
+            }, 2000);
+            return;
+    }
+}
+
+document.querySelector(".resend").addEventListener("click", function(event){
+    event.preventDefault();
+    document.getElementById("loading-spinner2").style.display = "block";
+    sendOTP(userEmail);
+    openAlert("OTP Has Sent To Your Email", "alertSuccess");
+});
+
+document.getElementById("otp").addEventListener("input", function() {
+    if (this.value.length > 4) {
+        this.value = this.value.slice(0, 4); // Limit the input to 4 digits
+    }
 });
 
 function openAlertSuccess() {
@@ -182,3 +267,33 @@ function closeAlertFail() {
     document.getElementById("overlay").style.display = "none";
 }
 
+function closeOTPVerification(){
+    document.getElementById("otpVerification").style.display = "none";
+    document.getElementById("overlay").style.display = "none";
+}
+
+function openAlert(text, alertBody){
+    if(alertBody === "alertFail"){
+        document.getElementById("alertMsg").textContent = text;
+    }
+    else{
+        document.getElementById("alertMsgSuccess").textContent = text;
+    }
+    document.getElementById(alertBody).style.display = "block";
+    document.getElementById("overlay").style.display = "block";
+}
+
+function closeAlert(){
+    const alertSuccess = document.getElementById("alertSuccess");
+    const alertFail = document.getElementById("alertFail");
+    if(alertSuccess.style.display === "block" && alertFail.style.display === "block"){
+        alertSuccess.style.display = "none";
+        alertFail.style.display = "none";
+    }
+    else if(alertSuccess.style.display === "block"){
+        alertSuccess.style.display = "none";
+    }
+    else if(alertFail.style.display === "block"){
+        alertFail.style.display = "none";
+    }
+}

@@ -69,6 +69,17 @@ public class busTable {
         ResultSet rs = pst.executeQuery();
         return rs;
     }
+    public static boolean isBusExists(String regNo) throws SQLException, ClassNotFoundException {
+        Connection con = dbConnection.initializeDatabase();
+        PreparedStatement pst = con.prepareStatement("SELECT COUNT(*) AS count FROM bus WHERE reg_no = ?");
+        pst.setString(1, regNo);
+        ResultSet rs = pst.executeQuery();
+        if (rs.next()) {
+            int count = rs.getInt("count");
+            return count > 0;
+        }
+        return false;
+    }
 
     public static ResultSet getRequestData(String bus_id) throws SQLException, ClassNotFoundException {
         Connection con = dbConnection.initializeDatabase();

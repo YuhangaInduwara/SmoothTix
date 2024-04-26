@@ -55,4 +55,11 @@ public class ownerTable {
 
         return "OWNER" + String.format("%03d", nextOwnerID);
     }
+
+    public static ResultSet getByP_id(String p_id) throws SQLException, ClassNotFoundException{
+        Connection con = dbConnection.initializeDatabase();
+        PreparedStatement pst = con.prepareStatement("SELECT * FROM owner WHERE p_id = ?");
+        pst.setString(1, p_id);
+        return pst.executeQuery();
+    }
 }

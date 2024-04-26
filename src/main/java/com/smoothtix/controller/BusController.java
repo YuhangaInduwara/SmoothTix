@@ -85,6 +85,13 @@ public class BusController extends HttpServlet {
             BufferedReader reader = request.getReader();
             Bus bus = gson.fromJson(reader, Bus.class);
 
+            boolean busExists = busTable.isBusExists(bus.getReg_no());
+            if (busExists) {
+                response.setStatus(HttpServletResponse.SC_CONFLICT);
+                out.println("Bus with registration number already exists.");
+                return;
+            }
+
             String ownerID = getOwnerID(p_id); // Retrieve owner ID or null if not found
             if (ownerID != null) {
                 int registrationSuccess = busTable.insert(bus, ownerID); // Pass owner's ID to insert method
@@ -102,7 +109,6 @@ public class BusController extends HttpServlet {
             response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
         }
     }
-
     // Retrieve owner ID based on passenger ID
     private String getOwnerID(String p_id) {
         try {
