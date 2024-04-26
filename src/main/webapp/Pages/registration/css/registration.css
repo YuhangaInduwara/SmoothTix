@@ -194,6 +194,7 @@ body{
     text-align: center;
     padding: 50px;
     gap:40px;
+    display: none;
 }
 
 .failImg,
@@ -249,3 +250,153 @@ body{
     z-index: 999;
 }
 
+.otpVerification {
+    display: none;
+    justify-content: center; /* Horizontally center the element */
+    align-items: center; /* Vertically center the element */
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 500px;
+    height: 250px;
+    background: #ffffff;
+    border-radius: 20px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+    z-index: 1000;
+    flex-direction: column;
+    padding: 95px;
+    gap: 13px;
+    /* Other styles */
+    text-align: center; /* Center text horizontally */
+}
+
+.otp-input {
+    height: 30px;
+    border: 1px solid #ccc;
+    text-align: center;
+    font-size: 20px;
+    margin-bottom: 10px;
+}
+
+.resend{
+    margin-top: 5px;
+    transform: translateY(-50%);
+    color: blue;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.resend:hover{
+    text-decoration: underline;
+    color:red;
+}
+
+.proceedButton{
+    width: 150px;
+    height: 40px;
+    border: none;
+    border-radius: 20px;
+    background: #EA2427;
+    color: #fff;
+    font-size: 16px;
+    cursor: pointer;
+    position: relative;
+    margin-right: 50px;
+    margin-left: 50px;
+    top: 30%;
+    transition: background 0.3s ease;
+}
+
+.proceedButton:hover{
+    background: #D1191D;
+}
+
+.cancelButton{
+    width: 150px;
+    height: 40px;
+    border: none;
+    border-radius: 20px;
+    background: #EA2427;
+    color: #fff;
+    font-size: 16px;
+    cursor: pointer;
+    position: relative;
+    margin-right: 50px;
+    margin-left: 50px;
+    top: 30%;
+    transition: background 0.3s ease;
+}
+
+.cancelButton:hover{
+    background: #D1191D;
+}
+
+#loading-spinner{
+    display: none;
+    border-radius: 10px;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 1000;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 50px;
+    gap:40px;
+    margin: 0;
+}
+
+#loading-spinner2{
+    display: none;
+    border-radius: 10px;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 1000;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 50px;
+    gap:40px;
+    margin: 0;
+}
+
+.spinner-container {
+    display: block;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(255, 255, 255, 0.7);
+    z-index: 9999;
+}
+
+.spinner {
+    border: 4px solid rgba(255, 255, 255, 0.3);
+    border-radius: 50%;
+    border-top: 4px solid #3498db;
+    width: 40px;
+    height: 40px;
+    animation: spin 1s linear infinite;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    margin-top: -20px;
+    margin-left: -20px;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+.alertImg {
+    width: 80px;
+    margin-bottom: 40px;
+}

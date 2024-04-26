@@ -145,63 +145,48 @@ function renderPageControl(){
 // Add new bus to the database
 document.getElementById("busRegForm").addEventListener("submit", function(event) {
     event.preventDefault();
-
     const reg_no = document.getElementById("add_reg_no").value;
     const route_no = document.getElementById("add_route_no").value;
     const no_of_Seats = document.getElementById("add_no_of_Seats").value;
 
-    fetch(`${url}/busController?reg_no=${reg_no}`, {
-        method: 'GET',
+    const userData = {
+        reg_no: reg_no,
+        route_no: route_no,
+        no_of_Seats: no_of_Seats,
+    };
+    console.log(userData);
+    const jsonData = JSON.stringify(userData);
+
+    // Assuming `url` is defined elsewhere and `session_p_id` is available in your session storage or a similar place.
+    fetch(`${url}/busController`, {
+        method: 'POST',
         headers: {
             'Content-Type': 'application/json',
-        }
+            'p_id': session_p_id
+        },
+        body: jsonData
     })
     .then(response => {
         if (response.ok) {
-            // Bus registration number doesn't exist, proceed with adding the bus
-            return response.json();
+            // If the response is OK (200 status), handle success
+            closeForm_add(); // Assuming this function closes your form
+            openAlertSuccess("Successfully Added!"); // Assuming this function shows a success message
+        } else if (response.status === 409) {
+            // Handle the specific case of a conflict (duplicate entry)
+            return response.text().then(error_msg => {
+                openAlertFail(error_msg); // Assuming this function shows an error message
+            });
         } else {
-            // Bus registration number already exists, display error message
-            throw new Error(`Bus with registration number ${reg_no} already exists.`);
+            // Handle other types of errors generically
+            return response.text().then(error_msg => {
+                openAlertFail("Failed to add bus: " + error_msg);
+            });
         }
     })
-    .then(data => {
-        const userData = {
-            reg_no: reg_no,
-            route_no: route_no,
-            no_of_Seats: no_of_Seats,
-        };
-        console.log(userData)
-        const jsonData = JSON.stringify(userData);
-
-        fetch(`${ url }/busController`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'p_id': session_p_id
-            },
-            body: jsonData
-        })
-        .then(response => {
-            if (response.ok) {
-                closeForm_add();
-                openAlertSuccess("Successfully Added!");
-            } else{
-                return response.json()
-                    .then(data => {
-                        const error_msg = data.error;
-                        openAlertFail(error_msg);
-                        throw new Error("Failed");
-                    });
-            }
-        })
     .catch(error => {
-        // Display error message for existing registration number
-        const regNoInput = document.getElementById("add_reg_no");
-        regNoInput.setCustomValidity(error.message); // Set custom validity message
-        regNoInput.reportValidity(); // Show the validation message
+        console.error('Error:', error);
+        openAlertFail("An error occurred while processing your request."); // General error handling
     });
-});
 });
 
 

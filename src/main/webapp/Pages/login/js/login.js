@@ -172,7 +172,6 @@ function sendOTP(email){
         email: email
     };
     const jsonData = JSON.stringify(userData);
-    console.log(userData);
     fetch(`${ url }/otpController`, {
         method: 'POST',
         headers: {
@@ -296,9 +295,7 @@ function generateOTP(){
 
 function verifyOTP(){
     const OTP = localStorage.getItem("OTP");
-    console.log("=system otp : " , OTP , "type : ", typeof(OTP));
     const userOTP = document.getElementById("otp").value;
-    console.log("user otp : " , userOTP , "type : ", typeof(userOTP));
 
     if(OTP === userOTP){
         document.getElementById("otpVerification").style.display = "none";
@@ -314,7 +311,6 @@ function verifyOTP(){
                     password: newPassword,
                 };
                 const jsonData = JSON.stringify(updatedPassword);
-                console.log("new password : " , newPassword);
                 fetch(`${ url }/passengerController`, {
                     method: 'PUT',
                     headers: {
@@ -366,6 +362,12 @@ function verifyOTP(){
             {location.reload(true)},2000);
     }
 }
+
+document.getElementById("otp").addEventListener("input", function() {
+    if (this.value.length > 4) {
+        this.value = this.value.slice(0, 4); // Limit the input to 4 digits
+    }
+});
 
 function openAlert(text, alertBody){
     if(alertBody === "alertFail"){
