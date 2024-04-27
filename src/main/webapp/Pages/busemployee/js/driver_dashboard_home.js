@@ -38,14 +38,16 @@ function displayPassengerProfile(passengers) {
         // Create a form element
         const form = document.createElement("form");
 
+        // Concatenate first_name and last_name into a single name
+        const fullName = passenger.first_name + ' ' + passenger.last_name;
+
         // Create and append input elements for each field
-        const firstNameInput = createTextInput("first_name", "First Name", passenger.first_name);
-        const lastNameInput = createTextInput("last_name", "Last Name", passenger.last_name);
+        const nameInput = createTextInput("name", "Name", fullName); // Use fullName here
         const nicInput = createTextInput("nic", "NIC", passenger.nic);
         const emailInput = createTextInput("email", "Email", passenger.email);
 
         // Append input elements to the form
-        form.append(firstNameInput, lastNameInput, nicInput, emailInput);
+        form.append(nameInput, nicInput, emailInput);
 
         // Append the form to the form container
         formContainer.appendChild(form);

@@ -1,5 +1,5 @@
-let session_p_id = 'P0006';
-let session_user_role = '4';
+let session_p_id = '';
+let session_user_role = '';
 let session_user_name = 'UserName';
 
 async function isAuthenticated() {

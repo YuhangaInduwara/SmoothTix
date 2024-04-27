@@ -144,10 +144,10 @@ a{
         width: auto;
         padding: 20px;
         border: 1px solid #ccc;
-        margin-bottom: 110px;
+        margin-bottom: 10px;
         margin-top: 70px;
         margin-right:10px;
-        margin-left:10px;
+        margin-left:20px;
         border-radius: 20px;
         background-color: #F8F9F9;
         box-shadow: 0 0 10px rgba(0, 0, 0, 0.8);
@@ -192,7 +192,7 @@ a{
          justify-content: center; /* Horizontally center the content */
          align-items: center; /* Vertically center the content */
          position: fixed;
-         font-size: 30px;
+         font-size: 20px;
          font-weight: bold;
          bottom: 70px; /* Adjust as needed */
          left: 0;
