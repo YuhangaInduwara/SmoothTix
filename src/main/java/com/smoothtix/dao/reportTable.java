@@ -56,7 +56,9 @@ public class reportTable {
             ps.setString(2, startDate);
             ps.setString(3, endDate);
             rs = ps.executeQuery();
-            double finalAmount = rs.next() ? rs.getDouble("totalPayments") : 0;
+            double totalPayments  = rs.next() ? rs.getDouble("totalPayments") : 0;
+
+            double finalAmount = totalPayments * 0.95;
 
             String sql4 = "SELECT COUNT(dp.payment_id) AS deletedPayments\n" +
                     "FROM booking b\n" +
