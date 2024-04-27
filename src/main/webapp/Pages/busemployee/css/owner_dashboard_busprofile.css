@@ -451,7 +451,7 @@ tbody tr:hover {
 #page_control{
     width: calc(100% - 20px);
     height: 40px;
-    display: block;
+    display: none;
     justify-content: flex-end;
     align-items: center;
     margin-top: 10px;
@@ -477,17 +477,30 @@ tbody tr:hover {
 #flag_nextPageIcon{
     margin-right: 0;
 }
-
 .form {
     display: none;
     position: fixed;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    background-color: #fff;
-    padding: 20px;
+    background-color: #f5f5f5;
+    padding: 20px; /* Reduced padding from 30px */
+    width: 540px; /* Adjust width as needed */
+    height: auto; /* Adjust height as needed or keep it auto */
     z-index: 2;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+    border: 1px solid #ccc;
+    border-radius: 10px;
+}
+
+.form input,
+.form select {
+    width: 100%;
+    padding: 8px; /* Slightly reduced padding */
+    margin-bottom: 15px; /* Slightly reduced bottom margin */
+    box-sizing: border-box;
+    border: 2px solid #ccc;
+    border-radius: 5px;
 }
 
 .form fieldset {
@@ -497,22 +510,17 @@ tbody tr:hover {
 .form label {
     display: block;
     margin-bottom: 5px;
-}
-
-.form input,
-.form select {
-    width: 100%;
-    padding: 8px;
-    margin-bottom: 10px;
-    box-sizing: border-box;
+    font-family: Times New Roman, serif; /* Change font family */
 }
 
 .form button {
-    background-color: #4CAF50;
+    background-color: #ff0000; /* Change button color */
     color: #fff;
     padding: 10px 20px;
     border: none;
     cursor: pointer;
+    border-radius: 5px; /* Add border radius */
+    transition: background-color 0.3s; /* Add transition */
 }
 
 .form button[type="button"] {
@@ -530,18 +538,4 @@ tbody tr:hover {
     margin-right: 5px;
 }
 
-.form-buttons {
-    display: flex;
-    justify-content: space-between;
-    margin-top: 20px;
-}
 
-.cancel-button {
-    background-color: #ccc;
-    color: #000;
-    margin-right: 30px;
-}
-
-.cancel-button:hover {
-    background-color: #ddd;
-}

@@ -139,6 +139,7 @@ function generateReport() {
             document.getElementById("routeNo").textContent = routeNo;
             document.getElementById("totalSeatsBooked").textContent = data.totalSeatsBooked;
             document.getElementById("totalBusesScheduled").textContent = data.totalBusesScheduled;
+            document.getElementById("commission").textContent = data.commission;
             document.getElementById("TotalAmount").textContent = data.TotalAmount;
             document.getElementById("downloadReportButton").disabled = false;
             openAlertSuccess("Report generated successfully!");
