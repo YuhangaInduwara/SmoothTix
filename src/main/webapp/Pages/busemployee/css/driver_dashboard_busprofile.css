@@ -147,6 +147,7 @@ a{
         border-radius: 20px;
         background-color: #EAEDED;
         box-shadow: 0 0 10px rgba(0, 0, 0, 0.8);
+        
     }
     .box:hover {
             background-color:#E5E8E8;
