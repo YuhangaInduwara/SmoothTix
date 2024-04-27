@@ -8,6 +8,7 @@ body{
     display: flex;
     flex-direction: row;
 }
+
 .sidebar{
     background-color: #cccccc;
     display: flex;
@@ -92,6 +93,7 @@ a{
     width: 40px;
 }
 
+
 .content_container{
     flex: 1;
     display: flex;
@@ -167,14 +169,14 @@ a{
         }
 
         /* Style for form */
-/*form {
+form {
             border: 1px solid #ccc;
             padding: 30px;
             border-radius: 8px;
             max-width: 550px;
             margin-left:70px;
         }
-*/
+
         /* Style for form labels */
 label {
             display: block; /* Make labels display as block to appear above inputs */
@@ -185,7 +187,7 @@ label {
 
         /* Style for form inputs */
 input[type="text"] {
-            width: 90%; /* Take up full width */
+            width: 100%; /* Take up full width */
             padding: 10px; /* Add padding for better appearance */
             border: 1px solid #ccc; /* Add border */
             border-radius: 3px; /* Add border radius */
