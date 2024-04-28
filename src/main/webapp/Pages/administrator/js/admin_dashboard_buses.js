@@ -220,7 +220,6 @@ function updateBusRequest(bus_id, action){
                     openAlert( "Request Accept Failed", "alertFail");
                 }
             } else {
-                console.error('Error:', response.status);
                 if(action === 'decline'){
                     openAlert( "Request Decline Failed", "alertFail");
                 }
@@ -230,7 +229,6 @@ function updateBusRequest(bus_id, action){
             }
         })
         .catch(error => {
-            console.error('Error:', error);
             if(action === 'decline'){
                 openAlert( "Request Decline Failed", "alertFail");
             }

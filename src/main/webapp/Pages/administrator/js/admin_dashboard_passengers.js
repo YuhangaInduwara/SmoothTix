@@ -109,7 +109,6 @@ function changePage(newPage, isFlag) {
             isFlag ? (document.getElementById("flag_nextPageIcon").style.opacity = "1") : (document.getElementById("nextPageIcon").style.opacity = "1");
             updatePage(isFlag ? currentFlagPage : currentPage, isFlag);
         } else {
-            console.log(`Next ${isFlag ? 'flag ' : ''}page is empty`);
             isFlag ? (document.getElementById("flag_nextPageIcon").style.opacity = "0.5") : (document.getElementById("nextPageIcon").style.opacity = "0.5");
         }
     }
@@ -183,11 +182,6 @@ function displayDataAsTable(data, flag) {
         }
     });
 }
-
-// <img
-//     src="${(item.privilege_level === 2) ? '../../../images/vector_icons/delete_icon.png' : '../../../images/vector_icons/flag_icon.png'}"
-//     alt="${(item.privilege_level === 2) ? 'delete' : 'flag'}"
-//     className="action_icon"/>
 
 function renderPageControl(flag) {
     if (flag === true) {
@@ -316,12 +310,10 @@ function FlagConfirm() {
         .then(response => {
             if (response.ok) {
                 openFlagSuccess(currentFlag)
-                // closeFlagAlert(currentFlag)
             } else if (response.status === 401) {
                 openFlagFail(response.status, currentFlag);
             } else {
                 openFlagFail(response.status, currentFlag);
-                console.error('Error:', response.status);
             }
         })
         .catch(error => {
@@ -363,8 +355,6 @@ function searchData() {
             privilege_number= 5;
         }
 
-        console.log(privilege_number)
-        console.log(normalData)
         normalDataSearch = normalData.filter(user =>
             user.privilege_level === privilege_number
         );
