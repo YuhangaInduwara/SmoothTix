@@ -9,14 +9,17 @@ let normalDataSearch = [];
 let flagDataSearch = [];
 let searchOption = 'p_id';
 
+// session management (authentication and authorization)
 document.addEventListener('DOMContentLoaded', function () {
     isAuthenticated().then(() => fetchAndDisplayData(false));
 });
 
+// refresh the page
 function refreshPage() {
     location.reload();
 }
 
+// get all passenger data from database
 async function fetchAndDisplayData(flag) {
     try {
         document.getElementById("userName").textContent = session_user_name;
@@ -47,6 +50,7 @@ async function fetchAndDisplayData(flag) {
     }
 }
 
+// create data chunks for each page and call display function for each of them
 function updatePage(page, flag, search) {
     const tableBody = document.querySelector(flag ? "#flagTable tbody" : "#dataTable tbody");
     const startIndex = (page - 1) * pageSize;
@@ -66,15 +70,17 @@ function updatePage(page, flag, search) {
     flag ? updateFlagPageNumber(currentFlagPage) : updatePageNumber(currentPage);
 }
 
-
+// update the page number on page control icons for non flagged page
 function updatePageNumber(page) {
     document.getElementById("currentPageNumber").textContent = page;
 }
 
+// update the page number on page control icons for flagged page
 function updateFlagPageNumber(page) {
     document.getElementById("flag_currentPageNumber").textContent = page;
 }
 
+// event listeners for page control buttons
 const prevPageIcon = document.getElementById("prevPageIcon");
 prevPageIcon.addEventListener("click", (event) => {
     event.stopPropagation();
@@ -99,7 +105,7 @@ flag_nextPageIcon.addEventListener("click", (event) => {
     changePage(currentFlagPage + 1, true);
 }, true);
 
-
+// change the page number
 function changePage(newPage, isFlag) {
     const data = getDataForPage(newPage, isFlag);
 
@@ -114,13 +120,14 @@ function changePage(newPage, isFlag) {
     }
 }
 
-
+// select among flag and non flag pages
 function getDataForPage(page, flag) {
     const startIndex = (page - 1) * pageSize;
     const endIndex = startIndex + pageSize;
     return flag ? flagData.slice(startIndex, endIndex) : normalData.slice(startIndex, endIndex);
 }
 
+// display chunked data on the UI
 function displayDataAsTable(data, flag) {
     let tableBody = ""
     if (flag === true) {
@@ -130,6 +137,7 @@ function displayDataAsTable(data, flag) {
     }
 
     const rowCount = data.length;
+    // check for empty pages
     if (rowCount === 0) {
         const noDataRow = document.createElement("tr");
         noDataRow.innerHTML = `<td colspan="6">No data available</td>`;
@@ -137,6 +145,7 @@ function displayDataAsTable(data, flag) {
         return;
     }
 
+    // display page controls if row count is greater than 10
     if (rowCount >= 10) {
         renderPageControl(flag)
     }
@@ -183,6 +192,7 @@ function displayDataAsTable(data, flag) {
     });
 }
 
+// display page control icons according to flag or non flag
 function renderPageControl(flag) {
     if (flag === true) {
         document.getElementById("flag_page_control").style.display = "flex";
@@ -191,6 +201,7 @@ function renderPageControl(flag) {
     }
 }
 
+// select the user roles according to the privilege_level
 function mapPrivilegeLevel(privilege_level) {
     switch (privilege_level) {
         case 1:
@@ -210,6 +221,7 @@ function mapPrivilegeLevel(privilege_level) {
     }
 }
 
+// show confirmation for flag a passenger
 function openFlagConfirm(p_id, flag) {
     toBeFlagged = p_id;
     currentFlag = flag;
@@ -225,6 +237,7 @@ function openFlagConfirm(p_id, flag) {
     }
 }
 
+// close the flag confirmation window
 function closeFlagAlert(flag) {
     toBeFlagged = "";
     currentFlag = false;
@@ -237,12 +250,14 @@ function closeFlagAlert(flag) {
 
 }
 
+// view flagged users
 function openFlagged() {
     document.getElementById("flagTable").style.display = "block";
     document.getElementById("overlay").style.display = "block";
     fetchAndDisplayData(true);
 }
 
+// close flagged users
 function closeFlagged() {
     document.getElementById("flagTable").style.display = "none";
     document.getElementById("overlay").style.display = "none";
@@ -251,6 +266,7 @@ function closeFlagged() {
     fetchAndDisplayData(false);
 }
 
+// show success message
 function openFlagSuccess(flag) {
     if (flag === "true") {
         document.getElementById("confirmFlagAlert").style.display = "none";
@@ -263,6 +279,7 @@ function openFlagSuccess(flag) {
     }
 }
 
+// close success message
 function closeAlertSuccess(flag) {
     if (flag === false) {
         document.getElementById("successFlagAlert").style.display = "none";
@@ -274,6 +291,7 @@ function closeAlertSuccess(flag) {
     }
 }
 
+// show fail message
 function openFlagFail(response, flag) {
     if (flag === "true") {
         document.getElementById("failFlagMsg").innerHTML = "Operation failed (" + response + ")";
@@ -286,12 +304,14 @@ function openFlagFail(response, flag) {
 
 }
 
+// close fail message
 function closeAlertFail() {
     document.getElementById("failAlert").style.display = "none";
     document.getElementById("overlay").style.display = "none";
     window.location.href = "../html/admin_dashboard_buses.html";
 }
 
+// flag a selected passenger
 function FlagConfirm() {
     const updatedFlag = {
         flag: currentFlag,
@@ -321,9 +341,11 @@ function FlagConfirm() {
         });
 }
 
+// event listener for search button
 const searchInput = document.getElementById("searchInput");
 searchInput.addEventListener("keyup", searchData);
 
+// filter data according to the search options
 function searchData() {
     const searchTerm = document.getElementById("searchInput").value;
     const search = searchTerm.toLowerCase();
@@ -371,6 +393,7 @@ function searchData() {
     updatePage(currentPage, false, true);
 }
 
+// event listener for search option drop down
 const searchSelect = document.getElementById("searchSelect");
 searchSelect.addEventListener("change", (event) => {
     searchOption = event.target.value;

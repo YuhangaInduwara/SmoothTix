@@ -1,7 +1,9 @@
+// session management (authentication and authorization)
 document.addEventListener('DOMContentLoaded', function () {
-    isAuthenticated().then(() => fetchAllData());
+    isAuthenticated().then(() => init());
 });
 
-function fetchAllData() {
+// set username in dashboard
+function init() {
     document.getElementById("userName").textContent = session_user_name;
 }
