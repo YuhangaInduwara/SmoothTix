@@ -23,7 +23,6 @@ public class reportTable {
             }
             String ownerId = rs.getString("owner_id");
 
-            // Get total seats booked
             String sql2 = " SELECT COUNT(bs.seat_no) AS totalSeats \n" +
                     " FROM booking b \n" +
                     " JOIN booked_seats bs ON b.booking_id = bs.booking_id \n" +
@@ -39,7 +38,6 @@ public class reportTable {
             rs = ps.executeQuery();
             int totalSeatsBooked = rs.next() ? rs.getInt("totalSeats") : 0;
 
-            // Get total payments and deleted payments
             String sql3 = "SELECT \n" +
                     "    SUM(p.amount) AS totalPayments  \n" +
                     "FROM \n" +
@@ -75,7 +73,6 @@ public class reportTable {
             rs = ps.executeQuery();
             int totalPaymentsDeleted = rs.next() ? rs.getInt("deletedPayments") : 0;
 
-            // Create a report entry
             String sql5 = "INSERT INTO owner_report (report_id,owner_id, date_time, report_details) VALUES (?, ?, NOW(), ?)";
             ps = con.prepareStatement(sql5);
             ps.setString(1, generateReportID());
