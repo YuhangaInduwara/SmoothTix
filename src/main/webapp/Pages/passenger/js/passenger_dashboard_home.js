@@ -1,5 +1,4 @@
-
- function createForm() {
+function createForm() {
     const form_add = document.createElement('div');
     form_add.classList.add('bus_add_form_body');
 
@@ -23,8 +22,7 @@
 
     form_add.innerHTML = form.replace(/id="/g, 'id="add_');
     const formContainer_add = document.getElementById('formContainer_add');
-    formContainer_add.appendChild(form_add.cloneNode(true)); // Clone the form
-
+    formContainer_add.appendChild(form_add.cloneNode(true));
 }
 
 function showSuggestions1(event) {
@@ -147,7 +145,6 @@ function closeAlertFail() {
     window.location.href = "../html/passenger_dashboard_home.html";
 }
 
-// Add new bus to the database
 document.getElementById("busRegForm").addEventListener("submit", function(event) {
     event.preventDefault();
     const reg_no = document.getElementById("add_reg_no").value;
@@ -159,10 +156,9 @@ document.getElementById("busRegForm").addEventListener("submit", function(event)
         route_no: route_no,
         no_of_Seats: no_of_Seats,
     };
-    console.log(userData);
+
     const jsonData = JSON.stringify(userData);
 
-    // Assuming `url` is defined elsewhere and `session_p_id` is available in your session storage or a similar place.
     fetch(`${url}/busController`, {
         method: 'POST',
         headers: {
@@ -173,24 +169,20 @@ document.getElementById("busRegForm").addEventListener("submit", function(event)
     })
     .then(response => {
         if (response.ok) {
-            // If the response is OK (200 status), handle success
-            closeForm_add(); // Assuming this function closes your form
-            openAlertSuccess("Successfully Added!"); // Assuming this function shows a success message
+            closeForm_add();
+            openAlertSuccess("Successfully Added!");
         } else if (response.status === 409) {
-            // Handle the specific case of a conflict (duplicate entry)
             return response.text().then(error_msg => {
-                openAlertFail(error_msg); // Assuming this function shows an error message
+                openAlertFail(error_msg);
             });
         } else {
-            // Handle other types of errors generically
             return response.text().then(error_msg => {
-                openAlertFail("Failed to add bus: " + error_msg);
+                openAlertFail("Failed To Add Bus: " + error_msg);
             });
         }
     })
     .catch(error => {
-        console.error('Error:', error);
-        openAlertFail("An error occurred while processing your request."); // General error handling
+        openAlertFail("An Error Occurred While Processing Your Request.");
     });
 });
 
@@ -217,8 +209,8 @@ function updateCount(targetElement) {
             const totalRecords = data.smooth_points;
 
             let currentCount = 0;
-            const incrementInterval = 100; // Adjust the interval as needed (in milliseconds)
-            const incrementStep = Math.ceil(totalRecords / (1000 / incrementInterval)); // Assuming 1000 ms is 1 second
+            const incrementInterval = 100;
+            const incrementStep = Math.ceil(totalRecords / (1000 / incrementInterval));
 
             const incrementTimer = setInterval(() => {
                 currentCount += incrementStep;
@@ -250,33 +242,21 @@ function fetchNextBooking(){
             }
         })
         .then(data => {
-            console.log(data);
             const currentTime = new Date();
-            console.log(currentTime);
-            // Filter the bookings
+
             const latestBooking = data.filter(booking => {
-                // Convert booking date and time to JavaScript Date object
                 const bookingDateTime = new Date(`${booking.date}T${booking.time}`);
-                console.log(bookingDateTime);
-                console.log(booking.status === 0);
-                console.log(bookingDateTime > currentTime);
-                // Check if booking status is 0 and booking date and time is greater than current time
                 return booking.status === 0 && bookingDateTime > currentTime;
             });
 
-            console.log(latestBooking);
-            // Sort the filtered bookings by date and time in ascending order
             latestBooking.sort((a, b) => {
                 const dateA = new Date(`${a.date}T${a.time}`);
                 const dateB = new Date(`${b.date}T${b.time}`);
                 return dateA - dateB;
             });
 
-            // Get the latest booking
             const latestBookingInfo = latestBooking[0];
             document.getElementById("current_booking").textContent = latestBookingInfo.date + " " + latestBookingInfo.time;
-            console.log(latestBookingInfo);
-            console.log(latestBookingInfo.date + " " + latestBookingInfo.time);
         })
         .catch(error => {
             console.error('Error:', error);
