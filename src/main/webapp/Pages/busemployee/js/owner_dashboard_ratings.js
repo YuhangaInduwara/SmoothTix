@@ -58,15 +58,15 @@ console.log(owner_id)
             })
             .catch(error => {
                console.error('Error:', error);
-                                      // Display error message as a form
-                                      const errorMessageForm = document.createElement("div");
-                                      errorMessageForm.classList.add("box");
+                  // Display error message as a form
+                  const errorMessageForm = document.createElement("div");
+                  errorMessageForm.classList.add("box");
 
-                                      const errorMessage = document.createElement("p");
-                                      errorMessage.textContent = "Error fetching data. Please try again later.";
+                  const errorMessage = document.createElement("p");
+                  errorMessage.textContent = "Error fetching data. Please try again later.";
 
-                                      errorMessageForm.appendChild(errorMessage);
-                                      document.getElementById("formContainer").appendChild(errorMessageForm);
+                  errorMessageForm.appendChild(errorMessage);
+                  document.getElementById("formContainer").appendChild(errorMessageForm);
             });
 }
 
@@ -152,7 +152,7 @@ function displayDataAsForms(data) {
 
          const errorMessage = document.createElement("h2");
          errorMessage.classList.add("errorMgText"); // Apply error message text style
-         errorMessage.textContent = "Your bus have no any points !";
+         errorMessage.textContent = "Your bus have no any Ratings !";
          errorMessageForm.appendChild(errorMessage);
          formContainer.appendChild(errorMessageForm);
      }
