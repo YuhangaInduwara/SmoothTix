@@ -21,7 +21,6 @@ function refreshPage() {
 setSearchStands();
 
 function setSearchStands() {
-
     fetch(`${url}/routeController?request_data=stand_list`, {
         method: 'GET',
         headers: {
@@ -49,7 +48,6 @@ function setSearchStands() {
                     option_start.text = standData[i].stand_list;
                     option_start.value = standData[i].stand_list;
                     dropdown_start.add(option_start);
-
                     let option_destination = document.createElement("option");
                     option_destination.text = standData[i].stand_list;
                     option_destination.value = standData[i].stand_list;
@@ -112,7 +110,6 @@ function fetchAllData() {
         .then(data => {
             allData = data;
             document.getElementById("noOfPages").textContent = parseInt(allData.length / 3) + 1;
-            console.log(allData)
             updatePage(currentPage);
         })
         .catch(error => {
@@ -125,7 +122,6 @@ function updatePage(page) {
     const startIndex = (page - 1) * pageSize;
     const endIndex = startIndex + pageSize;
     const dataToShow = allData.slice(startIndex, endIndex);
-
     tableBody.innerHTML = "";
     displayDataAsTable(dataToShow);
     updatePageNumber(currentPage);
@@ -242,9 +238,7 @@ document.getElementById("busRegForm").addEventListener("submit", function(event)
     const destination = document.getElementById("add_destination").value;
     const date = document.getElementById("add_date").value;
     const time = document.getElementById("add_time").value;
-
     date_time = date + " " + time;
-
     fetch(`${ url }/feasibilityController?start=${start}&destination=${destination}&date=${date}&time=${time}`, {
         method: 'GET',
         headers: {
@@ -343,14 +337,11 @@ function updateRow(schedule_id){
 
     document.getElementById("busUpdateForm").addEventListener("submit", function(event) {
         event.preventDefault();
-
         const start = timeKeeper_stand;
         const destination = document.getElementById("update_destination").value;
         const date = document.getElementById("update_date").value;
         const time = document.getElementById("update_time").value;
-
         date_time = date + " " + time;
-
         fetch(`${ url }/feasibilityController?start=${start}&destination=${destination}&date=${date}&time=${time}`, {
             method: 'GET',
             headers: {
@@ -477,10 +468,8 @@ function createForm() {
     const formContainer_add = document.getElementById('formContainer_add');
     const formContainer_update = document.getElementById('formContainer_update');
 
-    formContainer_add.appendChild(form_add.cloneNode(true)); // Clone the form
-    formContainer_update.appendChild(form_update.cloneNode(true)); // Clone the form
-
-    // showSuggestions({ target: document.getElementById('add_destination') });
+    formContainer_add.appendChild(form_add.cloneNode(true));
+    formContainer_update.appendChild(form_update.cloneNode(true));
 }
 
 function showSuggestions(event) {
@@ -608,7 +597,6 @@ function handleRowClick(data) {
     }
 }
 
-
 document.getElementById("bpSelection").addEventListener("submit", function(event) {
     event.preventDefault();
 
@@ -727,9 +715,8 @@ function startFetchingLocation(schedule_id) {
     fetchAndUpdateLocation(schedule_id);
     fetchInterval = setInterval(() => {
         fetchAndUpdateLocation(schedule_id);
-    }, 1000); // Fetch location every 1 second
+    }, 1000);
 }
-
 
 function stopFetchingLocation() {
     clearInterval(fetchInterval);
