@@ -57,7 +57,6 @@ function update(p_id){
 
     let existingData = {};
     const urlParams = new URLSearchParams(window.location.search);
-
     fetch(`${ url }/passengerController`, {
         method: 'GET',
         headers: {

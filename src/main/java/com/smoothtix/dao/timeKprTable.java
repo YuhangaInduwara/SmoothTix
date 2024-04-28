@@ -59,7 +59,6 @@ public class timeKprTable {
         }
     }
 
-
     private static String generate_timekpr_id() throws SQLException {
         Connection con;
         Statement stmt;
