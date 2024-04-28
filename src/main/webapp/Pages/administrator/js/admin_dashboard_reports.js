@@ -59,6 +59,10 @@ function generateReport() {
     const startDateFormatted = startDateInput.value;
     const endDateFormatted = endDateInput.value;
 
+    document.getElementById('startDateError').textContent = "";
+    document.getElementById('endDateError').textContent = "";
+    document.getElementById('routeNoError').textContent = "";
+
     startDateInput.style.border = '';
     startDateInput.title = '';
     endDateInput.style.border = '';
@@ -72,32 +76,40 @@ function generateReport() {
 
     if (isStartDateEmpty) {
         setErrorMsg(startDateInput, "Please enter a start date.");
+        document.getElementById('startDateError').textContent = "Please enter a start date.";
     } else if (isEndDateEmpty) {
         setErrorMsg(endDateInput, "Please enter an end date.");
+        document.getElementById('endDateError').textContent = "Please enter an end date.";
     } else if (isRouteNoEmpty) {
         setErrorMsg(routeNoSelect, "Please select a Route number.");
+        document.getElementById('routeNoError').textContent = "Please select a bus registration number.";
     } else {
         const isStartDateValid = validateDate(startDate);
         if (!isStartDateValid) {
             setErrorMsg(document.getElementById('StartdatePicker'), "Please enter a valid start date.");
+            document.getElementById('startDateError').textContent = "Please enter a valid start date.";
             return;
         }
 
         const isEndDateValid = validateDate(endDate);
         if (!isEndDateValid) {
             setErrorMsg(document.getElementById('EnddatePicker'), "Please enter a valid end date.");
+            document.getElementById('endDateError').textContent = "Please enter a valid end date.";
             return;
         }
 
         if (new Date(startDate) > new Date(endDate)) {
             setErrorMsg(document.getElementById('StartdatePicker'), "Start date must be before end date.");
             setErrorMsg(document.getElementById('EnddatePicker'), "End date must be after start date.");
+            document.getElementById('startDateError').textContent = "Start date must be before end date.";
+            document.getElementById('endDateError').textContent = "End date must be after start date.";
             return;
         }
 
         const isRouteNoValid = routeNo !== "";
         if (!isRouteNoValid) {
             setErrorMsg(document.getElementById('routeNoSelect'), "Please select a Route number.");
+            document.getElementById('routeNoError').textContent = "Please select a Route number.";
             return;
         }
 
@@ -130,6 +142,7 @@ function generateReport() {
             document.getElementById("routeNo").textContent = routeNo;
             document.getElementById("totalSeatsBooked").textContent = data.totalSeatsBooked;
             document.getElementById("totalBusesScheduled").textContent = data.totalBusesScheduled;
+            document.getElementById("commission").textContent = data.commission;
             document.getElementById("TotalAmount").textContent = data.TotalAmount;
             document.getElementById("downloadReportButton").disabled = false;
             openAlertSuccess("Report generated successfully!");

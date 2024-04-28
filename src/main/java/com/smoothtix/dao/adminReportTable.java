@@ -47,7 +47,11 @@ public class adminReportTable {
         ps.setString(2, startDate);
         ps.setString(3, endDate);
         rs = ps.executeQuery();
+
         double TotalAmount = rs.next() ? rs.getDouble("total_amount") : 0;
+
+        double commission = TotalAmount * 0.05;
+        TotalAmount -= commission;
 
         String sql4 = "SELECT COUNT(*) AS total_buses_scheduled\n" +
                 "FROM schedule s\n" +
@@ -68,11 +72,11 @@ public class adminReportTable {
         ps = con.prepareStatement(sql5);
         ps.setString(1, generateReportID());
         System.out.println(generateReportID());
-        ps.setString(2, String.format("Bus Reg No: %s, Date Range: %s to %s, Total Amount: Rs.%f, Total Seats Booked: %d, Total buses scheduled on that route: %d",
-                routeNo, startDate, endDate, TotalAmount, totalSeatsBooked, totalBusesScheduled));
+        ps.setString(2, String.format("Bus Reg No: %s, Date Range: %s to %s, Total Amount: Rs.%f, Total Seats Booked: %d, Total buses scheduled on that route: %d, Commission: Rs.%f",
+                routeNo, startDate, endDate, TotalAmount, totalSeatsBooked, totalBusesScheduled, commission));
         ps.executeUpdate();
 
-        AdminReport report = new AdminReport(startDate + " to " + endDate, routeNo, totalSeatsBooked, totalBusesScheduled, TotalAmount);
+        AdminReport report = new AdminReport(startDate + " to " + endDate, routeNo, totalSeatsBooked, totalBusesScheduled, commission,TotalAmount);
         return report;
 
     }
