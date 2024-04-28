@@ -138,46 +138,7 @@ a{
     flex: 1;
     display: flex;
     margin: 15px;
-    /*height: 40px;*/
-    /*gap: 5px;*/
-    /*justify-content: flex-end;*/
-    /*transition: transform 0.1s;*/
 }
-
-/*.search {*/
-/*    background-color: rgba(176, 176, 176, 0.4);*/
-/*    padding: 7px;*/
-/*    border-radius: 10px;*/
-/*    display: flex;*/
-/*    align-items: center;*/
-/*    gap: 10px;*/
-/*}*/
-
-/*.search:hover{*/
-/*    transform: scale(1.1);*/
-/*}*/
-
-/*.search_input {*/
-/*    border: none;*/
-/*    background: transparent;*/
-/*    outline: none;*/
-/*    width: 100%;*/
-/*    color: #000000;*/
-/*    font-size: 16px;*/
-/*    margin-left: 5px;*/
-/*}*/
-
-/*.search_img {*/
-/*    width: 20px;*/
-/*    height: 20px;*/
-/*    opacity: 0.7;*/
-/*    cursor: pointer;*/
-/*    margin-right: 5px;*/
-/*}*/
-
-/*.search_img:hover {*/
-/*    opacity: 1.5;*/
-/*}*/
 
 #searchButton {
     background: none;
@@ -313,12 +274,10 @@ select::after {
     border: 1px solid #cccccc;
     box-shadow: 0 0 5px rgba(0.1, 0.1, 0.1, 0.1);
     background-color: white; width: 97%; display: flex; flex-direction: column; justify-content: space-between; align-items: center; border-radius: 10px; height:150px;
-    /*background: linear-gradient(90deg, rgba(255, 1, 1, 0.47) -10%, rgba(26, 1, 2, 0) 100%); width: 97%; display: flex; flex-direction: column; justify-content: space-between; align-items: center; border-radius: 10px;height:150px;*/
 }
 
 .schedule_element_row1{
     display: flex; flex-direction: row; justify-content: space-between; width: 95%; margin-top: 1px; margin-left: 40px; margin-right: 40px;
-    /*gap: 100px;*/
 }
 
 .schedule_element_row2{
@@ -332,7 +291,6 @@ select::after {
 
 .busRegNo{
     border: 1px solid #cccccc;
-    /*box-shadow: 0 0 10px rgba(0.1, 0.1, 0.1, 0.1);*/
     background-color: rgba(238, 0, 0, 0.83);
     width:  170px;display:flex;justify-content:center;align-items:center;height: 65px; border-radius: 10px; margin-top: 15px;
 }
@@ -362,6 +320,7 @@ select::after {
     flex-wrap: wrap;
     justify-content: center;
 }
+
 .row {
     display: flex;
     flex-direction: row;
@@ -378,11 +337,13 @@ select::after {
     text-align: center;
     line-height: 30px;
 }
+
 .seat.selected {
     background-color: #5cb85c;
     color: white;
     border: 1px solid #4cae4c;
 }
+
 #booking-details {
     margin-top: 20px;
 }
@@ -613,21 +574,6 @@ label {
     width: 50px;
 }
 
-/*.alert {*/
-/*    position: absolute;*/
-/*    top: 100%;*/
-/*    margin-bottom: 10px;*/
-/*}*/
-
-/*.alert {*/
-/*    background-color: #ffdddd;*/
-/*    color: #ff0000;*/
-/*    padding: 8px;*/
-/*    margin-top: 5px;*/
-/*    font-size: 14px;*/
-/*    border-radius: 4px;*/
-/*}*/
-
 .alert {
     background-color: #ffdddd;
     color: #ff0000;
@@ -684,62 +630,19 @@ label {
     100% { transform: rotate(360deg); }
 }
 
-
-
-
-
-
-
-
-
-
-
-
 body {
     margin: 0;
     background-color: white;
     max-height: 100vh;
 }
 
-/* ... (rest of your styles) ... */
-
-/* Media Queries */
-
-/* Small screens (phones) */
 @media only screen and (max-width: 600px) {
     .dashboard {
-        flex-direction: column; /* Stack items vertically on small screens */
+        flex-direction: column;
     }
 
     .sidebar {
-        width: 100%; /* Full width on small screens */
-        margin: 0; /* Remove margins on small screens */
+        width: 100%;
+        margin: 0;
     }
-
-    /* Add more specific styles for small screens if needed */
-}
-
-/* Medium screens (tablets) */
-@media only screen and (min-width: 601px) and (max-width: 1024px) {
-    /* Adjust styles for medium-sized screens */
-}
-
-/* Large screens (desktops) */
-@media only screen and (min-width: 1025px) {
-    /* Adjust styles for large screens */
-}
-
-/* Extra-large screens (large desktops, TVs) */
-@media only screen and (min-width: 1441px) {
-    /* Adjust styles for extra-large screens */
-}
-
-/* Landscape orientation */
-@media only screen and (orientation: landscape) {
-    /* Adjust styles for landscape orientation */
-}
-
-/* Portrait orientation */
-@media only screen and (orientation: portrait) {
-    /* Adjust styles for portrait orientation */
 }

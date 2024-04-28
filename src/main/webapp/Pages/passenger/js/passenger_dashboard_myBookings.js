@@ -29,7 +29,6 @@ function setSearchStands() {
             }
         })
         .then(data => {
-
             if (data) {
                 standData = data;
 
@@ -86,7 +85,6 @@ function fetchAllData(){
 
                 return a.time.localeCompare(b.time);
             });
-            console.log(allData);
             displayDataAsScheduleTiles_0(allData);
             displayDataAsScheduleTiles_1(allData);
         })
@@ -94,55 +92,6 @@ function fetchAllData(){
             console.error('Error:', error);
         });
 }
-
-// function updatePage(page) {
-//     const list = document.getElementById("schedule_list");
-//     const startIndex = (page - 1) * pageSize;
-//     const endIndex = startIndex + pageSize;
-//     const dataToShow = allData.slice(startIndex, endIndex);
-//
-//     list.innerHTML = "";
-//     console.log(startIndex + " " +dataToShow + " " + endIndex)
-//     displayDataAsScheduleTiles_0(dataToShow);
-//     updatePageNumber(currentPage);
-// }
-//
-// function updatePageNumber(page) {
-//     document.getElementById("currentPageNumber").textContent = page;
-// }
-//
-// const prevPageIcon = document.getElementById("prevPageIcon");
-// prevPageIcon.addEventListener("click", (event) => {
-//     event.stopPropagation();
-//     changePage(currentPage - 1);
-// }, true);
-//
-// const nextPageIcon = document.getElementById("nextPageIcon");
-// nextPageIcon.addEventListener("click", (event) => {
-//     event.stopPropagation();
-//     changePage(currentPage + 1);
-// }, true);
-//
-// function changePage(newPage) {
-//     const data = getDataForPage(newPage);
-//
-//     if (currentPage !== newPage) {
-//         if (data.length > 0) {
-//             currentPage = Math.max(1, newPage);
-//             document.getElementById("nextPageIcon").style.opacity = "1";
-//             updatePage(currentPage);
-//         } else {
-//             console.log(`Next page is empty`);
-//             document.getElementById("nextPageIcon").style.opacity = "0.5";
-//         }
-//     }
-// }
-//
-// function getDataForPage(page) {
-//     const startIndex = (page - 1) * pageSize;
-//     const endIndex = startIndex + pageSize;
-//     return allData.slice(startIndex, endIndex);
-// }
 
 function displayDataAsScheduleTiles_0(data) {
     const scheduleList = document.getElementById("schedule_list");
@@ -163,7 +112,6 @@ function displayDataAsScheduleTiles_0(data) {
         const itemDateTime = new Date(item.date + 'T' + item.time);
         const timeDiff = itemDateTime - now;
         const diffInHours = timeDiff / (1000 * 60 * 60);
-        console.log("Diftime: " + diffInHours + " date+time: " + itemDateTime + " test: " + item.date + " " + item.time)
 
         if (counter < 2 && item.status === 0) {
             if (item.schedule_status === 0 && diffInHours > 2) {
@@ -232,7 +180,6 @@ function displayDataAsScheduleTiles_1(data) {
 
     let buttonsHTML = '';
     data.forEach(item => {
-        console.log(item)
         if(counter < 2 && item.status === 1){
             if (item.schedule_status === 1) {
                 buttonsHTML = `
@@ -305,7 +252,7 @@ let marker;
 let fetchInterval;
 
 function fetchAndUpdateLocation(schedule_id) {
-    fetch(`../../../locationController?schedule_id=${schedule_id}`, {
+    fetch(`${ url }/locationController?schedule_id=${schedule_id}`, {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json',
@@ -316,7 +263,6 @@ function fetchAndUpdateLocation(schedule_id) {
             if (data.length > 0) {
                 const lat = data[0].latitude;
                 const lng = data[0].longitude;
-                console.log("lat: " + lat + " lng: " + lng);
                 updateMarkerPosition(lat, lng);
             }
         })
@@ -344,7 +290,7 @@ function startFetchingLocation(schedule_id) {
     fetchAndUpdateLocation(schedule_id);
     fetchInterval = setInterval(() => {
         fetchAndUpdateLocation(schedule_id);
-    }, 1000); // Fetch location every 1 second
+    }, 1000);
 }
 
 
@@ -353,7 +299,6 @@ function stopFetchingLocation() {
 }
 
 function ViewLocation(schedule_id){
-    console.log(schedule_id)
     document.getElementById("locationView").style.display = "flex";
     document.getElementById("overlay").style.display = "block";
 
@@ -362,7 +307,6 @@ function ViewLocation(schedule_id){
 }
 
 let previousMapSize = { width: 0, height: 0 };
-
 function resizeMap() {
     const currentMapSize = {
         width: document.getElementById('map').clientWidth,
@@ -428,7 +372,7 @@ document.getElementById("review_form").addEventListener("submit", function(event
             if (response.ok) {
                 return response.json();
             } else {
-                openAlert( "You only can review a journey once!", "alertFail");
+                openAlert( "You Can Only Review A Journey Once!", "alertFail");
                 console.log("Error:", response.status);
             }
         })
@@ -460,7 +404,7 @@ function addReview(point_id, booking_id, comments){
     })
         .then(response =>{
             if(response.ok){
-                openAlert( "Successfully reviewed", "alertSuccess");
+                openAlert( "Successfully Reviewed", "alertSuccess");
             }
             else{
                 openAlert( "Review Unsuccessful", "alertFail");
@@ -520,7 +464,6 @@ function openDeleteConfirmation(seat_no) {
 
             if (this.classList.contains("selected")) {
                 seat_delete.push(seat);
-                console.log(seat)
             } else {
                 let index = seat_delete.indexOf(seat);
                 if (index !== -1) {
@@ -547,21 +490,18 @@ function closeDeleteConfirmation(){
 
 function deleteBookingPayment(){
     if(booking_id_delete === ''){
-        console.log('booking_id_delete is null');
+        console.error('booking_id_delete is null');
     }
     else if(seat_delete.length === 0){
-        console.log(seat_delete)
         showAlert(document.getElementById("seatToBeDeleted"), "Please select one or more seats to be deleted.");
     }
     else if(!document.getElementById("declaration").checked){
         showAlert(document.getElementById("declaration"), "Please agree to the terms and conditions.");
     }
     else if(seat_delete.length === all_seats.length){
-        console.log("1: " + seat_delete + " all seats:" + all_seats)
         deleteFetch(booking_id_delete, seat_delete, "flag");
     }
     else if(seat_delete.length < all_seats.length){
-        console.log("m: " + seat_delete + " all seats:" + all_seats)
         deleteFetch(booking_id_delete, seat_delete, "update");
     }
 }
@@ -602,8 +542,7 @@ function deleteFetch(booking_id, selected_seat, action){
             if (response.ok) {
                 openAlert( "Successfully deleted", "alertSuccess");
             } else {
-                openAlert( "Deletion unsuccessful!", "alertFail");
-                console.log("Error:", response.status);
+                openAlert( "Deletion unsuccessful!", "alertFail");;
             }
         })
         .catch(error => {
@@ -612,7 +551,6 @@ function deleteFetch(booking_id, selected_seat, action){
 }
 
 function openSeeMore(page){
-    console.log(page)
     document.getElementById("seeMoreBookings").style.display = "block";
     document.getElementById("overlay").style.display = "block";
 

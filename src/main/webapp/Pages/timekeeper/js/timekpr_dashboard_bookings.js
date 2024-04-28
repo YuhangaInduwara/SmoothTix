@@ -44,7 +44,6 @@ function updatePage(page, search) {
 
     let dataToShow;
     if(search){
-        console.log("hello: " + allSearchData)
         dataToShow = allSearchData.slice(startIndex, endIndex);
     }
     else{
@@ -66,7 +65,6 @@ const nextPageIcon = document.getElementById("nextPageIcon");
 nextPageIcon.addEventListener("click", () => changePage(currentPage));
 
 function changePage(newPage) {
-    console.log(currentPage + "  " + newPage)
     if (currentPage !== newPage) {
         currentPage = Math.max(1, newPage);
         updatePage(currentPage, false);

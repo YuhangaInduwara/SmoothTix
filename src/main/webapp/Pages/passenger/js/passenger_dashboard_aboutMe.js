@@ -1,13 +1,12 @@
 let isMatched;
+
 document.addEventListener('DOMContentLoaded', function () {
     isAuthenticated().then(() => fetchAllData());
 });
 
-fetchAllData();
-
 function fetchAllData() {
     document.getElementById("userName").textContent = session_user_name;
-    fetch('../../../passengerController', {
+    fetch(`${ url }/passengerController`, {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json',
@@ -59,7 +58,7 @@ function update(p_id){
     let existingData = {};
     const urlParams = new URLSearchParams(window.location.search);
 
-    fetch('../../../passengerController', {
+    fetch(`${ url }/passengerController`, {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json',
@@ -105,7 +104,7 @@ function update(p_id){
 
         const jsonData = JSON.stringify(updatedData);
 
-        fetch('../../../passengerController', {
+        fetch(`${ url }/passengerController`, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',
@@ -118,16 +117,13 @@ function update(p_id){
                     closeForm_update();
                     openAlert( "Profile Successfully Updated!", "alertSuccess");
                 } else if (response.status === 401) {
-                    openAlert( "Update unsuccessful", "alertFail");
-                    console.log('Update unsuccessful');
+                    openAlert( "Update Unsuccessful", "alertFail");
                 } else {
-                    openAlert( "Update unsuccessful", "alertFail");
-                    console.error('Error:', response.status);
+                    openAlert( "Update Unsuccessful", "alertFail");
                 }
             })
             .catch(error => {
-                openAlert( "Update unsuccessful", "alertFail");
-                console.error('Error:', error);
+                openAlert( "Update Unsuccessful", "alertFail");
             });
     });
 }
@@ -139,9 +135,7 @@ document.getElementById("passengerPasswordForm").addEventListener("submit", func
     const new_password = document.getElementById("new_password").value;
     const reenter_new_password = document.getElementById("reenter_new_password").value;
 
-    console.log(password + " " + reenter_new_password + " " + new_password )
-    console.log(session_p_id)
-    fetch('../../../passengerController', {
+    fetch(`${ url }/passengerController`, {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json',
@@ -159,22 +153,22 @@ document.getElementById("passengerPasswordForm").addEventListener("submit", func
                     changePassword(jsonData);
                 }
                 else{
-                    openAlert( "Passwords are not matching", "alertFail");
-                    console.log('Passwords don\'t match');
+                    openAlert( "Passwords Are Not Matching", "alertFail");
+                    console.log('Passwords Don\'t Match');
                 }
             }
             else{
-                openAlert( "Enter old password correctly", "alertFail");
+                openAlert( "Enter Old Password Correctly", "alertFail");
             }
         })
         .catch(error => {
-            openAlert( "Password update unsuccessful", "alertFail");
+            openAlert( "Password Update Unsuccessful", "alertFail");
         });
 });
 
 function changePassword(jsonData) {
     console.log(session_p_id)
-    fetch('../../../passengerController', {
+    fetch(`${ url }/passengerController`, {
         method: 'PUT',
         headers: {
             'Content-Type': 'application/json',
@@ -186,18 +180,14 @@ function changePassword(jsonData) {
             if (response.ok) {
                 closeForm_changePassword();
                 openAlert( "Password Successfully Updated!", "alertSuccess");
-                console.log('Update successful');
             } else if (response.status === 401) {
-                openAlert( "Password update unsuccessful", "alertFail");
-                console.log('Update unsuccessful');
+                openAlert( "Password Update Failed", "alertFail");
             } else {
-                openAlert( "Password update unsuccessful", "alertFail");
-                console.error('Error:', response.status);
+                openAlert( "Password Update Unsuccessful", "alertFail");
             }
         })
         .catch(error => {
-            openAlert( "Password update unsuccessful", "alertFail");
-            console.error('Error:', error);
+            openAlert( "Password Update Failed", "alertFail");
         });
 }
 
@@ -327,8 +317,6 @@ const confirmPasswordInput = document.getElementById("reenter_new_password");
 const confirmPasswordInputError = document.getElementById("reenter_new_password_error");
 const passwordInput = document.getElementById("new_password");
 const passwordInputError = document.getElementById("new_passwordError");
-const password = document.getElementById("password");
-const passwordError = document.getElementById("passwordError");
 
 confirmPasswordInput.addEventListener("change", function() {
     if (document.getElementById("password").value !== document.getElementById("password_confirm").value) {
@@ -351,17 +339,5 @@ passwordInput.addEventListener("change", function() {
         passwordInput.setCustomValidity("");
         passwordInputError.textContent = "";
         passwordInputError.style.display = "none";
-    }
-});
-
-password.addEventListener("change", function() {
-    if (!isStrongPassword(passwordInput.value)) {
-        password.setCustomValidity("Password should be at least 8 characters long and contain at least one lowercase letter, one uppercase letter, one digit, and one special character.");
-        passwordError.textContent = "Password should be at least 8 characters long and contain at least one lowercase letter, one uppercase letter, one digit, and one special character.";
-        passwordError.style.display = "block";
-    } else {
-        password.setCustomValidity("");
-        passwordError.textContent = "";
-        passwordError.style.display = "none";
     }
 });

@@ -63,6 +63,7 @@ function setSearchStands() {
 }
 
 function getTimeKeeperData(){
+    document.getElementById("userName").textContent = session_user_name;
     fetch(`${ url }/timekeeperController?p_id=${session_p_id}`, {
         method: 'GET',
         headers: {
@@ -77,14 +78,11 @@ function getTimeKeeperData(){
             }
         })
         .then(data => {
-            console.log(data)
             data.forEach(item =>{
                 timeKeeper_id = item.timekpr_id;
                 timeKeeper_stand = item.stand;
-                console.log(timeKeeper_stand)
             })
 
-            console.log(timeKeeper_id + " " + timeKeeper_stand);
             fetchAllData(timeKeeper_stand);
         })
         .catch(error => {
@@ -93,7 +91,6 @@ function getTimeKeeperData(){
 }
 
 function fetchAllData() {
-    document.getElementById("userName").textContent = session_user_name;
     fetch(`${ url }/scheduleController`, {
         method: 'GET',
         headers: {
@@ -152,7 +149,6 @@ function changePage(newPage) {
             document.getElementById("nextPageIcon").style.opacity = "1";
             updatePage(currentPage);
         } else {
-            console.log(`Next page is empty`);
             document.getElementById("nextPageIcon").style.opacity = "0.5";
         }
     }
@@ -250,7 +246,6 @@ document.getElementById("busRegForm").addEventListener("submit", function(event)
                 return response.json()
                     .then(data =>{
                         allFeasibleData = data;
-                        console.log(allFeasibleData);
                         closeForm_add();
                         openForm_bpSelection();
                     })
@@ -274,7 +269,6 @@ function searchData() {
     const date = document.getElementById('datePicker').value;
     const startTime = document.getElementById('startTimePicker').value;
     const endTime = document.getElementById('endTimePicker').value;
-    console.log("start: " + start + " destination: " + destination + " date: " + date + " startTime: " + startTime + " endTime: " + endTime);
 
     fetch(`${ url }/scheduleController?start=${start}&destination=${destination}&date=${date}&startTime=${startTime}&endTime=${endTime}`, {
         method: 'GET',
@@ -320,7 +314,6 @@ function updateRow(schedule_id){
             if (response.ok) {
                 response.json().then(data => {
                     existingData = data[0];
-                    console.log("existingData:", existingData);
                     document.getElementById("update_destination").value = existingData.destination;
                     document.getElementById("update_date").value = existingData.date;
                     document.getElementById("update_time").value = existingData.time;
@@ -353,7 +346,6 @@ function updateRow(schedule_id){
                     return response.json()
                         .then(data =>{
                             allFeasibleData = data;
-                            console.log(allFeasibleData);
                             closeForm_update();
                             openForm_bpSelection();
                         })
@@ -384,10 +376,8 @@ function deleteRow(schedule_id){
                 openAlertSuccess('Deleted successfully');
             } else if (response.status === 401) {
                 openAlertFail(response.status);
-                console.log('Delete unsuccessful');
             } else {
                 openAlertFail(response.status);
-                console.error('Error:', response.status);
             }
         })
         .catch(error => {
@@ -490,7 +480,6 @@ function showSuggestions(event) {
                 if (response.ok) {
                     return response.json();
                 } else {
-                    console.error('Error:', response.status);
                     throw new Error(`HTTP error! Status: ${response.status}`);
                 }
             })
@@ -500,7 +489,6 @@ function showSuggestions(event) {
                 const filteredSuggestions = suggestions.filter(suggestion =>
                     suggestion.toUpperCase().includes(inputValue)
                 );
-                console.log(filteredSuggestions)
                 suggestionsContainer.style.maxHeight = '200px';
                 suggestionsContainer.style.overflowY = 'auto';
                 suggestionsContainer.style.width = '100%';
@@ -581,7 +569,6 @@ function createTableRows(data) {
 function handleRowClick(data) {
     const tbody = document.querySelector('#bpSelection_container tbody');
     tbody.innerHTML = '';
-    console.log(data)
 
     if (data === []) {
         const messageRow = document.createElement('tr');
@@ -600,16 +587,12 @@ function handleRowClick(data) {
 document.getElementById("bpSelection").addEventListener("submit", function(event) {
     event.preventDefault();
 
-    console.log(isUpdate)
-
     const userData = {
         bus_profile_id: bus_profile_id_schedule,
         date_time: date_time,
         status: 0
     };
     const jsonData = JSON.stringify(userData);
-
-    console.log(isUpdate)
 
     if(isUpdate === true){
         fetch(`${ url }/scheduleController?schedule_id=${update_schedule_id}`, {
@@ -687,7 +670,6 @@ function fetchAndUpdateLocation(schedule_id) {
             if (data.length > 0) {
                 const lat = data[0].latitude;
                 const lng = data[0].longitude;
-                console.log("lat: " + lat + " lng: " + lng);
                 updateMarkerPosition(lat, lng);
             }
         })
@@ -723,7 +705,6 @@ function stopFetchingLocation() {
 }
 
 function ViewLocation(schedule_id){
-    console.log(schedule_id)
     document.getElementById("locationView").style.display = "flex";
     document.getElementById("overlay").style.display = "block";
 

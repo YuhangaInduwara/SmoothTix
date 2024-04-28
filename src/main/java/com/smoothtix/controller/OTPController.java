@@ -33,8 +33,8 @@ public class OTPController extends HttpServlet {
         System.out.println("email : " + otp.getEmail());
         System.out.println("otp : " + otp.getOTP());
 
-//        int sendSuccess = sendEmail(otp.getEmail(), otp.getOTP());
-        int sendSuccess = 1;
+        int sendSuccess = sendEmail(otp.getEmail(), otp.getOTP());
+//        int sendSuccess = 1;
         if(sendSuccess > 0){
           response.setStatus(HttpServletResponse.SC_OK);
         }
@@ -44,54 +44,54 @@ public class OTPController extends HttpServlet {
 
 }
 
-//    protected static int sendEmail(String email, int otp){
-//        final String fromEmail = "smoothtix@gmail.com";
-//        final String password = "obzy cvzg dznf llkg";
-//
-//        String subject = "OTP Verification for SmoothTix";
-//        String message = "Hi SmoothTix User" + ",<br/><br/>" +
-//                "Your verification code is " + otp + "<br/>" +
-//                "Use this 4-digit code to proceed with your verification.<br/><br/>";
-//        String footer =
-//                "SmoothTix<br/>" +
-//                "smoothtix@gmail.com";
-//
-//        String htmlContent = "<html><body>";
-//        htmlContent += "<p>" + message + "</p>";
-//        htmlContent += "<p>" + footer + "</p>";
-//        htmlContent += "</body></html>";
-//
-//
-//        Properties props = new Properties();
-//        props.put("mail.smtp.auth", "true");
-//        props.put("mail.smtp.starttls.enable", "true");
-//        props.put("mail.smtp.host", "smtp.gmail.com");
-//        props.put("mail.smtp.port", "587");
-//        props.put("mail.debug", "true");
-//        props.put("mail.debug.auth", "true");
-//        props.put("mail.smtp.socketFactory.port", "465");
-//        props.put("mail.smtp.socketFactory.class", "javax.net.ssl.SSLSocketFactory");
-//
-//        Session session = Session.getInstance(props, new Authenticator() {
-//            protected PasswordAuthentication getPasswordAuthentication() {
-//                return new PasswordAuthentication(fromEmail, password);
-//            }
-//        });
-//
-//        try {
-//            Message mimeMessage = new MimeMessage(session);
-//            mimeMessage.setFrom(new InternetAddress(fromEmail));
-//            mimeMessage.setRecipients(Message.RecipientType.TO, InternetAddress.parse(email));
-//            mimeMessage.setSubject(subject);
-//            mimeMessage.setContent(htmlContent, "text/html");
-//            Transport.send(mimeMessage);
-//            System.out.println("Remainder Succeed!");
-//            return 1;
-//
-//        } catch (MessagingException e) {
-//            System.out.println("Remainder failed!");
-//            e.printStackTrace();
-//            return 0;
-//        }
-//    }
+    protected static int sendEmail(String email, int otp){
+        final String fromEmail = "smoothtix@gmail.com";
+        final String password = "obzy cvzg dznf llkg";
+
+        String subject = "OTP Verification for SmoothTix";
+        String message = "Hi SmoothTix User" + ",<br/><br/>" +
+                "Your verification code is " + otp + "<br/>" +
+                "Use this 4-digit code to proceed with your verification.<br/><br/>";
+        String footer =
+                "SmoothTix<br/>" +
+                "smoothtix@gmail.com";
+
+        String htmlContent = "<html><body>";
+        htmlContent += "<p>" + message + "</p>";
+        htmlContent += "<p>" + footer + "</p>";
+        htmlContent += "</body></html>";
+
+
+        Properties props = new Properties();
+        props.put("mail.smtp.auth", "true");
+        props.put("mail.smtp.starttls.enable", "true");
+        props.put("mail.smtp.host", "smtp.gmail.com");
+        props.put("mail.smtp.port", "587");
+        props.put("mail.debug", "true");
+        props.put("mail.debug.auth", "true");
+        props.put("mail.smtp.socketFactory.port", "465");
+        props.put("mail.smtp.socketFactory.class", "javax.net.ssl.SSLSocketFactory");
+
+        Session session = Session.getInstance(props, new Authenticator() {
+            protected PasswordAuthentication getPasswordAuthentication() {
+                return new PasswordAuthentication(fromEmail, password);
+            }
+        });
+
+        try {
+            Message mimeMessage = new MimeMessage(session);
+            mimeMessage.setFrom(new InternetAddress(fromEmail));
+            mimeMessage.setRecipients(Message.RecipientType.TO, InternetAddress.parse(email));
+            mimeMessage.setSubject(subject);
+            mimeMessage.setContent(htmlContent, "text/html");
+            Transport.send(mimeMessage);
+            System.out.println("Remainder Succeed!");
+            return 1;
+
+        } catch (MessagingException e) {
+            System.out.println("Remainder failed!");
+            e.printStackTrace();
+            return 0;
+        }
+    }
 }

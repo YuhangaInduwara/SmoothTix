@@ -83,7 +83,7 @@ function displayDataAsTable(data) {
       let existingData = {};
           if(rowCount === 0){
               const noDataRow = document.createElement("tr");
-              noDataRow.innerHTML = `<td colspan="6">No data available</td>`;
+              noDataRow.innerHTML = `<td colspan="7">No data available</td>`;
               tableBody.appendChild(noDataRow);
               return;
           }
