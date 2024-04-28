@@ -30,7 +30,6 @@ function fetchAllData() {
         })
         .then(data => {
             allData = data;
-            console.log(allData)
             updatePage(currentPage, false);
         })
         .catch(error => {
@@ -69,7 +68,6 @@ const nextPageIcon = document.getElementById("nextPageIcon");
 nextPageIcon.addEventListener("click", () => changePage(currentPage));
 
 function changePage(newPage) {
-    console.log(currentPage + "  " + newPage)
     if (currentPage !== newPage) {
         currentPage = Math.max(1, newPage);
         updatePage(currentPage, false);
@@ -144,13 +142,12 @@ document.getElementById("busRegForm").addEventListener("submit", function(event)
     event.preventDefault();
     const nic = document.getElementById("add_nic").value;
     const stand = document.getElementById("add_stand").value.toLowerCase();
-    console.log(nic)
+
     const userData = {
         nic: nic,
         stand: stand,
     };
     const jsonData = JSON.stringify(userData);
-    console.log("test: "+jsonData)
 
     fetch(`${ url }/timekeeperController`, {
         method: 'POST',
@@ -202,10 +199,7 @@ function createForm(action) {
 
         form_add.innerHTML = form.replace(/id="/g, 'id="add_');
         const formContainer_add = document.getElementById('formContainer_add');
-        formContainer_add.appendChild(form_add.cloneNode(true)); // Clone the form
-        //
-        // showSuggestions1({ target: document.getElementById('nic_suggestions') });
-        // showSuggestions2({ target: document.getElementById('stand_suggestions') });
+        formContainer_add.appendChild(form_add.cloneNode(true));
     }
     else if(action === 'update'){
         const form_update = document.createElement('div');
@@ -223,9 +217,7 @@ function createForm(action) {
 
         form_update.innerHTML = form.replace(/id="/g, 'id="update_');
         const formContainer_update = document.getElementById('formContainer_update');
-        formContainer_update.appendChild(form_update.cloneNode(true)); // Clone the form
-
-        // showSuggestions3({ target: document.getElementById('stand_suggestions') });
+        formContainer_update.appendChild(form_update.cloneNode(true));
     }
 }
 
@@ -314,7 +306,6 @@ function showSuggestions2(event) {
                 const filteredSuggestions = suggestions.filter(suggestion =>
                     suggestion.toUpperCase().includes(inputValue)
                 );
-                console.log(filteredSuggestions)
                 suggestionsContainer.style.maxHeight = '200px';
                 suggestionsContainer.style.overflowY = 'auto';
                 suggestionsContainer.style.width = '100%';
@@ -370,7 +361,6 @@ function showSuggestions3(event) {
                 const filteredSuggestions = suggestions.filter(suggestion =>
                     suggestion.toUpperCase().includes(inputValue)
                 );
-                console.log(filteredSuggestions)
                 suggestionsContainer.style.maxHeight = '200px';
                 suggestionsContainer.style.overflowY = 'auto';
                 suggestionsContainer.style.width = '100%';
@@ -399,7 +389,6 @@ function showSuggestions3(event) {
 }
 
 function updateRow(timekpr_id){
-    console.log("test1: " + timekpr_id)
     openForm_update();
 
     let existingData = {};
@@ -416,8 +405,6 @@ function updateRow(timekpr_id){
             if (response.ok) {
                 response.json().then(data => {
                     existingData = data[0];
-                    console.log("existingData:", existingData);
-                    // document.getElementById("update_nic").value = existingData.p_id;
                     document.getElementById("update_stand").value = existingData.stand;
                 });
             } else if (response.status === 401) {
@@ -441,7 +428,6 @@ function updateRow(timekpr_id){
         };
 
         const jsonData = JSON.stringify(updatedData);
-        console.log(jsonData)
 
         fetch(`${ url }/timekeeperController?timekpr_id=${timekpr_id}`, {
             method: 'PUT',
@@ -456,10 +442,8 @@ function updateRow(timekpr_id){
                     openAlertSuccess("Successfully Updated!");
                 } else if (response.status === 401) {
                     openAlertFail(response.status);
-                    console.log('Update unsuccessful');
                 } else {
                     openAlertFail(response.status);
-                    console.error('Error:', response.status);
                 }
             })
             .catch(error => {
@@ -483,11 +467,9 @@ function deleteRow(){
             } else if (response.status === 401) {
                 closeAlert();
                 openAlertFail(response.status);
-                console.log('Delete unsuccessful');
             } else {
                 openAlertFail(response.status);
                 closeAlert();
-                console.error('Error:', response.status);
             }
         })
         .catch(error => {

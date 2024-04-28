@@ -47,7 +47,7 @@ function closeForm_update() {
 
 function fetchAllData() {
     document.getElementById("userName").textContent = session_user_name;
-    fetch('/SmoothTix_war_exploded/routeController', {
+    fetch(`${ url }/routeController`, {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json',
@@ -62,7 +62,6 @@ function fetchAllData() {
         })
         .then(data => {
             allData = data;
-            console.log(allData)
             updatePage(currentPage, false);
         })
         .catch(error => {
@@ -79,7 +78,6 @@ function updatePage(page, search) {
 
     let dataToShow;
     if(search){
-        console.log("hello: " + dataSearch)
         dataToShow = dataSearch.slice(startIndex, endIndex);
     }
     else{
@@ -111,7 +109,6 @@ function changePage(newPage) {
 function displayDataAsTable(data) {
     const tableBody = document.querySelector("#dataTable tbody");
     const rowCount = data.length;
-    console.log(rowCount)
     if(rowCount === 0){
         const noDataRow = document.createElement("tr");
         noDataRow.innerHTML = `<td colspan="8">No data available</td>`;
@@ -168,7 +165,7 @@ document.getElementById("busRegForm").addEventListener("submit", function(event)
     };
 
     const jsonData = JSON.stringify(userData);
-    fetch('../../../routeController', {
+    fetch(`${ url }/routeController`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
@@ -245,7 +242,7 @@ function updateRow(route_id){
 
     document.getElementById("header_bus_id").innerHTML = route_id
 
-    fetch('../../../routeController', {
+    fetch(`${ url }/routeController`, {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json',
@@ -290,7 +287,7 @@ function updateRow(route_id){
 
         const jsonData = JSON.stringify(updatedData);
 
-        fetch(`/SmoothTix_war_exploded/routeController`, {
+        fetch(`${ url }/routeController`, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',
@@ -319,7 +316,7 @@ function updateRow(route_id){
 }
 
 function deleteRow(route_id){
-    fetch(`/SmoothTix_war_exploded/routeController`, {
+    fetch(`${ url }/routeController`, {
         method: 'DELETE',
         headers: {
             'Content-Type': 'application/json',
