@@ -21,7 +21,7 @@ public class timeKprTable {
                 if(rs.getInt("privilege_level") == 2){
                     return 3;
                 }
-                else if(rs.getInt("privilege_level") == 1 || rs.getInt("privilege_level") == 3 || rs.getInt("privilege_level") == 4 || rs.getInt("privilege_level") == 5){
+                else if(rs.getInt("privilege_level") == 1 || rs.getInt("privilege_level") == 4 || rs.getInt("privilege_level") == 5){
                     return 4;
                 }
                 else if(rs.getInt("privilege_level") == 6){

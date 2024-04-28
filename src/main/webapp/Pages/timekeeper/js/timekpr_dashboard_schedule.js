@@ -10,16 +10,19 @@ let bus_profile_id_schedule;
 let isUpdate = false;
 let update_schedule_id;
 
+// session management (authentication and authorization)
 document.addEventListener('DOMContentLoaded', function () {
     isAuthenticated().then(() => getTimeKeeperData());
 });
 
+// refresh the page
 function refreshPage() {
     location.reload();
 }
 
 setSearchStands();
 
+// get stand data for showing on the dropdown list
 function setSearchStands() {
 
     fetch(`${url}/routeController?request_data=stand_list`, {
@@ -64,6 +67,7 @@ function setSearchStands() {
         });
 }
 
+// get the corresponding timekeeper id and stand for the session passenger id
 function getTimeKeeperData(){
     document.getElementById("userName").textContent = session_user_name;
     fetch(`${ url }/timekeeperController?p_id=${session_p_id}`, {
@@ -92,6 +96,7 @@ function getTimeKeeperData(){
         });
 }
 
+// get all schedule data from database
 function fetchAllData() {
     fetch(`${ url }/scheduleController`, {
         method: 'GET',
@@ -116,6 +121,7 @@ function fetchAllData() {
         });
 }
 
+// create data chunks for each page and call display function for each of them
 function updatePage(page) {
     const tableBody = document.querySelector("#dataTable tbody");
     const startIndex = (page - 1) * pageSize;
@@ -127,10 +133,12 @@ function updatePage(page) {
     updatePageNumber(currentPage);
 }
 
+// update the page number on page control icons
 function updatePageNumber(page) {
     document.getElementById("currentPageNumber").textContent = page;
 }
 
+// event listeners for page control buttons
 const prevPageIcon = document.getElementById("prevPageIcon");
 prevPageIcon.addEventListener("click", (event) => {
     event.stopPropagation();
@@ -143,6 +151,7 @@ nextPageIcon.addEventListener("click", (event) => {
     changePage(currentPage + 1);
 }, true);
 
+// change the page number
 function changePage(newPage) {
     const data = getDataForPage(newPage);
 
@@ -157,12 +166,14 @@ function changePage(newPage) {
     }
 }
 
+// get data chunks for each pages
 function getDataForPage(page) {
     const startIndex = (page - 1) * pageSize;
     const endIndex = startIndex + pageSize;
     return allData.slice(startIndex, endIndex);
 }
 
+// display chunked data on the UI
 function displayDataAsTable(data) {
     const tableBody = document.querySelector("#dataTable tbody");
 
@@ -226,11 +237,12 @@ function displayDataAsTable(data) {
     });
 }
 
+// display page control icons
 function renderPageControl(){
     document.getElementById("page_control").style.display = "flex";
 }
 
-
+// event listener for getting form data and submitting as a new schedule
 document.getElementById("busRegForm").addEventListener("submit", function(event) {
     event.preventDefault();
     const start = timeKeeper_stand;
@@ -268,6 +280,7 @@ document.getElementById("busRegForm").addEventListener("submit", function(event)
         });
 });
 
+// handle search data
 function searchData() {
     const start = document.getElementById('dropdown_start').value.toLowerCase();
     const destination = document.getElementById('dropdown_destination').value.toLowerCase();
@@ -299,10 +312,11 @@ function searchData() {
         });
 }
 
+// update selected schedule by showing current data and sending user inputs to the database
 function updateRow(schedule_id){
     update_schedule_id = schedule_id;
     isUpdate = true;
-    var submitButton = document.getElementById('bpSelectionSubmit');
+    let submitButton = document.getElementById('bpSelectionSubmit');
     submitButton.value = 'Update';
     openForm_update();
 
@@ -372,6 +386,7 @@ function updateRow(schedule_id){
     });
 }
 
+// delete a selected schedule
 function deleteRow(schedule_id){
     fetch(`${ url }/scheduleController?schedule_id=${schedule_id}`, {
         method: 'DELETE',
@@ -393,6 +408,7 @@ function deleteRow(schedule_id){
         });
 }
 
+// handle view/close bus profile selection popups | open/close add/update forms
 function openForm_bpSelection() {
     createTableRows(allFeasibleData);
     document.getElementById("bpSelection").style.display = "block";
@@ -436,6 +452,7 @@ function closeForm_update() {
     document.getElementById("overlay").style.display = "none";
 }
 
+// render add route and update route forms
 function createForm() {
     const form_add = document.createElement('div');
     form_add.classList.add('bus_add_form_body');
@@ -470,6 +487,7 @@ function createForm() {
     formContainer_update.appendChild(form_update.cloneNode(true));
 }
 
+// show stand suggestions
 function showSuggestions(event) {
     const input = event.target;
     const inputValue = input.value.toUpperCase();
@@ -524,6 +542,7 @@ function showSuggestions(event) {
     }
 }
 
+// handle view/close success/alert popups
 function openAlertSuccess(msg) {
     document.getElementById("alertMsgSuccess").textContent = msg;
     document.getElementById("successAlert").style.display = "block";
@@ -560,6 +579,7 @@ function createTableRow(obj) {
     return row;
 }
 
+// render the table for displaying feasible schedules
 function createTableRows(data) {
     const tbody = document.querySelector('#bpSelection_container tbody');
     tbody.innerHTML = '';
@@ -574,6 +594,7 @@ function createTableRows(data) {
     }
 }
 
+// show selected row
 function handleRowClick(data) {
     const tbody = document.querySelector('#bpSelection_container tbody');
     tbody.innerHTML = '';
@@ -592,7 +613,7 @@ function handleRowClick(data) {
     }
 }
 
-
+// submit data after selecting bus profile and add button
 document.getElementById("bpSelection").addEventListener("submit", function(event) {
     event.preventDefault();
 
@@ -667,6 +688,7 @@ L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
 let marker;
 let fetchInterval;
 
+// get location updates for a given schedule id
 function fetchAndUpdateLocation(schedule_id) {
     fetch(`../../../locationController?schedule_id=${schedule_id}`, {
         method: 'GET',
@@ -687,6 +709,7 @@ function fetchAndUpdateLocation(schedule_id) {
         });
 }
 
+// set the marker position of the map according to the current location
 function updateMarkerPosition(lat, lng) {
     if (!marker) {
         marker = L.marker([lat, lng]).addTo(map);
@@ -702,6 +725,7 @@ function updateMarkerPosition(lat, lng) {
     map.setView([lat, lng], currentZoomLevel);
 }
 
+// starting to calling fetchAndUpdateLocation function for 1 second timer
 function startFetchingLocation(schedule_id) {
     fetchAndUpdateLocation(schedule_id);
     fetchInterval = setInterval(() => {
@@ -709,11 +733,12 @@ function startFetchingLocation(schedule_id) {
     }, 1000);
 }
 
-
+// stop location fetching
 function stopFetchingLocation() {
     clearInterval(fetchInterval);
 }
 
+// display location container
 function ViewLocation(schedule_id){
     document.getElementById("locationView").style.display = "flex";
     document.getElementById("overlay").style.display = "block";
@@ -724,6 +749,7 @@ function ViewLocation(schedule_id){
 
 let previousMapSize = { width: 0, height: 0 };
 
+// resize the map according to the user's previous map size
 function resizeMap() {
     const currentMapSize = {
         width: document.getElementById('map').clientWidth,
@@ -739,6 +765,7 @@ function resizeMap() {
     }
 }
 
+// close map view by stopping location fetching
 function RemoveLocation(){
     stopFetchingLocation()
     document.getElementById("locationView").style.display = "none";

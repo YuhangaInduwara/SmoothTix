@@ -2,18 +2,22 @@ let routeData = [];
 let routeNo = 'R001';
 let allData = [];
 
+// session management (authentication and authorization)
 document.addEventListener('DOMContentLoaded', function () {
     isAuthenticated().then(() => getRouteNos() );
 });
 
+// event listener for route number selection dropdown menu
 const searchSelect = document.getElementById("routeNoSelect");
 searchSelect.addEventListener("change", (event) => {
     routeNo = event.target.value;
     console.log(routeNo)
 });
 
+// get route numbers from the database for showing in the dropdown
 function getRouteNos(){
-    document.getElementById("userName").textContent = session_user_name;
+
+    document.getElementById("userName").textContent = session_user_name; // set username in dashboard
 
     fetch(`${url}/routeController`, {
         method: 'GET',
@@ -49,6 +53,7 @@ function getRouteNos(){
         });
 }
 
+// get filter data, send them to the backend to fetch the corresponding report details and display them
 function generateReport() {
     const startDateInput = document.getElementById('StartdatePicker');
     const endDateInput = document.getElementById('EnddatePicker');
@@ -156,49 +161,51 @@ function generateReport() {
     }
 }
 
+// validate the date
 function validateDate(dateString) {
     const regex = /^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}$/;
     return regex.test(dateString);
 }
 
+// create an error message for showing on invalid insertion
 function setErrorMsg(element, message) {
     element.style.border = "1px solid red";
     element.title = message;
 }
 
+// clear filter insertions after submitting them
 function clearSearchBoxes() {
   document.getElementById("StartdatePicker").value = "";
   document.getElementById("EnddatePicker").value = "";
   document.getElementById("routeNoSelect").selectedIndex = 0;
 }
 
+// view success message
 function openAlertSuccess(msg) {
     document.getElementById("alertMsgSuccess").textContent = msg;
     document.getElementById("successAlert").style.display = "block";
     document.getElementById("overlay").style.display = "block";
 }
 
+// close success messages
 function closeAlertSuccess() {
     document.getElementById("successAlert").style.display = "none";
     document.getElementById("overlay").style.display = "none";
 }
 
-function openAlertFail(response) {
-    document.getElementById("failMsg").textContent = response;
-    document.getElementById("failAlert").style.display = "block";
-    document.getElementById("overlay").style.display = "block";
-}
-
+// close failed messages
 function closeAlertFail() {
     document.getElementById("failAlert").style.display = "none";
     document.getElementById("overlay").style.display = "none";
 }
 
+// event listener for download report button
 document.addEventListener('DOMContentLoaded', function () {
     const downloadBtn = document.getElementById('downloadReportButton');
     downloadBtn.addEventListener('click', downloadPDF);
 });
 
+// download the generated report as a pdf
 function downloadPDF() {
     const { jsPDF } = window.jspdf;
     const doc = new jsPDF();
