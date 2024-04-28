@@ -9,8 +9,8 @@ function createForm() {
                 <input type="text" name="reg_no" id="reg_no" class="form_data" placeholder="Enter Registration No" required="required" />
             </div>
         <div class="form_div">
-            <label for="route_no" class="bus_form_title">Route Id <span class="bus_form_require">*</span></label>
-            <input type="text" name="route_no" id="route_no" class="form_data" placeholder="Enter Route_id" required="required" oninput="showSuggestions1(event)" />
+            <label for="route_no" class="bus_form_title">Route No. <span class="bus_form_require">*</span></label>
+            <input type="text" name="route_no" id="route_no" class="form_data" placeholder="Enter Route No" required="required" oninput="showSuggestions1(event)" />
             <ul id="bus_route_suggestions" class="autocomplete-list"></ul>
         </div>
             <div class="form_div">

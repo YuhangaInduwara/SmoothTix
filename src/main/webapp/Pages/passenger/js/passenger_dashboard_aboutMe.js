@@ -317,8 +317,6 @@ const confirmPasswordInput = document.getElementById("reenter_new_password");
 const confirmPasswordInputError = document.getElementById("reenter_new_password_error");
 const passwordInput = document.getElementById("new_password");
 const passwordInputError = document.getElementById("new_passwordError");
-const password = document.getElementById("password");
-const passwordError = document.getElementById("passwordError");
 
 confirmPasswordInput.addEventListener("change", function() {
     if (document.getElementById("password").value !== document.getElementById("password_confirm").value) {
@@ -341,17 +339,5 @@ passwordInput.addEventListener("change", function() {
         passwordInput.setCustomValidity("");
         passwordInputError.textContent = "";
         passwordInputError.style.display = "none";
-    }
-});
-
-password.addEventListener("change", function() {
-    if (!isStrongPassword(passwordInput.value)) {
-        password.setCustomValidity("Password should be at least 8 characters long and contain at least one lowercase letter, one uppercase letter, one digit, and one special character.");
-        passwordError.textContent = "Password should be at least 8 characters long and contain at least one lowercase letter, one uppercase letter, one digit, and one special character.";
-        passwordError.style.display = "block";
-    } else {
-        password.setCustomValidity("");
-        passwordError.textContent = "";
-        passwordError.style.display = "none";
     }
 });

@@ -8,6 +8,7 @@ body{
     display: flex;
     flex-direction: row;
 }
+
 .sidebar{
     background-color: #cccccc;
     display: flex;
@@ -46,12 +47,7 @@ body{
     text-decoration: none;
     padding-top: 10px;
     padding-left: 20px;
-    margin-top: 10px;
     transition: transform 0.3s;
-}
-
-.empty{
-    margin-top: 40%;
 }
 
 .sidebar_element:hover{
@@ -136,24 +132,22 @@ a{
 .container {
         display: flex;
         justify-content: space-around;
-        gap: 25px;
-        margin-left: 20px;
     }
 
     .box {
-        min-width: 250px;
-        max-width: 300px;
         position: relative;
         transition: box-shadow 0.3s;
-        /*width: 25%;*/
         width: auto;
         padding: 20px;
         border: 1px solid #ccc;
-        /margin-bottom: 20px;/
+        margin-bottom: 10px;
         margin-top: 70px;
+        margin-right:10px;
+        margin-left:20px;
         border-radius: 20px;
         background-color: #EAEDED;
         box-shadow: 0 0 10px rgba(0, 0, 0, 0.8);
+       
     }
     .box:hover {
             background-color:#E5E8E8;
@@ -183,67 +177,29 @@ a{
         background-color:#EAEDED;
     }
 
+    .errorMgForm {
+           display: flex;
+           justify-content: center;
+           align-items: center;
+           position: fixed; /* Ensures that the form stays centered even when scrolling */
+           top: 300px;
+           left: 650px;
+           width: 100hv;
+           height: 100hv;
+           background-color: #F8F9F9;
+           z-index: 999; /* Ensures the form is above other content */
+       }
 
-    .page_control{
-        display: flex;
-        width: 97%;
-        margin-top: 5px;
-        margin-right: auto;
-        margin-left: auto;
-        height: 40px;
-        justify-content: flex-end;
-        align-items: center;
-    }
+       .errorMgFormContent {
+            background-color: #F8F9F9;
+           padding: 20px; /* Adjust as needed */
+           border-radius: 5px;
+           box-shadow: 0 0 10px rgba(0, 0, 0, 0.5); /* Box shadow for a subtle elevation effect */
+       }
 
-    #page_control,
-    #flag_page_control{
-        width: calc(100% - 20px);
-        height: 40px;
-        display: flex;
-        justify-content: flex-end;
-        align-items: center;
-        margin-top: 10px;
-        padding-right: 20px;
-    }
+       .errorMgText {
+          font-weight:bold;
+          color:red;
+       }
 
-    .arrow_img {
-        width: 15px;
-        height: 15px;
-        opacity: 0.7;
-        cursor: pointer;
-        transition: transform 0.3s ease;
-    }
 
-    .arrow_img:hover {
-        transform: scale(1.1);
-    }
-
-    #prevPageIcon,
-    #nextPageIcon,
-    #flag_prevPageIcon,
-    #flag_nextPageIcon{
-        cursor: pointer;
-        margin: 0 10px;
-    }
-
-    .currentPageNumber {
-        font-size: 16px;
-        font-weight: bold;
-        color: #333;
-        margin-bottom: 3px;
-    }
-
-    #nextPageIcon,
-    #flag_nextPageIcon{
-        margin-right: 0;
-    }
-#page_control {
-    display: flex;
-    align-items: center;
-}
-
-#prevPageIcon,
-#nextPageIcon {
-    cursor: pointer;
-    margin: 0 10px;
-}

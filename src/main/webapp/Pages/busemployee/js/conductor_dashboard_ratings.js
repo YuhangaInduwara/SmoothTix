@@ -53,7 +53,16 @@ function fetchAllData(conductor_id) {
 //                }
             })
             .catch(error => {
-                console.error('Error:', error);
+               console.error('Error:', error);
+                       // Display error message as a form
+                       const errorMessageForm = document.createElement("div");
+                       errorMessageForm.classList.add("box");
+
+                       const errorMessage = document.createElement("p");
+                       errorMessage.textContent = "Error fetching data. Please try again later.";
+
+                       errorMessageForm.appendChild(errorMessage);
+                       document.getElementById("formContainer").appendChild(errorMessageForm);
             });
         }
 
@@ -64,6 +73,7 @@ function displayDataAsForms(data) {
     let totalPoints = 0;
     let formCount = 0;
 
+ if (Array.isArray(data) && data.length > 0) {
     data.forEach((item, index) => {
         console.log(item);
         const form = document.createElement("div");
@@ -129,8 +139,19 @@ function displayDataAsForms(data) {
     averagePointsElement.textContent = `Average Points: ${averagePoints.toFixed(2)}`; // Display average with two decimal places
     averagePointsElement.classList.add("average-points");
     document.body.appendChild(averagePointsElement);
-}
+}else {
+         // Display error message as a form
+         const errorMessageForm = document.createElement("div");
+         errorMessageForm.classList.add("box", "errorMgForm"); // Apply box style and error message form style
 
+         const errorMessage = document.createElement("h2");
+         errorMessage.classList.add("errorMgText"); // Apply error message text style
+         errorMessage.textContent = "You have no any points !";
+         errorMessageForm.appendChild(errorMessage);
+         formContainer.appendChild(errorMessageForm);
+     }
+
+}
 
 
 

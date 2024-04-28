@@ -35,6 +35,7 @@ public class AdminController extends HttpServlet {
             reportData.put("totalSeatsBooked", report.getTotalSeatsBooked());
             reportData.put("totalBusesScheduled", report.getTotalBusesScheduled());
             reportData.put("TotalAmount", "Rs." + String.format("%.2f", report.getTotalAmount()));
+            reportData.put("commission", "Rs." + String.format("%.2f", report.getCommission()));
 
             out.print(reportData);
             response.setStatus(HttpServletResponse.SC_OK);

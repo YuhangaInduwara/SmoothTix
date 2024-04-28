@@ -76,10 +76,12 @@
                 <div class="search_box">
                     <label for="StartdatePicker">Date From</label>
                     <input type="date" id="StartdatePicker">
+                    <span class="error-message" id="startDateError"></span>
                 </div>
                 <div class="search_box">
                     <label for="EnddatePicker">Date to</label>
                     <input type="date" id="EnddatePicker">
+                    <span class="error-message" id="endDateError"></span>
                 </div>
                 <div class="search_box" >
                     <div>
@@ -88,6 +90,7 @@
                             <option value="" disabled selected>Select Route No:</option>
                         </select>
                         </label>
+                        <span class="error-message" id="routeNoError"></span>
                     </div>
                 </div>
                 <div class="search_box">
@@ -115,13 +118,17 @@
                             <td id="totalBusesScheduled">-</td>
                         </tr>
                         <tr>
+                            <th>Commission</th>
+                            <td id="commission">-</td>
+                        </tr>
+                        <tr>
                             <th>Total Revenue from the route</th>
                             <td id="TotalAmount">-</td>
                         </tr>
                         </tbody>
                     </table>
                 </div>
-                <button class="button" id="downloadReportButton" disabled>Download Report</button>
+                <center><button class="button" id="downloadReportButton" disabled>Download Report</button></center>
             </div>
 
             <div class="overlay" id="overlay"></div>

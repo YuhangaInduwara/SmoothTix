@@ -128,14 +128,6 @@ a{
   margin-right: 20px;
 }
 
-
-
-
-
-
-
-/* Style the form container */
-
 .centered {
     display: flex;
     justify-content: center;
@@ -152,7 +144,6 @@ a{
      width: 100px;
      hight:100px;
      border-radius: 100%;
-
 }
 
 .user-details-form {
@@ -163,26 +154,16 @@ a{
     border-radius: 5px;
     box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
     margin-bottom: 50px;
-
 }
+
 .textarea{
    text-align: left;
 }
 
-
-/*.user-details-form input, .user-details-form textarea {
-    width: 100%;
-
-    padding: 10px;
-    margin-bottom: 10px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-}*/
 .user-details-form label {
     display: block;
     margin-bottom: 8px;
     flex: 1;
-
 }
 
 .user-details-form input {
@@ -194,9 +175,8 @@ a{
     margin-bottom: 10px;
     flex: 2;
 }
-.button {
 
-    /*background-color: #7F868D;*/
+.button {
     background-color:rgb(255, 0, 0);
     color: #fff;
     border: none;
@@ -204,7 +184,8 @@ a{
     border-radius: 4px;
     cursor: pointer;
     margin-left:300px;
-    }
+}
+
 .button:hover{
    background-color: rgba(255, 1, 1, 0.47);
 }
