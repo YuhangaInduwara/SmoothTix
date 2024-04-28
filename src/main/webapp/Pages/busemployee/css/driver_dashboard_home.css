@@ -93,7 +93,6 @@ a{
     width: 40px;
 }
 
-
 .content_container{
     flex: 1;
     display: flex;
@@ -138,60 +137,59 @@ a{
 }
 
 .container {
-            max-width: 750px;
-            margin: 20px auto;
-            background-color: #fff;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
-        }
+     max-width: 750px;
+     margin: 20px auto;
+     background-color: #fff;
+     padding: 20px;
+     border-radius: 8px;
+     box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+}
+
 .profile {
     text-align: center;
     margin-bottom: 20px;
 }
+
 .profile img {
-            width: 100px;
-            height: 100px;
-            border-radius: 50%;
-            object-fit: cover;
-            border: 3px solid #fff;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.8);
-        }
+     width: 100px;
+     height: 100px;
+     border-radius: 50%;
+     object-fit: cover;
+     border: 3px solid #fff;
+     box-shadow: 0 0 10px rgba(0, 0, 0, 0.8);
+}
+
 .profile h2 {
-            margin-top: 10px;
-        }
+     margin-top: 10px;
+}
 
-/* Add styles for the form */
 #formContainer {
-            display: flex;
-            flex-direction: column;
-            gap: 20px; /* Adjust the spacing between forms */
-        }
+     display: flex;
+     flex-direction: column;
+     gap: 20px;
+}
 
-        /* Style for form */
 form {
-            border: 1px solid #ccc;
-            padding: 30px;
-            border-radius: 8px;
-            max-width: 550px;
-            margin-left:70px;
-        }
+     border: 1px solid #ccc;
+     padding: 30px;
+     border-radius: 8px;
+     max-width: 550px;
+     margin-left:70px;
+}
 
-        /* Style for form labels */
 label {
-            display: block; /* Make labels display as block to appear above inputs */
-            margin-bottom: 5px; /* Add spacing between labels and inputs */
-            font-weight: bold; /* Optionally, make labels bold */
-            padding: 5px;
-        }
+     display: block;
+     margin-bottom: 5px;
+     font-weight: bold;
+     padding: 5px;
+}
 
-        /* Style for form inputs */
 input[type="text"] {
-            width: 100%; /* Take up full width */
-            padding: 10px; /* Add padding for better appearance */
-            border: 1px solid #ccc; /* Add border */
-            border-radius: 3px; /* Add border radius */
-            color:#605D5D;
-        }
+     width: 100%;
+     padding: 10px;
+     border: 1px solid #ccc;
+     border-radius: 3px;
+     color:#605D5D;
+}
 
 

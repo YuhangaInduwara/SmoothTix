@@ -83,7 +83,6 @@ public class BusprofileController extends HttpServlet {
 
             }
 
-
             else{
                 ResultSet rs = busprofileTable.getAllDetails(p_id);
 //                JSONArray busprofileDataArray = new JSONArray();
