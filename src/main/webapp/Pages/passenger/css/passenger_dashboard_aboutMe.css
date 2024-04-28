@@ -134,7 +134,6 @@ a{
     margin: 20px;
 }
 
-/* Style the list container */
 .list {
     display: flex;
     flex-direction: column;
@@ -145,16 +144,12 @@ a{
     border-radius: 5px;
     box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
     background-color: #fff;
-    /*max-width: 300px;*/
-    /*height: 300px;*/
 }
 
-/* Style each data item in the list */
 .dataList {
     padding: 10px;
 }
 
-/* Style the Edit and Delete buttons */
 .editDeleteButtons {
     display: flex;
     justify-content: center;
@@ -164,11 +159,6 @@ a{
     border-radius: 5px;
     cursor: pointer;
     gap: 50px;
-}
-
-/* Style the buttons on hover */
-.editDeleteButtons button:hover {
-    /*background-color: #0056b3;*/
 }
 
 .passenger_form {
