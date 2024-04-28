@@ -66,7 +66,6 @@ function updatePageNumber(page) {
 // event listeners for page control buttons
 const prevPageIcon = document.getElementById("prevPageIcon");
 prevPageIcon.addEventListener("click", () => changePage(currentPage))
-
 const nextPageIcon = document.getElementById("nextPageIcon");
 nextPageIcon.addEventListener("click", () => changePage(currentPage));
 
