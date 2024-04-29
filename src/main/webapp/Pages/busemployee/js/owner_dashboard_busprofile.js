@@ -99,6 +99,12 @@ function displayDataAsTable(data) {
         tableBody.appendChild(noDataRow);
         return;
     }
+
+    // Renders page control if row count >= 10
+    if(rowCount >= 10){
+        renderPageControl()
+    }
+
     // Loop through data and create table rows
     data.forEach(item => {
         const row = document.createElement("tr");
@@ -469,8 +475,8 @@ function createForm(action) {
         const form= `
         <div class="busprofile_form_left">
             <div class="form_div">
-                <label for="bus_reg_no" class="busprofile_form_title">Bus Registration No.<span class="busprofile_form_require">*</span></label>
-                <input type="text" name="bus_reg_no" id="bus_reg_no" class="form_data" placeholder="Enter Bus Registration No" required="required" oninput="showSuggestions1(event)"/>
+                <label for="bus_reg_no" class="busprofile_form_title">Bus Registration No<span class="busprofile_form_require">*</span></label>
+                <input type="text" name="bus_reg_no" id="bus_reg_no" class="form_data" placeholder="Eg : NB-xxxx" required="required" oninput="showSuggestions1(event)"/>
                 <ul id="bus_reg_no_suggestions" class="autocomplete-list"></ul>
             </div>
             <div class="form_div">

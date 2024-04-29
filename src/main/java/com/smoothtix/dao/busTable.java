@@ -144,7 +144,11 @@ public class busTable {
 
     public static ResultSet getByOwner(String p_id) throws SQLException {
         Connection con = dbConnection.initializeDatabase();
-        PreparedStatement pst = con.prepareStatement("SELECT b.* FROM bus b JOIN owner o ON b.owner_id = o.owner_id WHERE o.p_id = ?");
+        PreparedStatement pst = con.prepareStatement("SELECT b.*, r.route_no, r.start, r.destination\n" +
+                "FROM bus b \n" +
+                "JOIN owner o ON b.owner_id = o.owner_id \n" +
+                "JOIN route r ON b.route_id = r.route_id\n" +
+                "WHERE o.p_id = ?;");
         pst.setString(1, p_id);
         return pst.executeQuery();
     }

@@ -345,7 +345,7 @@ function createForm(action) {
             </div>
             <div class="form_div">
                 <label for="license_no" class="driver_form_title">Driving License Number <span class="driver_form_require">*</span></label>
-                <input type="text" name="license_no" id="license_no" class="form_data" placeholder="Enter driving license no" required="required" />
+                <input type="text" name="license_no" id="license_no" class="form_data" placeholder="Eg : Bxxxxxxx" required="required" />
             </div>
         </div>
         `;
