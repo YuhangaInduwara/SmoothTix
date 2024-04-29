@@ -23,7 +23,7 @@ function openForm_add() {
     }
 
     document.getElementById("busRegForm").style.display = "block";
-    document.getElementById("overlay").style.display = "block";
+    document.getElementById("overlay").style.display = "block";//make visible the form
 }
 
 function closeForm_add() {

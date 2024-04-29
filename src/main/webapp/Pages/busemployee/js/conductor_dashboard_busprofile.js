@@ -1,7 +1,9 @@
+// session management (authentication and authorization)
 document.addEventListener('DOMContentLoaded', function () {
    isAuthenticated().then(() => fetchConductorId());
 });
 
+//fetch data about a conductor based on a provided passenger ID (p_id).
 function fetchConductorId() {
     document.getElementById("userName").textContent = session_user_name;
     fetch(`${ url }/conductorController?p_id=${session_p_id}`, {
@@ -10,6 +12,7 @@ function fetchConductorId() {
             'Content-Type': 'application/json',
         },
     })
+    //if the response is OK parses the response body as JSON and returns the parsed data
         .then(response => {
                 if (response.ok) {
                     return response.json();
@@ -18,6 +21,7 @@ function fetchConductorId() {
                 }
         })
 
+//handles the parsed data received from the server
         .then(data => {
                  fetchAllData(data[0].conductor_id)
                  displayDataAsForms(data);
@@ -28,8 +32,7 @@ function fetchConductorId() {
         });
 }
 
-
-
+//HTTP GET request to fetch all data related to a specific conductor
 function fetchAllData(conductor_id) {
     fetch(`${url}/busprofileController?conductor_id=${conductor_id}`, {
         method: 'GET',
@@ -47,8 +50,10 @@ function fetchAllData(conductor_id) {
     .then(data => {
         displayDataAsForms(data);
     })
+    //handles errors that occur during the fetch request
     .catch(error => {
         console.error('Error:', error);
+
         const errorMessageForm = document.createElement("div");
         errorMessageForm.classList.add("box");
         const errorMessage = document.createElement("p");
@@ -62,6 +67,7 @@ function displayDataAsForms(data) {
     const formContainer = document.getElementById("formContainer");
     formContainer.innerHTML = "";
 
+//this responsible for rendering data received from the server as forms on the webpage
     if (Array.isArray(data) && data.length > 0) {
         data.forEach((item, index) => {
             const form = document.createElement("div");
@@ -74,21 +80,23 @@ function displayDataAsForms(data) {
             innerForm.id = `form${index + 1}`;
 
             const inputs = [
+            //Each object represents an input field that will be rendered in the form
                 { label: "Bus Number:", key: "reg_no" },
                 { label: "Route:", key: "route" },
                 { label: "Conductor's Name:", key: "conductor_name" },
                 { label: "Driver's Name:", key: "driver_name" }
             ];
 
+      //dynamically creates HTML elements for each input field
             inputs.forEach(input => {
-                const label = document.createElement("label");
-                label.setAttribute("for", `${input.key}${index + 1}`);
-                label.textContent = input.label;
-                const inputField = document.createElement("input");
-                inputField.setAttribute("type", "text");
+                const label = document.createElement("label"); //For each input object, it creates a <label>
+                label.setAttribute("for", `${input.key}${index + 1}`);//generates a unique identifier for the input field by combining the key property from the inputs
+                label.textContent = input.label; //sets the text content of the <label> element to the value specified in the label property of the current input object
+                const inputField = document.createElement("input"); //create new input
+                inputField.setAttribute("type", "text"); //sets the type attribute of the input field to "text"
                 inputField.setAttribute("id", `${input.key}${index + 1}`);
                 inputField.setAttribute("name", `${input.key}${index + 1}`);
-                inputField.value = item[input.key];
+                inputField.value = item[input.key];  // sets the value of the input field to the value of the corresponding property in the item object
 
                 innerForm.appendChild(label);
                 innerForm.appendChild(inputField);

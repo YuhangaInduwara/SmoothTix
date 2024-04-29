@@ -172,6 +172,7 @@ a{
 }
 
 .bus_form {
+    width: 500px;
     display: none;
     position: fixed;
     top: 50%;

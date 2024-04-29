@@ -23,133 +23,53 @@ import java.util.Objects;
 public class SeatAvailabilityController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        // Set the content type of the response to HTML
         response.setContentType("text/html");
+
+        // Initialize a PrintWriter to send the response
         PrintWriter out = response.getWriter();
+
+        // Create a JSONArray to store seat availability data
         JSONArray seatAvailabilityDataArray = new JSONArray();
+
+        // Retrieve the schedule ID parameter from the request
         String schedule_id = request.getParameter("schedule_id");
 
         try {
+            // Declare a ResultSet to store the query result
             ResultSet rs;
-            if(schedule_id != null){
+
+            // Check if the schedule_id parameter is not null
+            if (schedule_id != null) {
+                // Retrieve seat availability data for the specified schedule ID
                 rs = seatAvailabilityTable.getByScheduleId(schedule_id);
 
+                // Iterate over the ResultSet and construct JSON objects for each row
                 while (rs.next()) {
+                    // Create a JSONObject to represent seat availability data
                     JSONObject seatAvailabilityData = new JSONObject();
+
+                    // Add seat number and availability status to the JSONObject
                     seatAvailabilityData.put("seat_no", rs.getString("seat_no"));
                     seatAvailabilityData.put("availability", rs.getString("availability"));
 
+                    // Add the JSONObject to the JSONArray
                     seatAvailabilityDataArray.put(seatAvailabilityData);
                 }
-
             }
+
+            // Print the JSONArray to the PrintWriter
             out.println(seatAvailabilityDataArray);
+
+            // Set the HTTP status code to OK
             response.setStatus(HttpServletResponse.SC_OK);
-        }catch (Exception e) {
+        } catch (Exception e) {
+            // Print the stack trace of any exceptions that occur
             e.printStackTrace();
+
+            // Set the HTTP status code to INTERNAL_SERVER_ERROR
             response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
         }
     }
-
-//    @Override
-//    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-//        response.setContentType("text/html");
-////        PrintWriter out = response.getWriter();
-//
-//        try {
-//            Gson gson = new Gson();
-//
-//            BufferedReader reader = request.getReader();
-//            Schedule schedule = gson.fromJson(reader, Schedule.class);
-//            int registrationSuccess = scheduleTable.insert(schedule);
-//
-//            if (registrationSuccess >= 1) {
-//                response.setStatus(HttpServletResponse.SC_OK);
-//            } else {
-//                response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-//            }
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-//        }
-//    }
-////
-//    @Override
-//    protected void doPut(HttpServletRequest request, HttpServletResponse response) {
-//        response.setContentType("text/html");
-////        PrintWriter out = response.getWriter();
-//
-//        try {
-//            Gson gson = new Gson();
-//
-//            String schedule_id = request.getHeader("schedule_id");
-//
-//            BufferedReader reader = request.getReader();
-//            Schedule schedule = gson.fromJson(reader, Schedule.class);
-//
-//
-//            int updateSuccess = scheduleTable.update(schedule_id, schedule);
-//
-//            if (updateSuccess >= 1) {
-//                response.setStatus(HttpServletResponse.SC_OK);
-//            } else {
-//                response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-//            }
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-//        }
-//    }
-//
-//    @Override
-//    protected void doDelete(HttpServletRequest request, HttpServletResponse response) {
-//        response.setContentType("text/html");
-////        PrintWriter out = response.getWriter();
-//
-//        try {
-//            String schedule_id = request.getHeader("schedule_id");
-//            int deleteSuccess = scheduleTable.delete(schedule_id);
-//
-//            if (deleteSuccess >= 1) {
-//                response.setStatus(HttpServletResponse.SC_OK);
-//            } else {
-//                response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-//            }
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-//        }
-//    }
-//
-//    private JSONArray filterScheduleData(JSONArray originalArray, String start, String destination, String date, String startTime, String endTime) throws JSONException, ParseException {
-//        JSONArray filteredArray = new JSONArray();
-//        SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm");
-//
-//        for (int i = 0; i < originalArray.length(); i++) {
-//            JSONObject scheduleData = originalArray.getJSONObject(i);
-//
-//            if (!startTime.isEmpty() && !endTime.isEmpty()) {
-//                Date parsedStartTime = timeFormat.parse(startTime);
-//                Date parsedEndTime = timeFormat.parse(endTime);
-//                String scheduleTimeStr = scheduleData.getString("time");
-//                Date scheduleTime = timeFormat.parse(scheduleTimeStr);
-//
-//                if (scheduleTime.after(parsedStartTime) && scheduleTime.before(parsedEndTime)) {
-//                    if ((Objects.equals(start, "") || start.equals(scheduleData.getString("start")))
-//                            && (Objects.equals(destination, "") || destination.equals(scheduleData.getString("destination")))
-//                            && (Objects.equals(date, "") || date.equals(scheduleData.getString("date")))) {
-//                        filteredArray.put(scheduleData);
-//                    }
-//                }
-//            } else {
-//                if ((Objects.equals(start, "") || start.equals(scheduleData.getString("start")))
-//                        && (Objects.equals(destination, "") || destination.equals(scheduleData.getString("destination")))
-//                        && (Objects.equals(date, "") || date.equals(scheduleData.getString("date")))) {
-//                    filteredArray.put(scheduleData);
-//                }
-//            }
-//        }
-//
-//        return filteredArray;
-//    }
 
 }
