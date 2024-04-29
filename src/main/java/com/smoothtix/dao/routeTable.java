@@ -7,6 +7,7 @@ import java.sql.*;
 import java.util.Objects;
 
 public class routeTable {
+    //handle the insertion of route data into a database.
     public static int insert(Route route) throws SQLException, ClassNotFoundException {
         Connection con = dbConnection.initializeDatabase();
         PreparedStatement ps1 = con.prepareStatement("SELECT * FROM route WHERE route_no=?");
@@ -34,6 +35,7 @@ public class routeTable {
         return pst.executeUpdate();
     }
 
+    //generates a unique route ID for inserting a new route into the database
     private static String generateRouteID() throws SQLException {
         Connection con;
         Statement stmt;
@@ -52,6 +54,7 @@ public class routeTable {
         return "R" + String.format("%04d", nextRouteID);
     }
 
+    //retrieves route information from the database based on the provided route ID
     public static ResultSet get(String route_id) throws SQLException, ClassNotFoundException {
         Connection con = dbConnection.initializeDatabase();
         PreparedStatement pst = con.prepareStatement("SELECT * FROM route WHERE route_id=?");
@@ -59,6 +62,7 @@ public class routeTable {
         return pst.executeQuery();
     }
 
+    //retrieves a list of stands from the database.
     public static ResultSet getStands() throws SQLException, ClassNotFoundException {
         Connection con = dbConnection.initializeDatabase();
         PreparedStatement pst = con.prepareStatement("SELECT stand_list\n" +
@@ -70,6 +74,7 @@ public class routeTable {
         return pst.executeQuery();
     }
 
+    //retrieves all routes from the database
     public static ResultSet getAll() throws SQLException, ClassNotFoundException {
         Connection con = dbConnection.initializeDatabase();
         PreparedStatement pst = con.prepareStatement("SELECT\n" +
@@ -89,12 +94,14 @@ public class routeTable {
         return pst.executeQuery();
     }
 
+    //retrieves the count of records in the "route" table of the database.
     public static ResultSet counter() throws SQLException, ClassNotFoundException {
         Connection con = dbConnection.initializeDatabase();
         PreparedStatement pst = con.prepareStatement("SELECT COUNT(*) AS record_count FROM route");
         return pst.executeQuery();
     }
 
+    //updates a record in the "route" table of the database based on the provided route ID and route object
     public static int update(String route_id, Route route) throws SQLException, ClassNotFoundException {
         Connection con = dbConnection.initializeDatabase();
         PreparedStatement ps1 = con.prepareStatement("SELECT * FROM route WHERE route_no=?");
@@ -126,6 +133,7 @@ public class routeTable {
         return pst.executeUpdate();
     }
 
+    //deletes a record from the "route" table in the database based on the provided route ID
     public static int delete(String route_id) throws SQLException, ClassNotFoundException {
         Connection con = dbConnection.initializeDatabase();
         PreparedStatement pst = con.prepareStatement("DELETE FROM route WHERE route_id = ?");

@@ -1,3 +1,4 @@
+// session management (authentication and authorization)
 document.addEventListener('DOMContentLoaded', function () {
    isAuthenticated().then(() => fetchPassengerData());
 });
@@ -7,7 +8,7 @@ fetch(`${url}/passengerController`, {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json',
-            'p_id': session_p_id,
+            'p_id': session_p_id, // header includes the passenger ID (session_p_id)
         },
     })
     .then(response => {
@@ -25,6 +26,7 @@ fetch(`${url}/passengerController`, {
     });
 }
 
+//iterates over an array of passenger objects (passengers) and creates a form for each passenger
 function displayPassengerProfile(passengers) {
     const formContainer = document.querySelector("#formContainer");
     formContainer.innerHTML = '';
@@ -39,6 +41,7 @@ function displayPassengerProfile(passengers) {
     });
 }
 
+//createTextInput function creates a text input field with a corresponding label
 function createTextInput(id, label, value) {
     const input = document.createElement("input");
     input.type = "text";

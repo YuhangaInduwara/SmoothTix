@@ -7,6 +7,7 @@ import com.smoothtix.model.Schedule;
 import java.sql.*;
 
 public class scheduleTable {
+    //Inserts a new schedule into the database
     public static int insert(Schedule schedule) throws SQLException, ClassNotFoundException {
         Connection con = dbConnection.initializeDatabase();
         String schedule_id = generateScheduleID();
@@ -29,6 +30,7 @@ public class scheduleTable {
         return rawCount2;
     }
 
+//Generates a new schedule ID for inserting a new schedule into the database
     private static String generateScheduleID() throws SQLException, ClassNotFoundException {
         Connection con = dbConnection.initializeDatabase();
         String query = "SELECT COALESCE(MAX(CAST(SUBSTRING(schedule_id, 3) AS SIGNED)), 0) + 1 AS next_schedule_id FROM schedule";
@@ -42,7 +44,7 @@ public class scheduleTable {
 
         return "SH" + String.format("%04d", nextScheduleID);
     }
-
+//Retrieves schedule information based on the provided schedule ID
     public static ResultSet getByScheduleId(String schedule_id) throws SQLException, ClassNotFoundException {
         Connection con = dbConnection.initializeDatabase();
         PreparedStatement pst = con.prepareStatement("SELECT \n" +
@@ -68,19 +70,7 @@ public class scheduleTable {
         return rs;
     }
 
-//    public static ResultSet getByDriverId(String driver_id) throws SQLException, ClassNotFoundException {
-//        Connection con = dbConnection.initializeDatabase();
-//        PreparedStatement pst = con.prepareStatement("SELECT s.*, r.route_no, r.start, r.destination\n" +
-//                "FROM schedule s\n" +
-//                "JOIN bus_profile b ON s.bus_profile_id = b.bus_profile_id\n" +
-//                "JOIN bus bs ON b.bus_id = bs.bus_id\n" +
-//                "JOIN route r ON bs.route_id = r.route_id\n" +
-//                "WHERE b.driver_id = ?;");
-//        pst.setString(1,driver_id);
-//        ResultSet rs = pst.executeQuery();
-//        return rs;
-//    }
-
+      //retrieves schedule information for a specific driver based on the provided driver ID
     public static ResultSet getByDriverId(String driver_id) throws SQLException, ClassNotFoundException {
         Connection con = dbConnection.initializeDatabase();
         PreparedStatement pst = con.prepareStatement("SELECT \n" +
@@ -116,7 +106,7 @@ public class scheduleTable {
         ResultSet rs = pst.executeQuery();
         return rs;
     }
-
+     //retrieves schedule information for a specific conductor based on the provided conductor ID
     public static ResultSet getByConductorId(String conductor_id) throws SQLException, ClassNotFoundException {
         Connection con = dbConnection.initializeDatabase();
         PreparedStatement pst = con.prepareStatement("SELECT \n" +
@@ -153,6 +143,7 @@ public class scheduleTable {
         return rs;
     }
 
+   //retrieves all schedule information from the database. It selects details such as schedule ID
     public static ResultSet getByRouteByScheduleId(String schedule_id) throws SQLException, ClassNotFoundException {
         Connection con = dbConnection.initializeDatabase();
         PreparedStatement pst = con.prepareStatement("SELECT r.start, r.destination, b.reg_no\n" +
@@ -166,9 +157,9 @@ public class scheduleTable {
         return rs;
     }
 
+    //retrieves all schedule information from the database
     public static ResultSet getAll() throws SQLException, ClassNotFoundException {
         Connection con = dbConnection.initializeDatabase();
-        System.out.println("hello_schedule");
         PreparedStatement pst = con.prepareStatement("SELECT \n" +
                 "    s.schedule_id, \n" +
                 "    r_start.start AS start, \n" +
@@ -199,6 +190,7 @@ public class scheduleTable {
         return rs;
     }
 
+      //retrieves schedules with booked seats for the next day
     public static ResultSet getRemainderSchedules() throws SQLException, ClassNotFoundException {
         Connection con = dbConnection.initializeDatabase();
         PreparedStatement pst = con.prepareStatement("SELECT\n" +
@@ -227,6 +219,7 @@ public class scheduleTable {
         return rs;
     }
 
+     //updates the schedule information in the database for a given schedule ID
     public static int update(String schedule_id, Schedule schedule) throws SQLException, ClassNotFoundException {
         Connection con = dbConnection.initializeDatabase();
 
@@ -239,6 +232,8 @@ public class scheduleTable {
         return rawCount;
     }
 
+    //updates the status of a schedule in the database.
+    //takes the schedule ID and the new status as parameters.
     public static int updateStatus(String schedule_id, String status) throws SQLException {
         Connection con = dbConnection.initializeDatabase();
 
@@ -250,6 +245,7 @@ public class scheduleTable {
         return rawCount;
     }
 
+    //deletes a schedule from the database based on the provided schedule ID.
     public static int delete(String schedule_id) throws SQLException, ClassNotFoundException {
         Connection con = dbConnection.initializeDatabase();
         PreparedStatement pst = con.prepareStatement("DELETE FROM schedule WHERE schedule_id = ?");
@@ -258,6 +254,7 @@ public class scheduleTable {
         return rawCount;
     }
 
+//retrieves schedules for a specific route within the past week.
     public static ResultSet getWeekSchedules(String route_id) throws SQLException, ClassNotFoundException {
         Connection con = dbConnection.initializeDatabase();
         PreparedStatement pst = con.prepareStatement("SELECT s.schedule_id, s.bus_profile_id, s.date_time\n" +
@@ -272,6 +269,7 @@ public class scheduleTable {
         return rs;
     }
 
+    //retrieves schedules for a specific route within the past month.
     public static ResultSet getMonthSchedules(String route_id) throws SQLException, ClassNotFoundException {
         Connection con = dbConnection.initializeDatabase();
         PreparedStatement pst = con.prepareStatement("SELECT s.schedule_id, s.bus_profile_id, s.date_time\n" +
@@ -286,6 +284,7 @@ public class scheduleTable {
         return rs;
     }
 
+    //retrieves schedules for a specific route within the past year.
     public static ResultSet getYearSchedules(String route_id) throws SQLException, ClassNotFoundException {
         Connection con = dbConnection.initializeDatabase();
         PreparedStatement pst = con.prepareStatement("SELECT s.schedule_id, s.bus_profile_id, s.date_time\n" +

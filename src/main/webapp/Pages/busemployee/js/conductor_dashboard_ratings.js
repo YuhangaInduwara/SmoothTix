@@ -101,6 +101,7 @@ function displayDataAsForms(data) {
         starsContainer.id = `stars-container${index + 1}`;
         starsContainer.classList.add('stars-container');
 
+      //dynamically creates star elements based on the value of item.conductor_points
         for (let i = 0; i < item.conductor_points; i++) {
             const star = document.createElement('span');
             star.textContent = '\u2B50';
@@ -114,7 +115,7 @@ function displayDataAsForms(data) {
         formCount++;
     });
 
-
+  //dynamically creates average points base on total points and form count
     const averagePoints = totalPoints / formCount;
     const averagePointsElement = document.createElement('p');
     averagePointsElement.textContent = `Average Points: ${averagePoints.toFixed(2)}`;

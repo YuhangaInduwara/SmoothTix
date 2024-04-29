@@ -24,8 +24,14 @@ public class ScheduleController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         response.setContentType("text/html");
+
+        // Initialize a PrintWriter to send the response
         PrintWriter out = response.getWriter();
+
+        // Create a JSONArray to store schedule data
         JSONArray scheduleDataArray = new JSONArray();
+
+        // Retrieve parameters from the request
         String schedule_id = request.getHeader("schedule_id");
         String driver_id = request.getHeader("driver_id");
         String conductor_id = request.getHeader("conductor_id");
@@ -38,9 +44,12 @@ public class ScheduleController extends HttpServlet {
 
         try {
             ResultSet rs;
-            if(schedule_id == null && driver_id == null && conductor_id == null){
+
+            // If no specific IDs are provided, retrieve all schedule data
+            if (schedule_id == null && driver_id == null && conductor_id == null) {
                 rs = scheduleTable.getAll();
 
+                // Iterate through the ResultSet and populate the JSON array with schedule data
                 while (rs.next()) {
                     JSONObject scheduleData = new JSONObject();
                     scheduleData.put("schedule_id", rs.getString("schedule_id"));
@@ -50,21 +59,27 @@ public class ScheduleController extends HttpServlet {
                     scheduleData.put("destination", rs.getString("destination"));
                     scheduleData.put("date", rs.getDate("date_time"));
                     scheduleData.put("time", rs.getTime("date_time"));
+
+                    // Adjust time by subtracting 1 hour (3600000 milliseconds) for display
                     java.util.Date originalTime = rs.getTime("date_time");
                     java.util.Date adjustedTime = new java.util.Date(originalTime.getTime() - 3600000);
                     SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm:ss");
                     String formattedTime = timeFormat.format(adjustedTime);
                     scheduleData.put("adjusted_time", formattedTime);
+
                     scheduleData.put("price_per_ride", rs.getDouble("price_per_ride"));
                     scheduleData.put("available_seats", rs.getInt("available_seats"));
                     scheduleData.put("status", rs.getInt("status"));
                     scheduleDataArray.put(scheduleData);
                 }
-                if(start != null || destination != null || date != null || startTime != null || endTime != null){
+
+                // Apply filtering if any search parameters are provided
+                if (start != null || destination != null || date != null || startTime != null || endTime != null) {
                     scheduleDataArray = filterScheduleData(scheduleDataArray, start, destination, date, startTime, endTime);
                 }
             }
-            else if(driver_id == null && conductor_id == null){
+            // If only the schedule ID is provided, retrieve schedule data by ID
+            else if (driver_id == null && conductor_id == null) {
                 rs = scheduleTable.getByScheduleId(schedule_id);
                 while (rs.next()) {
                     JSONObject scheduleData = new JSONObject();
@@ -79,7 +94,8 @@ public class ScheduleController extends HttpServlet {
                     scheduleDataArray.put(scheduleData);
                 }
             }
-            else if(schedule_id == null && conductor_id == null){
+            // If only the driver ID is provided, retrieve schedule data by driver ID
+            else if (schedule_id == null && conductor_id == null) {
                 rs = scheduleTable.getByDriverId(driver_id);
                 while (rs.next()) {
                     JSONObject scheduleData = new JSONObject();
@@ -94,7 +110,8 @@ public class ScheduleController extends HttpServlet {
                     scheduleDataArray.put(scheduleData);
                 }
             }
-            else if(schedule_id == null && driver_id == null){
+            // If only the conductor ID is provided, retrieve schedule data by conductor ID
+            else if (schedule_id == null && driver_id == null) {
                 rs = scheduleTable.getByConductorId(conductor_id);
                 while (rs.next()) {
                     JSONObject scheduleData = new JSONObject();
@@ -109,6 +126,7 @@ public class ScheduleController extends HttpServlet {
                     scheduleDataArray.put(scheduleData);
                 }
             }
+            // Send the JSON array containing schedule data in the response
             out.println(scheduleDataArray);
             response.setStatus(HttpServletResponse.SC_OK);
         }catch (Exception e) {
@@ -120,15 +138,18 @@ public class ScheduleController extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         response.setContentType("text/html");
-//        PrintWriter out = response.getWriter();
 
         try {
             Gson gson = new Gson();
 
+            // Read the request body and parse it into a Schedule object using Gson
             BufferedReader reader = request.getReader();
             Schedule schedule = gson.fromJson(reader, Schedule.class);
+
+            // Insert the parsed Schedule object into the database
             int registrationSuccess = scheduleTable.insert(schedule);
 
+            // Set the response status based on the success of the insertion
             if (registrationSuccess >= 1) {
                 response.setStatus(HttpServletResponse.SC_OK);
             } else {
@@ -148,18 +169,24 @@ public class ScheduleController extends HttpServlet {
         int updateSuccess = 0;
 
         try {
+            // Check if the status parameter is null
             if(status == null){
                 Gson gson = new Gson();
 
+                // Read the request body and parse it into a Schedule object using Gson
                 BufferedReader reader = request.getReader();
                 Schedule schedule = gson.fromJson(reader, Schedule.class);
+
+                // Update the schedule information based on the provided schedule_id
                 updateSuccess = scheduleTable.update(schedule_id, schedule);
             }
             else{
+                // If status is provided, update only the status of the schedule
                 System.out.println(schedule_id + " " + status);
                 updateSuccess = scheduleTable.updateStatus(schedule_id, status);
             }
 
+            // Set the response status based on the success of the update operation
             if (updateSuccess >= 1) {
                 response.setStatus(HttpServletResponse.SC_OK);
             } else {
@@ -172,14 +199,19 @@ public class ScheduleController extends HttpServlet {
         }
     }
 
+
     @Override
     protected void doDelete(HttpServletRequest request, HttpServletResponse response) {
         response.setContentType("text/html");
 
         try {
+            // Extract the schedule_id from the request parameters
             String schedule_id = request.getParameter("schedule_id");
+
+            // Attempt to delete the schedule with the provided schedule_id
             int deleteSuccess = scheduleTable.delete(schedule_id);
 
+            // Set the response status based on the success of the delete operation
             if (deleteSuccess >= 1) {
                 response.setStatus(HttpServletResponse.SC_OK);
             } else {
@@ -199,12 +231,17 @@ public class ScheduleController extends HttpServlet {
             JSONObject scheduleData = originalArray.getJSONObject(i);
 
             if (!startTime.isEmpty() && !endTime.isEmpty()) {
+                // Parse the start and end time strings to Date objects
                 Date parsedStartTime = timeFormat.parse(startTime);
                 Date parsedEndTime = timeFormat.parse(endTime);
+
+                // Extract the schedule time string and parse it to a Date object
                 String scheduleTimeStr = scheduleData.getString("time");
                 Date scheduleTime = timeFormat.parse(scheduleTimeStr);
 
+                // Check if the schedule time is within the specified range
                 if (scheduleTime.after(parsedStartTime) && scheduleTime.before(parsedEndTime)) {
+                    // Check if the schedule matches the filtering criteria
                     if ((Objects.equals(start, "") || start.equals(scheduleData.getString("start")))
                             && (Objects.equals(destination, "") || destination.equals(scheduleData.getString("destination")))
                             && (Objects.equals(date, "") || date.equals(scheduleData.getString("date")))) {
@@ -212,6 +249,7 @@ public class ScheduleController extends HttpServlet {
                     }
                 }
             } else {
+                // If no time range is specified, only check other filtering criteria
                 if ((Objects.equals(start, "") || start.equals(scheduleData.getString("start")))
                         && (Objects.equals(destination, "") || destination.equals(scheduleData.getString("destination")))
                         && (Objects.equals(date, "") || date.equals(scheduleData.getString("date")))) {
@@ -234,6 +272,7 @@ public class ScheduleController extends HttpServlet {
 
         }
     }
+
 }
 
 

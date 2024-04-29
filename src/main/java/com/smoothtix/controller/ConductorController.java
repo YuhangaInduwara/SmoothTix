@@ -6,7 +6,6 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.smoothtix.dao.conductorTable;
 import com.smoothtix.dao.ownerTable;
-import com.smoothtix.dao.timeKprTable;
 import com.smoothtix.model.Conductor;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
