@@ -18,9 +18,11 @@ import static com.smoothtix.controller.PasswordHash.checkPassword;
 public class PassengerController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        // handle get (retrieve) requests
         response.setContentType("text/html");
         PrintWriter out = response.getWriter();
         JSONArray passengerDataArray = new JSONArray();
+        // get p_id, flag, nic, privilege level and password from header
         String p_id = request.getHeader("p_id");
         String flag = request.getHeader("flag");
         String nic = request.getParameter("nic");
@@ -29,8 +31,9 @@ public class PassengerController extends HttpServlet {
         String password = request.getHeader("password");
 
         try {
-            ResultSet rs = null;
+            ResultSet rs;
 
+            // if a p_id and password is sent with the request
             if(p_id != null && password != null){
                 String hashedPassword = passengerTable.getPassword(p_id);
                 if(checkPassword(password, hashedPassword)){
@@ -43,8 +46,10 @@ public class PassengerController extends HttpServlet {
                 return;
             }
 
+            // if a nic is sent with the request
             if(nicForgot != null){
                 rs = passengerTable.getEmailPid(nicForgot);
+                // if data are exist add to a json object array
                 if(rs.next()) {
                     JsonObject passengerData = new JsonObject();
                     passengerData.addProperty("email", rs.getString("email"));
@@ -60,25 +65,26 @@ public class PassengerController extends HttpServlet {
             if(p_id == null){
                 if(flag == null){
                     if(nic == null){
-                        rs = passengerTable.getAll();
+                        rs = passengerTable.getAll(); // if p_id, flag and nic are null
                     }
                     else{
-                        rs = passengerTable.getBy_nic(nic);
+                        rs = passengerTable.getBy_nic(nic); // // if p_id and nic are null
                     }
                 }
                 else{
                     if(privilege_level == null){
-                        rs = passengerTable.getBy_flag(flag);
+                        rs = passengerTable.getBy_flag(flag); // if p_id and privilege is null
                     }
                     else{
-                        rs = passengerTable.getBy_flag_p_l(flag, privilege_level);
+                        rs = passengerTable.getBy_flag_p_l(flag, privilege_level); // if p_id is null
                     }
                 }
             }
             else{
-                rs = passengerTable.getBy_p_id(p_id);
+                rs = passengerTable.getBy_p_id(p_id); // if p_id exist
             }
 
+            // if data are exist add to a json object array
             while (rs.next()) {
                 JSONObject passengerData = new JSONObject();
                 passengerData.put("p_id", rs.getString("p_id"));
@@ -102,27 +108,33 @@ public class PassengerController extends HttpServlet {
 
     @Override
     protected void doPut(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        // handle put (update) requests
         response.setContentType("text/html");
-        PrintWriter out = response.getWriter();
 
         try {
+            // parse the json request data to passenger object
             Gson gson = new Gson();
             String p_id = request.getHeader("p_id");
 
             BufferedReader reader = request.getReader();
             Passenger passenger = gson.fromJson(reader, Passenger.class);
-            int updateSuccess = 0;
+            int updateSuccess;
+
+            // if passenger's password is not null and not empty
             if(passenger.get_password() != null && !passenger.get_password().isEmpty()){
                 String hashedPassword = PasswordHash.hashPassword(passenger.get_password());
                 passenger.set_password(hashedPassword);
-                updateSuccess = passengerTable.updatePassword(p_id, passenger);
+                updateSuccess = passengerTable.updatePassword(p_id, passenger); // update the database
             }
+            // if passenger's flag is not null
             else if(passenger.get_flag() != null){
                 updateSuccess = passengerTable.updateFlag(p_id, passenger);
             }
+            // if passenger's privilege level is an integer
             else if(passenger.get_privilege_level() >= 1){
                  updateSuccess = passengerTable.updatePrivilegeLevel(p_id, passenger);
             }
+            // if only got p_id
             else{
                 updateSuccess = passengerTable.update(p_id, passenger);
             }
@@ -139,10 +151,11 @@ public class PassengerController extends HttpServlet {
 
     @Override
     protected void doDelete(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        // handle delete requests
         response.setContentType("text/html");
-        PrintWriter out = response.getWriter();
 
         try {
+            // get nic from request and pass it to delete from nic
             String nic = request.getHeader("nic");
             int deleteSuccess = passengerTable.delete(nic);
             if (deleteSuccess >= 1) {
