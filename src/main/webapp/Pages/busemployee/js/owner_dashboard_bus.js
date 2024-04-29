@@ -90,7 +90,7 @@ function displayDataAsTable(data) {
           if(rowCount === 0){
               // Display message if no data available
               const noDataRow = document.createElement("tr");
-              noDataRow.innerHTML = `<td colspan="7">No data available</td>`;
+              noDataRow.innerHTML = `<td colspan="6">No data available</td>`;
               tableBody.appendChild(noDataRow);
               return;
           }
@@ -104,7 +104,7 @@ function displayDataAsTable(data) {
         row.innerHTML = `
         `;
         // Fetch additional data for each row
-        fetch(`${ url }/passengerController`, {
+        fetch(`${ url }/busController`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
@@ -118,9 +118,8 @@ function displayDataAsTable(data) {
                         // Populate row with data
                         row.innerHTML = `
                             <td>${item.bus_id}</td>
-                            <td>${item.owner_id}</td>
                             <td>${item.reg_no}</td>
-                            <td>${item.route_id}</td>
+                            <td>${item.route}</td>
                             <td>${item.no_of_Seats}</td>
                             <td>${item.review_points}</td>
                             <td>
@@ -387,16 +386,16 @@ if(action === 'add'){
         <div class="bus_form_left">
             <div class="form_div">
                 <label for="reg_no" class="bus_form_title">Registration No <span class="bus_form_require">*</span></label>
-                <input type="text" name="reg_no" id="reg_no" class="form_data" placeholder="Enter Registration No" required="required" />
+                <input type="text" name="reg_no" id="reg_no" class="form_data" placeholder=" Eg : NB-xxxx" required="required" />
             </div>
             <div class="form_div">
                 <label for="route_no" class="bus_form_title">Route No <span class="bus_form_require">*</span></label>
-                <input type="text" name="route_no" id="route_no" class="form_data" placeholder="Enter Route_No" required="required" oninput="showSuggestions1(event)" />
+                <input type="text" name="route_no" id="route_no" class="form_data" placeholder=" Eg : EX001 " required="required" oninput="showSuggestions1(event)" />
                 <ul id="bus_route_suggestions" class="autocomplete-list"></ul>
             </div>
             <div class="form_div">
                 <label for="no_of_Seats" class="bus_form_title">Number of Seats <span class="bus_form_require">*</span></label>
-                <input type="number" name="no_of_Seats" id="no_of_Seats" class="form_data" placeholder="Enter Number of Seats" required="required" />
+                <input type="number" name="no_of_Seats" id="no_of_Seats" class="form_data" placeholder=" Eg : ##" required="required" />
             </div>
         </div>
         `;
@@ -414,12 +413,12 @@ if(action === 'add'){
             <div class="bus_form_left">
                 <div class="form_div">
                     <label for="route_no" class="bus_form_title">Route No <span class="bus_form_require">*</span></label>
-                    <input type="text" name="route_no" id="route_no" class="form_data" placeholder="Enter Route_No" required="required" oninput="showSuggestions2(event)" />
+                    <input type="text" name="route_no" id="route_no" class="form_data" placeholder="Update Route_No" required="required" oninput="showSuggestions2(event)" />
                     <ul id="bus_route_suggestions" class="autocomplete-list"></ul>
                 </div>
                 <div class="form_div">
                     <label for="no_of_Seats" class="bus_form_title">Number of Seats <span class="bus_form_require">*</span></label>
-                    <input type="number" name="no_of_Seats" id="no_of_Seats" class="form_data" placeholder="Enter Number of Seats" required="required" />
+                    <input type="number" name="no_of_Seats" id="no_of_Seats" class="form_data" placeholder="update Number of Seats" required="required" />
                 </div>
             </div>
         `;

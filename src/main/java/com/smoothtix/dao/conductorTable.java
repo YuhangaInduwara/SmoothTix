@@ -23,7 +23,7 @@ public class conductorTable {
 
                 ps.setString(1, generate_conductor_id());
                 ps.setString(2, rs.getString("p_id"));
-                ps.setFloat(3, 1.0f);
+                ps.setDouble(3, 0);
                 ps.setString(4, owner_id);
                 System.out.println("nic: " + rs.getString("nic"));
                 System.out.println("p_id: " + rs.getString("p_id"));

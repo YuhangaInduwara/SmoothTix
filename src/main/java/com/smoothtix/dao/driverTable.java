@@ -27,7 +27,7 @@ public class driverTable {
                 ps.setString(1, generate_driver_id());
                 ps.setString(2, rs.getString("p_id"));
                 ps.setString(3, license_no);
-                ps.setFloat(4, 5.0f);
+                ps.setDouble(4,0);
                 ps.setString(5, owner_id);
 
                 // Update the passenger's privilege level to indicate they are now a driver

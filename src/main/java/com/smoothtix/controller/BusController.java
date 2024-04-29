@@ -50,6 +50,7 @@ public class BusController extends HttpServlet {
                     busData.put("owner_id", rs.getString("owner_id"));
                     busData.put("reg_no", rs.getString("reg_no"));
                     busData.put("route_id", rs.getString("route_id"));
+                    busData.put("route", rs.getString("start") + " - " + rs.getString("destination"));
                     busData.put("no_of_Seats", rs.getInt("no_of_Seats"));
                     busData.put("review_points", rs.getFloat("review_points"));
                     busDataArray.put(busData);
@@ -119,13 +120,11 @@ public class BusController extends HttpServlet {
 
             if (isOwner) {
                 // If the passenger is an owner, retrieve their owner ID
-                System.out.println(ownerTable.getOwnerIDByPassengerID(p_id));
                 return ownerTable.getOwnerIDByPassengerID(p_id);
 
             } else {
                 // If the passenger is not an owner, insert a new entry into the owner table
                 String ownerID = ownerTable.insertOwner(p_id);
-                System.out.println(ownerID);
                 return ownerID;
             }
         } catch (Exception e) {

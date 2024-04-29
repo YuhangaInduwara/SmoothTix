@@ -6,16 +6,16 @@ function createForm() {
         <div class="bus_form_left">
             <div class="form_div">
                 <label for="reg_no" class="bus_form_title">Registration No <span class="bus_form_require">*</span></label>
-                <input type="text" name="reg_no" id="reg_no" class="form_data" placeholder="Enter Registration No" required="required" />
+                <input type="text" name="reg_no" id="reg_no" class="form_data" placeholder="Eg : NB-xxxx" required="required" />
             </div>
         <div class="form_div">
-            <label for="route_no" class="bus_form_title">Route No. <span class="bus_form_require">*</span></label>
-            <input type="text" name="route_no" id="route_no" class="form_data" placeholder="Enter Route No" required="required" oninput="showSuggestions1(event)" />
+            <label for="route_no" class="bus_form_title">Route No <span class="bus_form_require">*</span></label>
+            <input type="text" name="route_no" id="route_no" class="form_data" placeholder=" Eg : EX001 " required="required" oninput="showSuggestions1(event)" />
             <ul id="bus_route_suggestions" class="autocomplete-list"></ul>
         </div>
             <div class="form_div">
                 <label for="no_of_Seats" class="bus_form_title">Number of Seats <span class="bus_form_require">*</span></label>
-                <input type="number" name="no_of_Seats" id="no_of_Seats" class="form_data" placeholder="Enter Number of Seats" required="required" />
+                <input type="number" name="no_of_Seats" id="no_of_Seats" class="form_data" placeholder="Eg : ##" required="required" />
             </div>
         </div>
     `;
@@ -88,38 +88,53 @@ function showSuggestions1(event) {
 
 
 function openForm_add() {
-    fetch(`${url}/ownerController`, {
+    // Fetch data to check if the owner has any buses associated
+    fetch(`${url}/busController`, {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json',
             'p_id': session_p_id
         },
     })
-
     .then(response => {
         if (response.ok) {
+            // Convert response to JSON
+            return response.json();
+        } else {
+            throw new Error('Failed to fetch bus data of passenger');
+        }
+    })
+    .then(data => {
+        // Check if the owner has any buses associated
+        if (data && data.length > 0) {
+            // If the owner has buses associated, redirect to the owner dashboard
             window.location.href = "../../busemployee/html/owner_dashboard_home.html";
         } else {
             const existingForm = document.querySelector(".bus_add_form_body");
             if (!existingForm) {
+                // If the form is not displayed, create and display it
                 createForm();
+                document.getElementById("busRegForm").style.display = "block";
+                document.getElementById("overlay").style.display = "block";
             }
-            document.getElementById("busRegForm").style.display = "block";
-            document.getElementById("overlay").style.display = "block";
         }
     })
     .catch(error => {
         console.error('Error:', error);
+        // Handle error (e.g., display an error message)
     });
 }
+
 
 function closeForm_add() {
     document.getElementById("busRegForm").style.display = "none";
     document.getElementById("overlay").style.display = "none";
+    window.location.href = "../html/passenger_dashboard_home.html";
 }
 
-function openAlertSuccess() {
+function openAlertSuccess(response) {
     bus_id = "";
+    document.getElementById("successMsg").innerHTML = response ;
     document.getElementById("successAlert").style.display = "block";
     document.getElementById("overlay").style.display = "block";
 }
@@ -128,7 +143,6 @@ function closeAlertSuccess() {
     bus_id = "";
     document.getElementById("successAlert").style.display = "none";
     document.getElementById("overlay").style.display = "none";
-    window.location.href = "../../busemployee/html/owner_dashboard_bus.html";
 }
 
 function openAlertFail(response) {
@@ -170,7 +184,7 @@ document.getElementById("busRegForm").addEventListener("submit", function(event)
     .then(response => {
         if (response.ok) {
             closeForm_add();
-            openAlertSuccess("Successfully Added!");
+            openAlertSuccess("Operation Successful! <br> Your bus request is pending approval.");
         } else if (response.status === 409) {
             return response.text().then(error_msg => {
                 openAlertFail(error_msg);
