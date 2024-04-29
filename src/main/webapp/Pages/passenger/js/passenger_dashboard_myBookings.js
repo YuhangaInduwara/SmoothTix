@@ -57,6 +57,7 @@ function setSearchStands() {
         });
 }
 
+// function to refresh the page
 function refreshPage() {
     location.reload();
 }
@@ -257,6 +258,7 @@ L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
 let marker;
 let fetchInterval;
 
+// function to track location and update it
 function fetchAndUpdateLocation(schedule_id) {
     fetch(`${ url }/locationController?schedule_id=${schedule_id}`, {
         method: 'GET',
@@ -277,6 +279,7 @@ function fetchAndUpdateLocation(schedule_id) {
         });
 }
 
+// function to update location marker
 function updateMarkerPosition(lat, lng) {
     if (!marker) {
         marker = L.marker([lat, lng]).addTo(map);
@@ -300,11 +303,12 @@ function startFetchingLocation(schedule_id) {
     }, 1000);
 }
 
-
+// function to stop getting location
 function stopFetchingLocation() {
     clearInterval(fetchInterval);
 }
 
+// function to view location with relevant schedule id
 function ViewLocation(schedule_id){
     document.getElementById("locationView").style.display = "flex";
     document.getElementById("overlay").style.display = "block";
@@ -313,6 +317,7 @@ function ViewLocation(schedule_id){
     resizeMap();
 }
 
+// function to resize the map and display
 let previousMapSize = { width: 0, height: 0 };
 function resizeMap() {
     const currentMapSize = {
@@ -329,6 +334,7 @@ function resizeMap() {
     }
 }
 
+// function to stop displaying location
 function RemoveLocation(){
     stopFetchingLocation()
     document.getElementById("locationView").style.display = "none";
@@ -462,6 +468,7 @@ function deleteBooking_passenger(booking_id, seat_no){
     openDeleteConfirmation(seat_no);
 }
 
+// function to open confirmation box for deletion
 function openDeleteConfirmation(seat_no) {
     let seats = seat_no.split(',');
     all_seats = seats;
@@ -493,6 +500,7 @@ function openDeleteConfirmation(seat_no) {
     document.getElementById("overlay").style.display = "block";
 }
 
+// function to close confirmation box for deletion
 function closeDeleteConfirmation(){
     booking_id_delete = '';
     seat_delete = [];
@@ -539,6 +547,7 @@ function showAlert(inputElement, message) {
     }
 }
 
+// after payment deleted this function is called
 function deleteFetch(booking_id, selected_seat, action){
     const userData = {
         booking_id: booking_id,
@@ -626,6 +635,7 @@ function openSeeMore(page){
     });
 }
 
+// function to close the see more at previous bookings and upcoming bookings
 function closeSeeMore(){
     document.getElementById("seeMoreBookings").style.display = "none";
     document.getElementById("overlay").style.display = "none";
