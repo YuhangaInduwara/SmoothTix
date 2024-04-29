@@ -1,5 +1,4 @@
 package com.smoothtix.service;
-
 import com.smoothtix.dao.scheduleTable;
 import javax.mail.*;
 import javax.mail.internet.InternetAddress;
@@ -31,16 +30,16 @@ public class ReminderService {
         ResultSet rs = scheduleTable.getRemainderSchedules();
 
         while (rs.next()){
-            String subject = "Your Booking Details";
+            String subject = "Reminder: Your Journey Tomorrow";
             String email = rs.getString("email");
             String passengerName = rs.getString("first_name") + " " + rs.getString("last_name");
             String message = "Dear " + passengerName + ",<br/><br/>" +
-                    "We are delighted to inform you that your booking for the upcoming journey has been successfully confirmed. Your travel details are as follows:<br/><br/>" +
-                    "Date and time the of Journey: " + rs.getString("date_time") + "<br/>" +
+                    "This is a friendly reminder that your journey is scheduled for tomorrow. Please review your travel details below:<br/><br/>" +
+                    "Date and Time of Journey: " + rs.getString("date_time") + "<br/>" +
                     "Bus: " + rs.getString("bus_reg_no") + "<br/>" +
-                    "Reserved seat/seats: " + rs.getString("seat_no") + "<br/>" +
-                    "Please find attached QR code for this booking. This QR code will serve as your electronic ticket, so please ensure that you have it readily available on your mobile device when boarding.<br/><br/>";
-            String footer = "We appreciate your trust in our services and wish you a pleasant journey. Thank you for choosing SmoothTix.<br/><br/>" +
+                    "Reserved Seat/Seats: " + rs.getString("seat_no") + "<br/><br/>" +
+                    "For your convenience, we have attached a QR code to this email. This QR code will serve as your electronic ticket. Kindly ensure you have it available on your mobile device for boarding.<br/><br/>";
+            String footer = "Thank you for choosing SmoothTix for your travel needs. We look forward to providing you with a pleasant journey.<br/><br/>" +
                     "Safe travels!<br/><br/>" +
                     "Best regards,<br/><br/>" +
                     "SmoothTix<br/>" +
@@ -50,6 +49,7 @@ public class ReminderService {
             htmlContent += "<p>" + message + "</p>";
             htmlContent += "<p>" + footer + "</p>";
             htmlContent += "</body></html>";
+
 
 
             Properties props = new Properties();
@@ -75,10 +75,8 @@ public class ReminderService {
                 mimeMessage.setSubject(subject);
                 mimeMessage.setContent(htmlContent, "text/html");
                 Transport.send(mimeMessage);
-                System.out.println("Remainder Succeed!");
 
             } catch (MessagingException e) {
-                System.out.println("Remainder failed!");
                 e.printStackTrace();
             }
         }

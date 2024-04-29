@@ -1,5 +1,6 @@
 isAuthenticated();
 
+// check the validity of the NIC
 function isValidNIC(nic) {
     const nicRegex = /^(\d{9}[vV]|\d{12})$/;
     return nicRegex.test(nic);
@@ -12,6 +13,7 @@ const nicError = document.getElementById("nicError");
 const nicForgot = document.getElementById("nicForgot");
 const nicForgotError = document.getElementById("nicForgotError");
 
+// when user enter the NIC, this event listener checks for validity of NIC
 nicInput.addEventListener("change", function() {
     if (!isValidNIC(nicInput.value)) {
         nicInput.setCustomValidity("Please enter a valid NIC number.");
@@ -24,6 +26,7 @@ nicInput.addEventListener("change", function() {
     }
 });
 
+// when user enter the NIC, this event listener checks for validity of NIC (this is inside of forgot password)
 nicForgot.addEventListener("change", function() {
     if (!isValidNIC(nicForgot.value)) {
         nicForgot.setCustomValidity("Please enter a valid NIC number.");
@@ -36,6 +39,7 @@ nicForgot.addEventListener("change", function() {
     }
 });
 
+// when the user submit the login credentials this event listener calls
 let landingPage= '../../passenger/html/passenger_dashboard_home.html'
 document.getElementById("loginForm").addEventListener("submit", function(event) {
     event.preventDefault();
@@ -68,7 +72,7 @@ document.getElementById("loginForm").addEventListener("submit", function(event) 
             }
         })
         .then(parsedResponse => {
-            const jwtToken = parsedResponse.token;
+            const jwtToken = parsedResponse.token; // store the received token
             localStorage.setItem('jwtToken', jwtToken);
             let user_role = parsedResponse.user_role;
             openAlertSuccess(user_role)
@@ -79,6 +83,7 @@ document.getElementById("loginForm").addEventListener("submit", function(event) 
         });
 });
 
+// this is called after above event listener successfully happened
 function openAlertSuccess(user_role) {
     if (user_role === 1) {
         landingPage = 'http://localhost:2000/SmoothTix_war_exploded/Pages/administrator/html/admin_dashboard_home.html';
@@ -96,29 +101,34 @@ function openAlertSuccess(user_role) {
     document.getElementById("overlay").style.display = "block";
 }
 
+// function to open fail alert
 function openAlertFail(error_msg) {
     document.getElementById("failMsg").textContent = error_msg;
     document.getElementById("loginFail").style.display = "block";
     document.getElementById("overlay").style.display = "block";
 }
 
+// function to close success alert
 function closeAlertSuccess() {
     document.getElementById("loginSuccess").style.display = "none";
     document.getElementById("overlay").style.display = "none";
     window.location.href = landingPage;
 }
 
+// function to close fail alert
 function closeAlertFail() {
     document.getElementById("loginFail").style.display = "none";
     document.getElementById("overlay").style.display = "none";
 }
 
+// forgot your password? text links here
 function forgotPassword(){
     document.getElementById("forgotPassword").style.display = "block";
     document.getElementById("overlay").style.display = "block";
 
 }
 
+// when user press Get OTP button this occurs
 document.querySelector(".getOTPButton").addEventListener("click", function(event) {
         event.preventDefault();
         const nic = document.getElementById("nicForgot").value;
@@ -154,12 +164,14 @@ document.querySelector(".getOTPButton").addEventListener("click", function(event
         });
 });
 
+// function to format email
 function formatEmail(email) {
     const atIndex = email.indexOf("@");
     const formattedEmail = email.charAt(0) + "*".repeat(atIndex - 1) + email.substring(atIndex);
     return formattedEmail;
 }
 
+// if user's email is correct then this function called with that email
 function sendOTP(email){
     const OTP = generateOTP();
 
@@ -195,6 +207,7 @@ function sendOTP(email){
         });
 }
 
+// resend OTP option
 document.querySelector(".resend").addEventListener("click", function(event){
     event.preventDefault();
     document.getElementById("loading-spinner2").style.display = "block";
@@ -202,16 +215,19 @@ document.querySelector(".resend").addEventListener("click", function(event){
     openAlert("OTP Has Sent To Your Email", "alertSuccess");
 });
 
+// function to close forgot password div
 function closeForgotPassword(){
     document.getElementById("forgotPassword").style.display = "none";
     document.getElementById("overlay").style.display = "none";
 }
 
+// function to close OTP verification
 function closeOTPVerification(){
     document.getElementById("otpVerification").style.display = "none";
     document.getElementById("overlay").style.display = "none";
 }
 
+// function to close change password div
 function closeChangePassword(){
     document.getElementById("changePassword").style.display = "none";
     document.getElementById("overlay").style.display = "none";
@@ -222,6 +238,7 @@ const confirmPasswordInputError = document.getElementById("confirmPasswordError"
 const passwordInput = document.getElementById("newPassword");
 const passwordInputError = document.getElementById("newPasswordError");
 
+// check for strong password
 function isStrongPassword(password) {
     if (password.length < 8) {
         return false;
@@ -241,6 +258,7 @@ function isStrongPassword(password) {
     return true;
 }
 
+// event listener for check mismatching passwords
 confirmPasswordInput.addEventListener("input", function() {
     if (document.getElementById("newPassword").value !== document.getElementById("confirmPassword").value) {
         confirmPasswordInput.setCustomValidity("Password should be matched.");
@@ -253,6 +271,7 @@ confirmPasswordInput.addEventListener("input", function() {
     }
 });
 
+// event listener for check strong passwords
 passwordInput.addEventListener("input", function() {
     if (!isStrongPassword(passwordInput.value)) {
         passwordInput.setCustomValidity("Password should be at least 8 characters long and contain at least one lowercase letter, one uppercase letter, one digit, and one special character.");
@@ -265,6 +284,7 @@ passwordInput.addEventListener("input", function() {
     }
 });
 
+// password eye icon
 document.querySelectorAll('.password_toggle').forEach(function(toggle) {
     toggle.addEventListener('click', function() {
         let targetId = this.getAttribute('toggle-target');
@@ -282,13 +302,14 @@ document.querySelectorAll('.password_toggle').forEach(function(toggle) {
     });
 });
 
-
+// function to generate OTP between 1000 and 9999
 function generateOTP(){
     const OTP = Math.floor(1000 + Math.random() * 9000);
     localStorage.setItem("OTP", OTP);
     return OTP;
 }
 
+// function to verify the OTP
 function verifyOTP(){
     const OTP = localStorage.getItem("OTP");
     const userOTP = document.getElementById("otp").value;
@@ -297,6 +318,7 @@ function verifyOTP(){
         document.getElementById("otpVerification").style.display = "none";
         document.getElementById("changePassword").style.display = "block";
 
+        // event listener for change password
         document.getElementById("updatePassword"),addEventListener("submit", function(event) {
             event.preventDefault();
             const newPassword = document.getElementById("newPassword").value;
@@ -355,12 +377,14 @@ function verifyOTP(){
     }
 }
 
+// function to limit the input to 4 digits
 document.getElementById("otp").addEventListener("input", function() {
     if (this.value.length > 4) {
-        this.value = this.value.slice(0, 4); // Limit the input to 4 digits
+        this.value = this.value.slice(0, 4);
     }
 });
 
+// alert messages display here
 function openAlert(text, alertBody){
     if(alertBody === "alertFail"){
         document.getElementById("alertMsg").textContent = text;
@@ -372,6 +396,7 @@ function openAlert(text, alertBody){
     document.getElementById("overlay").style.display = "block";
 }
 
+// alert messages ok button
 function closeAlert(){
     const alertSuccess = document.getElementById("alertSuccess");
     const alertFail = document.getElementById("alertFail");

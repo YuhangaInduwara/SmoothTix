@@ -10,8 +10,6 @@ public class AdminReport {
     private String endDate;
     private double commission;
 
-
-    // Constructor, getters, and setters
     public AdminReport(String timePeriod, String routeNo, int totalSeatsBooked, int totalBusesScheduled, double commission, double TotalAmount) {
         this.timePeriod = timePeriod;
         this.routeNo = routeNo;
@@ -48,8 +46,8 @@ public class AdminReport {
         return routeNo;
     }
 
-    public void setRouteNo(String routeNo) { this.routeNo = routeNo;
-    }
+    public void setRouteNo(String routeNo) { this.routeNo = routeNo;}
+
     public double getCommission() {
         return commission;
     }

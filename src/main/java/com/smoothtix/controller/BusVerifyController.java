@@ -1,17 +1,12 @@
 package com.smoothtix.controller;
-
-import com.google.gson.Gson;
 import com.smoothtix.dao.busTable;
-import com.smoothtix.dao.ownerTable;
 import com.smoothtix.model.Bus;
 import org.json.JSONArray;
 import org.json.JSONObject;
-
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.ResultSet;
@@ -43,7 +38,6 @@ public class BusVerifyController extends HttpServlet {
             }
             else{
                 ResultSet rs = busTable.getBusRequestByPID(p_id);
-                System.out.println("BR PID: " + p_id);
                 while (rs.next()) {
                     JSONObject busData = new JSONObject();
                     busData.put("bus_id", rs.getString("bus_id"));
@@ -57,8 +51,7 @@ public class BusVerifyController extends HttpServlet {
                     busDataArray.put(busData);
                 }
             }
-            System.out.println(busDataArray);
-            out.println(busDataArray.toString());
+            out.println(busDataArray);
             response.setStatus(HttpServletResponse.SC_OK);
         } catch (Exception e) {
             e.printStackTrace();
@@ -68,7 +61,6 @@ public class BusVerifyController extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         response.setContentType("text/html");
-        PrintWriter out = response.getWriter();
 
         String bus_id = request.getParameter("bus_id");
         String action = request.getParameter("action");
@@ -82,7 +74,6 @@ public class BusVerifyController extends HttpServlet {
                     if(insertSuccess > 0) {
                         int updateSuccess = busTable.updateRequestStatus(bus_id, 1);
                         if(updateSuccess > 0) {
-                            System.out.println(rs.getString("bus_id")+ rs.getString("owner_id")+ rs.getString("reg_no")+ rs.getString("route_id")+ rs.getInt("no_of_seats")+rs.getDouble("review_points"));
                             response.setStatus(HttpServletResponse.SC_OK);
                         }
                         else{
@@ -115,7 +106,6 @@ public class BusVerifyController extends HttpServlet {
     @Override
     protected void doDelete(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         response.setContentType("text/html");
-        PrintWriter out = response.getWriter();
 
         try {
             String bus_id = request.getParameter("bus_id");

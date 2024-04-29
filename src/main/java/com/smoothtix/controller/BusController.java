@@ -1,5 +1,4 @@
 package com.smoothtix.controller;
-
 import com.google.gson.Gson;
 import com.smoothtix.dao.busTable;
 import com.smoothtix.dao.ownerTable;
@@ -8,8 +7,6 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-
 import org.json.JSONArray;
 import org.json.JSONObject;
 import java.io.BufferedReader;
@@ -18,17 +15,19 @@ import java.io.PrintWriter;
 import java.sql.ResultSet;
 
 public class BusController extends HttpServlet {
+    // handle get requests
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         response.setContentType("text/html");
         PrintWriter out = response.getWriter();
         JSONArray busDataArray = new JSONArray();
 
+        // get bus id or passenger id from the request header
         String bus_id = request.getHeader("bus_id");
         String p_id = request.getHeader("p_id");
 
         try {
-            ResultSet rs = null;
+            ResultSet rs;
             if (bus_id != null) {
                 rs = busTable.get(bus_id);
                 while (rs.next()) {
@@ -69,35 +68,36 @@ public class BusController extends HttpServlet {
                 }
             }
 
-            out.println(busDataArray.toString()); // Send JSON data as a response
+            out.println(busDataArray);
             response.setStatus(HttpServletResponse.SC_OK);
         } catch (Exception e) {
             e.printStackTrace();
             response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
         }
     }
+
+    // handle post requests
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         response.setContentType("text/html");
         PrintWriter out = response.getWriter();
-        System.out.println("hello");
         try {
-            String p_id = request.getHeader("p_id");// Get passenger's ID from request header
+
+            String p_id = request.getHeader("p_id");
             Gson gson = new Gson();
             BufferedReader reader = request.getReader();
             Bus bus = gson.fromJson(reader, Bus.class);
-            System.out.println(bus.getReg_no());
+
             boolean busExists = busTable.isBusExists(bus.getReg_no());
-            System.out.println(busExists);
             if (busExists) {
                 response.setStatus(HttpServletResponse.SC_CONFLICT);
                 out.println("Bus with registration number already exists.");
                 return;
             }
 
-            String ownerID = getOwnerID(p_id); // Retrieve owner ID or null if not found
+            String ownerID = getOwnerID(p_id);
             if (ownerID != null) {
-                int registrationSuccess = busTable.insert(bus, ownerID); // Pass owner's ID to insert method
+                int registrationSuccess = busTable.insert(bus, ownerID);
 
                 if (registrationSuccess >= 1) {
                     response.setStatus(HttpServletResponse.SC_OK);
@@ -112,16 +112,15 @@ public class BusController extends HttpServlet {
             response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
         }
     }
-    // Retrieve owner ID based on passenger ID
+
+    // generate owner id
     private String getOwnerID(String p_id) {
         try {
-            // Check if the passenger is also an owner
             boolean isOwner = ownerTable.isOwner(p_id);
 
             if (isOwner) {
                 // If the passenger is an owner, retrieve their owner ID
                 return ownerTable.getOwnerIDByPassengerID(p_id);
-
             } else {
                 // If the passenger is not an owner, insert a new entry into the owner table
                 String ownerID = ownerTable.insertOwner(p_id);
@@ -133,11 +132,10 @@ public class BusController extends HttpServlet {
         }
     }
 
-
+    // handle update requests
     @Override
     protected void doPut(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         response.setContentType("text/html");
-        PrintWriter out = response.getWriter();
 
         try {
             Gson gson = new Gson();
@@ -146,7 +144,6 @@ public class BusController extends HttpServlet {
 
             BufferedReader reader = request.getReader();
             Bus bus = gson.fromJson(reader, Bus.class);
-
 
             int updateSuccess = busTable.update(bus_id, bus);
 
@@ -161,10 +158,10 @@ public class BusController extends HttpServlet {
         }
     }
 
+    // handle delete requests
     @Override
     protected void doDelete(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         response.setContentType("text/html");
-        PrintWriter out = response.getWriter();
 
         try {
             String bus_id = request.getHeader("bus_id");

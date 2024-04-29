@@ -1,5 +1,4 @@
 package com.smoothtix.dao;
-
 import com.smoothtix.database.dbConnection;
 import com.smoothtix.model.Conductor;
 import com.smoothtix.model.Passenger;
@@ -25,8 +24,6 @@ public class conductorTable {
                 ps.setString(2, rs.getString("p_id"));
                 ps.setDouble(3, 0);
                 ps.setString(4, owner_id);
-                System.out.println("nic: " + rs.getString("nic"));
-                System.out.println("p_id: " + rs.getString("p_id"));
                 Passenger passenger = new Passenger(rs.getString("nic"), 5);
                 int success = passengerTable.updatePrivilegeLevel(rs.getString("p_id"), passenger);
                 if (success == 1) {
@@ -35,7 +32,7 @@ public class conductorTable {
                         return 1;
                     } else {
                         Passenger passenger2 = new Passenger(rs.getString("nic"), 6);
-                        int success2 = passengerTable.updatePrivilegeLevel(rs.getString("p_id"), passenger2);
+                        passengerTable.updatePrivilegeLevel(rs.getString("p_id"), passenger2);
                         return -1;
                     }
                 } else {
@@ -72,17 +69,15 @@ public class conductorTable {
         Connection con = dbConnection.initializeDatabase();
         PreparedStatement pst = con.prepareStatement("SELECT * FROM conductor WHERE conductor_id=?");
         pst.setString(1,conductor_id);
-        ResultSet rs = pst.executeQuery();
-        return rs;
+        return pst.executeQuery();
     }
 
     public static ResultSet getAll() throws SQLException, ClassNotFoundException {
         Connection con = dbConnection.initializeDatabase();
         PreparedStatement pst = con.prepareStatement("SELECT * FROM conductor");
-        ResultSet rs = pst.executeQuery();
-        return rs;
+        return pst.executeQuery();
     }
-    public static ResultSet get_by_p_id(String p_id) throws SQLException, ClassNotFoundException {
+    public static ResultSet get_by_p_id(String p_id) throws SQLException {
         Connection con = dbConnection.initializeDatabase();
         PreparedStatement pst = con.prepareStatement("SELECT * FROM conductor WHERE p_id=?");
         pst.setString(1,p_id);
@@ -95,7 +90,7 @@ public class conductorTable {
         return pst.executeQuery();
     }
 
-    public static ResultSet get_NIC(String p_id) throws SQLException, ClassNotFoundException {
+    public static ResultSet get_NIC(String p_id) throws SQLException {
         Connection con = dbConnection.initializeDatabase();
             String sql = "SELECT p.nic " +
                     "FROM owner o " +
@@ -108,15 +103,14 @@ public class conductorTable {
         return pst.executeQuery();
     }
 
-    public static ResultSet getAllByOwner(String p_id) throws SQLException, ClassNotFoundException {
+    public static ResultSet getAllByOwner(String p_id) throws SQLException {
         Connection con = dbConnection.initializeDatabase();
         PreparedStatement pst = con.prepareStatement(
                 "SELECT * FROM conductor " +
                         "WHERE owner_id IN (SELECT owner_id FROM conductor WHERE owner_id IN (SELECT owner_id FROM owner WHERE p_id = ?))"
         );
         pst.setString(1, p_id);
-        ResultSet rs = pst.executeQuery();
-        return rs;
+        return pst.executeQuery();
     }
 
     public static int update(String conductor_id,Conductor conductor) throws SQLException, ClassNotFoundException {
@@ -125,8 +119,7 @@ public class conductorTable {
         pst.setFloat(1,conductor.getReview_points());
         pst.setString(2,conductor_id);
 
-        int rawCount = pst.executeUpdate();
-        return rawCount;
+        return pst.executeUpdate();
     }
 
     public static int delete(String conductor_id) throws SQLException, ClassNotFoundException {

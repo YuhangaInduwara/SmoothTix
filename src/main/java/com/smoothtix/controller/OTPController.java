@@ -1,15 +1,6 @@
 package com.smoothtix.controller;
-
 import com.google.gson.Gson;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
-import com.smoothtix.dao.conductorTable;
-import com.smoothtix.dao.ownerTable;
-import com.smoothtix.dao.passengerTable;
 import com.smoothtix.model.OTP;
-import com.smoothtix.model.Payment;
-
 import javax.mail.*;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
@@ -20,21 +11,22 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.sql.ResultSet;
 import java.util.Properties;
 
 public class OTPController extends HttpServlet {
+    // handle post requests
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         response.setContentType("text/json");
-        PrintWriter out = response.getWriter();
+
+        // parse the json request data to an OTP object
         Gson gson = new Gson();
         BufferedReader reader = request.getReader();
         OTP otp = gson.fromJson(reader, OTP.class);
         System.out.println("email : " + otp.getEmail());
         System.out.println("otp : " + otp.getOTP());
 
+        // call the sendEmail with 2 parameters which are received from database
         int sendSuccess = sendEmail(otp.getEmail(), otp.getOTP());
-//        int sendSuccess = 1;
         if(sendSuccess > 0){
           response.setStatus(HttpServletResponse.SC_OK);
         }

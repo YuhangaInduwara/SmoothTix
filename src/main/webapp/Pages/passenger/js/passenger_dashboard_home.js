@@ -1,3 +1,4 @@
+// create add a bus html form
 function createForm() {
     const form_add = document.createElement('div');
     form_add.classList.add('bus_add_form_body');
@@ -25,6 +26,7 @@ function createForm() {
     formContainer_add.appendChild(form_add.cloneNode(true));
 }
 
+// this is called when entering the route
 function showSuggestions1(event) {
     const input = event.target;
     const inputValue = input.value.toUpperCase();
@@ -86,7 +88,7 @@ function showSuggestions1(event) {
     }
 }
 
-
+// this connects with front end Owner box
 function openForm_add() {
     // Fetch data to check if the owner has any buses associated
     fetch(`${url}/busController`, {
@@ -125,26 +127,30 @@ function openForm_add() {
     });
 }
 
-
+// function to close add bus form
 function closeForm_add() {
     document.getElementById("busRegForm").style.display = "none";
     document.getElementById("overlay").style.display = "none";
     window.location.href = "../html/passenger_dashboard_home.html";
 }
 
+
 function openAlertSuccess(response) {
+// function to open success alert
     bus_id = "";
     document.getElementById("successMsg").innerHTML = response ;
     document.getElementById("successAlert").style.display = "block";
     document.getElementById("overlay").style.display = "block";
 }
 
+// function to close success alert
 function closeAlertSuccess() {
     bus_id = "";
     document.getElementById("successAlert").style.display = "none";
     document.getElementById("overlay").style.display = "none";
 }
 
+// function to open fail alert
 function openAlertFail(response) {
     bus_id = "";
     document.getElementById("failMsg").innerHTML = "Operation failed <br> (" + response + ")";
@@ -152,6 +158,7 @@ function openAlertFail(response) {
     document.getElementById("overlay").style.display = "block";
 }
 
+// function to close fail alert
 function closeAlertFail() {
     bus_id = "";
     document.getElementById("failAlert").style.display = "none";
@@ -159,6 +166,7 @@ function closeAlertFail() {
     window.location.href = "../html/passenger_dashboard_home.html";
 }
 
+// event listener for add a bus
 document.getElementById("busRegForm").addEventListener("submit", function(event) {
     event.preventDefault();
     const reg_no = document.getElementById("add_reg_no").value;
@@ -200,11 +208,12 @@ document.getElementById("busRegForm").addEventListener("submit", function(event)
     });
 });
 
-
+// session management
 document.addEventListener('DOMContentLoaded', function () {
     isAuthenticated().then(() => init_page());
 });
 
+// count smooth points and display
 function updateCount(targetElement) {
     fetch(`${url}/smoothPointController?p_id=${session_p_id}`, {
         method: 'GET',
@@ -241,6 +250,7 @@ function updateCount(targetElement) {
         });
 }
 
+// show next booking
 function fetchNextBooking(){
     fetch(`${ url }/bookingController?p_id=${session_p_id}`, {
         method: 'GET',
@@ -277,6 +287,7 @@ function fetchNextBooking(){
         });
 }
 
+// initialize the page
 function init_page(){
     document.getElementById("userName").textContent = session_user_name;
     document.getElementById("user").textContent = session_user_name;

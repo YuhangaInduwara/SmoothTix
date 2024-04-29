@@ -1,9 +1,7 @@
 package com.smoothtix.controller;
-
 import com.google.gson.Gson;
 import com.smoothtix.dao.pointTable;
 import com.smoothtix.model.Point;
-
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -16,21 +14,21 @@ public class PointController extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        // handle post (insert) requests
         response.setContentType("application/json");
         PrintWriter out = response.getWriter();
 
         try {
+            // parse the json request data to point object
             Gson gson = new Gson();
             BufferedReader reader = request.getReader();
             Point point = gson.fromJson(reader, Point.class);
-            System.out.println("point1");
 
             String jsonResponse = pointTable.insert(point);
 
 
+            // if passed point insertion
             if (!jsonResponse.equals("Unsuccessful")) {
-                System.out.println("point3");
-
                 out.write(jsonResponse);
                 response.setStatus(HttpServletResponse.SC_OK);
             } else {

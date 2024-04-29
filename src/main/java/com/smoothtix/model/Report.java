@@ -9,7 +9,6 @@ public class Report {
     private String startDate;
     private String endDate;
 
-    // Constructor, getters, and setters
     public Report(String timePeriod, String busRegNo, int totalSeatsBooked, double totalPaymentsDeleted, double finalAmount) {
         this.timePeriod = timePeriod;
         this.busRegNo = busRegNo;
@@ -23,7 +22,6 @@ public class Report {
         this.endDate = endDate;
         this.busRegNo = busRegNo;
     }
-
 
     public String getStartDate() {
         return startDate;
@@ -61,13 +59,9 @@ public class Report {
         return totalPaymentsDeleted;
     }
 
-    public void setTotalPaymentsDeleted(double totalPaymentsDeleted) {
-        this.totalPaymentsDeleted = totalPaymentsDeleted;
-    }
+    public void setTotalPaymentsDeleted(double totalPaymentsDeleted) { this.totalPaymentsDeleted = totalPaymentsDeleted;}
 
-    public double getFinalAmount() {
-        return finalAmount;
-    }
+    public double getFinalAmount() {return finalAmount;}
 
     public void setFinalAmount(double finalAmount) {
         this.finalAmount = finalAmount;
