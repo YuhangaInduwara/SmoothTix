@@ -1,5 +1,4 @@
 package com.smoothtix.controller;
-
 import com.google.gson.Gson;
 import com.smoothtix.dao.passengerTable;
 import com.smoothtix.model.Passenger;
