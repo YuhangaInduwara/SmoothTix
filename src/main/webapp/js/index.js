@@ -1,5 +1,7 @@
 let i = 0;
 let txt = 'Your Ticket to a Smooth Travel';
+let speed = 50;
+
 
 // show the text as typing
 function typeWriter() {

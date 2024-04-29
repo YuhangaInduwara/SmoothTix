@@ -10,18 +10,20 @@ import java.sql.SQLException;
 
 public class feasibilityTable {
 
+    // Method to insert a new feasibility record into the database
     public static int insert(Feasibility feasibility) throws SQLException, ClassNotFoundException {
         Connection con = dbConnection.initializeDatabase();
         PreparedStatement pst = con.prepareStatement("INSERT INTO feasible_schedule(bus_profile_id, date, time_range, availability) VALUES (?, ?, ?, ?)");
         pst.setString(1, feasibility.getBus_id());
         pst.setDate(2, feasibility.getDate());
         pst.setString(3, feasibility.getTime_range());
-        pst.setInt(4,1);
+        pst.setInt(4, 1); // Assuming availability is initially set to 1 (available)
 
         int rawCount = pst.executeUpdate();
         return rawCount;
     }
 
+    // Method to retrieve a feasibility record by bus profile ID
     public static ResultSet get(String bus_profile_id) throws SQLException, ClassNotFoundException {
         Connection con = dbConnection.initializeDatabase();
         PreparedStatement pst = con.prepareStatement("SELECT * FROM bus_profile WHERE bus_profile_id = ?");
@@ -29,6 +31,8 @@ public class feasibilityTable {
         ResultSet rs = pst.executeQuery();
         return rs;
     }
+
+    // Method to retrieve all feasibility records from the database
     public static ResultSet getAll() throws SQLException, ClassNotFoundException {
         Connection con = dbConnection.initializeDatabase();
         PreparedStatement pst = con.prepareStatement("SELECT * FROM feasible_schedule");
@@ -36,6 +40,7 @@ public class feasibilityTable {
         return rs;
     }
 
+    // Method to retrieve feasibility records by start, destination, and date
     public static ResultSet get_by_date(String start, String destination, String date) throws SQLException {
         Connection con = dbConnection.initializeDatabase();
         PreparedStatement pst = con.prepareStatement("SELECT\n" +

@@ -130,76 +130,76 @@ a{
 
 
 .container {
+     display: flex;
+     justify-content: space-around;
+}
+
+.box {
+      position: relative;
+      transition: box-shadow 0.3s;
+      padding: 20px;
+      border: 1px solid #ccc;
+      margin-bottom: 10px;
+      margin-top: 70px;
+      margin-right:10px;
+      margin-left:20px;
+      border-radius: 20px;
+      background-color: #EAEDED;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.8);
+
+}
+
+.box:hover {
+      background-color:#E5E8E8;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.form-heading {
+      text-align: center;
+      margin-bottom: 20px;
+}
+
+form {
+      display: flex;
+      flex-direction: column;
+}
+
+label {
+      margin-bottom: 10px;
+}
+
+input {
+       padding: 8px;
+       margin-bottom: 10px;
+       border: 1px solid #ccc;
+       box-sizing: border-box;
+       border-radius: 10px;
+       background-color:#EAEDED;
+}
+
+.errorMgForm {
         display: flex;
-        justify-content: space-around;
-    }
+        justify-content: center;
+        align-items: center;
+        position: fixed; /* Ensures that the form stays centered even when scrolling */
+        top: 300px;
+        left: 650px;
+        width: 100hv;
+        height: 100hv;
+        background-color: #F8F9F9;
+        z-index: 999; /* Ensures the form is above other content */
+}
 
-    .box {
-        position: relative;
-        transition: box-shadow 0.3s;
-        width: auto;
-        padding: 20px;
-        border: 1px solid #ccc;
-        margin-bottom: 10px;
-        margin-top: 70px;
-        margin-right:10px;
-        margin-left:20px;
-        border-radius: 20px;
-        background-color: #EAEDED;
-        box-shadow: 0 0 10px rgba(0, 0, 0, 0.8);
-       
-    }
-    .box:hover {
-            background-color:#E5E8E8;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        }
+.errorMgFormContent {
+        background-color: #F8F9F9;
+        padding: 20px; /* Adjust as needed */
+        border-radius: 5px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.5); /* Box shadow for a subtle elevation effect */
+}
 
-    .form-heading {
-        text-align: center;
-        margin-bottom: 20px;
-    }
-
-    form {
-        display: flex;
-        flex-direction: column;
-    }
-
-    label {
-        margin-bottom: 10px;
-    }
-
-    input {
-        padding: 8px;
-        margin-bottom: 10px;
-        border: 1px solid #ccc;
-        box-sizing: border-box;
-        border-radius: 10px;
-        background-color:#EAEDED;
-    }
-
-    .errorMgForm {
-           display: flex;
-           justify-content: center;
-           align-items: center;
-           position: fixed; /* Ensures that the form stays centered even when scrolling */
-           top: 300px;
-           left: 650px;
-           width: 100hv;
-           height: 100hv;
-           background-color: #F8F9F9;
-           z-index: 999; /* Ensures the form is above other content */
-       }
-
-       .errorMgFormContent {
-            background-color: #F8F9F9;
-           padding: 20px; /* Adjust as needed */
-           border-radius: 5px;
-           box-shadow: 0 0 10px rgba(0, 0, 0, 0.5); /* Box shadow for a subtle elevation effect */
-       }
-
-       .errorMgText {
-          font-weight:bold;
-          color:red;
-       }
+.errorMgText {
+       font-weight:bold;
+       color:red;
+}
 
 

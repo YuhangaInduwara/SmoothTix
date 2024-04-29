@@ -70,7 +70,6 @@ public class BusprofileController extends HttpServlet {
                 }
             }
 
-
             else{
                 ResultSet rs = busprofileTable.getAllDetails(p_id);
                 while (rs.next()) {

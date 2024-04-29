@@ -1,5 +1,4 @@
 package com.smoothtix.dao;
-
 import com.smoothtix.database.dbConnection;
 import com.smoothtix.model.Passenger;
 import java.sql.*;
@@ -20,21 +19,18 @@ public class passengerTable {
         return rawCount;
     }
 
-    private static String generate_p_id() throws SQLException, ClassNotFoundException {
+    private static String generate_p_id() throws SQLException {
         Connection con = dbConnection.initializeDatabase();
         String query = "SELECT COALESCE(MAX(CAST(SUBSTRING(p_id, 2) AS SIGNED)), 0) + 1 AS next_p_id FROM passenger";
         Statement stmt = con.createStatement();
-        ResultSet rs = ((Statement) stmt).executeQuery(query);
+        ResultSet rs = stmt.executeQuery(query);
 
         int nextPassengerID = 1;
         if (rs.next()) {
             nextPassengerID = rs.getInt("next_p_id");
         }
-
         return "P" + String.format("%04d", nextPassengerID);
     }
-
-
 
     public static ResultSet getBy_p_id(String p_id) throws SQLException, ClassNotFoundException {
         Connection con = dbConnection.initializeDatabase();
@@ -43,14 +39,14 @@ public class passengerTable {
         return pst.executeQuery();
     }
 
-    public static ResultSet getBy_flag(String flag) throws SQLException, ClassNotFoundException {
+    public static ResultSet getBy_flag(String flag) throws SQLException {
         Connection con = dbConnection.initializeDatabase();
         PreparedStatement pst = con.prepareStatement("SELECT * FROM passenger WHERE flag=?");
         pst.setBoolean(1,Boolean.parseBoolean(flag));
         return pst.executeQuery();
     }
 
-    public static ResultSet getBy_flag_p_l(String flag, String privilege_level) throws SQLException, ClassNotFoundException {
+    public static ResultSet getBy_flag_p_l(String flag, String privilege_level) throws SQLException {
         Connection con = dbConnection.initializeDatabase();
         PreparedStatement pst = con.prepareStatement("SELECT * FROM passenger WHERE flag=? AND privilege_level=?");
         pst.setBoolean(1,Boolean.parseBoolean(flag));
@@ -58,7 +54,7 @@ public class passengerTable {
         return pst.executeQuery();
     }
 
-    public static ResultSet getBy_nic(String nic) throws SQLException, ClassNotFoundException {
+    public static ResultSet getBy_nic(String nic) throws SQLException {
         Connection con = dbConnection.initializeDatabase();
         PreparedStatement pst = con.prepareStatement("SELECT * FROM passenger WHERE nic=?");
         pst.setString(1,nic);
@@ -89,7 +85,7 @@ public class passengerTable {
         return pst.executeUpdate();
     }
 
-    public static int updatePassword(String p_id, Passenger passenger) throws SQLException, ClassNotFoundException {
+    public static int updatePassword(String p_id, Passenger passenger) throws SQLException {
         Connection con = dbConnection.initializeDatabase();
         PreparedStatement pst = con.prepareStatement("UPDATE passenger SET password=? WHERE p_id=?");
         pst.setString(1,passenger.get_password());
@@ -97,7 +93,7 @@ public class passengerTable {
         return pst.executeUpdate();
     }
 
-    public static int updateFlag(String p_id, Passenger passenger) throws SQLException, ClassNotFoundException {
+    public static int updateFlag(String p_id, Passenger passenger) throws SQLException {
         Connection con = dbConnection.initializeDatabase();
         PreparedStatement pst = con.prepareStatement("UPDATE passenger SET flag=? WHERE p_id=?");
         pst.setBoolean(1,!passenger.get_flag());
@@ -106,7 +102,7 @@ public class passengerTable {
         return pst.executeUpdate();
     }
 
-    public static int updatePrivilegeLevel(String p_id, Passenger passenger) throws SQLException, ClassNotFoundException {
+    public static int updatePrivilegeLevel(String p_id, Passenger passenger) throws SQLException {
         Connection con = dbConnection.initializeDatabase();
         PreparedStatement pst = con.prepareStatement("UPDATE passenger SET privilege_level=? WHERE p_id=?");
         pst.setInt(1,passenger.get_privilege_level());
@@ -121,12 +117,6 @@ public class passengerTable {
         return pst.executeUpdate();
     }
 
-    public  static ResultSet getLastPassenger() throws SQLException {
-        Connection con = dbConnection.initializeDatabase();
-        PreparedStatement pst = con.prepareStatement("SELECT * FROM passenger ORDER BY p_id DESC LIMIT 1;");
-        return pst.executeQuery();
-    }
-
     public static String getPassword(String p_id) throws SQLException{
         Connection con = dbConnection.initializeDatabase();
         PreparedStatement pst = con.prepareStatement("SELECT password FROM passenger WHERE p_id=?");
@@ -134,17 +124,6 @@ public class passengerTable {
         ResultSet rs = pst.executeQuery();
         if(rs.next()){
             return rs.getString("password");
-        }
-        else return null;
-    }
-
-    public static String getEmail(String nic) throws SQLException{
-        Connection con = dbConnection.initializeDatabase();
-        PreparedStatement pst = con.prepareStatement("SELECT email,p_id FROM passenger WHERE nic=?");
-        pst.setString(1,nic);
-        ResultSet rs = pst.executeQuery();
-        if(rs.next()){
-            return rs.getString("email");
         }
         else return null;
     }

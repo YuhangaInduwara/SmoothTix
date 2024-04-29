@@ -7,12 +7,14 @@ let seat_delete = [];
 let all_seats = [];
 const errorMessages = {};
 
+// session management
 document.addEventListener('DOMContentLoaded', function () {
    isAuthenticated().then(() => fetchAllData());
 });
 
 setSearchStands()
 
+// get the stand data for display on start and end dropdowns
 function setSearchStands() {
     fetch(`${url}/routeController?request_data=stand_list`, {
         method: 'GET',
@@ -59,9 +61,10 @@ function refreshPage() {
     location.reload();
 }
 
+// get passenger's data from the database
 function fetchAllData(){
     document.getElementById('loading-spinner').style.display = 'block';
-    document.getElementById("userName").textContent = session_user_name;
+    document.getElementById("userName").textContent = session_user_name;  // set dashboard user name
     fetch(`${ url }/bookingController?p_id=${session_p_id}`, {
         method: 'GET',
         headers: {
@@ -93,6 +96,7 @@ function fetchAllData(){
         });
 }
 
+// upcoming bookings. these bookings can be deleted
 function displayDataAsScheduleTiles_0(data) {
     const scheduleList = document.getElementById("schedule_list");
     scheduleList.innerHTML = "";
@@ -164,6 +168,7 @@ function displayDataAsScheduleTiles_0(data) {
     });
 }
 
+// previous bookings. these bookings can be reviewed and see location if on going
 function displayDataAsScheduleTiles_1(data) {
     const scheduleList = document.getElementById("schedule_list_old");
     scheduleList.innerHTML = "";
@@ -242,6 +247,7 @@ function displayDataAsScheduleTiles_1(data) {
     });
 }
 
+// track the location
 var map = L.map('map').setView([0, 0], 2);
 
 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -286,6 +292,7 @@ function updateMarkerPosition(lat, lng) {
     map.setView([lat, lng], currentZoomLevel);
 }
 
+// fetch location for every 1 second
 function startFetchingLocation(schedule_id) {
     fetchAndUpdateLocation(schedule_id);
     fetchInterval = setInterval(() => {
@@ -328,18 +335,21 @@ function RemoveLocation(){
     document.getElementById("overlay").style.display = "none";
 }
 
+// add a review
 function openReview(schedule_id, booking_id){
     booking_id_review = booking_id;
     document.getElementById("review_container").style.display = "block";
     document.getElementById("overlay").style.display = "block";
 }
 
+// close the review
 function closeReview(){
     booking_id_review = '';
     document.getElementById("review_container").style.display = "none";
     document.getElementById("overlay").style.display = "none";
 }
 
+// event listener for review submit button
 document.getElementById("review_form").addEventListener("submit", function(event) {
     event.preventDefault();
 
@@ -385,6 +395,7 @@ document.getElementById("review_form").addEventListener("submit", function(event
         });
 });
 
+// call from above function
 function addReview(point_id, booking_id, comments){
 
     const reviewDetails = {
@@ -415,6 +426,7 @@ function addReview(point_id, booking_id, comments){
         });
 }
 
+// open alert everything control from here
 function openAlert(text, alertBody){
     if(alertBody === "alertFail"){
         document.getElementById("alertMsg").textContent = text;
@@ -426,6 +438,7 @@ function openAlert(text, alertBody){
     document.getElementById("overlay").style.display = "block";
 }
 
+// this also calls with open alert when press ok button
 function closeAlert(){
     const alertSuccess = document.getElementById("alertSuccess");
     const alertFail = document.getElementById("alertFail");
@@ -443,6 +456,7 @@ function closeAlert(){
     refreshPage();
 }
 
+// delete a booking
 function deleteBooking_passenger(booking_id, seat_no){
     booking_id_delete = booking_id;
     openDeleteConfirmation(seat_no);
@@ -488,6 +502,7 @@ function closeDeleteConfirmation(){
     document.getElementById("overlay").style.display = "none";
 }
 
+// delete the payment of the booking
 function deleteBookingPayment(){
     if(booking_id_delete === ''){
         console.error('booking_id_delete is null');
@@ -506,6 +521,7 @@ function deleteBookingPayment(){
     }
 }
 
+// show alert box
 function showAlert(inputElement, message) {
     if (!errorMessages[inputElement.id]) {
         const alertBox = document.createElement("div");
@@ -529,7 +545,7 @@ function deleteFetch(booking_id, selected_seat, action){
         p_id: session_p_id,
         selectedSeats: selected_seat,
     };
-    console.log(selected_seat)
+
     const jsonData = JSON.stringify(userData);
     fetch(`${url}/bookingController?action=${action}`, {
         method: "DELETE",
@@ -550,6 +566,7 @@ function deleteFetch(booking_id, selected_seat, action){
         });
 }
 
+// see more function. this creates a another div model
 function openSeeMore(page){
     document.getElementById("seeMoreBookings").style.display = "block";
     document.getElementById("overlay").style.display = "block";
@@ -614,13 +631,13 @@ function closeSeeMore(){
     document.getElementById("overlay").style.display = "none";
 }
 
+// search require data
 function searchData() {
     const start = document.getElementById('dropdown_start').value.toLowerCase();
     const destination = document.getElementById('dropdown_destination').value.toLowerCase();
     const date = document.getElementById('datePicker').value;
     const startTime = document.getElementById('startTimePicker').value;
     const endTime = document.getElementById('endTimePicker').value;
-    console.log("start: " + start + " destination: " + destination + " date: " + date + " startTime: " + startTime + " endTime: " + endTime);
 
     fetch(`${ url }/bookingController?start=${start}&destination=${destination}&date=${date}&startTime=${startTime}&endTime=${endTime}&p_id=${session_p_id}`, {
         method: 'GET',

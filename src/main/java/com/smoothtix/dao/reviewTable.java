@@ -1,8 +1,6 @@
 package com.smoothtix.dao;
-
 import com.smoothtix.database.dbConnection;
 import com.smoothtix.model.Review;
-
 import java.sql.*;
 
 public class reviewTable {
@@ -26,28 +24,11 @@ public class reviewTable {
         return "Unsuccessful";
     }
 
-    public static String generateReviewID(String bookingID) throws SQLException{
+    public static String generateReviewID(String bookingID) {
 
         String reviewID = bookingID.replace("BK","REVW");
         System.out.println("Review Profile ID: " + reviewID);
         return reviewID;
-    }
-
-    public static String getBusProfileID(String bookingID) throws SQLException {
-        Connection con = dbConnection.initializeDatabase();
-        PreparedStatement pst = con.prepareStatement(
-                "SELECT s.bus_profile_id " +
-                        "FROM booking b " +
-                        "JOIN schedule s ON b.schedule_id = s.schedule_id " +
-                        "WHERE b.booking_id = ?");
-        pst.setString(1, bookingID);
-        ResultSet rs = pst.executeQuery();
-        String busProfileID = null;
-        if (rs.next()) {
-            busProfileID = rs.getString("bus_profile_id");
-            System.out.println("Bus Profile ID: " + busProfileID);
-        }
-        return busProfileID;
     }
 
     public static String getScheduleID(String bookingID) throws SQLException {
@@ -62,7 +43,6 @@ public class reviewTable {
         String schedule_id = null;
         if (rs.next()) {
             schedule_id = rs.getString("schedule_id");
-            System.out.println("Bus Profile ID: " + schedule_id);
         }
         return schedule_id;
     }
@@ -95,7 +75,6 @@ public class reviewTable {
         ResultSet rs = pst.executeQuery();
         return rs;
     }
-
 
     public static ResultSet getByd_Id(String driver_id) throws SQLException {
         Connection con = dbConnection.initializeDatabase();
