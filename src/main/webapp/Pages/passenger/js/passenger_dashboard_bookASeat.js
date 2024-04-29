@@ -13,6 +13,31 @@ const errorMessages = {};
 let standData = [];
 let isPayByPoints = false;
 
+// Function to capitalize the first letter of stand
+function capitalizeStartAndDestination(data) {
+    function capitalizeFirstLetter(str) {
+        return str.charAt(0).toUpperCase() + str.slice(1);
+    }
+
+    if (data) {
+        data.forEach(row => {
+            if (row.start) {
+                row.start = capitalizeFirstLetter(row.start);
+            }
+
+            if (row.destination) {
+                row.destination = capitalizeFirstLetter(row.destination);
+            }
+
+            if (row.stand_list) {
+                row.stand_list = capitalizeFirstLetter(row.stand_list);
+            }
+        });
+    }
+
+    return data;
+}
+
 setSearchStands();
 
 // function to refresh the page
@@ -39,7 +64,7 @@ function setSearchStands() {
         .then(data => {
 
             if (data) {
-                standData = data;
+                standData = capitalizeStartAndDestination(data);
 
                 let dropdown_start = document.getElementById("dropdown_start");
                 let dropdown_destination = document.getElementById("dropdown_destination");
@@ -83,7 +108,8 @@ function fetchAllData() {
             }
         })
         .then(data => {
-            allData = data.filter(booking => booking.status === 0);
+            let tempData = capitalizeStartAndDestination(data);
+            allData = tempData.filter(booking => booking.status === 0);
             updatePage(currentPage);
         })
         .catch(error => {
@@ -238,7 +264,7 @@ function searchData() {
         .then(data => {
             const scheduleList = document.getElementById("schedule_list");
             scheduleList.innerHTML = "";
-            allData = data;
+            allData = capitalizeStartAndDestination(data);
             updatePage(currentPage);
         })
         .catch(error => {

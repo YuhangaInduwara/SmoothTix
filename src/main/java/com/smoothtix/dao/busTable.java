@@ -132,7 +132,24 @@ public class busTable {
 
     public static ResultSet getAll() throws SQLException, ClassNotFoundException {
         Connection con = dbConnection.initializeDatabase();
-        PreparedStatement pst = con.prepareStatement("SELECT * FROM bus");
+        PreparedStatement pst = con.prepareStatement("SELECT \n" +
+                "    b.bus_id,\n" +
+                "    b.owner_id,\n" +
+                "    p.nic AS owner_nic,\n" +
+                "    b.reg_no,\n" +
+                "    b.route_id,\n" +
+                "    b.no_of_seats,\n" +
+                "    b.review_points,\n" +
+                "    r.route_no,\n" +
+                "\tCONCAT(r.start, '-', r.destination) AS route\n" +
+                "FROM \n" +
+                "    bus b\n" +
+                "JOIN \n" +
+                "    owner o ON b.owner_id = o.owner_id\n" +
+                "JOIN \n" +
+                "    passenger p ON p.p_id = o.p_id\n" +
+                "JOIN \n" +
+                "    route r ON b.route_id = r.route_id;");
         return pst.executeQuery();
     }
 

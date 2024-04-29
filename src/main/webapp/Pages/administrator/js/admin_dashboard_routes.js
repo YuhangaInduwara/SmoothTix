@@ -5,6 +5,31 @@ let allData = [];
 let dataSearch = [];
 let searchOption = 'route_no';
 
+// Function to capitalize the first letter of stand
+function capitalizeStartAndDestination(data) {
+    function capitalizeFirstLetter(str) {
+        return str.charAt(0).toUpperCase() + str.slice(1);
+    }
+
+    if (data) {
+        data.forEach(row => {
+            if (row.start) {
+                row.start = capitalizeFirstLetter(row.start);
+            }
+
+            if (row.destination) {
+                row.destination = capitalizeFirstLetter(row.destination);
+            }
+
+            if (row.stand_list) {
+                row.stand_list = capitalizeFirstLetter(row.stand_list);
+            }
+        });
+    }
+
+    return data;
+}
+
 // session management (authentication and authorization)
 document.addEventListener('DOMContentLoaded', function () {
     isAuthenticated().then(() => fetchAllData());
@@ -64,7 +89,7 @@ function fetchAllData() {
             }
         })
         .then(data => {
-            allData = data;
+            allData = capitalizeStartAndDestination(data);
             updatePage(currentPage, false);
         })
         .catch(error => {
@@ -387,8 +412,6 @@ searchInput.addEventListener("keyup", searchData);
 function searchData() {
     const searchTerm = document.getElementById("searchInput").value;
     const search = searchTerm.toLowerCase();
-    console.log(searchTerm)
-    console.log(searchOption)
 
     dataSearch = allData.filter(user =>
         user[searchOption].toLowerCase().includes(search)

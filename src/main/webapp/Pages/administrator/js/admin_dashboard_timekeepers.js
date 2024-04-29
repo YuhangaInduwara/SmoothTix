@@ -5,6 +5,31 @@ let allData = [];
 let dataSearch = [];
 let searchOption = 'timekpr_id';
 
+// Function to capitalize the first letter of stand
+function capitalizeStartAndDestination(data) {
+    function capitalizeFirstLetter(str) {
+        return str.charAt(0).toUpperCase() + str.slice(1);
+    }
+
+    if (data) {
+        data.forEach(row => {
+            if (row.start) {
+                row.start = capitalizeFirstLetter(row.start);
+            }
+
+            if (row.destination) {
+                row.destination = capitalizeFirstLetter(row.destination);
+            }
+
+            if (row.stand) {
+                row.stand = capitalizeFirstLetter(row.stand);
+            }
+        });
+    }
+
+    return data;
+}
+
 // session management (authentication and authorization)
 document.addEventListener('DOMContentLoaded', function () {
     isAuthenticated().then(() => fetchAllData());
@@ -32,7 +57,7 @@ function fetchAllData() {
             }
         })
         .then(data => {
-            allData = data;
+            allData = capitalizeStartAndDestination(data)
             updatePage(currentPage, false);
         })
         .catch(error => {

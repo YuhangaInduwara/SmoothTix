@@ -5,6 +5,26 @@ let allRequestData = [];
 let dataSearch = [];
 let searchOption = 'bus_id';
 
+// Function to capitalize the first letter of route
+function capitalizeRoute(data) {
+    function capitalizeFirstLetter(str) {
+        return str.charAt(0).toUpperCase() + str.slice(1);
+    }
+
+    if (data) {
+        data.forEach(row => {
+            console.log(row)
+            if (row.route) {
+                const parts = row.route.split('-');
+                const capitalizedParts = parts.map(part => capitalizeFirstLetter(part));
+                row.route = capitalizedParts.join(' - ');
+            }
+        });
+    }
+
+    return data;
+}
+
 // session management (authentication and authorization)
 document.addEventListener('DOMContentLoaded', function () {
     isAuthenticated().then(() => fetchAllData());
@@ -32,7 +52,7 @@ function fetchAllData() {
             }
         })
         .then(data => {
-            allData = data;
+            allData = capitalizeRoute(data);
             updatePage(currentPage, false);
         })
         .catch(error => {
@@ -102,9 +122,10 @@ function displayDataAsTable(data) {
 
         row.innerHTML = `
             <td>${item.bus_id}</td>
-            <td>${item.owner_id}</td>
+            <td>${item.owner_nic}</td>
             <td>${item.reg_no}</td>
-            <td>${item.route_id}</td>
+            <td>${item.route_no}</td>
+            <td>${item.route}</td>
             <td>${item.no_of_Seats}</td>
             <td>${item.review_points}</td>
         `;

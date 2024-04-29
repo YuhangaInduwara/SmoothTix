@@ -6,6 +6,26 @@ const pageSize = 10;
 let allData = [];
 let dataSearch = [];
 
+// Function to capitalize the first letter of stand
+function capitalizeRoute(data) {
+    function capitalizeFirstLetter(str) {
+        return str.charAt(0).toUpperCase() + str.slice(1);
+    }
+
+    if (data) {
+        data.forEach(row => {
+            console.log(row)
+            if (row.route) {
+                const parts = row.route.split('-');
+                const capitalizedParts = parts.map(part => capitalizeFirstLetter(part));
+                row.route = capitalizedParts.join(' - ');
+            }
+        });
+    }
+
+    return data;
+}
+
 // When the DOM content is loaded, execute the function
 document.addEventListener('DOMContentLoaded', function () {
     // Check if the user is authenticated, then fetch all data
@@ -39,7 +59,7 @@ function fetchAllData() {
     })
     .then(data => {
         // Store fetched data and update the page
-        allData = data;
+        allData = capitalizeRoute(data);
         updatePage(currentPage);
     })
     .catch(error => {
