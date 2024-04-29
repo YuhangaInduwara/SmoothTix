@@ -1,162 +1,164 @@
+// This event listener waits for the DOMContentLoaded event before executing the provided function.
 document.addEventListener('DOMContentLoaded', function () {
-   isAuthenticated().then(() => fetchOwnerId());
+    // It calls the isAuthenticated function and then calls fetchOwnerId if the user is authenticated.
+    isAuthenticated().then(() => fetchOwnerId());
 });
 
+// This function fetches the owner ID and then calls fetchAllData with the owner ID.
 function fetchOwnerId() {
+    // It sets the user name in the HTML element with the id "userName".
     document.getElementById("userName").textContent = session_user_name;
-    fetch(`${ url }/ownerController?action=owner_id`, {
+
+    // It fetches the owner ID from the server using a GET request.
+    fetch(`${url}/ownerController?action=owner_id`, {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json',
             'p_id': session_p_id,
         },
     })
-        .then(response => {
-                if (response.ok) {
-                    return response.json();
-                } else {
-                    throw new Error('Error fetching data:', response.status);
-                }
-            })
-            .then(data => {
-//
-            fetchAllData(data.owner_id)
-            console.log(data.owner_id)
-//                if (data && data.length > 0) {
-//                    displayDataAsForms(data);
-//                } else {
-//                    console.log('No data available.');
-//                }
-            })
-            .catch(error => {
-                console.error('Error:', error);
-            });
+    .then(response => {
+        // If the response is successful, it returns the JSON data.
+        if (response.ok) {
+            return response.json();
+        } else {
+            // Otherwise, it throws an error.
+            throw new Error('Error fetching data:', response.status);
+        }
+    })
+    .then(data => {
+        // It calls fetchAllData with the owner ID.
+        fetchAllData(data.owner_id);
+    })
+    .catch(error => {
+        // It catches any errors that occur during the fetch process.
+        console.error('Error:', error);
+    });
 }
 
+// This function fetches all data associated with a given owner ID.
 function fetchAllData(owner_id) {
-console.log(owner_id)
-    fetch(`${ url }/reviewController?owner_id=${owner_id}`, {
+    // It fetches data associated with the owner ID from the server using a GET request.
+    fetch(`${url}/reviewController?owner_id=${owner_id}`, {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json'
         },
     })
-        .then(response => {
-                if (response.ok) {
-                    return response.json();
-                } else {
-                    throw new Error('Error fetching data:', response.status);
-                }
-            })
-            .then(data => {
-            console.log(data)
-//                if (data && data.length > 0) {
-                    displayDataAsForms(data);
-//                } else {
-//                    console.log('No data available.');
-//                }
-            })
-            .catch(error => {
-               console.error('Error:', error);
-                  // Display error message as a form
-                  const errorMessageForm = document.createElement("div");
-                  errorMessageForm.classList.add("box");
+    .then(response => {
+        // If the response is successful, it returns the JSON data.
+        if (response.ok) {
+            return response.json();
+        } else {
+            // Otherwise, it throws an error.
+            throw new Error('Error fetching data:', response.status);
+        }
+    })
+    .then(data => {
+        // It calls displayDataAsForms with the fetched data.
+        displayDataAsForms(data);
+    })
+    .catch(error => {
+        // It catches any errors that occur during the fetch process and displays an error message.
+        console.error('Error:', error);
+        // It creates and appends an error message to the form container.
+        const errorMessageForm = document.createElement("div");
+        errorMessageForm.classList.add("box");
 
-                  const errorMessage = document.createElement("p");
-                  errorMessage.textContent = "Error fetching data. Please try again later.";
+        const errorMessage = document.createElement("p");
+        errorMessage.textContent = "Error fetching data. Please try again later.";
 
-                  errorMessageForm.appendChild(errorMessage);
-                  document.getElementById("formContainer").appendChild(errorMessageForm);
-            });
+        errorMessageForm.appendChild(errorMessage);
+        document.getElementById("formContainer").appendChild(errorMessageForm);
+    });
 }
 
+// This function displays the fetched data as forms in the HTML.
 function displayDataAsForms(data) {
+    // It clears the form container.
     const formContainer = document.getElementById("formContainer");
-    formContainer.innerHTML = ""; // Clear existing forms
+    formContainer.innerHTML = "";
 
+    // Variables to calculate average points and form count.
     let totalPoints = 0;
     let formCount = 0;
 
- if (Array.isArray(data) && data.length > 0) {
-    data.forEach((item, index) => {
-        console.log(item);
-        const form = document.createElement("div");
-        form.classList.add("box");
+    // If there is data and it's an array with length greater than 0, it processes it.
+    if (Array.isArray(data) && data.length > 0) {
+        data.forEach((item, index) => {
+            // For each item in the data array, it creates a form element.
+            const form = document.createElement("div");
+            form.classList.add("box");
 
-        const dateHeading = document.createElement("h3");
-        dateHeading.textContent = item.schedule_date;
-        dateHeading.classList.add('heading');
-        form.appendChild(dateHeading);
+            // It creates a heading element for the date.
+            const dateHeading = document.createElement("h3");
+            dateHeading.textContent = item.schedule_date;
+            dateHeading.classList.add('heading');
+            form.appendChild(dateHeading);
 
-        const innerForm = document.createElement("form");
-        innerForm.id = `form${index + 1}`;
+            // It creates input fields for various data points and populates them with the fetched data.
+            const innerForm = document.createElement("form");
+            innerForm.id = `form${index + 1}`;
 
-        const inputs = [
-                    { label: "Date :", key: "schedule_date" },
-                    { label: "Time :", key: "schedule_time" },
-                    { label: "Route:", key: "route" },
-                    { label: "Bus:", key: "reg_no" },
-                    { label: "Points:", key: "bus_points" },
-                    { label: "Review:", key: "comments" }
-        ];
+            const inputs = [
+                { label: "Date :", key: "schedule_date" },
+                { label: "Time :", key: "schedule_time" },
+                { label: "Route:", key: "route" },
+                { label: "Bus:", key: "reg_no" },
+                { label: "Points:", key: "bus_points" },
+                { label: "Review:", key: "comments" }
+            ];
 
-        console.log(inputs)
+            inputs.forEach(input => {
+                const label = document.createElement("label");
+                label.setAttribute("for", `${input.key}${index + 1}`);
+                label.textContent = input.label;
 
-        inputs.forEach(input => {
-            const label = document.createElement("label");
-            label.setAttribute("for", `${input.key}${index + 1}`);
-            label.textContent = input.label;
+                const inputField = document.createElement("input");
+                inputField.setAttribute("type", "text");
+                inputField.setAttribute("id", `${input.key}${index + 1}`);
+                inputField.setAttribute("name", `${input.key}${index + 1}`);
+                inputField.value = item[input.key];
 
-            const inputField = document.createElement("input");
-            inputField.setAttribute("type", "text");
-            inputField.setAttribute("id", `${input.key}${index + 1}`);
-            inputField.setAttribute("name", `${input.key}${index + 1}`);
-            inputField.value = item[input.key];
-            console.log(item[input.key])
+                innerForm.appendChild(label);
+                innerForm.appendChild(inputField);
+            });
 
-            innerForm.appendChild(label);
-            innerForm.appendChild(inputField);
+            // It creates star icons based on the bus points and calculates the total points.
+            const starsContainer = document.createElement('div');
+            starsContainer.id = `stars-container${index + 1}`;
+            starsContainer.classList.add('stars-container');
+
+            for (let i = 0; i < item.bus_points; i++) {
+                const star = document.createElement('span');
+                star.textContent = '\u2B50';
+                starsContainer.appendChild(star);
+                totalPoints += 1;
+            }
+
+            // It appends the form and stars container to the form container.
+            form.appendChild(innerForm);
+            form.appendChild(starsContainer);
+            formContainer.appendChild(form);
+
+            formCount++;
         });
 
-        // Display stars based on the number of points
-        const starsContainer = document.createElement('div');
-        starsContainer.id = `stars-container${index + 1}`;
-        starsContainer.classList.add('stars-container');
+        // It calculates and displays the average points.
+        const averagePoints = totalPoints / formCount;
+        const averagePointsElement = document.createElement('p');
+        averagePointsElement.textContent = `Average Points: ${averagePoints.toFixed(2)}`;
+        averagePointsElement.classList.add("average-points");
+        document.body.appendChild(averagePointsElement);
+    } else {
+        // If there's no data, it displays an error message.
+        const errorMessageForm = document.createElement("div");
+        errorMessageForm.classList.add("box", "errorMgForm");
 
-        for (let i = 0; i < item.bus_points; i++) {
-            const star = document.createElement('span');
-            star.textContent = '\u2B50'; // Unicode character for star
-            starsContainer.appendChild(star);
-            totalPoints += 1; // Add each point to the total
-        }
-
-        form.appendChild(innerForm);
-        form.appendChild(starsContainer);
-        formContainer.appendChild(form);
-
-        formCount++; // Increment form count for each form displayed
-    });
-
-    // Calculate the average points
-    const averagePoints = totalPoints / formCount;
-
-    // Display the average points at the bottom of the page
-    const averagePointsElement = document.createElement('p');
-    averagePointsElement.textContent = `Average Points: ${averagePoints.toFixed(2)}`; // Display average with two decimal places
-    averagePointsElement.classList.add("average-points");
-    document.body.appendChild(averagePointsElement);
-}else {
-         // Display error message as a form
-         const errorMessageForm = document.createElement("div");
-         errorMessageForm.classList.add("box", "errorMgForm"); // Apply box style and error message form style
-
-         const errorMessage = document.createElement("h2");
-         errorMessage.classList.add("errorMgText"); // Apply error message text style
-         errorMessage.textContent = "Your bus have no any Ratings !";
-         errorMessageForm.appendChild(errorMessage);
-         formContainer.appendChild(errorMessageForm);
-     }
-
+        const errorMessage = document.createElement("h2");
+        errorMessage.classList.add("errorMgText");
+        errorMessage.textContent = "Your bus have no any Ratings !";
+        errorMessageForm.appendChild(errorMessage);
+        formContainer.appendChild(errorMessageForm);
+    }
 }
-
-

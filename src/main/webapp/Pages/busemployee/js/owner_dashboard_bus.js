@@ -1,3 +1,4 @@
+// Initialize variables
 let Bus_id = "";
 let searchOption = "bus_id";
 let currentPage = 1;
@@ -11,93 +12,99 @@ document.addEventListener('DOMContentLoaded', function () {
     isAuthenticated().then(() => fetchAllData());
 });
 
+// Function to refresh the page
 function refreshPage() {
     location.reload();
 }
-// Fetch all data from the database
+// Function to fetch all bus data
 function fetchAllData() {
     document.getElementById("userName").textContent = session_user_name;
-            fetch(`${url}/busController`, {
-                method: 'GET',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'p_id': session_p_id
-                },
-            })
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error(`Failed to fetch bus data: ${response.status}`);
-                }
-                return response.json();
-            })
-            .then(data => {
-                allData = data;
-                updatePage(currentPage);
-            })
-            .catch(error => {
-                console.error('Error fetching bus data:', error);
-            });
+    // Fetch data from the server
+    fetch(`${url}/busController`, {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+            'p_id': session_p_id
+        },
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error(`Failed to fetch bus data: ${response.status}`);
+        }
+        return response.json();
+    })
+    .then(data => {
+        allData = data;
+        updatePage(currentPage);
+    })
+    .catch(error => {
+        console.error('Error fetching bus data:', error);
+    });
 }
 
-
+// Function to update the page number display
 function updatePageNumber(page) {
+    // Update the page number display
     document.getElementById("currentPageNumber").textContent = page;
 }
 
+// Event listener for previous page button
 const prevPageIcon = document.getElementById("prevPageIcon");
+// Event listener for next page button
 prevPageIcon.addEventListener("click", () => changePage(currentPage))
 
 const nextPageIcon = document.getElementById("nextPageIcon");
 nextPageIcon.addEventListener("click", () => changePage(currentPage));
 
+// Function to handle page change
 function changePage(newPage) {
-    console.log(currentPage + "  " + newPage)
+    // Change the current page and update the page
     if (currentPage !== newPage) {
         currentPage = Math.max(1, newPage);
         updatePage(currentPage, false);
     }
 }
 function updatePage(page, search) {
+    // Update the page with data based on search
     const startIndex = (page - 1) * pageSize;
     const endIndex = startIndex + pageSize;
     const tableBody = document.querySelector("#dataTable tbody");
 
     let dataToShow;
     if(search){
-        console.log("hello: " + dataSearch)
         dataToShow = dataSearch.slice(startIndex, endIndex);
     }
     else{
         dataToShow = allData.slice(startIndex, endIndex);
     }
-
     tableBody.innerHTML = "";
     displayDataAsTable(dataToShow);
     updatePageNumber(currentPage);
 }
 
-// Display all data
 function displayDataAsTable(data) {
+      // Display data as a table
       const tableBody = document.querySelector("#dataTable tbody");
       const rowCount = data.length;
       let existingData = {};
           if(rowCount === 0){
+              // Display message if no data available
               const noDataRow = document.createElement("tr");
-              noDataRow.innerHTML = `<td colspan="7">No data available</td>`;
+              noDataRow.innerHTML = `<td colspan="6">No data available</td>`;
               tableBody.appendChild(noDataRow);
               return;
           }
           if(rowCount >= 10){
+              // Render page control if more than 10 rows
               renderPageControl()
           }
-
+     // Iterate through data and display each row
     data.forEach(item => {
         const row = document.createElement("tr");
-
         row.innerHTML = `
         `;
-
-        fetch(`${ url }/passengerController`, {
+        // Fetch additional data for each row
+        fetch(`${ url }/busController`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
@@ -108,11 +115,11 @@ function displayDataAsTable(data) {
                 if (response.ok) {
                     response.json().then(data => {
                         existingData = data[0];
+                        // Populate row with data
                         row.innerHTML = `
                             <td>${item.bus_id}</td>
-                            <td>${item.owner_id}</td>
                             <td>${item.reg_no}</td>
-                            <td>${item.route_id}</td>
+                            <td>${item.route}</td>
                             <td>${item.no_of_Seats}</td>
                             <td>${item.review_points}</td>
                             <td>
@@ -139,10 +146,11 @@ function displayDataAsTable(data) {
 }
 
 function renderPageControl(){
+    // Render page control if needed
     document.getElementById("page_control").style.display = "flex";
 }
 
-// Add new bus to the database
+// Event listener for bus registration form submission
 document.getElementById("busRegForm").addEventListener("submit", function(event) {
     event.preventDefault();
     const reg_no = document.getElementById("add_reg_no").value;
@@ -154,10 +162,8 @@ document.getElementById("busRegForm").addEventListener("submit", function(event)
         route_no: route_no,
         no_of_Seats: no_of_Seats,
     };
-    console.log(userData);
     const jsonData = JSON.stringify(userData);
 
-    // Assuming `url` is defined elsewhere and `session_p_id` is available in your session storage or a similar place.
     fetch(`${url}/busController`, {
         method: 'POST',
         headers: {
@@ -168,16 +174,13 @@ document.getElementById("busRegForm").addEventListener("submit", function(event)
     })
     .then(response => {
         if (response.ok) {
-            // If the response is OK (200 status), handle success
-            closeForm_add(); // Assuming this function closes your form
-            openAlertSuccess("Successfully Added!"); // Assuming this function shows a success message
+            closeForm_add();
+            openAlertSuccess("Successfully Added!");
         } else if (response.status === 409) {
-            // Handle the specific case of a conflict (duplicate entry)
             return response.text().then(error_msg => {
-                openAlertFail(error_msg); // Assuming this function shows an error message
+                openAlertFail(error_msg);
             });
         } else {
-            // Handle other types of errors generically
             return response.text().then(error_msg => {
                 openAlertFail("Failed to add bus: " + error_msg);
             });
@@ -185,12 +188,11 @@ document.getElementById("busRegForm").addEventListener("submit", function(event)
     })
     .catch(error => {
         console.error('Error:', error);
-        openAlertFail("An error occurred while processing your request."); // General error handling
+        openAlertFail("An error occurred while processing your request.");
     });
 });
 
-
-// Handle update
+// Function to update a row
 function updateRow(bus_id){
     openForm_update();
 
@@ -262,7 +264,7 @@ function updateRow(bus_id){
     });
 }
 
-// Handle delete
+// Function to delete a row
 function deleteRow(){
     fetch(`${ url }/busController`, {
         method: 'DELETE',
@@ -290,38 +292,39 @@ function deleteRow(){
        });
 }
 
+// Function to open the add form
 function openForm_add() {
     const existingForm = document.querySelector(".bus_add_form_body");
-
     if (!existingForm) {
         createForm('add');
     }
-
     document.getElementById("busRegForm").style.display = "block";
     document.getElementById("overlay").style.display = "block";
 }
 
+// Function to close the add form
 function closeForm_add() {
     document.getElementById("busRegForm").style.display = "none";
     document.getElementById("overlay").style.display = "none";
 }
 
+// Function to open the update form
 function openForm_update() {
     const existingForm = document.querySelector(".bus_update_form_body");
-
     if (!existingForm) {
         createForm('update');
     }
-
     document.getElementById("busUpdateForm").style.display = "block";
     document.getElementById("overlay").style.display = "block";
 }
 
+// Function to close the update form
 function closeForm_update() {
     document.getElementById("busUpdateForm").style.display = "none";
     document.getElementById("overlay").style.display = "none";
 }
 
+// Function to open the success alert
 function openAlertSuccess(msg) {
     bus_id = "";
     document.getElementById("alertMsgSuccess").textContent = msg;
@@ -329,6 +332,7 @@ function openAlertSuccess(msg) {
     document.getElementById("overlay").style.display = "block";
 }
 
+// Function to close the success alert
 function closeAlertSuccess() {
     bus_id = "";
     document.getElementById("successAlert").style.display = "none";
@@ -336,6 +340,7 @@ function closeAlertSuccess() {
     window.location.href = "../html/owner_dashboard_bus.html";
 }
 
+// Function to open the fail alert
 function openAlertFail(response) {
     bus_id = "";
     document.getElementById("failMsg").textContent = response;
@@ -343,12 +348,15 @@ function openAlertFail(response) {
     document.getElementById("overlay").style.display = "block";
 }
 
+// Function to close the fail alert
 function closeAlertFail() {
     bus_id = "";
     document.getElementById("failAlert").style.display = "none";
     document.getElementById("overlay").style.display = "none";
     window.location.href = "../html/owner_dashboard_bus.html";
 }
+
+// Function to open the confirmation dialog for deletion
 function openFlagConfirm(bus_id){
     Bus_id = bus_id;
     document.getElementById("confirmAlert").style.display = "block";
@@ -356,6 +364,7 @@ function openFlagConfirm(bus_id){
     document.getElementById("deleteUser").textContent = Bus_id;
 }
 
+// Function to close the alert dialog
 function closeAlert(){
     bus_id = "";
     document.getElementById("confirmAlert").style.display = "none";
@@ -367,7 +376,7 @@ document.addEventListener('DOMContentLoaded', function() {
     createForm('update');
 });
 
-// Create the add and update forms
+// Function to create add/update form
 function createForm(action) {
 if(action === 'add'){
      const form_add = document.createElement('div');
@@ -377,23 +386,23 @@ if(action === 'add'){
         <div class="bus_form_left">
             <div class="form_div">
                 <label for="reg_no" class="bus_form_title">Registration No <span class="bus_form_require">*</span></label>
-                <input type="text" name="reg_no" id="reg_no" class="form_data" placeholder="Enter Registration No" required="required" />
+                <input type="text" name="reg_no" id="reg_no" class="form_data" placeholder=" Eg : NB-xxxx" required="required" />
             </div>
             <div class="form_div">
                 <label for="route_no" class="bus_form_title">Route No <span class="bus_form_require">*</span></label>
-                <input type="text" name="route_no" id="route_no" class="form_data" placeholder="Enter Route_No" required="required" oninput="showSuggestions1(event)" />
+                <input type="text" name="route_no" id="route_no" class="form_data" placeholder=" Eg : EX001 " required="required" oninput="showSuggestions1(event)" />
                 <ul id="bus_route_suggestions" class="autocomplete-list"></ul>
             </div>
             <div class="form_div">
                 <label for="no_of_Seats" class="bus_form_title">Number of Seats <span class="bus_form_require">*</span></label>
-                <input type="number" name="no_of_Seats" id="no_of_Seats" class="form_data" placeholder="Enter Number of Seats" required="required" />
+                <input type="number" name="no_of_Seats" id="no_of_Seats" class="form_data" placeholder=" Eg : ##" required="required" />
             </div>
         </div>
         `;
 
         form_add.innerHTML = form.replace(/id="/g, 'id="add_');
         const formContainer_add = document.getElementById('formContainer_add');
-        formContainer_add.appendChild(form_add.cloneNode(true)); // Clone the form
+        formContainer_add.appendChild(form_add.cloneNode(true));
 
     }
     else if(action === 'update'){
@@ -404,23 +413,24 @@ if(action === 'add'){
             <div class="bus_form_left">
                 <div class="form_div">
                     <label for="route_no" class="bus_form_title">Route No <span class="bus_form_require">*</span></label>
-                    <input type="text" name="route_no" id="route_no" class="form_data" placeholder="Enter Route_No" required="required" oninput="showSuggestions2(event)" />
+                    <input type="text" name="route_no" id="route_no" class="form_data" placeholder="Update Route_No" required="required" oninput="showSuggestions2(event)" />
                     <ul id="bus_route_suggestions" class="autocomplete-list"></ul>
                 </div>
                 <div class="form_div">
                     <label for="no_of_Seats" class="bus_form_title">Number of Seats <span class="bus_form_require">*</span></label>
-                    <input type="number" name="no_of_Seats" id="no_of_Seats" class="form_data" placeholder="Enter Number of Seats" required="required" />
+                    <input type="number" name="no_of_Seats" id="no_of_Seats" class="form_data" placeholder="update Number of Seats" required="required" />
                 </div>
             </div>
         `;
 
         form_update.innerHTML = form.replace(/id="/g, 'id="update_');
         const formContainer_update = document.getElementById('formContainer_update');
-        formContainer_update.appendChild(form_update.cloneNode(true)); // Clone the form
+        formContainer_update.appendChild(form_update.cloneNode(true));
     }
 
 }
 
+// Function to show route suggestions
 function showSuggestions1(event) {
     const input = event.target;
     const inputValue = input.value.toUpperCase();
@@ -435,50 +445,50 @@ function showSuggestions1(event) {
                 'Content-Type': 'application/json'
             },
         })
-            .then(response => {
-                if (response.ok) {
-                    return response.json();
-                } else {
-                    console.error('Error:', response.status);
-                    throw new Error(`HTTP error! Status: ${response.status}`);
-                }
-            })
-            .then(data => {
-                const suggestions = data.map(item => {
-                    return {
-                        route_no: item.route_no,
-                        start: item.start,
-                        destination: item.destination
-                    };
-                });
-                suggestionsContainer.innerHTML = '';
-                const filteredSuggestions = suggestions.filter(suggestion =>
-                    suggestion.route_no.toUpperCase().includes(inputValue)
-                );
-                suggestionsContainer.style.maxHeight = '200px';
-                suggestionsContainer.style.overflowY = 'auto';
-                suggestionsContainer.style.width = '100%';
-                suggestionsContainer.style.left = `18px`;
-                if (filteredSuggestions.length === 0) {
-                    const errorMessage = document.createElement('li');
-                    errorMessage.textContent = 'No suggestions found';
-                    suggestionsContainer.appendChild(errorMessage);
-                } else {
-                    filteredSuggestions.forEach(suggestion => {
-                        const listItem = document.createElement('li');
-                        listItem.classList.add('autocomplete-list-item');
-                        listItem.textContent = `${suggestion.route_no} - ${suggestion.start} to ${suggestion.destination}`;
-                        listItem.addEventListener('click', () => {
-                            input.value = suggestion.route_no;
-                            suggestionsContainer.innerHTML = '';
-                        });
-                        suggestionsContainer.appendChild(listItem);
-                    });
-                }
-            })
-            .catch(error => {
-                console.error('Error:', error);
+        .then(response => {
+            if (response.ok) {
+                return response.json();
+            } else {
+                console.error('Error:', response.status);
+                throw new Error(`HTTP error! Status: ${response.status}`);
+            }
+        })
+        .then(data => {
+            const suggestions = data.map(item => {
+                return {
+                    route_no: item.route_no,
+                    start: item.start,
+                    destination: item.destination
+                };
             });
+            suggestionsContainer.innerHTML = '';
+            const filteredSuggestions = suggestions.filter(suggestion =>
+                suggestion.route_no.toUpperCase().includes(inputValue)
+            );
+            suggestionsContainer.style.maxHeight = '200px';
+            suggestionsContainer.style.overflowY = 'auto';
+            suggestionsContainer.style.width = '100%';
+            suggestionsContainer.style.left = `18px`;
+            if (filteredSuggestions.length === 0) {
+                const errorMessage = document.createElement('li');
+                errorMessage.textContent = 'No suggestions found';
+                suggestionsContainer.appendChild(errorMessage);
+            } else {
+                filteredSuggestions.forEach(suggestion => {
+                    const listItem = document.createElement('li');
+                    listItem.classList.add('autocomplete-list-item');
+                    listItem.textContent = `${suggestion.route_no} - ${suggestion.start} to ${suggestion.destination}`;
+                    listItem.addEventListener('click', () => {
+                        input.value = suggestion.route_no;
+                        suggestionsContainer.innerHTML = '';
+                    });
+                    suggestionsContainer.appendChild(listItem);
+                });
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
     }
 }
 
@@ -496,56 +506,57 @@ function showSuggestions2(event) {
                 'Content-Type': 'application/json'
             },
         })
-            .then(response => {
-                if (response.ok) {
-                    return response.json();
-                } else {
-                    console.error('Error:', response.status);
-                    throw new Error(`HTTP error! Status: ${response.status}`);
-                }
-            })
-            .then(data => {
-                const suggestions = data.map(item => {
-                    return {
-                        route_no: item.route_no,
-                        start: item.start,
-                        destination: item.destination
-                    };
-                });
-                suggestionsContainer.innerHTML = '';
-                const filteredSuggestions = suggestions.filter(suggestion =>
-                    suggestion.route_no.toUpperCase().includes(inputValue)
-                );
-                suggestionsContainer.style.maxHeight = '200px';
-                suggestionsContainer.style.overflowY = 'auto';
-                suggestionsContainer.style.width = '100%';
-                suggestionsContainer.style.left = `18px`;
-                if (filteredSuggestions.length === 0) {
-                    const errorMessage = document.createElement('li');
-                    errorMessage.textContent = 'No suggestions found';
-                    suggestionsContainer.appendChild(errorMessage);
-                } else {
-                    filteredSuggestions.forEach(suggestion => {
-                        const listItem = document.createElement('li');
-                        listItem.classList.add('autocomplete-list-item');
-                        listItem.textContent = `${suggestion.route_no} - ${suggestion.start} to ${suggestion.destination}`;
-                        listItem.addEventListener('click', () => {
-                            input.value = suggestion.route_no;
-                            suggestionsContainer.innerHTML = '';
-                        });
-                        suggestionsContainer.appendChild(listItem);
-                    });
-                }
-            })
-            .catch(error => {
-                console.error('Error:', error);
+        .then(response => {
+            if (response.ok) {
+                return response.json();
+            } else {
+                console.error('Error:', response.status);
+                throw new Error(`HTTP error! Status: ${response.status}`);
+            }
+        })
+        .then(data => {
+            const suggestions = data.map(item => {
+                return {
+                    route_no: item.route_no,
+                    start: item.start,
+                    destination: item.destination
+                };
             });
+            suggestionsContainer.innerHTML = '';
+            const filteredSuggestions = suggestions.filter(suggestion =>
+                suggestion.route_no.toUpperCase().includes(inputValue)
+            );
+            suggestionsContainer.style.maxHeight = '200px';
+            suggestionsContainer.style.overflowY = 'auto';
+            suggestionsContainer.style.width = '100%';
+            suggestionsContainer.style.left = `18px`;
+            if (filteredSuggestions.length === 0) {
+                const errorMessage = document.createElement('li');
+                errorMessage.textContent = 'No suggestions found';
+                suggestionsContainer.appendChild(errorMessage);
+            } else {
+                filteredSuggestions.forEach(suggestion => {
+                    const listItem = document.createElement('li');
+                    listItem.classList.add('autocomplete-list-item');
+                    listItem.textContent = `${suggestion.route_no} - ${suggestion.start} to ${suggestion.destination}`;
+                    listItem.addEventListener('click', () => {
+                        input.value = suggestion.route_no;
+                        suggestionsContainer.innerHTML = '';
+                    });
+                    suggestionsContainer.appendChild(listItem);
+                });
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
     }
 }
 
+// Event listener for search input
 const searchInput = document.getElementById("searchInput");
 searchInput.addEventListener("keyup", searchData);
-
+// Function to handle search data
 function searchData() {
     const searchTerm = document.getElementById("searchInput").value;
     const search = searchTerm.toLowerCase();
@@ -556,7 +567,7 @@ function searchData() {
 
     updatePage(currentPage, true);
 }
-
+// Event listener for search select
 const searchSelect = document.getElementById("searchSelect");
 searchSelect.addEventListener("change", (event) => {
     searchOption = event.target.value;
@@ -573,6 +584,8 @@ function closeRequests(){
     document.getElementById("overlay").style.display = "none";
 }
 
+// Function to show requests
+
 function showRequests(status){
     fetch(`${url}/busVerifyController?p_id=${session_p_id}`, {
         method: 'GET',
@@ -580,37 +593,35 @@ function showRequests(status){
             'Content-Type': 'application/json'
         },
     })
-        .then(response => {
-            if (response.ok) {
-                return response.json();
-            } else {
-                console.error('Error:', response.status);
-                throw new Error(`HTTP error! Status: ${response.status}`);
-            }
-        })
-        .then(data=>{
-            allRequestData = data;
-            console.log(allRequestData);
-            if(status === 0){
-                console.log("0")
-                showRequestsBody(0)
-            }
-            else if(status === 2){
-                console.log("2")
-                showRequestsBody(2)
-            }
-        })
-        .catch(error => {
-            console.error('Error:', error);
-        });
+    .then(response => {
+        if (response.ok) {
+            return response.json();
+        } else {
+            console.error('Error:', response.status);
+            throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+    })
+    .then(data=>{
+        allRequestData = data;
+        console.log(allRequestData);
+        if(status === 0){
+            showRequestsBody(0)
+        }
+        else if(status === 2){
+            showRequestsBody(2)
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+    });
 }
 
+// Function to display requests body
 function showRequestsBody(status) {
+    // Filter and display requests based on status
     let filteredRequests = allRequestData.filter(function(request) {
         return request.status === status;
     });
-
-    console.log(filteredRequests)
 
     let requestBody = document.getElementById("requestBody");
     requestBody.innerHTML = "";

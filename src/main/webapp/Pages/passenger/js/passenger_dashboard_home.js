@@ -1,3 +1,4 @@
+// create add a bus html form
 function createForm() {
     const form_add = document.createElement('div');
     form_add.classList.add('bus_add_form_body');
@@ -6,16 +7,16 @@ function createForm() {
         <div class="bus_form_left">
             <div class="form_div">
                 <label for="reg_no" class="bus_form_title">Registration No <span class="bus_form_require">*</span></label>
-                <input type="text" name="reg_no" id="reg_no" class="form_data" placeholder="Enter Registration No" required="required" />
+                <input type="text" name="reg_no" id="reg_no" class="form_data" placeholder="Eg : NB-xxxx" required="required" />
             </div>
         <div class="form_div">
-            <label for="route_no" class="bus_form_title">Route No. <span class="bus_form_require">*</span></label>
-            <input type="text" name="route_no" id="route_no" class="form_data" placeholder="Enter Route No" required="required" oninput="showSuggestions1(event)" />
+            <label for="route_no" class="bus_form_title">Route No <span class="bus_form_require">*</span></label>
+            <input type="text" name="route_no" id="route_no" class="form_data" placeholder=" Eg : EX001 " required="required" oninput="showSuggestions1(event)" />
             <ul id="bus_route_suggestions" class="autocomplete-list"></ul>
         </div>
             <div class="form_div">
                 <label for="no_of_Seats" class="bus_form_title">Number of Seats <span class="bus_form_require">*</span></label>
-                <input type="number" name="no_of_Seats" id="no_of_Seats" class="form_data" placeholder="Enter Number of Seats" required="required" />
+                <input type="number" name="no_of_Seats" id="no_of_Seats" class="form_data" placeholder="Eg : ##" required="required" />
             </div>
         </div>
     `;
@@ -25,6 +26,7 @@ function createForm() {
     formContainer_add.appendChild(form_add.cloneNode(true));
 }
 
+// this is called when entering the route
 function showSuggestions1(event) {
     const input = event.target;
     const inputValue = input.value.toUpperCase();
@@ -86,51 +88,69 @@ function showSuggestions1(event) {
     }
 }
 
-
+// this connects with front end Owner box
 function openForm_add() {
-    fetch(`${url}/ownerController`, {
+    // Fetch data to check if the owner has any buses associated
+    fetch(`${url}/busController`, {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json',
             'p_id': session_p_id
         },
     })
-
     .then(response => {
         if (response.ok) {
+            // Convert response to JSON
+            return response.json();
+        } else {
+            throw new Error('Failed to fetch bus data of passenger');
+        }
+    })
+    .then(data => {
+        // Check if the owner has any buses associated
+        if (data && data.length > 0) {
+            // If the owner has buses associated, redirect to the owner dashboard
             window.location.href = "../../busemployee/html/owner_dashboard_home.html";
         } else {
             const existingForm = document.querySelector(".bus_add_form_body");
             if (!existingForm) {
+                // If the form is not displayed, create and display it
                 createForm();
+                document.getElementById("busRegForm").style.display = "block";
+                document.getElementById("overlay").style.display = "block";
             }
-            document.getElementById("busRegForm").style.display = "block";
-            document.getElementById("overlay").style.display = "block";
         }
     })
     .catch(error => {
         console.error('Error:', error);
+        // Handle error (e.g., display an error message)
     });
 }
 
+// function to close add bus form
 function closeForm_add() {
     document.getElementById("busRegForm").style.display = "none";
     document.getElementById("overlay").style.display = "none";
+    window.location.href = "../html/passenger_dashboard_home.html";
 }
 
-function openAlertSuccess() {
+
+function openAlertSuccess(response) {
+// function to open success alert
     bus_id = "";
+    document.getElementById("successMsg").innerHTML = response ;
     document.getElementById("successAlert").style.display = "block";
     document.getElementById("overlay").style.display = "block";
 }
 
+// function to close success alert
 function closeAlertSuccess() {
     bus_id = "";
     document.getElementById("successAlert").style.display = "none";
     document.getElementById("overlay").style.display = "none";
-    window.location.href = "../../busemployee/html/owner_dashboard_bus.html";
 }
 
+// function to open fail alert
 function openAlertFail(response) {
     bus_id = "";
     document.getElementById("failMsg").innerHTML = "Operation failed <br> (" + response + ")";
@@ -138,6 +158,7 @@ function openAlertFail(response) {
     document.getElementById("overlay").style.display = "block";
 }
 
+// function to close fail alert
 function closeAlertFail() {
     bus_id = "";
     document.getElementById("failAlert").style.display = "none";
@@ -145,6 +166,7 @@ function closeAlertFail() {
     window.location.href = "../html/passenger_dashboard_home.html";
 }
 
+// event listener for add a bus
 document.getElementById("busRegForm").addEventListener("submit", function(event) {
     event.preventDefault();
     const reg_no = document.getElementById("add_reg_no").value;
@@ -170,7 +192,7 @@ document.getElementById("busRegForm").addEventListener("submit", function(event)
     .then(response => {
         if (response.ok) {
             closeForm_add();
-            openAlertSuccess("Successfully Added!");
+            openAlertSuccess("Operation Successful! <br> Your bus request is pending approval.");
         } else if (response.status === 409) {
             return response.text().then(error_msg => {
                 openAlertFail(error_msg);
@@ -186,11 +208,12 @@ document.getElementById("busRegForm").addEventListener("submit", function(event)
     });
 });
 
-
+// session management
 document.addEventListener('DOMContentLoaded', function () {
     isAuthenticated().then(() => init_page());
 });
 
+// count smooth points and display
 function updateCount(targetElement) {
     fetch(`${url}/smoothPointController?p_id=${session_p_id}`, {
         method: 'GET',
@@ -227,6 +250,7 @@ function updateCount(targetElement) {
         });
 }
 
+// show next booking
 function fetchNextBooking(){
     fetch(`${ url }/bookingController?p_id=${session_p_id}`, {
         method: 'GET',
@@ -263,6 +287,7 @@ function fetchNextBooking(){
         });
 }
 
+// initialize the page
 function init_page(){
     document.getElementById("userName").textContent = session_user_name;
     document.getElementById("user").textContent = session_user_name;

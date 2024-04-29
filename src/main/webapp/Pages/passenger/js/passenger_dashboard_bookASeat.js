@@ -15,10 +15,12 @@ let isPayByPoints = false;
 
 setSearchStands();
 
+// function to refresh the page
 function refreshPage() {
     location.reload();
 }
 
+// get the stand data for display on start and end dropdowns
 function setSearchStands() {
     fetch(`${url}/routeController?request_data=stand_list`, {
         method: 'GET',
@@ -62,7 +64,7 @@ function setSearchStands() {
         });
 }
 
-
+// fetch all data
 function fetchAllData() {
     if(!session_user_name === ''){
         document.getElementById("userName").textContent = session_user_name;
@@ -91,6 +93,7 @@ function fetchAllData() {
 
 fetchAllData();
 
+ // function for change the page data and shows 3 data tiles
 function updatePage(page) {
     const list = document.getElementById("schedule_list");
     const startIndex = (page - 1) * pageSize;
@@ -102,22 +105,27 @@ function updatePage(page) {
     updatePageNumber(currentPage);
 }
 
+// change the page number with above function
 function updatePageNumber(page) {
     document.getElementById("currentPageNumber").textContent = page;
 }
 
+// event listener for go back for previous page
 const prevPageIcon = document.getElementById("prevPageIcon");
 prevPageIcon.addEventListener("click", (event) => {
     event.stopPropagation();
     changePage(currentPage - 1);
 }, true);
 
+// event listener for go for next page
 const nextPageIcon = document.getElementById("nextPageIcon");
 nextPageIcon.addEventListener("click", (event) => {
     event.stopPropagation();
     changePage(currentPage + 1);
 }, true);
 
+
+// above 2 event listeners are dealing with this function
 function changePage(newPage) {
     const data = getDataForPage(newPage);
 
@@ -132,12 +140,14 @@ function changePage(newPage) {
     }
 }
 
+// this calls with changePage(newPage) function
 function getDataForPage(page) {
     const startIndex = (page - 1) * pageSize;
     const endIndex = startIndex + pageSize;
     return allData.slice(startIndex, endIndex);
 }
 
+// display data in 3 tiles. this calls with updatePage(page) function
 function displayDataAsScheduleTiles(data) {
     const scheduleList = document.getElementById("schedule_list");
 
@@ -157,6 +167,8 @@ function displayDataAsScheduleTiles(data) {
         if(item.status === 0){
             const scheduleElement = document.createElement("div");
             scheduleElement.classList.add("schedule_tiles");
+
+            // create a html element
             scheduleElement.innerHTML = `
             <div class="schedule_element_row1">
                 <div class="busRegNo">
@@ -196,10 +208,12 @@ function displayDataAsScheduleTiles(data) {
     });
 }
 
+// display page number
 function renderPageControl(){
     document.getElementById("page_control").style.display = "flex";
 }
 
+// search data function
 function searchData() {
     const start = document.getElementById('dropdown_start').value.toLowerCase();
     const destination = document.getElementById('dropdown_destination').value.toLowerCase();
@@ -232,6 +246,7 @@ function searchData() {
         });
 }
 
+// open alert everything control from here
 function openAlert(text, alertBody){
     if(alertBody === "alertFail"){
         document.getElementById("alertMsg").textContent = text;
@@ -243,6 +258,7 @@ function openAlert(text, alertBody){
     document.getElementById("overlay").style.display = "block";
 }
 
+// this also calls with open alert when press ok button
 function closeAlert(){
     const alertSuccess = document.getElementById("alertSuccess");
     const alertFail = document.getElementById("alertFail");
@@ -259,6 +275,7 @@ function closeAlert(){
     document.getElementById("overlay").style.display = "none";
 }
 
+// when pressed add booking button it directs here
 function openSeatSelection(schedule_id, start, destination, date, time, available_seats, price) {
     isAuthenticated();
     if(parseInt(available_seats, 10) === 0){
@@ -296,6 +313,7 @@ function openSeatSelection(schedule_id, start, destination, date, time, availabl
     }
 }
 
+// when pressed close booking button it directs here
 function closeSeatSelection() {
     price_per_ride = 0;
     selectedSeats = [];
@@ -306,6 +324,7 @@ function closeSeatSelection() {
     resetPaymentDetails();
 }
 
+// update booking price in relevant tile
 function updateBookingDetails() {
     const selectedSeatsElement = document.getElementById('selected-seats');
     const totalPriceElement = document.getElementById('total-price');
@@ -313,6 +332,7 @@ function updateBookingDetails() {
     totalPriceElement.textContent = totalPrice;
 }
 
+// this calls when selecting/deselecting seats
 function toggleSeat(seatNumber) {
     const seatIndex = selectedSeats.indexOf(seatNumber);
 
@@ -328,6 +348,7 @@ function toggleSeat(seatNumber) {
     updateSeatMap();
 }
 
+// firstly calls with openSeatSelection function
 function updateSeatMap() {
     const seatMapElement = document.getElementById('seat-map');
     seatMapElement.innerHTML = '';
@@ -373,7 +394,7 @@ function updateSeatMap() {
     }
 }
 
-
+// when press pay button it calls this
 function payment() {
     if(totalPrice <= 0){
         openAlert( "Please Select At Least One Seat!", "alertFail");
@@ -387,6 +408,7 @@ function payment() {
     }
 }
 
+// after payment() function done, it calls this function
 function getSmoothPoints(){
     fetch(`${url}/smoothPointController?p_id=${session_p_id}`, {
         method: 'GET',
@@ -410,11 +432,13 @@ function getSmoothPoints(){
         });
 }
 
+// close button of seat map div
 function closePayment() {
     document.getElementById("paymentContainer").style.display = "none";
     document.getElementById("overlay").style.display = "none";
 }
 
+// after completing card details or pressed pay using Smooth Points this calls
 function pay() {
     closeConfirmAlert();
     if(isPayByPoints === true){
@@ -450,7 +474,7 @@ function pay() {
                 return response.json();
             }
             else{
-                openAlert("Your booking was unsuccessful!" + err, "alertFail");
+                openAlert("Your Booking Was Unsuccessful!" + err, "alertFail");
             }
         })
         .then(parsedResponse => {
@@ -459,6 +483,7 @@ function pay() {
         })
 }
 
+// pay with smooth points directs here
 function payByPoints(){
     if(smooth_points*100 >= totalPrice){
         openConfirmAlert('points');
@@ -468,6 +493,7 @@ function payByPoints(){
     }
 }
 
+// after payment part completed those functions calls this and inside it it sends the mail
 function addBooking(schedule_id, p_id, payment_id, selectedSeats) {
     const bookingDetails = {
         schedule_id: schedule_id,
@@ -493,7 +519,7 @@ function addBooking(schedule_id, p_id, payment_id, selectedSeats) {
             else{
                 closeConfirmAlert();
                 document.getElementById('loading-spinner').style.display = 'none';
-                openAlert("Your booking was unsuccessful!", "alertFail");
+                openAlert("Your Booking Was Unsuccessful!", "alertFail");
             }
         })
         .then(parsedResponse => {
@@ -528,6 +554,7 @@ function addBooking(schedule_id, p_id, payment_id, selectedSeats) {
         })
 }
 
+// delete booking icon's function or unsuccessful add bookings. this is at my bookings
 function deleteBooking(booking_id){
     fetch(`${ url }/bookingController?booking_id=${booking_id}`, {
         method: 'DELETE',
@@ -547,6 +574,7 @@ function deleteBooking(booking_id){
         });
 }
 
+// delete booking icon's function or unsuccessful add bookings. this is at my bookings
 function deletePayment(payment_id){
     fetch(`${ url }/bookingController?payment_id=${payment_id}`, {
         method: 'DELETE',
@@ -566,6 +594,7 @@ function deletePayment(payment_id){
         });
 }
 
+// check the card payment or point payment
 function openConfirmAlert(action){
     let isValid
     if(action === 'card'){
@@ -590,11 +619,13 @@ function openConfirmAlert(action){
     }
 }
 
+// close alert message
 function closeConfirmAlert(){
     document.getElementById("confirmationAlert").style.display = "none";
     document.getElementById("overlay").style.display = "none";
 }
 
+// show alert box at payment gateway
 function showAlert(inputElement, message) {
     if (!errorMessages[inputElement.id]) {
         const alertBox = document.createElement("div");
@@ -612,6 +643,7 @@ function showAlert(inputElement, message) {
     }
 }
 
+// event listener for select card type visa
 document.querySelectorAll('.cardOptionVisa').forEach(function (label) {
     label.addEventListener('click', function () {
         document.getElementById("visaCard").checked = true;
@@ -619,6 +651,7 @@ document.querySelectorAll('.cardOptionVisa').forEach(function (label) {
     });
 });
 
+// event listener for select card type visa
 document.querySelectorAll('.cardOptionMaster').forEach(function (label) {
     label.addEventListener('click', function () {
         document.getElementById("visaCard").checked = false;
@@ -626,6 +659,7 @@ document.querySelectorAll('.cardOptionMaster').forEach(function (label) {
     });
 });
 
+// openConfirmAlert(action) function calls this. check validity of card details
 function validatePayment() {
     const visaCardChecked = document.getElementById("visaCard").checked;
     const masterCardChecked = document.getElementById("masterCard").checked;
@@ -675,11 +709,10 @@ function validatePayment() {
             agreement: agreementCheckbox.checked
         };
 
-        console.log(paymentData)
-
     return true;
 }
 
+// when close bookings or error occurred
 function resetPaymentDetails() {
     document.getElementById("visaCard").checked = false;
     document.getElementById("masterCard").checked = false;
@@ -690,6 +723,8 @@ function resetPaymentDetails() {
     document.getElementById("declaration").checked = false;
 }
 
+
+// this calls from pay() function
 function reduceSmoothPoints(amount){
     const updatedData = {
         p_id: session_p_id,

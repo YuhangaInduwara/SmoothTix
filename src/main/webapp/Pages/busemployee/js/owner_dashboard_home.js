@@ -1,4 +1,4 @@
-while   .addEventListener('DOMContentLoaded', function () {
+document.addEventListener('DOMContentLoaded', function () {
     isAuthenticated().then(() => fetchAllData());
 });
 function fetchAllData() {

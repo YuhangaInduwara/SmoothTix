@@ -1,11 +1,7 @@
 package com.smoothtix.dao;
-
 import com.smoothtix.database.dbConnection;
 import com.smoothtix.model.Booking;
-import com.smoothtix.model.Bus;
-
 import java.sql.*;
-import java.util.Arrays;
 
 public class bookingTable {
     public static String insert(Booking booking) throws SQLException, ClassNotFoundException {
@@ -51,11 +47,11 @@ public class bookingTable {
         return "Unsuccessful";
     }
 
-    private static String generateBookingID() throws SQLException, ClassNotFoundException {
+    private static String generateBookingID() throws SQLException{
         Connection con = dbConnection.initializeDatabase();
         String query = "SELECT COALESCE(MAX(CAST(SUBSTRING(booking_id, 4) AS SIGNED)), 0) + 1 AS next_booking_id FROM booking";
         Statement stmt = con.createStatement();
-        ResultSet rs = ((Statement) stmt).executeQuery(query);
+        ResultSet rs = stmt.executeQuery(query);
 
         int nextBookingID = 1;
         if (rs.next()) {
@@ -68,11 +64,10 @@ public class bookingTable {
     public static ResultSet getAll() throws SQLException, ClassNotFoundException {
         Connection con = dbConnection.initializeDatabase();
         PreparedStatement pst = con.prepareStatement("SELECT * FROM booking");
-        ResultSet rs = pst.executeQuery();
-        return rs;
+        return pst.executeQuery();
     }
 
-    public static ResultSet getAllByTKID(String timeKeeper_id) throws SQLException, ClassNotFoundException {
+    public static ResultSet getAllByTKID(String timeKeeper_id) throws SQLException {
         Connection con = dbConnection.initializeDatabase();
         PreparedStatement pst = con.prepareStatement("SELECT \n" +
                 "    b.booking_id,\n" +
@@ -105,19 +100,10 @@ public class bookingTable {
                 "GROUP BY \n" +
                 "    b.booking_id;");
         pst.setString(1, timeKeeper_id);
-        ResultSet rs = pst.executeQuery();
-        return rs;
+        return pst.executeQuery();
     }
 
-//    public static ResultSet counter() throws SQLException, ClassNotFoundException {
-//        Connection con = dbConnection.initializeDatabase();
-//        PreparedStatement pst = con.prepareStatement("SELECT COUNT(*) AS record_count FROM booking");
-//        return pst.executeQuery();
-//    }
-
-    // schedule_id, booking id, from, to, date, time, status, price, seat no, bus
-    // schedule -
-    public static ResultSet getByP_id(String p_id) throws SQLException, ClassNotFoundException {
+    public static ResultSet getByP_id(String p_id) throws SQLException {
         Connection con = dbConnection.initializeDatabase();
         PreparedStatement pst = con.prepareStatement(
                 "SELECT \n" +
@@ -159,11 +145,10 @@ public class bookingTable {
                         "    s.date_time;"
         );
         pst.setString(1,p_id);
-        ResultSet rs = pst.executeQuery();
-        return rs;
+        return pst.executeQuery();
     }
 
-    public static ResultSet getByBooking_id(String booking_id) throws SQLException, ClassNotFoundException {
+    public static ResultSet getByBooking_id(String booking_id) throws SQLException {
         Connection con = dbConnection.initializeDatabase();
         PreparedStatement pst = con.prepareStatement(
                 "SELECT \n" +
@@ -196,42 +181,22 @@ public class bookingTable {
                         "    s.date_time;"
         );
         pst.setString(1,booking_id);
-        ResultSet rs = pst.executeQuery();
-        return rs;
+        return pst.executeQuery();
     }
 
-//    public static int update(String booking_id, Booking booking) throws SQLException, ClassNotFoundException {
-//        Connection con = dbConnection.initializeDatabase();
-//        PreparedStatement pst = con.prepareStatement("UPDATE booking SET owner_id=?, route=?, engineNo=?, chassisNo=?, noOfSeats=?, manufact_year=?, brand=?, model=? WHERE bus_id=?");
-//        pst.setString(1,booking.getOwner_nic());
-//        pst.setString(2,booking.getRoute());
-//        pst.setString(3,booking.getEngineNo());
-//        pst.setString(4,booking.getChassisNo());
-//        pst.setInt(5,booking.getNoOfSeats());
-//        pst.setString(6,booking.getManufact_year());
-//        pst.setString(7,booking.getBrand());
-//        pst.setString(8,booking.getModel());
-//        pst.setString(9,booking_id);
-//        int rawCount = pst.executeUpdate();
-//        return rawCount;
-//    }
-
-    public static int update_status(String booking_id, Boolean status) throws SQLException, ClassNotFoundException{
-        System.out.println("Booking Id: " + booking_id + " Status: " + status);
+    public static int update_status(String booking_id, Boolean status) throws SQLException{
         Connection con = dbConnection.initializeDatabase();
         PreparedStatement pst = con.prepareStatement("UPDATE booking SET status=? WHERE booking_id=?");
         pst.setBoolean(1,status);
         pst.setString(2,booking_id);
-        int rawCount = pst.executeUpdate();
-        return rawCount;
+        return pst.executeUpdate();
     }
 
     public static int delete(String booking_id) throws SQLException, ClassNotFoundException {
         Connection con = dbConnection.initializeDatabase();
         PreparedStatement pst = con.prepareStatement("DELETE FROM booking WHERE booking_id = ?");
         pst.setString(1,booking_id);
-        int rawCount = pst.executeUpdate();
-        return rawCount;
+        return pst.executeUpdate();
     }
 
 

@@ -1,8 +1,6 @@
 package com.smoothtix.controller;
-
 import com.smoothtix.dao.ownerTable;
 import org.json.JSONObject;
-
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -12,24 +10,27 @@ import java.io.PrintWriter;
 import java.sql.ResultSet;
 
 public class OwnerController extends HttpServlet {
+    // handle get requests
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         response.setContentType("text/html");
         PrintWriter out = response.getWriter();
 
+        // get owner's p_id and action according to the request
         String p_id = request.getHeader("p_id");
         String action = request.getParameter("action");
         try {
             if(action == null){
-                boolean isOwner = ownerTable.isOwner(p_id); // Check if the user is an owner
+                boolean isOwner = ownerTable.isOwner(p_id);
                 if (isOwner) {
-                    response.setStatus(HttpServletResponse.SC_OK); // Set response status to indicate success
+                    response.setStatus(HttpServletResponse.SC_OK);
                 } else {
-                    response.setStatus(HttpServletResponse.SC_FORBIDDEN); // Set response status to indicate user is not an owner
+                    response.setStatus(HttpServletResponse.SC_FORBIDDEN);
                 }
             }
             else if(action.equals("owner_id")){
                 ResultSet rs = ownerTable.getByP_id(p_id);
+                // if data are exist add to a json object array
                 if(rs.next()){
                     JSONObject jsonObject = new JSONObject();
                     jsonObject.put("owner_id", rs.getString("owner_id"));
@@ -47,7 +48,7 @@ public class OwnerController extends HttpServlet {
             }
         } catch (Exception e) {
             e.printStackTrace();
-            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR); // Set response status to indicate internal server error
+            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
         }
     }
 }

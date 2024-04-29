@@ -1,5 +1,4 @@
 package com.smoothtix.controller;
-
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -13,7 +12,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.json.JSONArray;
 import org.json.JSONObject;
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -31,10 +29,8 @@ public class ConductorController extends HttpServlet {
         String op_id = request.getHeader("op_id");
         String cp_id = request.getHeader("cp_id");
 
-        System.out.println("conductor " + p_id);
-
         try {
-            ResultSet rs = null;
+            ResultSet rs;
 
             if (conductor_id == null) {
                 if (p_id == null) {
@@ -45,15 +41,13 @@ public class ConductorController extends HttpServlet {
                             nicData.put("nic", rs.getString("nic"));
                             conductorDataArray.put(nicData);
                         }
-                    } else if (cp_id != null) { // Check if cp_id is provided
-                        // Call getAllByOwner method when cp_id is provided
+                    } else if (cp_id != null) {
                         rs = conductorTable.getAllByOwner(cp_id);
                         while (rs != null && rs.next()) {
                             JSONObject conductorData = new JSONObject();
                             conductorData.put("conductor_id", rs.getString("conductor_id"));
                             conductorData.put("p_id", rs.getString("p_id"));
                             conductorData.put("review_points", rs.getFloat("review_points"));
-
                             conductorDataArray.put(conductorData);
                         }
                     } else {
@@ -63,7 +57,6 @@ public class ConductorController extends HttpServlet {
                             conductorData.put("conductor_id", rs.getString("conductor_id"));
                             conductorData.put("p_id", rs.getString("p_id"));
                             conductorData.put("review_points", rs.getFloat("review_points"));
-
                             conductorDataArray.put(conductorData);
                         }
                     }
@@ -74,7 +67,6 @@ public class ConductorController extends HttpServlet {
                         conductorData.put("conductor_id", rs.getString("conductor_id"));
                         conductorData.put("p_id", rs.getString("p_id"));
                         conductorData.put("review_points", rs.getFloat("review_points"));
-
                         conductorDataArray.put(conductorData);
                     }
                 }
@@ -85,20 +77,16 @@ public class ConductorController extends HttpServlet {
                     conductorData.put("conductor_id", rs.getString("conductor_id"));
                     conductorData.put("p_id", rs.getString("p_id"));
                     conductorData.put("review_points", rs.getFloat("review_points"));
-
                     conductorDataArray.put(conductorData);
                 }
             }
-            System.out.println(conductorDataArray);
-            out.println(conductorDataArray); // Send JSON data as a response
+            out.println(conductorDataArray);
             response.setStatus(HttpServletResponse.SC_OK);
         } catch (Exception e) {
             e.printStackTrace();
             response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
         }
     }
-
-
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -116,7 +104,6 @@ public class ConductorController extends HttpServlet {
                 JsonObject jsonObject = jsonElement.getAsJsonObject();
                 String nic = jsonObject.get("nic").getAsString();
                 result = conductorTable.insert(nic, ownerID);
-                System.out.println(result);
             } else{
                 return;
             }
@@ -147,7 +134,6 @@ public class ConductorController extends HttpServlet {
     @Override
     protected void doPut(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         response.setContentType("text/html");
-        PrintWriter out = response.getWriter();
 
         try {
             Gson gson = new Gson();
@@ -172,12 +158,10 @@ public class ConductorController extends HttpServlet {
     @Override
     protected void doDelete(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         response.setContentType("text/html");
-        PrintWriter out = response.getWriter();
 
         try {
             String conductor_id = request.getHeader("conductor_id");
             int deleteSuccess = conductorTable.delete(conductor_id);
-            System.out.println(conductor_id);
             if (deleteSuccess >= 1) {
                 response.setStatus(HttpServletResponse.SC_OK);
             } else {
