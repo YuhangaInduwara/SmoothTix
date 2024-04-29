@@ -5,10 +5,12 @@ let allData = [];
 let dataSearch = [];
 let searchOption = 'route_no';
 
+// session management (authentication and authorization)
 document.addEventListener('DOMContentLoaded', function () {
     isAuthenticated().then(() => fetchAllData());
 });
 
+// refresh the page
 function refreshPage() {
     location.reload();
 }
@@ -45,9 +47,10 @@ function closeForm_update() {
     document.getElementById("overlay").style.display = "none";
 }
 
+// get all route data from database
 function fetchAllData() {
-    document.getElementById("userName").textContent = session_user_name;
-    fetch('/SmoothTix_war_exploded/routeController', {
+    document.getElementById("userName").textContent = session_user_name; // set username in dashboard
+    fetch(`${ url }/routeController`, {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json',
@@ -62,7 +65,6 @@ function fetchAllData() {
         })
         .then(data => {
             allData = data;
-            console.log(allData)
             updatePage(currentPage, false);
         })
         .catch(error => {
@@ -70,8 +72,7 @@ function fetchAllData() {
         });
 }
 
-fetchAllData();
-
+// create data chunks for each page and call display function for each of them
 function updatePage(page, search) {
     const startIndex = (page - 1) * pageSize;
     const endIndex = startIndex + pageSize;
@@ -79,7 +80,6 @@ function updatePage(page, search) {
 
     let dataToShow;
     if(search){
-        console.log("hello: " + dataSearch)
         dataToShow = dataSearch.slice(startIndex, endIndex);
     }
     else{
@@ -91,16 +91,19 @@ function updatePage(page, search) {
     updatePageNumber(currentPage);
 }
 
+// update the page number on page control icons
 function updatePageNumber(page) {
     document.getElementById("currentPageNumber").textContent = page;
 }
 
+// event listeners for page control buttons
 const prevPageIcon = document.getElementById("prevPageIcon");
 prevPageIcon.addEventListener("click", () => changePage(currentPage))
 
 const nextPageIcon = document.getElementById("nextPageIcon");
 nextPageIcon.addEventListener("click", () => changePage(currentPage));
 
+// change the page number
 function changePage(newPage) {
     if (currentPage !== newPage) {
         currentPage = Math.max(1, newPage);
@@ -108,19 +111,24 @@ function changePage(newPage) {
     }
 }
 
+// display chunked data on the UI
 function displayDataAsTable(data) {
     const tableBody = document.querySelector("#dataTable tbody");
     const rowCount = data.length;
-    console.log(rowCount)
+
+    // check for empty pages
     if(rowCount === 0){
         const noDataRow = document.createElement("tr");
         noDataRow.innerHTML = `<td colspan="8">No data available</td>`;
         tableBody.appendChild(noDataRow);
         return;
     }
+
+    // display page controls if row count is greater than 10
     if(rowCount >= 10){
         renderPageControl()
     }
+
     data.forEach(item => {
         const row = document.createElement("tr");
 
@@ -146,10 +154,12 @@ function displayDataAsTable(data) {
     });
 }
 
+// display page control icons
 function renderPageControl(){
     document.getElementById("page_control").style.display = "flex";
 }
 
+// event listener for getting form data and submitting as a new route
 document.getElementById("busRegForm").addEventListener("submit", function(event) {
     event.preventDefault();
 
@@ -168,7 +178,7 @@ document.getElementById("busRegForm").addEventListener("submit", function(event)
     };
 
     const jsonData = JSON.stringify(userData);
-    fetch('../../../routeController', {
+    fetch(`${ url }/routeController`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
@@ -195,6 +205,7 @@ document.getElementById("busRegForm").addEventListener("submit", function(event)
         });
 });
 
+// render add route and update route forms
 function createForm() {
     const form_add = document.createElement('div');
     form_add.classList.add('bus_add_form_body');
@@ -236,6 +247,7 @@ function createForm() {
     formContainer_update.appendChild(form_update.cloneNode(true));
 }
 
+// update selected route by showing current data and sending user inputs to the database
 function updateRow(route_id){
     openForm_update();
 
@@ -245,7 +257,7 @@ function updateRow(route_id){
 
     document.getElementById("header_bus_id").innerHTML = route_id
 
-    fetch('../../../routeController', {
+    fetch(`${ url }/routeController`, {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json',
@@ -290,7 +302,7 @@ function updateRow(route_id){
 
         const jsonData = JSON.stringify(updatedData);
 
-        fetch(`/SmoothTix_war_exploded/routeController`, {
+        fetch(`${ url }/routeController`, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',
@@ -318,8 +330,9 @@ function updateRow(route_id){
     });
 }
 
+// delete a selected route
 function deleteRow(route_id){
-    fetch(`/SmoothTix_war_exploded/routeController`, {
+    fetch(`${ url }/routeController`, {
         method: 'DELETE',
         headers: {
             'Content-Type': 'application/json',
@@ -342,6 +355,7 @@ function deleteRow(route_id){
         });
 }
 
+// handle view/close success/alert popups
 function openAlertSuccess(msg) {
     document.getElementById("alertMsgSuccess").textContent = msg;
     document.getElementById("successAlert").style.display = "block";
@@ -365,10 +379,11 @@ function closeAlertFail() {
     document.getElementById("overlay").style.display = "none";
 }
 
-
+// event listener for search button
 const searchInput = document.getElementById("searchInput");
 searchInput.addEventListener("keyup", searchData);
 
+// handle search data
 function searchData() {
     const searchTerm = document.getElementById("searchInput").value;
     const search = searchTerm.toLowerCase();
@@ -382,6 +397,7 @@ function searchData() {
     updatePage(currentPage, true);
 }
 
+// event listener for filter drop down
 const searchSelect = document.getElementById("searchSelect");
 searchSelect.addEventListener("change", (event) => {
     searchOption = event.target.value;

@@ -169,7 +169,6 @@ a{
     background-color: #EA2427;
     border: none;
     color: white;
-    border: none;
     border-radius: 20px;
     padding: 10px 20px;
     text-align: center;
@@ -181,7 +180,6 @@ a{
 }
 
 .Searchbutton:hover {
-    background-color: #45a04920px;
     text-align: center;
     text-decoration: none;
     display: inline-block;
@@ -199,7 +197,6 @@ a{
     background-color: #EA2427;
     border: none;
     color: white;
-    border: none;
     border-radius: 20px;
     padding: 10px 20px;
     text-align: center;
@@ -211,7 +208,6 @@ a{
 }
 
 .button:hover {
-    background-color: #45a04920px;
     text-align: center;
     text-decoration: none;
     display: inline-block;
@@ -241,7 +237,7 @@ a{
 #reportTable {
     width: 100%;
     border-collapse: collapse;
-    margin-top: 20px; /* Adding space above the table */
+    margin-top: 20px;
 }
 
 #reportTable th, #reportTable td {
@@ -253,7 +249,7 @@ a{
 #reportTable th {
     background-color: #f2f2f2;
     font-weight: bold;
-    width: 50%; /* Ensure headers take up 50% of the table width */
+    width: 50%;
 }
 
 .alertBody{

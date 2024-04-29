@@ -8,6 +8,7 @@ body{
     display: flex;
     flex-direction: row;
 }
+
 .sidebar{
     background-color: #cccccc;
     display: flex;
@@ -134,99 +135,103 @@ a{
 
 
 .container {
-        display: flex;
-        justify-content: space-around;
-    }
+     display: flex;
+     justify-content: space-around;
+}
 
-    .box {
-        position: relative;
-        transition: box-shadow 0.3s;
-        /*width: 15%;*/
-        width: auto;
-        padding: 20px;
-        border: 1px solid #ccc;
-        margin-bottom: 10px;
-        margin-top: 70px;
-        margin-right:10px;
-        margin-left:20px;
-        border-radius: 20px;
-        background-color: #F8F9F9;
-        box-shadow: 0 0 10px rgba(0, 0, 0, 0.8);
-    }
-    .box:hover {
+.box {
+     position: relative;
+     transition: box-shadow 0.3s;
+     width: auto;
+     padding: 20px;
+     border: 1px solid #ccc;
+     margin-bottom: 10px;
+     margin-top: 70px;
+     margin-right:10px;
+     margin-left:20px;
+     border-radius: 20px;
+     background-color: #F8F9F9;
+     box-shadow: 0 0 10px rgba(0, 0, 0, 0.8);
+}
 
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        }
+.box:hover {
 
+     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
 
-    form {
-        display: flex;
-        flex-direction: column;
-    }
+.form-heading {
+     text-align: center;
+     margin-bottom: 20px;
+}
 
-    label {
-        margin-bottom: 10px;
-        color:#5D6D7E;
-        font-weight: bold;
+form {
+     display: flex;
+     flex-direction: column;
+}
 
-    }
+label {
+     margin-bottom: 10px;
+     color:#5D6D7E;
+     font-weight: bold;
 
-    input {
-        padding: 8px;
-        outline: none;
-        margin-bottom: 10px;
-        border:none;
-        box-sizing: border-box;
-        border-radius: 10px;
-        background-color:#F8F9F9;
-        font-weight: bold;
-    }
+}
 
-    .average-points{
-         display: flex;
-         justify-content: center; /* Horizontally center the content */
-         align-items: center; /* Vertically center the content */
-         position: fixed;
-         font-size: 20px;
-         font-weight: bold;
-         bottom: 60px; /* Adjust as needed */
-         left: 0;
-         right: 0;
-         margin: 0 auto; /* Horizontally center the element */
-         width: max-content; /* Set width to content width */
-         background-color: rgba(255, 255, 255, 0.9); /* Semi-transparent background */
-         padding: 10px 20px;
-         border-radius: 5px; /* Rounded corners */
-         box-shadow: 0 0 10px rgba(0, 0, 0, 0.2); /* Box shadow for better visibility */
+input {
+     padding: 8px;
+     outline: none;
+     margin-bottom: 10px;
+     border:none;
+     box-sizing: border-box;
+     border-radius: 10px;
+     background-color:#F8F9F9;
+     font-weight: bold;
+}
 
-    }
+.average-points{
+     display: flex;
+     justify-content: center;
+     align-items: center;
+     position: fixed;
+     font-size: 20px;
+     font-weight: bold;
+     bottom: 70px;
+     left: 0;
+     right: 0;
+     margin: 0 auto;
+     width: max-content;
+     background-color: rgba(255, 255, 255, 0.9);
+     padding: 10px 20px;
+     border-radius: 5px;
+     box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
 
-    .heading {
-            padding-top: 5px;
+}
 
-            color:#115295;
-        }
-    .errorMgForm {
-           display: flex;
-           justify-content: center;
-           align-items: center;
-           position: fixed; /* Ensures that the form stays centered even when scrolling */
-           top: 300px;
-           left: 650px;
-           width: 100hv;
-           height: 100hv;
-           background-color: #F8F9F9;
-           z-index: 999; /* Ensures the form is above other content */
-       }
+.heading {
+     padding-top: 5px;
+     color:#115295;
+}
 
-       .errorMgFormContent {
-            background-color: #F8F9F9;
-           padding: 20px; /* Adjust as needed */
-           border-radius: 5px;
-           box-shadow: 0 0 10px rgba(0, 0, 0, 0.5); /* Box shadow for a subtle elevation effect */
-       }
+.errorMgForm {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      position: fixed;
+      top: 300px;
+      left: 650px;
+      width: 100hv;
+      height: 100hv;
+      background-color: #F8F9F9;
+      z-index: 999;
+}
 
-       .errorMgText {
-          font-weight:bold;
-          color:red;
-       }
+.errorMgFormContent {
+      background-color: #F8F9F9;
+      padding: 20px;
+      border-radius: 5px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+}
+
+.errorMgText {
+      font-weight:bold;
+      color:red;
+}

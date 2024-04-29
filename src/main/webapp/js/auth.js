@@ -2,6 +2,7 @@ let session_p_id = '';
 let session_user_role = '';
 let session_user_name = 'UserName';
 
+// check for the session existence and redirect of do specific operations
 async function isAuthenticated() {
 
      const jwtToken = localStorage.getItem('jwtToken');
@@ -59,11 +60,13 @@ async function isAuthenticated() {
      }
 }
 
+// get details from the JWT token
 function decodeJWT(token) {
     const [header, payload, signature] = token.split('.');
     return JSON.parse(atob(payload));
 }
 
+// redirect to pages according to the user role
 function changePage(privilege_level){
     if (privilege_level === 1) {
         window.location.href = `${frontend_url}/Pages/administrator/html/admin_dashboard_home.html`;
@@ -84,6 +87,7 @@ function changePage(privilege_level){
     }
 }
 
+// invalidate the JWT token
 function logout(){
     const jwtToken = localStorage.getItem('jwtToken');
 

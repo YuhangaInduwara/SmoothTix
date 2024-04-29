@@ -1,7 +1,9 @@
+// session management (authentication and authorization)
 document.addEventListener('DOMContentLoaded', function () {
     isAuthenticated().then(() => init_page());
 });
 
+// get different tables counts from database
 function updateCount(request_table, targetElement) {
         fetch(`${url}/itemCountController?request_table=${request_table}`, {
             method: 'GET',
@@ -20,9 +22,10 @@ function updateCount(request_table, targetElement) {
                 const totalRecords = data[0].record_count;
 
                 let currentCount = 0;
-                const incrementInterval = 100; // Adjust the interval as needed (in milliseconds)
-                const incrementStep = Math.ceil(totalRecords / (1000 / incrementInterval)); // Assuming 1000 ms is 1 second
+                const incrementInterval = 100;
+                const incrementStep = Math.ceil(totalRecords / (1000 / incrementInterval));
 
+                // add a counter to display the data
                 const incrementTimer = setInterval(() => {
                     currentCount += incrementStep;
                     targetElement.textContent = currentCount;
@@ -38,6 +41,7 @@ function updateCount(request_table, targetElement) {
             });
 }
 
+// initialize the home page for showing data on tiles
 function init_page(){
     document.getElementById("userName").textContent = session_user_name;
     updateCount("passenger", document.getElementById("passenger_count"));

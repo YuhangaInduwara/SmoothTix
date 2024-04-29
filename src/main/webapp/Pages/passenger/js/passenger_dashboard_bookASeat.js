@@ -98,7 +98,6 @@ function updatePage(page) {
     const dataToShow = allData.slice(startIndex, endIndex);
 
     list.innerHTML = "";
-    // console.log(startIndex + " " +dataToShow + " " + endIndex)
     displayDataAsScheduleTiles(dataToShow);
     updatePageNumber(currentPage);
 }
@@ -128,7 +127,6 @@ function changePage(newPage) {
             document.getElementById("nextPageIcon").style.opacity = "1";
             updatePage(currentPage);
         } else {
-            console.log(`Next page is empty`);
             document.getElementById("nextPageIcon").style.opacity = "0.5";
         }
     }
@@ -156,7 +154,6 @@ function displayDataAsScheduleTiles(data) {
     }
 
     data.forEach(item => {
-        console.log(item.status)
         if(item.status === 0){
             const scheduleElement = document.createElement("div");
             scheduleElement.classList.add("schedule_tiles");
@@ -265,7 +262,7 @@ function closeAlert(){
 function openSeatSelection(schedule_id, start, destination, date, time, available_seats, price) {
     isAuthenticated();
     if(parseInt(available_seats, 10) === 0){
-        openAlert( "Sorry! All seats are booked.", "alertFail");
+        openAlert( "Sorry! All Seats Are Booked.", "alertFail");
     }
     else{
         document.getElementById("seat_selection").style.display = "flex";
@@ -379,7 +376,7 @@ function updateSeatMap() {
 
 function payment() {
     if(totalPrice <= 0){
-        openAlert( "Please,select at least one seat!", "alertFail");
+        openAlert( "Please Select At Least One Seat!", "alertFail");
     }
     else{
         getSmoothPoints();
@@ -407,7 +404,6 @@ function getSmoothPoints(){
         .then(data => {
             smooth_points = data.smooth_points;
             document.getElementById('smooth_points').textContent = smooth_points;
-            console.log(smooth_points + " " + data.smooth_points)
         })
         .catch(error => {
             console.error('Fetch error:', error);
@@ -435,7 +431,6 @@ function pay() {
     const seconds = currentDate.getSeconds();
     const formattedDateTime = `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
 
-    console.log("Current Date and Time:", formattedDateTime);
     const paymentDetails = {
         date_time: formattedDateTime,
         amount:totalPrice,
@@ -456,11 +451,9 @@ function pay() {
             }
             else{
                 openAlert("Your booking was unsuccessful!" + err, "alertFail");
-                console.error("Error" + err);
             }
         })
         .then(parsedResponse => {
-            console.log(parsedResponse);
             const payment_id = parsedResponse.payment_id;
             addBooking(booking_schedule_id, session_p_id, payment_id, selectedSeats);
         })
@@ -471,7 +464,7 @@ function payByPoints(){
         openConfirmAlert('points');
     }
     else{
-        openAlert("No enough SmoothPoints!", "alertFail");
+        openAlert("Not Enough SmoothPoints!", "alertFail");
     }
 }
 
@@ -501,7 +494,6 @@ function addBooking(schedule_id, p_id, payment_id, selectedSeats) {
                 closeConfirmAlert();
                 document.getElementById('loading-spinner').style.display = 'none';
                 openAlert("Your booking was unsuccessful!", "alertFail");
-                console.error("Error" + err);
             }
         })
         .then(parsedResponse => {
@@ -509,7 +501,6 @@ function addBooking(schedule_id, p_id, payment_id, selectedSeats) {
             const email = parsedResponse.email;
             const bookedSeats = selectedSeats.join(', ');
 
-            console.log("booking_id: " + booking_id + "p_id: " + p_id + "email: " + email + "seats: " + bookedSeats)
             fetch(`${ url }/mailController?email=${email}&schedule_id=${schedule_id}&p_id=${p_id}&bookingId=${booking_id}&price=${totalPrice}&bookedSeats=${bookedSeats}`, {
                 method: 'POST',
                 headers: {
@@ -520,7 +511,7 @@ function addBooking(schedule_id, p_id, payment_id, selectedSeats) {
                     if (response.ok) {
                         console.log("Successful")
                         document.getElementById('loading-spinner').style.display = 'none';
-                        openAlert("Your booking was successful!", "alertSuccess");
+                        openAlert("Your Booking Was Successful!", "alertSuccess");
                         closeConfirmAlert();
                         closePayment();
                         closeSeatSelection();
@@ -529,10 +520,9 @@ function addBooking(schedule_id, p_id, payment_id, selectedSeats) {
                     } else {
                         deleteBooking(booking_id);
                         deletePayment(payment_id);
-                        console.log("Unsuccessful: " + response)
                         closeConfirmAlert();
                         document.getElementById('loading-spinner').style.display = 'none';
-                        openAlert("Your booking was unsuccessful!", "alertFail");
+                        openAlert("Your Booking Was Unsuccessful!", "alertFail");
                     }
                 })
         })
@@ -594,7 +584,7 @@ function openConfirmAlert(action){
     }
 
     if (isValid) {
-        document.getElementById('confirmationMsg').textContent = "Are you sure to pay?";
+        document.getElementById('confirmationMsg').textContent = "Are You Sure To Pay?";
         document.getElementById("confirmationAlert").style.display = "block";
         document.getElementById("overlay").style.display = "block";
     }
@@ -708,7 +698,7 @@ function reduceSmoothPoints(amount){
 
     const jsonData = JSON.stringify(updatedData);
 
-    fetch(`../../../smoothPointController?action=subtract`, {
+    fetch(`${ url }/smoothPointController?action=subtract`, {
         method: 'PUT',
         headers: {
             'Content-Type': 'application/json',
@@ -717,9 +707,9 @@ function reduceSmoothPoints(amount){
     })
         .then(response => {
             if (response.ok) {
-                console.log('Update successful');
+                console.log('Update Successful');
             } else if (response.status === 401) {
-                console.log('Update unsuccessful');
+                console.log('Update Unsuccessful');
             } else {
                 console.error('Error:', response.status);
             }

@@ -20,14 +20,8 @@ function fetchDriverId() {
                 }
             })
             .then(data => {
-            console.log(data[0].driver_id);
-            console.log(session_p_id);
-            fetchAllData(data[0].driver_id)
-//                if (data && data.length > 0) {
+                    fetchAllData(data[0].driver_id)
                     displayDataAsForms(data);
-//                } else {
-//                    console.log('No data available.');
-//                }
             })
             .catch(error => {
                 console.error('Error:', error);
@@ -48,22 +42,18 @@ function fetchAllData(driver_id) {
                         throw new Error('Error fetching data:', response.status);
                     }
                 })
+
                 .then(data => {
-  console.log(data);
                         displayDataAsForms(data);
-    //                } else {
-    //                    console.log('No data available.');
-    //                }
+
                 })
                 .catch(error => {
                     console.error('Error:', error);
-                            // Display error message as a form
+
                             const errorMessageForm = document.createElement("div");
                             errorMessageForm.classList.add("box");
-
                             const errorMessage = document.createElement("p");
                             errorMessage.textContent = "Error fetching data. Please try again later.";
-
                             errorMessageForm.appendChild(errorMessage);
                             document.getElementById("formContainer").appendChild(errorMessageForm);
                 });
@@ -71,7 +61,7 @@ function fetchAllData(driver_id) {
 
 function displayDataAsForms(data) {
     const formContainer = document.getElementById("formContainer");
-    formContainer.innerHTML = ""; // Clear existing forms
+    formContainer.innerHTML = "";
 
     let formCount = 0;
 
@@ -79,12 +69,10 @@ function displayDataAsForms(data) {
         data.forEach((item, index) => {
             const form = document.createElement("div");
             form.classList.add("box");
-
             const heading = document.createElement("h2");
             heading.classList.add("form-heading");
             heading.textContent = `Bus Profile ${index + 1}`;
             form.appendChild(heading);
-
             const innerForm = document.createElement("form");
             innerForm.id = `form${index + 1}`;
 
@@ -99,7 +87,6 @@ function displayDataAsForms(data) {
                 const label = document.createElement("label");
                 label.setAttribute("for", `${input.key}${index + 1}`);
                 label.textContent = input.label;
-
                 const inputField = document.createElement("input");
                 inputField.setAttribute("type", "text");
                 inputField.setAttribute("id", `${input.key}${index + 1}`);
@@ -115,24 +102,14 @@ function displayDataAsForms(data) {
             formCount++;
         });
     } else {
-        // Display error message as a form
-        const errorMessageForm = document.createElement("div");
-        errorMessageForm.classList.add("box", "errorMgForm"); // Apply box style and error message form style
 
+        const errorMessageForm = document.createElement("div");
+        errorMessageForm.classList.add("box", "errorMgForm");
         const errorMessage = document.createElement("h2");
-        errorMessage.classList.add("errorMgText"); // Apply error message text style
+        errorMessage.classList.add("errorMgText");
         errorMessage.textContent = "You are not assigned to any bus !";
         errorMessageForm.appendChild(errorMessage);
         formContainer.appendChild(errorMessageForm);
     }
-
-    if (formCount > 3) {
-        enableHorizontalScroll();
-    }
 }
 
-function enableHorizontalScroll() {
-//    const formContainer = document.getElementById("formContainer");
-//    formContainer.classList.add("horizontal-scroll"); // Add class to enable horizontal scrolling
-document.body.classList.add("horizontal-scroll"); // Add class to enable horizontal scrolling for body
-}

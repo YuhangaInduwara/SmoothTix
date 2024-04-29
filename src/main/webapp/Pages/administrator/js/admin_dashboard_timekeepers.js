@@ -5,16 +5,19 @@ let allData = [];
 let dataSearch = [];
 let searchOption = 'timekpr_id';
 
+// session management (authentication and authorization)
 document.addEventListener('DOMContentLoaded', function () {
     isAuthenticated().then(() => fetchAllData());
 });
 
+// refresh the page
 function refreshPage() {
     location.reload();
 }
 
+// get all timekeeper data from database
 function fetchAllData() {
-    document.getElementById("userName").textContent = session_user_name;
+    document.getElementById("userName").textContent = session_user_name; // set username in dashboard
     fetch(`${ url }/timekeeperController`, {
         method: 'GET',
         headers: {
@@ -30,7 +33,6 @@ function fetchAllData() {
         })
         .then(data => {
             allData = data;
-            console.log(allData)
             updatePage(currentPage, false);
         })
         .catch(error => {
@@ -38,7 +40,7 @@ function fetchAllData() {
         });
 }
 
-
+// create data chunks for each page and call display function for each of them
 function updatePage(page, search) {
     const startIndex = (page - 1) * pageSize;
     const endIndex = startIndex + pageSize;
@@ -46,7 +48,6 @@ function updatePage(page, search) {
 
     let dataToShow;
     if(search){
-        console.log("hello: " + dataSearch)
         dataToShow = dataSearch.slice(startIndex, endIndex);
     }
     else{
@@ -58,37 +59,45 @@ function updatePage(page, search) {
     updatePageNumber(currentPage);
 }
 
+// update the page number on page control icons
 function updatePageNumber(page) {
     document.getElementById("currentPageNumber").textContent = page;
 }
 
+// event listeners for page control buttons
 const prevPageIcon = document.getElementById("prevPageIcon");
 prevPageIcon.addEventListener("click", () => changePage(currentPage))
 
 const nextPageIcon = document.getElementById("nextPageIcon");
 nextPageIcon.addEventListener("click", () => changePage(currentPage));
 
+// change the page number
 function changePage(newPage) {
-    console.log(currentPage + "  " + newPage)
     if (currentPage !== newPage) {
         currentPage = Math.max(1, newPage);
         updatePage(currentPage, false);
     }
 }
 
+// display chunked data on the UI
 function displayDataAsTable(data) {
     const tableBody = document.querySelector("#dataTable tbody");
     const rowCount = data.length;
     let existingData = {};
+
+    // check for empty pages
     if(rowCount === 0){
         const noDataRow = document.createElement("tr");
         noDataRow.innerHTML = `<td colspan="6">No data available</td>`;
         tableBody.appendChild(noDataRow);
         return;
     }
+
+    // display page controls if row count is greater than 10
     if(rowCount >= 10){
         renderPageControl()
     }
+
     data.forEach(item => {
         const row = document.createElement("tr");
 
@@ -136,21 +145,22 @@ function displayDataAsTable(data) {
     });
 }
 
+// display page control icons
 function renderPageControl(){
     document.getElementById("page_control").style.display = "flex";
 }
 
+// event listener for getting form data and submitting as a new timekeeper
 document.getElementById("busRegForm").addEventListener("submit", function(event) {
     event.preventDefault();
     const nic = document.getElementById("add_nic").value;
     const stand = document.getElementById("add_stand").value.toLowerCase();
-    console.log(nic)
+
     const userData = {
         nic: nic,
         stand: stand,
     };
     const jsonData = JSON.stringify(userData);
-    console.log("test: "+jsonData)
 
     fetch(`${ url }/timekeeperController`, {
         method: 'POST',
@@ -180,6 +190,7 @@ document.getElementById("busRegForm").addEventListener("submit", function(event)
 createForm('add');
 createForm('update');
 
+// render add route and update route forms
 function createForm(action) {
     if(action === 'add'){
         const form_add = document.createElement('div');
@@ -202,10 +213,7 @@ function createForm(action) {
 
         form_add.innerHTML = form.replace(/id="/g, 'id="add_');
         const formContainer_add = document.getElementById('formContainer_add');
-        formContainer_add.appendChild(form_add.cloneNode(true)); // Clone the form
-        //
-        // showSuggestions1({ target: document.getElementById('nic_suggestions') });
-        // showSuggestions2({ target: document.getElementById('stand_suggestions') });
+        formContainer_add.appendChild(form_add.cloneNode(true));
     }
     else if(action === 'update'){
         const form_update = document.createElement('div');
@@ -223,12 +231,11 @@ function createForm(action) {
 
         form_update.innerHTML = form.replace(/id="/g, 'id="update_');
         const formContainer_update = document.getElementById('formContainer_update');
-        formContainer_update.appendChild(form_update.cloneNode(true)); // Clone the form
-
-        // showSuggestions3({ target: document.getElementById('stand_suggestions') });
+        formContainer_update.appendChild(form_update.cloneNode(true));
     }
 }
 
+// show nic suggestions
 function showSuggestions1(event) {
     const input = event.target;
     const inputValue = input.value.toUpperCase();
@@ -286,6 +293,7 @@ function showSuggestions1(event) {
     }
 }
 
+// show stand suggestions for insertion
 function showSuggestions2(event) {
     const input = event.target;
     const inputValue = input.value.toUpperCase();
@@ -314,7 +322,6 @@ function showSuggestions2(event) {
                 const filteredSuggestions = suggestions.filter(suggestion =>
                     suggestion.toUpperCase().includes(inputValue)
                 );
-                console.log(filteredSuggestions)
                 suggestionsContainer.style.maxHeight = '200px';
                 suggestionsContainer.style.overflowY = 'auto';
                 suggestionsContainer.style.width = '100%';
@@ -342,6 +349,7 @@ function showSuggestions2(event) {
     }
 }
 
+// show stand suggestions for update
 function showSuggestions3(event) {
     const input = event.target;
     const inputValue = input.value.toUpperCase();
@@ -370,7 +378,6 @@ function showSuggestions3(event) {
                 const filteredSuggestions = suggestions.filter(suggestion =>
                     suggestion.toUpperCase().includes(inputValue)
                 );
-                console.log(filteredSuggestions)
                 suggestionsContainer.style.maxHeight = '200px';
                 suggestionsContainer.style.overflowY = 'auto';
                 suggestionsContainer.style.width = '100%';
@@ -398,8 +405,8 @@ function showSuggestions3(event) {
     }
 }
 
+// update selected timekeeper by showing current data and sending user inputs to the database
 function updateRow(timekpr_id){
-    console.log("test1: " + timekpr_id)
     openForm_update();
 
     let existingData = {};
@@ -416,8 +423,6 @@ function updateRow(timekpr_id){
             if (response.ok) {
                 response.json().then(data => {
                     existingData = data[0];
-                    console.log("existingData:", existingData);
-                    // document.getElementById("update_nic").value = existingData.p_id;
                     document.getElementById("update_stand").value = existingData.stand;
                 });
             } else if (response.status === 401) {
@@ -441,7 +446,6 @@ function updateRow(timekpr_id){
         };
 
         const jsonData = JSON.stringify(updatedData);
-        console.log(jsonData)
 
         fetch(`${ url }/timekeeperController?timekpr_id=${timekpr_id}`, {
             method: 'PUT',
@@ -456,10 +460,8 @@ function updateRow(timekpr_id){
                     openAlertSuccess("Successfully Updated!");
                 } else if (response.status === 401) {
                     openAlertFail(response.status);
-                    console.log('Update unsuccessful');
                 } else {
                     openAlertFail(response.status);
-                    console.error('Error:', response.status);
                 }
             })
             .catch(error => {
@@ -468,6 +470,7 @@ function updateRow(timekpr_id){
     });
 }
 
+// delete a selected timekeeper
 function deleteRow(){
     fetch(`${ url }/timekeeperController`, {
         method: 'DELETE',
@@ -483,11 +486,9 @@ function deleteRow(){
             } else if (response.status === 401) {
                 closeAlert();
                 openAlertFail(response.status);
-                console.log('Delete unsuccessful');
             } else {
                 openAlertFail(response.status);
                 closeAlert();
-                console.error('Error:', response.status);
             }
         })
         .catch(error => {
@@ -495,6 +496,7 @@ function deleteRow(){
         });
 }
 
+// handle view/close success/alert popups | open/close add/update forms
 function openForm_add() {
     const existingForm = document.querySelector(".bus_add_form_body");
     if (!existingForm) {
@@ -563,9 +565,11 @@ function closeAlert(){
     document.getElementById("overlay").style.display = "none";
 }
 
+// event listener for search button
 const searchInput = document.getElementById("searchInput");
 searchInput.addEventListener("keyup", searchData);
 
+// handle search data
 function searchData() {
     const searchTerm = document.getElementById("searchInput").value;
     const search = searchTerm.toLowerCase();
@@ -577,6 +581,7 @@ function searchData() {
     updatePage(currentPage, true);
 }
 
+// event listener for filter drop down
 const searchSelect = document.getElementById("searchSelect");
 searchSelect.addEventListener("change", (event) => {
     searchOption = event.target.value;

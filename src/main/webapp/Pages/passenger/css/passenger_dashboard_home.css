@@ -4,7 +4,6 @@ body{
     max-height: 100vh;
     background-image:url('../../../images/welcome.png');background-size: cover;
     background-repeat: no-repeat;
-    /*background-position: center; height: 100vh; width: 100vh*/
 }
 
 .dashboard{
@@ -100,10 +99,6 @@ a{
     flex: 1;
     display: flex;
     flex-direction: column;
-    /*background-color: white;*/
-    /*background-image:url('../../../images/welcome.png');background-size: cover;*/
-    /*background-repeat: no-repeat;*/
-    /*background-position: center; height: 100vh; width: 100vh*/
 }
 
 .navbar{
@@ -359,6 +354,3 @@ a{
 .autocomplete-list-item:hover {
     background-color: #cccccc;
 }
-
-
-

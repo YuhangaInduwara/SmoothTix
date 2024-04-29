@@ -5,16 +5,19 @@ let allRequestData = [];
 let dataSearch = [];
 let searchOption = 'bus_id';
 
+// session management (authentication and authorization)
 document.addEventListener('DOMContentLoaded', function () {
     isAuthenticated().then(() => fetchAllData());
 });
 
+// refresh the page
 function refreshPage() {
     location.reload();
 }
 
+// get all bus data from database
 function fetchAllData() {
-    document.getElementById("userName").textContent = session_user_name;
+    document.getElementById("userName").textContent = session_user_name; // set username in dashboard
     fetch(`${ url }/busController`, {
         method: 'GET',
         headers: {
@@ -37,6 +40,7 @@ function fetchAllData() {
         });
 }
 
+// create data chunks for each page and call display function for each of them
 function updatePage(page, search) {
     const startIndex = (page - 1) * pageSize;
     const endIndex = startIndex + pageSize;
@@ -55,16 +59,19 @@ function updatePage(page, search) {
     updatePageNumber(currentPage);
 }
 
+// update the page number on page control icons
 function updatePageNumber(page) {
     document.getElementById("currentPageNumber").textContent = page;
 }
 
+// event listeners for page control buttons
 const prevPageIcon = document.getElementById("prevPageIcon");
 prevPageIcon.addEventListener("click", () => changePage(currentPage))
 
 const nextPageIcon = document.getElementById("nextPageIcon");
 nextPageIcon.addEventListener("click", () => changePage(currentPage));
 
+// change the page number
 function changePage(newPage) {
     if (currentPage !== newPage) {
         currentPage = Math.max(1, newPage);
@@ -72,18 +79,24 @@ function changePage(newPage) {
     }
 }
 
+// display chunked data on the UI
 function displayDataAsTable(data) {
     const tableBody = document.querySelector("#dataTable tbody");
     const rowCount = data.length;
+
+    // check for empty pages
     if(rowCount === 0){
         const noDataRow = document.createElement("tr");
         noDataRow.innerHTML = `<td colspan="8">No data available</td>`;
         tableBody.appendChild(noDataRow);
         return;
     }
+
+    // display page controls if row count is greater than 10
     if(rowCount >= 10){
         renderPageControl()
     }
+
     data.forEach(item => {
         const row = document.createElement("tr");
 
@@ -100,13 +113,16 @@ function displayDataAsTable(data) {
     });
 }
 
+// display page control icons
 function renderPageControl(){
     document.getElementById("page_control").style.display = "flex";
 }
 
+// event listener for search button
 const searchInput = document.getElementById("searchInput");
 searchInput.addEventListener("keyup", searchData);
 
+// handle search data
 function searchData() {
     const searchTerm = document.getElementById("searchInput").value;
     const search = searchTerm.toLowerCase();
@@ -118,22 +134,26 @@ function searchData() {
     updatePage(currentPage, true);
 }
 
+// event listener for filter drop down
 const searchSelect = document.getElementById("searchSelect");
 searchSelect.addEventListener("change", (event) => {
     searchOption = event.target.value;
 });
 
+// view bus requests sent by owner
 function openBusRequests(){
     fetchRequestData()
     document.getElementById("requestTable").style.display = "block";
     document.getElementById("overlay").style.display = "block";
 }
 
+// close bus requests container
 function closeBusRequests(){
     document.getElementById("requestTable").style.display = "none";
     document.getElementById("overlay").style.display = "none";
 }
 
+// get all bus requests sent by owners
 function fetchRequestData() {
     fetch(`${ url }/busVerifyController`, {
         method: 'GET',
@@ -158,19 +178,25 @@ function fetchRequestData() {
         });
 }
 
+// view fetched request data in the container
 function displayRequestDataAsTable(data) {
     const tableBody = document.querySelector("#requestTable tbody");
     tableBody.innerHTML = ''
     const rowCount = data.length;
+
+    // check for empty pages
     if(rowCount === 0){
         const noDataRow = document.createElement("tr");
         noDataRow.innerHTML = `<td colspan="8">No data available</td>`;
         tableBody.appendChild(noDataRow);
         return;
     }
+
+    // display page controls if row count is greater than 10
     if(rowCount >= 10){
         renderPageControl()
     }
+
     data.forEach(item => {
         if(item.status === 0){
             const row = document.createElement("tr");
@@ -196,6 +222,7 @@ function displayRequestDataAsTable(data) {
     });
 }
 
+// fetch a post request for accepting the bus requests
 function updateBusRequest(bus_id, action){
     fetch(`${ url }/busVerifyController?action=${action}&bus_id=${bus_id}`, {
         method: 'POST',
@@ -211,7 +238,6 @@ function updateBusRequest(bus_id, action){
                 else if(action === 'accept'){
                     openAlert( "Successfully accepted", "alertSuccess");
                 }
-                console.log('success');
             } else if (response.status === 401) {
                 if(action === 'decline'){
                     openAlert( "Request Decline Failed", "alertFail");
@@ -220,7 +246,6 @@ function updateBusRequest(bus_id, action){
                     openAlert( "Request Accept Failed", "alertFail");
                 }
             } else {
-                console.error('Error:', response.status);
                 if(action === 'decline'){
                     openAlert( "Request Decline Failed", "alertFail");
                 }
@@ -230,7 +255,6 @@ function updateBusRequest(bus_id, action){
             }
         })
         .catch(error => {
-            console.error('Error:', error);
             if(action === 'decline'){
                 openAlert( "Request Decline Failed", "alertFail");
             }
@@ -240,6 +264,7 @@ function updateBusRequest(bus_id, action){
         });
 }
 
+// view success and failure alerts with a given message
 function openAlert(text, alertBody){
     if(alertBody === "alertFail"){
         document.getElementById("alertMsg").textContent = text;
@@ -251,6 +276,7 @@ function openAlert(text, alertBody){
     document.getElementById("overlay").style.display = "block";
 }
 
+// close alert messages
 function closeAlert(){
     const alertSuccess = document.getElementById("alertSuccess");
     const alertFail = document.getElementById("alertFail");

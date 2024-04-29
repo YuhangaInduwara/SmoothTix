@@ -2,18 +2,22 @@ let routeData = [];
 let routeNo = 'R001';
 let allData = [];
 
+// session management (authentication and authorization)
 document.addEventListener('DOMContentLoaded', function () {
     isAuthenticated().then(() => getRouteNos() );
 });
 
+// event listener for route number selection dropdown menu
 const searchSelect = document.getElementById("routeNoSelect");
 searchSelect.addEventListener("change", (event) => {
     routeNo = event.target.value;
     console.log(routeNo)
 });
 
+// get route numbers from the database for showing in the dropdown
 function getRouteNos(){
-    document.getElementById("userName").textContent = session_user_name;
+
+    document.getElementById("userName").textContent = session_user_name; // set username in dashboard
 
     fetch(`${url}/routeController`, {
         method: 'GET',
@@ -49,16 +53,14 @@ function getRouteNos(){
         });
 }
 
+// get filter data, send them to the backend to fetch the corresponding report details and display them
 function generateReport() {
     const startDateInput = document.getElementById('StartdatePicker');
     const endDateInput = document.getElementById('EnddatePicker');
     const routeNoSelect = document.getElementById('routeNoSelect');
-
     const startDate = startDateInput.value + " 00:00:00";
     const endDate = endDateInput.value + " 23:59:59";
     const routeNo = routeNoSelect.value;
-    console.log("startDate: " + startDate + " endDate: " + endDate + " route_no: " + routeNoSelect);
-
     const startDateFormatted = startDateInput.value;
     const endDateFormatted = endDateInput.value;
 
@@ -87,7 +89,6 @@ function generateReport() {
         setErrorMsg(routeNoSelect, "Please select a Route number.");
         document.getElementById('routeNoError').textContent = "Please select a bus registration number.";
     } else {
-        // Check if start date is valid
         const isStartDateValid = validateDate(startDate);
         if (!isStartDateValid) {
             setErrorMsg(document.getElementById('StartdatePicker'), "Please enter a valid start date.");
@@ -95,7 +96,6 @@ function generateReport() {
             return;
         }
 
-        // Check if end date is valid
         const isEndDateValid = validateDate(endDate);
         if (!isEndDateValid) {
             setErrorMsg(document.getElementById('EnddatePicker'), "Please enter a valid end date.");
@@ -103,7 +103,6 @@ function generateReport() {
             return;
         }
 
-        // Check if start date is before end date
         if (new Date(startDate) > new Date(endDate)) {
             setErrorMsg(document.getElementById('StartdatePicker'), "Start date must be before end date.");
             setErrorMsg(document.getElementById('EnddatePicker'), "End date must be after start date.");
@@ -112,7 +111,6 @@ function generateReport() {
             return;
         }
 
-        // Check if bus registration number is selected
         const isRouteNoValid = routeNo !== "";
         if (!isRouteNoValid) {
             setErrorMsg(document.getElementById('routeNoSelect'), "Please select a Route number.");
@@ -125,7 +123,6 @@ function generateReport() {
                 endDate: endDate,
                 routeNo: routeNo
             });
-           console.log(jsonData)
 
         fetch(`${ url }/adminController`, {
             method: 'POST',
@@ -144,7 +141,6 @@ function generateReport() {
         .then(data => {
           if (data) {
           allData = data;
-          console.log(data);
           clearSearchBoxes();
 
             document.getElementById("timePeriod").textContent = `${startDateFormatted} - ${endDateFormatted}`;
@@ -165,88 +161,83 @@ function generateReport() {
     }
 }
 
+// validate the date
 function validateDate(dateString) {
     const regex = /^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}$/;
     return regex.test(dateString);
 }
 
-// Helper function to set error message
+// create an error message for showing on invalid insertion
 function setErrorMsg(element, message) {
     element.style.border = "1px solid red";
     element.title = message;
 }
 
+// clear filter insertions after submitting them
 function clearSearchBoxes() {
   document.getElementById("StartdatePicker").value = "";
   document.getElementById("EnddatePicker").value = "";
   document.getElementById("routeNoSelect").selectedIndex = 0;
 }
 
+// view success message
 function openAlertSuccess(msg) {
     document.getElementById("alertMsgSuccess").textContent = msg;
     document.getElementById("successAlert").style.display = "block";
     document.getElementById("overlay").style.display = "block";
 }
 
+// close success messages
 function closeAlertSuccess() {
     document.getElementById("successAlert").style.display = "none";
     document.getElementById("overlay").style.display = "none";
 }
 
-function openAlertFail(response) {
-    document.getElementById("failMsg").textContent = response;
-    document.getElementById("failAlert").style.display = "block";
-    document.getElementById("overlay").style.display = "block";
-}
-
+// close failed messages
 function closeAlertFail() {
     document.getElementById("failAlert").style.display = "none";
     document.getElementById("overlay").style.display = "none";
 }
 
+// event listener for download report button
 document.addEventListener('DOMContentLoaded', function () {
     const downloadBtn = document.getElementById('downloadReportButton');
     downloadBtn.addEventListener('click', downloadPDF);
 });
 
+// download the generated report as a pdf
 function downloadPDF() {
     const { jsPDF } = window.jspdf;
     const doc = new jsPDF();
 
-    const imageUrl = '../../../images/logo.png'; // Change to your logo's URL
+    const imageUrl = '../../../images/logo.png';
 
-    // Load image from URL and draw it along with the header text
     const img = new Image();
     img.src = imageUrl;
     img.onload = function() {
         const pageWidth = doc.internal.pageSize.getWidth();
 
-        // Image dimensions and positioning
-        const imgHeight = 15; // Adjust height in mm
+        const imgHeight = 15;
         const imgWidth = imgHeight * (img.naturalWidth / img.naturalHeight); // Maintain aspect ratio
-        const imgX = 10;  // x position from left
-        const imgY = 10;  // y position from top
+        const imgX = 10;
+        const imgY = 10;
 
-        // Draw the image on the PDF
         doc.addImage(img, 'PNG', imgX, imgY, imgWidth, imgHeight);
 
-        // Font settings and text positioning
         const fontSize = 18;
         doc.setFontSize(fontSize);
         const text = "Route Details Report";
-        const textX = imgX + imgWidth + 40; // Adjusted gap
-        const textY = imgY + (imgHeight / 2) + (fontSize / 2.8); // Vertically center text
+        const textX = imgX + imgWidth + 40;
+        const textY = imgY + (imgHeight / 2) + (fontSize / 2.8);
         doc.text(text, textX, textY);
 
-        // Draw a line under the text
         const lineStartX = imgX;
-        const lineEndX = pageWidth - 10;  // Ends near the right margin
-        const lineY = textY + 2; // A bit below the text
-        doc.setDrawColor(0); // Set the line color to black (default)
-        doc.setLineWidth(0.5);  // Line thickness
+        const lineEndX = pageWidth - 10;
+        const lineY = textY + 2;
+        doc.setDrawColor(0);
+        doc.setLineWidth(0.5);
         doc.line(lineStartX, lineY, lineEndX, lineY);
 
-        // Continue with the HTML content
         addHtmlContent();
     };
 
@@ -257,12 +248,11 @@ function downloadPDF() {
                 doc.save('RouteReport.pdf');
             },
             x: 10,
-            y: 40, // Adjust starting position after header
-            width: 190, // Adjust width according to your need
+            y: 40,
+            width: 190,
             windowWidth: content.scrollWidth
         };
 
-        // Render HTML content to PDF
         doc.html(content, options);
     }
 }
