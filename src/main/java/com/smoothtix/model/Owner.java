@@ -11,7 +11,6 @@ public class Owner {
         this.p_id = p_id;
     }
 
-    // Getters and setters
     public String getOwner_id() {
         return owner_id;
     }
@@ -28,9 +27,6 @@ public class Owner {
         this.p_id = p_id;
     }
 
-
-
-    // Override toString() method for debugging purposes
     @Override
     public String toString() {
         return "Owner{" +

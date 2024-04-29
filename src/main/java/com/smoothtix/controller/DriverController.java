@@ -1,5 +1,4 @@
 package com.smoothtix.controller;
-
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -13,20 +12,16 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.json.JSONArray;
 import org.json.JSONObject;
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.SQLOutput;
 
 public class DriverController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         response.setContentType("application/json");
         PrintWriter out = response.getWriter();
-        //JSONArray passengerDataArray = new JSONArray();
         JSONArray driverDataArray = new JSONArray();
 
         String driver_id = request.getHeader("driver_id");
@@ -35,7 +30,7 @@ public class DriverController extends HttpServlet {
         String dp_id = request.getHeader("dp_id");
 
         try {
-            ResultSet rs = null;
+            ResultSet rs;
 
             if (driver_id == null && p_id == null && op_id != null) {
                 rs = driverTable.get_NIC(op_id);
@@ -43,10 +38,8 @@ public class DriverController extends HttpServlet {
                     JSONObject nicData = new JSONObject();
                     nicData.put("nic", rs.getString("nic"));
                     driverDataArray.put(nicData);
-
                 }
             } else if (driver_id != null) {
-                // Fetch driver data by driver_id
                 rs = driverTable.get(driver_id);
 
                 while (rs != null && rs.next()) {
@@ -58,7 +51,6 @@ public class DriverController extends HttpServlet {
                     driverDataArray.put(driverData);
                 }
             } else if (p_id != null) {
-                // Fetch driver data by p_id
                 rs = driverTable.get_by_p_id(p_id);
                 if(rs.next()) {
                     JSONObject driverData = new JSONObject();
@@ -68,9 +60,7 @@ public class DriverController extends HttpServlet {
                     driverData.put("review_points", rs.getDouble("review_points"));
                     driverDataArray.put(driverData);
                 }
-                System.out.println("hellO:" + driverDataArray);
-            } else if (dp_id != null) { // Check if dp_id is provided
-                // Call getAllByOwner method when dp_id is provided
+            } else if (dp_id != null) {
                 rs = driverTable.getAllByOwner(dp_id);
                 while (rs != null && rs.next()) {
                     JSONObject driverData = new JSONObject();
@@ -81,10 +71,7 @@ public class DriverController extends HttpServlet {
                     driverDataArray.put(driverData);
                 }
             } else {
-                // Fetch all driver data
                 rs = driverTable.getAll();
-                System.out.println("Con: "+p_id);
-
                 while (rs != null && rs.next()) {
                     JSONObject driverData = new JSONObject();
                     driverData.put("driver_id", rs.getString("driver_id"));
@@ -95,8 +82,6 @@ public class DriverController extends HttpServlet {
                 }
 
             }
-            System.out.println(driverDataArray);
-            //out.println(passengerDataArray);
             out.print(driverDataArray);
             response.setStatus(HttpServletResponse.SC_OK);
         } catch (Exception e) {
@@ -125,7 +110,6 @@ public class DriverController extends HttpServlet {
                 String nic = jsonObject.get("nic").getAsString();
                 String license_no = jsonObject.get("license_no").getAsString();
                 result = driverTable.insert(nic, license_no,ownerID);
-                System.out.println(result);
             } else{
                 return;
             }
@@ -156,7 +140,6 @@ public class DriverController extends HttpServlet {
     @Override
     protected void doPut(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         response.setContentType("text/json");
-        PrintWriter out = response.getWriter();
 
         try {
             Gson gson = new Gson();
@@ -187,12 +170,9 @@ public class DriverController extends HttpServlet {
         try {
             String driver_id = request.getHeader("driver_id");
             int deleteSuccess = driverTable.delete(driver_id);
-            System.out.println(driver_id);
             if (deleteSuccess >= 1) {
-                System.out.println(deleteSuccess);
                 response.setStatus(HttpServletResponse.SC_OK);
             } else {
-                System.out.println(deleteSuccess);
                 response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
             }
         } catch (Exception e) {
