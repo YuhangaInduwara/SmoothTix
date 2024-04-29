@@ -45,34 +45,32 @@ nicInput.addEventListener("change", function() {
                 'Content-Type': 'application/json',
             },
         })
-            .then(response => {
-                if (response.ok) {
-                    console.log(response)
-                    return response.json();
-                } else {
-                    return response.json()
-                        .then(data => {
-                            throw new Error("Login failed");
-                        });
-                }
-            })
-            .then(parsedResponse => {
-                console.log(parsedResponse)
-                if(parsedResponse.length === 0){
-                    nicInput.setCustomValidity("");
-                    nicError.textContent = "";
-                    nicError.style.display = "none";
-                }
-                else{
-                    nicInput.setCustomValidity("This nic is already exist.");
-                    nicError.textContent = "This nic is already exist.";
-                    nicError.style.display = "block";
-                }
-            })
+        .then(response => {
+            if (response.ok) {
+                return response.json();
+            } else {
+                return response.json()
+                    .then(data => {
+                        throw new Error("Login failed");
+                    });
+            }
+        })
+        .then(parsedResponse => {
+            if(parsedResponse.length === 0){
+                nicInput.setCustomValidity("");
+                nicError.textContent = "";
+                nicError.style.display = "none";
+            }
+            else{
+                nicInput.setCustomValidity("This nic is already exist.");
+                nicError.textContent = "This nic is already exist.";
+                nicError.style.display = "block";
+            }
+        })
 
-            .catch(error => {
-                console.error('Error:', error);
-            });
+        .catch(error => {
+            console.error('Error:', error);
+        });
 
     }
 });
@@ -177,7 +175,7 @@ function sendOTP(email){
                 openAlert("Email Verification Failed!", "alertFail");
                 document.getElementById("overlay").style.display = "none";
                 setTimeout(function()
-                               {location.reload(true)},2000);
+                {location.reload(true)},2000);
             }
             })
         .catch(error => {
@@ -200,30 +198,28 @@ function verifyOTP(){
             },
             body: getJSON
         })
-            .then(response => {
-                if (response.ok) {
-                    openAlertSuccess()
-                } else if (response.status === 401) {
-                    openAlertFail()
-                    console.log('Registration unsuccessful');
-                } else {
-                    openAlertFail()
-                    console.error('Error:', response.status);
-                }
-            })
-            .catch(error => {
-                console.error('Error:', error);
-            });
+        .then(response => {
+            if (response.ok) {
+                openAlertSuccess()
+            } else if (response.status === 401) {
+                openAlertFail()
+                console.log('Registration unsuccessful');
+            } else {
+                openAlertFail()
+                console.error('Error:', response.status);
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
 
     }else if(counter > 1){
         counter -= 1;
-        console.log(counter)
         if(userOTP === ''){
             document.getElementById("empty_otp").textContent = "OTP can not be empty. Remaining attempts " + counter + "." ;
             return;
         }
         document.getElementById("empty_otp").textContent = "Entered OTP is incorrect. Remaining attempts " + counter + ".";
-        console.log(userOTP);
     }else{
         openAlert("Too many attempts!", "alertFail");
             setTimeout(function() {
@@ -242,7 +238,7 @@ document.querySelector(".resend").addEventListener("click", function(event){
 
 document.getElementById("otp").addEventListener("input", function() {
     if (this.value.length > 4) {
-        this.value = this.value.slice(0, 4); // Limit the input to 4 digits
+        this.value = this.value.slice(0, 4);
     }
 });
 

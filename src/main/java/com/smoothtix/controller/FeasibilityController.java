@@ -18,7 +18,6 @@ import java.io.PrintWriter;
 import java.sql.Time;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.Objects;
 
 
 public class FeasibilityController extends HttpServlet {
@@ -26,27 +25,21 @@ public class FeasibilityController extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         System.out.println("FeasibilityController doPost method invoked.");
-        response.setContentType("application/json");  // Set the content type to JSON
+        response.setContentType("application/json");
         PrintWriter out = response.getWriter();
 
         try {
-            Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd").create();  // Specify date format
+            Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd").create();
 
             try (BufferedReader reader = request.getReader()) {
-                // Log the raw JSON data
+
                 StringBuilder requestData = new StringBuilder();
                 String line;
 
                 while ((line = reader.readLine()) != null) {
                     requestData.append(line);
                 }
-
-                System.out.println("Received raw data: " + requestData.toString());
-
-                // Attempt to deserialize the JSON data
                 Feasibility feasible_schedule = gson.fromJson(requestData.toString(), Feasibility.class);
-                System.out.println("Received data: " + feasible_schedule.toString());
-
                 int registrationSuccess = feasibilityTable.insert(feasible_schedule);
 
                 if (registrationSuccess >= 1) {
@@ -61,8 +54,6 @@ public class FeasibilityController extends HttpServlet {
             e.printStackTrace();
             response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             out.println("Internal Server Error: " + e.getMessage());
-        } finally {
-            out.close();  // Close the PrintWriter
         }
     }
 
@@ -76,8 +67,6 @@ public class FeasibilityController extends HttpServlet {
         String date = request.getParameter("date");
         String time = request.getParameter("time");
         ResultSet rs;
-        System.out.println("start: " + start + " destination: " + destination + " date: " + date + " time: " + time);
-
         try {
             rs = feasibilityTable.get_by_date(start, destination, date);
             while (rs.next()) {
@@ -92,8 +81,6 @@ public class FeasibilityController extends HttpServlet {
                     String[] rangeParts = range.split("-");
                     Time startTime = Time.valueOf(rangeParts[0] + ":00:00");
                     Time endTime = Time.valueOf(rangeParts[1] + ":00:00");
-                    System.out.println("start: " + startTime + " end: " + endTime);
-
                     if (isBetween(givenTime, startTime, endTime)) {
                         ResultSet rs1 = busprofileTable.getByBPId(busProfileId);
                         if(rs1.next()) {
@@ -110,7 +97,6 @@ public class FeasibilityController extends HttpServlet {
                 }
 
             }
-
             out.println(feasibleDataArray);
             response.setStatus(HttpServletResponse.SC_OK);
         }catch (Exception e) {
@@ -122,6 +108,5 @@ public class FeasibilityController extends HttpServlet {
     private static boolean isBetween(Date givenTime, Time startTime, Time endTime) {
         return !givenTime.before(startTime) && !givenTime.after(endTime);
     }
-
 
 }

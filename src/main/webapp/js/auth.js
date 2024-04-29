@@ -21,8 +21,6 @@ async function isAuthenticated() {
              headers: headers,
          });
 
-         console.log(response);
-
          if (response.ok) {
 
              const decodedToken = decodeJWT(jwtToken);
@@ -37,9 +35,6 @@ async function isAuthenticated() {
              else if(window.location.href.includes("timekpr") && session_user_role !== 2){
                  changePage(session_user_role);
              }
-             // else if(window.location.href.includes("owner") && session_user_role !== 3){
-             //     changePage(session_user_role);
-             // }
              else if(window.location.href.includes("driver") && session_user_role !== 4){
                  changePage(session_user_role);
              }
@@ -63,7 +58,6 @@ async function isAuthenticated() {
          }
      }
 }
-
 
 function decodeJWT(token) {
     const [header, payload, signature] = token.split('.');

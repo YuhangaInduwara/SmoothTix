@@ -23,9 +23,12 @@ import java.util.Objects;
 import java.util.Set;
 
 public class LoginController extends HttpServlet {
+    // Define a secret key for JWT signing
     private static final Key SECRET_KEY = Keys.secretKeyFor(SignatureAlgorithm.HS256);
+    // Set to store blacklisted tokens
     private final Set<String> blacklistedTokens = new HashSet<>();
 
+    // Handle HTTP POST requests
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         response.setContentType("application/json");
@@ -35,7 +38,9 @@ public class LoginController extends HttpServlet {
             Gson gson = new Gson();
 
             BufferedReader reader = request.getReader();
+            // Deserialize JSON request body into Login object
             Login login = gson.fromJson(reader, Login.class);
+            // Retrieve user data from the database based on NIC
             ResultSet resultset = passengerTable.getBy_nic(login.get_nic());
             String plainPassword = login.get_password();
 
@@ -47,9 +52,11 @@ public class LoginController extends HttpServlet {
                 DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
                 String formattedDateTime = currentDateTime.format(formatter);
 
+                // Check if the user is flagged (not allowed to login)
                 if (!resultset.getBoolean("flag")) {
+                    // Check if the provided password matches the stored hashed password
                     if (PasswordHash.checkPassword(plainPassword, hashedPassword)) {
-                        // Generate JWT token
+                        // Generate JWT token with user claims
                         String jwtToken = Jwts.builder()
                                 .setSubject(login.get_nic())
                                 .claim("user_name", resultset.getString("first_name") + " " + resultset.getString("last_name"))
@@ -60,6 +67,7 @@ public class LoginController extends HttpServlet {
                                 .compact();
                         response.setHeader("Authorization", "Bearer " + jwtToken);
 
+                        // Prepare user data JSON response
                         JSONObject userData = new JSONObject();
                         userData.put("user_name", resultset.getString("first_name") + " " + resultset.getString("last_name"));
                         userData.put("nic", login.get_nic());
@@ -93,7 +101,6 @@ protected void doGet(HttpServletRequest request, HttpServletResponse response) t
     response.setContentType("application/json");
     PrintWriter out = response.getWriter();
     String action = request.getParameter("action");
-    System.out.println(action);
     if(Objects.equals(action, "validate")){
         try {
             String authHeader = request.getHeader("Authorization");
@@ -101,29 +108,26 @@ protected void doGet(HttpServletRequest request, HttpServletResponse response) t
             if (authHeader != null && authHeader.startsWith("Bearer ")) {
                 String jwtToken = authHeader.substring(7);
                 if (blacklistedTokens.contains(jwtToken)) {
-                    System.out.println("hello2");
                     response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
                     out.write("{\"error\": \"Unauthorized - Token has been blacklisted!\"}");
                     return;
                 }
                 try {
                     Jws<Claims> claims = Jwts.parser()
-                            .setSigningKey(SECRET_KEY) // Set your secret key
-                            .build()
-                            .parseClaimsJws(jwtToken);
-                    System.out.println(claims);
+                    .setSigningKey(SECRET_KEY)
+                    .build()
+                    .parseClaimsJws(jwtToken);
+                    // Prepare user data JSON response from JWT claims
                     JSONObject userData = new JSONObject();
                     userData.put("user_name", claims.getBody().get("user_name"));
                     userData.put("nic", claims.getBody().getSubject());
                     userData.put("user_role", claims.getBody().get("user_role"));
                     userData.put("p_id", claims.getBody().get("p_id"));
                     userData.put("date_time", claims.getBody().get("date_time"));
-                    System.out.println(claims.getBody().get("p_id"));
 
                     out.print(userData);
                     response.setStatus(HttpServletResponse.SC_OK);
                 } catch (Exception e) {
-                    System.out.println("hello3");
                     response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
                     out.write("{\"error\": \"Unauthorized - Invalid token!\"}");
                 }
@@ -136,25 +140,27 @@ protected void doGet(HttpServletRequest request, HttpServletResponse response) t
             response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             out.write("{\"error\": \"Internal Server Error\"}");
         }
-    }
-    else if(Objects.equals(action, "logout")) {
+    } else if (Objects.equals(action, "logout")) {
+        // Handle logout action
         String authHeader = request.getHeader("Authorization");
 
         if (authHeader != null && authHeader.startsWith("Bearer ")) {
             String jwtToken = authHeader.substring(7);
+            // Add token to the blacklist
             addToBlacklist(jwtToken);
 
             response.setStatus(HttpServletResponse.SC_OK);
             return;
         }
-        System.out.println(blacklistedTokens);
         out.write("{\"error\": \"Invalid Request!\"}");
         response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-    } else{
+    } else {
         out.write("{\"error\": \"Invalid Request!\"}");
         response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
     }
 }
+
+    // Method to add token to the blacklist
     private void addToBlacklist(String token) {
         blacklistedTokens.add(token);
     }
