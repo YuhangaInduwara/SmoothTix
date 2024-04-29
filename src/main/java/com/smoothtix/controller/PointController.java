@@ -14,10 +14,12 @@ public class PointController extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        // handle post (insert) requests
         response.setContentType("application/json");
         PrintWriter out = response.getWriter();
 
         try {
+            // parse the json request data to point object
             Gson gson = new Gson();
             BufferedReader reader = request.getReader();
             Point point = gson.fromJson(reader, Point.class);
@@ -25,6 +27,7 @@ public class PointController extends HttpServlet {
             String jsonResponse = pointTable.insert(point);
 
 
+            // if passed point insertion
             if (!jsonResponse.equals("Unsuccessful")) {
                 out.write(jsonResponse);
                 response.setStatus(HttpServletResponse.SC_OK);
