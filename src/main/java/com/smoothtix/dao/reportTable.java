@@ -1,8 +1,6 @@
 package com.smoothtix.dao;
-
 import com.smoothtix.database.dbConnection;
 import com.smoothtix.model.Report;
-
 import java.sql.*;
 
 public class reportTable {
@@ -10,9 +8,6 @@ public class reportTable {
         Connection con = dbConnection.initializeDatabase();
         PreparedStatement ps = null;
         ResultSet rs = null;
-        System.out.println(startDate);
-        System.out.println(endDate);
-        System.out.println(busRegNo);
 
             String sql1 = "SELECT owner_id FROM bus WHERE reg_no = ?";
             ps = con.prepareStatement(sql1);
@@ -89,27 +84,23 @@ public class reportTable {
             return report;
 
     }
-    private static String generateReportID() throws SQLException, ClassNotFoundException {
+    private static String generateReportID() throws SQLException {
         Connection con = dbConnection.initializeDatabase();
         String query = "SELECT COALESCE(MAX(CAST(SUBSTRING(report_id, 3) AS SIGNED)), 0) + 1 AS next_report_id FROM owner_report";
         Statement stmt = con.createStatement();
-        ResultSet rs = ((Statement) stmt).executeQuery(query);
+        ResultSet rs = stmt.executeQuery(query);
 
         int nextReportID = 1;
         if (rs.next()) {
             nextReportID = rs.getInt("next_report_id");
         }
-
         return "RP" + String.format("%04d", nextReportID);
     }
-    public static Report getReportDetails(String startDate, String endDate, String busRegNo) throws SQLException, ClassNotFoundException {
+    public static Report getReportDetails(String startDate, String endDate, String busRegNo) throws SQLException {
         Connection con = dbConnection.initializeDatabase();
         PreparedStatement ps = null;
         ResultSet rs = null;
 
-        System.out.println(busRegNo);
-        System.out.println(startDate);
-        System.out.println(endDate);
         String sql = "SELECT report_details FROM owner_report WHERE owner_id = (SELECT owner_id FROM bus WHERE reg_no = ?) AND date_time BETWEEN ? AND ? ORDER BY date_time DESC LIMIT 1;";
         ps = con.prepareStatement(sql);
         ps.setString(1, busRegNo);
@@ -122,8 +113,8 @@ public class reportTable {
             String[] details = reportDetails.split(", ");
 
             String busRegNoExtracted = details[0].split(":")[1].trim();
-            String dateRange = details[1].split(":")[1].trim(); // You might need further splitting if needed
-            double finalAmount = Double.parseDouble(details[2].split(":")[1].trim().substring(3)); // Adjust index if more details are added
+            String dateRange = details[1].split(":")[1].trim();
+            double finalAmount = Double.parseDouble(details[2].split(":")[1].trim().substring(3));
             int totalSeatsBooked = Integer.parseInt(details[3].split(":")[1].trim());
             int totalPaymentsDeleted = Integer.parseInt(details[4].split(":")[1].trim());
 

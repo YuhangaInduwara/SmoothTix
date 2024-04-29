@@ -1,5 +1,4 @@
 package com.smoothtix.controller;
-
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.smoothtix.dao.passengerTable;
@@ -10,7 +9,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.json.JSONArray;
 import org.json.JSONObject;
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -44,19 +42,6 @@ public class PassengerController extends HttpServlet {
                 }
                 return;
             }
-
-//            if(nicForgot != null){
-//                String validEmail = passengerTable.getEmail(nicForgot);
-//                if(validEmail != null) {
-//                    JsonObject passengerData = new JsonObject();
-//                    passengerData.addProperty("email", validEmail);
-//                    out.println(passengerData);
-//                    response.setStatus(HttpServletResponse.SC_OK);
-//                }else{
-//                    response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-//                }
-//                return;
-//            }
 
             if(nicForgot != null){
                 rs = passengerTable.getEmailPid(nicForgot);

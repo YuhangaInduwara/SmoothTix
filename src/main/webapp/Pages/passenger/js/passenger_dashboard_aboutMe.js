@@ -1,11 +1,13 @@
 let isMatched;
 
+// session management
 document.addEventListener('DOMContentLoaded', function () {
     isAuthenticated().then(() => fetchAllData());
 });
 
+// get passenger's data from the database
 function fetchAllData() {
-    document.getElementById("userName").textContent = session_user_name;
+    document.getElementById("userName").textContent = session_user_name; // set dashboard user name
     fetch(`${ url }/passengerController`, {
         method: 'GET',
         headers: {
@@ -28,6 +30,7 @@ function fetchAllData() {
         });
 }
 
+// database data came to this function
 function displayDataAsParagraphs(data) {
     const container = document.querySelector("#dataList");
     container.innerHTML = '';
@@ -52,8 +55,9 @@ function displayDataAsParagraphs(data) {
     });
 }
 
+// from html edit information ok button directs here
 function update(p_id){
-    openForm_update();
+    openForm_update(); // open update details form
 
     let existingData = {};
     const urlParams = new URLSearchParams(window.location.search);
@@ -70,7 +74,6 @@ function update(p_id){
                 response.json().then(data => {
                     existingData = data[0];
 
-                    console.log("existingData:", existingData);
                     document.getElementById("update_first_name").value = existingData.first_name;
                     document.getElementById("update_last_name").value = existingData.last_name;
                     document.getElementById("header_nic").innerHTML = existingData.first_name + " " + existingData.last_name + "'s";
@@ -87,6 +90,7 @@ function update(p_id){
             console.error('Error:', error);
         });
 
+    // edit information button directs here
     document.getElementById("passengerUpdateForm").addEventListener("submit", function(event) {
         event.preventDefault();
 
@@ -128,6 +132,7 @@ function update(p_id){
     });
 }
 
+// change password button directs here
 document.getElementById("passengerPasswordForm").addEventListener("submit", function(event) {
     event.preventDefault();
 
@@ -166,6 +171,7 @@ document.getElementById("passengerPasswordForm").addEventListener("submit", func
         });
 });
 
+// after inserting passwords change
 function changePassword(jsonData) {
     console.log(session_p_id)
     fetch(`${ url }/passengerController`, {
@@ -191,32 +197,37 @@ function changePassword(jsonData) {
         });
 }
 
+// this function call from update(p_id) function
 function openForm_update() {
     const existingForm = document.querySelector(".passenger_update_form_body");
 
     if (!existingForm) {
-        createForm();
+        createForm(); //create a new form for add data
     }
 
     document.getElementById("passengerUpdateForm").style.display = "block";
     document.getElementById("overlay").style.display = "block";
 }
 
+// close button directs here
 function closeForm_update() {
     document.getElementById("passengerUpdateForm").style.display = "none";
     document.getElementById("overlay").style.display = "none";
 }
 
+// this calls from displayDataAsParagraphs(data) function
 function openForm_changePassword() {
     document.getElementById("passengerPasswordForm").style.display = "block";
     document.getElementById("overlay").style.display = "block";
 }
 
+// close password change form
 function closeForm_changePassword() {
     document.getElementById("passengerPasswordForm").style.display = "none";
     document.getElementById("overlay").style.display = "none";
 }
 
+// open alert everything control from here
 function openAlert(text, alertBody){
     if(alertBody === "alertFail"){
         document.getElementById("alertMsg").textContent = text;
@@ -228,6 +239,7 @@ function openAlert(text, alertBody){
     document.getElementById("overlay").style.display = "block";
 }
 
+// this also calls with open alert when press ok button
 function closeAlert(){
     const alertSuccess = document.getElementById("alertSuccess");
     const alertFail = document.getElementById("alertFail");
@@ -244,10 +256,12 @@ function closeAlert(){
     document.getElementById("overlay").style.display = "none";
 }
 
+// this calls from openForm_update() function
 function createForm() {
     const form_update = document.createElement('div');
     form_update.classList.add('passenger_update_form_body');
 
+    // create a html form
     var form= `
         <div class="passenger_form_left">
 
@@ -277,6 +291,7 @@ function createForm() {
     formContainer_update.appendChild(form_update.cloneNode(true));
 }
 
+// password eye symbol
 document.querySelectorAll('.password_toggle').forEach(function(toggle) {
     toggle.addEventListener('click', function() {
         let targetId = this.getAttribute('toggle-target');
@@ -294,6 +309,7 @@ document.querySelectorAll('.password_toggle').forEach(function(toggle) {
     });
 });
 
+// check for strong password function
 function isStrongPassword(password) {
     if (password.length < 8) {
         return false;
@@ -318,6 +334,7 @@ const confirmPasswordInputError = document.getElementById("reenter_new_password_
 const passwordInput = document.getElementById("new_password");
 const passwordInputError = document.getElementById("new_passwordError");
 
+// event listener for check the password changes
 confirmPasswordInput.addEventListener("change", function() {
     if (document.getElementById("password").value !== document.getElementById("password_confirm").value) {
         confirmPasswordInput.setCustomValidity("Password should be matched.");
@@ -330,6 +347,7 @@ confirmPasswordInput.addEventListener("change", function() {
     }
 });
 
+// event listener for check strong password
 passwordInput.addEventListener("change", function() {
     if (!isStrongPassword(passwordInput.value)) {
         passwordInput.setCustomValidity("Password should be at least 8 characters long and contain at least one lowercase letter, one uppercase letter, one digit, and one special character.");
