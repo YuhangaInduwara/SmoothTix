@@ -1,3 +1,4 @@
+// Initialize variables
 let bus_profile_id = "";
 let searchOption = "bus_profile_id";
 let currentPage = 1;
@@ -5,16 +6,23 @@ const pageSize = 10;
 let allData = [];
 let dataSearch = [];
 
+// When the DOM content is loaded, execute the function
 document.addEventListener('DOMContentLoaded', function () {
+    // Check if the user is authenticated, then fetch all data
     isAuthenticated().then(() => fetchAllData());
 });
 
-function refreshPage() {
-    location.reload();
-}
+// Function to refresh the page
+ function refreshPage() {
+     location.reload();
+ }
+
+// Function to fetch all data
 function fetchAllData() {
+    // Set the user name in the UI
     document.getElementById("userName").textContent = session_user_name;
 
+    // Fetch data from the busprofileController endpoint
     fetch(`${ url }/busprofileController`, {
         method: 'GET',
         headers: {
@@ -23,14 +31,15 @@ function fetchAllData() {
         },
     })
     .then(response => {
+        // Check if response is successful
         if (!response.ok) {
             throw new Error(`Failed to fetch bus data: ${response.status}`);
         }
         return response.json();
     })
     .then(data => {
+        // Store fetched data and update the page
         allData = data;
-        console.log(data);
         updatePage(currentPage);
     })
     .catch(error => {
@@ -38,7 +47,7 @@ function fetchAllData() {
     });
 }
 
-
+// Function to update the displayed page
 function updatePage(page, search) {
     const startIndex = (page - 1) * pageSize;
     const endIndex = startIndex + pageSize;
@@ -46,7 +55,6 @@ function updatePage(page, search) {
 
     let dataToShow;
     if(search){
-
         dataToShow = dataSearch.slice(startIndex, endIndex);
     }
     else{
@@ -58,36 +66,40 @@ function updatePage(page, search) {
     updatePageNumber(currentPage);
 }
 
+// Function to update the displayed page number
 function updatePageNumber(page) {
     document.getElementById("currentPageNumber").textContent = page;
 }
 
+// Event listener for previous page navigation
 const prevPageIcon = document.getElementById("prevPageIcon");
 prevPageIcon.addEventListener("click", () => changePage(currentPage))
 
 const nextPageIcon = document.getElementById("nextPageIcon");
 nextPageIcon.addEventListener("click", () => changePage(currentPage));
 
+// Function to change the page
 function changePage(newPage) {
-    console.log(currentPage + "  " + newPage)
     if (currentPage !== newPage) {
         currentPage = Math.max(1, newPage);
         updatePage(currentPage, false);
     }
 }
-// Display all data
+
+
+// Function to display data as a table
 function displayDataAsTable(data) {
     const tableBody = document.querySelector("#dataTable tbody");
     tableBody.innerHTML = ""; // Clear existing rows
 
     if (data.length === 0) {
+    // Display message if no data available
         const noDataRow = document.createElement("tr");
         noDataRow.innerHTML = `<td colspan="8">No data available</td>`;
         tableBody.appendChild(noDataRow);
         return;
     }
-
-    // Assuming 'data' now includes all necessary details directly
+    // Loop through data and create table rows
     data.forEach(item => {
         const row = document.createElement("tr");
         row.innerHTML = `
@@ -114,6 +126,7 @@ function displayDataAsTable(data) {
     });
 }
 
+// Function to redirect to feasible schedule
 function redirectToFeasibleSchedule(bus_profile_id) {
     if (bus_profile_id) {
         openForm_feasible(bus_profile_id);
@@ -122,6 +135,8 @@ function redirectToFeasibleSchedule(bus_profile_id) {
 
     }
 }
+
+// Function to open the feasible schedule form
 function openForm_feasible(bus_profile_id) {
     const feasibleForm = document.getElementById('feasibleScheduleForm');
     if (feasibleForm) {
@@ -129,7 +144,6 @@ function openForm_feasible(bus_profile_id) {
 
     const inputForBusProfileId = document.getElementById('inputForBusProfileId');
             if (inputForBusProfileId) {
-                // Set the value property
                 inputForBusProfileId.value = bus_profile_id;
             } else {
                 console.error('Element with ID "inputForBusProfileId" not found.');
@@ -146,6 +160,7 @@ function openForm_feasible(bus_profile_id) {
         }
     }
 
+// Function to close the feasible schedule form
 function closeForm_feasible() {
     const feasibleForm = document.getElementById('feasibleScheduleForm');
     if (feasibleForm) {
@@ -161,56 +176,55 @@ function closeForm_feasible() {
         console.error('Overlay not found');
     }
 }
+// Function to set bus profile id on DOM content loaded
 document.addEventListener("DOMContentLoaded", function () {
     if (bus_profile_id) {
         document.getElementById('bus_profile_id').innerText = bus_profile_id;
     }
 });
 
+// Add event listener to the form for feasible schedule submission
 document.addEventListener("DOMContentLoaded", function () {
     const form = document.getElementById('feasibleScheduleForm');
 
     form.addEventListener('submit', function (event) {
-        event.preventDefault();
-
-        if (validateForm()) {
-            const bus_profile_id = document.getElementById("inputForBusProfileId").value;
-            const date = document.getElementById("date").value;
-            const time_range = getCheckedTimeRanges();
-
-            const formData = {
-                bus_profile_id: bus_profile_id,
-                date: date,
-                time_range: time_range,
-            };
-
-
-            fetch(`${url}/feasibilityController`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(formData)
-            })
-            .then(response => {
-                if (response.ok) {
-                    openAlertSuccess("Data Successfully Added!");
-                    console.log('Success');
-                } else {
-                    return response.json()
-                        .then(data => {
-                            const error_msg = data.error;
-                            console.log(error_msg);
-                            openAlertFail(error_msg);
-                            console.error('Error:', response.status);
-                        });
-                }
-            })
-            .catch(error => {
-                console.error('Error:', error);
-            });
-        }
-    });
+    event.preventDefault();
+    // Validate the form
+    if (validateForm()) {
+        const bus_profile_id = document.getElementById("inputForBusProfileId").value;
+        const date = document.getElementById("date").value;
+        const time_range = getCheckedTimeRanges();
+        // Construct form data
+        const formData = {
+            bus_profile_id: bus_profile_id,
+            date: date,
+            time_range: time_range,
+        };
+        // Send form data via POST request
+        fetch(`${url}/feasibilityController`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(formData)
+        })
+        .then(response => {
+            if (response.ok) {
+                openAlertSuccess("Data Successfully Added!");
+            } else {
+                return response.json()
+                    .then(data => {
+                        const error_msg = data.error;
+                        openAlertFail(error_msg);
+                        console.error('Error:', response.status);
+                    });
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
+    }
+});
 
     function getCheckedTimeRanges() {
         const checkboxes = document.querySelectorAll('input[name="time_range[]"]:checked');
@@ -233,8 +247,6 @@ function renderPageControl(){
     document.getElementById("page_control").style.display = "flex";
 }
 
-
-//Add new bus to the database
 document.getElementById("busprofileRegForm").addEventListener("submit", function(event) {
     event.preventDefault();
     const reg_no = document.getElementById("add_bus_reg_no").value;
@@ -245,9 +257,7 @@ document.getElementById("busprofileRegForm").addEventListener("submit", function
         reg_no: reg_no,
         driver_nic: driver_nic,
         conductor_nic: conductor_nic,
-
     };
-    console.log(userData)
     const jsonData = JSON.stringify(userData);
 
     fetch(`${ url }/busprofileController`, {
@@ -275,8 +285,6 @@ document.getElementById("busprofileRegForm").addEventListener("submit", function
         });
 });
 
-// Handle update
-
 function updateRow(bus_profile_id) {
 
     let existingData = {};
@@ -296,8 +304,6 @@ function updateRow(bus_profile_id) {
             if (response.ok) {
                 response.json().then(data => {
                     existingData = data[0];
-                    console.log("existingData:", existingData);
-
                     document.getElementById("update_bus_reg_no").value = existingData.reg_no;
                     document.getElementById("update_driver_nic").value = existingData.driver_nic;
                     document.getElementById("update_conductor_nic").value = existingData.conductor_nic;
@@ -311,10 +317,9 @@ function updateRow(bus_profile_id) {
         .catch(error => {
             console.error('Error:', error);
         });
-    openForm_update(); // Open the update form
+    openForm_update();
 }
 
-// Handle form submission for updating bus profile data
 document.getElementById("busprofileUpdateForm").addEventListener("submit", function(event) {
     event.preventDefault();
     const bus_profile_id = document.getElementById("header_bus_profile_id").textContent;
@@ -327,7 +332,6 @@ document.getElementById("busprofileUpdateForm").addEventListener("submit", funct
         driver_nic: driver_nic,
         conductor_nic: conductor_nic,
     };
-    console.log(userData);
 
     const jsonData = JSON.stringify(userData);
     console.log(jsonData);
@@ -346,7 +350,6 @@ document.getElementById("busprofileUpdateForm").addEventListener("submit", funct
                 openAlertSuccess("Successfully");
             } else if (response.status === 401) {
                 openAlertFail(response.status);
-                console.log('Update unsuccessful');
             } else {
                 openAlertFail(response.status);
                 console.error('Error:', response.status);
@@ -357,13 +360,14 @@ document.getElementById("busprofileUpdateForm").addEventListener("submit", funct
         });
     });
 
-
+// This function is responsible for handling the deletion of a row in the bus profile table.
  function deleteRow() {
+ // Make a DELETE request to the server to delete the bus profile with the specified ID (Bus_profile_id).
      fetch(`${ url }/busprofileController`, {
          method: 'DELETE',
          headers: {
              'Content-Type': 'application/json',
-             'bus_profile_id': Bus_profile_id,
+             'bus_profile_id': Bus_profile_id,  // Bus_profile_id should be defined somewhere in your code.
          },
      })
      .then(response => {
@@ -373,7 +377,6 @@ document.getElementById("busprofileUpdateForm").addEventListener("submit", funct
          } else if (response.status === 401) {
              closeAlert();
              openAlertFail(response.status);
-             console.log('Delete unsuccessful');
          } else {
              openAlertFail(response.status);
              closeAlert();
@@ -388,7 +391,6 @@ document.getElementById("busprofileUpdateForm").addEventListener("submit", funct
 
 function openForm_add() {
     const existingForm = document.querySelector(".busprofile_add_form_body");
-
     if (!existingForm) {
         createForm('add');
     }
@@ -406,7 +408,6 @@ function openForm_update() {
     if (!existingForm) {
         createForm('update');
     }
-
     document.getElementById("busprofileUpdateForm").style.display = "block";
     document.getElementById("overlay").style.display = "block";
 }
@@ -460,7 +461,6 @@ document.addEventListener('DOMContentLoaded', function() {
     createForm('update');
 });
 
-// Create the add and update forms
 function createForm(action) {
     if(action === 'add'){
         const form_add = document.createElement('div');
@@ -537,44 +537,44 @@ function showSuggestions1(event) {
                 'p_id': session_p_id
             },
         })
-            .then(response => {
-                if (response.ok) {
-                    return response.json();
-                } else {
-                    console.error('Error:', response.status);
-                    throw new Error(`HTTP error! Status: ${response.status}`);
-                }
-            })
-            .then(data => {
-                const suggestions = data.map(item => item.reg_no);
-                suggestionsContainer.innerHTML = '';
-                const filteredSuggestions = suggestions.filter(suggestion =>
-                    suggestion.toUpperCase().includes(inputValue)
-                );
-                suggestionsContainer.style.maxHeight = '200px';
-                suggestionsContainer.style.overflowY = 'auto';
-                suggestionsContainer.style.width = '100%';
-                suggestionsContainer.style.left = `18px`;
-                if (filteredSuggestions.length === 0) {
-                    const errorMessage = document.createElement('li');
-                    errorMessage.textContent = 'No suggestions found';
-                    suggestionsContainer.appendChild(errorMessage);
-                } else {
-                    filteredSuggestions.forEach(suggestion => {
-                        const listItem = document.createElement('li');
-                        listItem.classList.add('autocomplete-list-item');
-                        listItem.textContent = suggestion;
-                        listItem.addEventListener('click', () => {
-                            input.value = suggestion;
-                            suggestionsContainer.innerHTML = '';
-                        });
-                        suggestionsContainer.appendChild(listItem);
+        .then(response => {
+            if (response.ok) {
+                return response.json();
+            } else {
+                console.error('Error:', response.status);
+                throw new Error(`HTTP error! Status: ${response.status}`);
+            }
+        })
+        .then(data => {
+            const suggestions = data.map(item => item.reg_no);
+            suggestionsContainer.innerHTML = '';
+            const filteredSuggestions = suggestions.filter(suggestion =>
+                suggestion.toUpperCase().includes(inputValue)
+            );
+            suggestionsContainer.style.maxHeight = '200px';
+            suggestionsContainer.style.overflowY = 'auto';
+            suggestionsContainer.style.width = '100%';
+            suggestionsContainer.style.left = `18px`;
+            if (filteredSuggestions.length === 0) {
+                const errorMessage = document.createElement('li');
+                errorMessage.textContent = 'No suggestions found';
+                suggestionsContainer.appendChild(errorMessage);
+            } else {
+                filteredSuggestions.forEach(suggestion => {
+                    const listItem = document.createElement('li');
+                    listItem.classList.add('autocomplete-list-item');
+                    listItem.textContent = suggestion;
+                    listItem.addEventListener('click', () => {
+                        input.value = suggestion;
+                        suggestionsContainer.innerHTML = '';
                     });
-                }
-            })
-            .catch(error => {
-                console.error('Error:', error);
-            });
+                    suggestionsContainer.appendChild(listItem);
+                });
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
     }
 }
 function showSuggestions2(event) {
@@ -588,44 +588,44 @@ function showSuggestions2(event) {
             'op_id': session_p_id
         },
     })
-        .then(response => {
-            if (response.ok) {
-                return response.json();
-            } else {
-                console.error('Error:', response.status);
-                throw new Error(`HTTP error! Status: ${response.status}`);
-            }
-        })
-        .then(data => {
-            const suggestions = data.map(item => item.nic);
-            suggestionsContainer.innerHTML = '';
-            const filteredSuggestions = suggestions.filter(suggestion =>
-                suggestion.toUpperCase().includes(inputValue)
-            );
-            suggestionsContainer.style.maxHeight = '200px';
-            suggestionsContainer.style.overflowY = 'auto';
-            suggestionsContainer.style.width = '100%';
-            suggestionsContainer.style.left = `18px`;
-            if (filteredSuggestions.length === 0) {
-                const errorMessage = document.createElement('li');
-                errorMessage.textContent = 'No suggestions found';
-                suggestionsContainer.appendChild(errorMessage);
-            } else {
-                filteredSuggestions.forEach(suggestion => {
-                    const listItem = document.createElement('li');
-                    listItem.classList.add('autocomplete-list-item');
-                    listItem.textContent = suggestion;
-                    listItem.addEventListener('click', () => {
-                        input.value = suggestion;
-                        suggestionsContainer.innerHTML = '';
-                    });
-                    suggestionsContainer.appendChild(listItem);
+    .then(response => {
+        if (response.ok) {
+            return response.json();
+        } else {
+            console.error('Error:', response.status);
+            throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+    })
+    .then(data => {
+        const suggestions = data.map(item => item.nic);
+        suggestionsContainer.innerHTML = '';
+        const filteredSuggestions = suggestions.filter(suggestion =>
+            suggestion.toUpperCase().includes(inputValue)
+        );
+        suggestionsContainer.style.maxHeight = '200px';
+        suggestionsContainer.style.overflowY = 'auto';
+        suggestionsContainer.style.width = '100%';
+        suggestionsContainer.style.left = `18px`;
+        if (filteredSuggestions.length === 0) {
+            const errorMessage = document.createElement('li');
+            errorMessage.textContent = 'No suggestions found';
+            suggestionsContainer.appendChild(errorMessage);
+        } else {
+            filteredSuggestions.forEach(suggestion => {
+                const listItem = document.createElement('li');
+                listItem.classList.add('autocomplete-list-item');
+                listItem.textContent = suggestion;
+                listItem.addEventListener('click', () => {
+                    input.value = suggestion;
+                    suggestionsContainer.innerHTML = '';
                 });
-            }
-        })
-        .catch(error => {
-            console.error('Error:', error);
-        });
+                suggestionsContainer.appendChild(listItem);
+            });
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+    });
 }
 function showSuggestions3(event) {
     const input = event.target;
@@ -638,44 +638,44 @@ function showSuggestions3(event) {
             'op_id': session_p_id
         },
     })
-        .then(response => {
-            if (response.ok) {
-                return response.json();
-            } else {
-                console.error('Error:', response.status);
-                throw new Error(`HTTP error! Status: ${response.status}`);
-            }
-        })
-        .then(data => {
-            const suggestions = data.map(item => item.nic);
-            suggestionsContainer.innerHTML = '';
-            const filteredSuggestions = suggestions.filter(suggestion =>
-                suggestion.toUpperCase().includes(inputValue)
-            );
-            suggestionsContainer.style.maxHeight = '200px';
-            suggestionsContainer.style.overflowY = 'auto';
-            suggestionsContainer.style.width = '100%';
-            suggestionsContainer.style.left = `18px`;
-            if (filteredSuggestions.length === 0) {
-                const errorMessage = document.createElement('li');
-                errorMessage.textContent = 'No suggestions found';
-                suggestionsContainer.appendChild(errorMessage);
-            } else {
-                filteredSuggestions.forEach(suggestion => {
-                    const listItem = document.createElement('li');
-                    listItem.classList.add('autocomplete-list-item');
-                    listItem.textContent = suggestion;
-                    listItem.addEventListener('click', () => {
-                        input.value = suggestion;
-                        suggestionsContainer.innerHTML = '';
-                    });
-                    suggestionsContainer.appendChild(listItem);
+    .then(response => {
+        if (response.ok) {
+            return response.json();
+        } else {
+            console.error('Error:', response.status);
+            throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+    })
+    .then(data => {
+        const suggestions = data.map(item => item.nic);
+        suggestionsContainer.innerHTML = '';
+        const filteredSuggestions = suggestions.filter(suggestion =>
+            suggestion.toUpperCase().includes(inputValue)
+        );
+        suggestionsContainer.style.maxHeight = '200px';
+        suggestionsContainer.style.overflowY = 'auto';
+        suggestionsContainer.style.width = '100%';
+        suggestionsContainer.style.left = `18px`;
+        if (filteredSuggestions.length === 0) {
+            const errorMessage = document.createElement('li');
+            errorMessage.textContent = 'No suggestions found';
+            suggestionsContainer.appendChild(errorMessage);
+        } else {
+            filteredSuggestions.forEach(suggestion => {
+                const listItem = document.createElement('li');
+                listItem.classList.add('autocomplete-list-item');
+                listItem.textContent = suggestion;
+                listItem.addEventListener('click', () => {
+                    input.value = suggestion;
+                    suggestionsContainer.innerHTML = '';
                 });
-            }
-        })
-        .catch(error => {
-            console.error('Error:', error);
-        });
+                suggestionsContainer.appendChild(listItem);
+            });
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+    });
 }
 
 function showSuggestions4(event) {
@@ -693,44 +693,44 @@ function showSuggestions4(event) {
                 'p_id': session_p_id
             },
         })
-            .then(response => {
-                if (response.ok) {
-                    return response.json();
-                } else {
-                    console.error('Error:', response.status);
-                    throw new Error(`HTTP error! Status: ${response.status}`);
-                }
-            })
-            .then(data => {
-                const suggestions = data.map(item => item.reg_no);
-                suggestionsContainer.innerHTML = '';
-                const filteredSuggestions = suggestions.filter(suggestion =>
-                    suggestion.toUpperCase().includes(inputValue)
-                );
-                suggestionsContainer.style.maxHeight = '200px';
-                suggestionsContainer.style.overflowY = 'auto';
-                suggestionsContainer.style.width = '100%';
-                suggestionsContainer.style.left = `18px`;
-                if (filteredSuggestions.length === 0) {
-                    const errorMessage = document.createElement('li');
-                    errorMessage.textContent = 'No suggestions found';
-                    suggestionsContainer.appendChild(errorMessage);
-                } else {
-                    filteredSuggestions.forEach(suggestion => {
-                        const listItem = document.createElement('li');
-                        listItem.classList.add('autocomplete-list-item');
-                        listItem.textContent = suggestion;
-                        listItem.addEventListener('click', () => {
-                            input.value = suggestion;
-                            suggestionsContainer.innerHTML = '';
-                        });
-                        suggestionsContainer.appendChild(listItem);
+        .then(response => {
+            if (response.ok) {
+                return response.json();
+            } else {
+                console.error('Error:', response.status);
+                throw new Error(`HTTP error! Status: ${response.status}`);
+            }
+        })
+        .then(data => {
+            const suggestions = data.map(item => item.reg_no);
+            suggestionsContainer.innerHTML = '';
+            const filteredSuggestions = suggestions.filter(suggestion =>
+                suggestion.toUpperCase().includes(inputValue)
+            );
+            suggestionsContainer.style.maxHeight = '200px';
+            suggestionsContainer.style.overflowY = 'auto';
+            suggestionsContainer.style.width = '100%';
+            suggestionsContainer.style.left = `18px`;
+            if (filteredSuggestions.length === 0) {
+                const errorMessage = document.createElement('li');
+                errorMessage.textContent = 'No suggestions found';
+                suggestionsContainer.appendChild(errorMessage);
+            } else {
+                filteredSuggestions.forEach(suggestion => {
+                    const listItem = document.createElement('li');
+                    listItem.classList.add('autocomplete-list-item');
+                    listItem.textContent = suggestion;
+                    listItem.addEventListener('click', () => {
+                        input.value = suggestion;
+                        suggestionsContainer.innerHTML = '';
                     });
-                }
-            })
-            .catch(error => {
-                console.error('Error:', error);
-            });
+                    suggestionsContainer.appendChild(listItem);
+                });
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
     }
 }
 function showSuggestions5(event) {
@@ -744,44 +744,44 @@ function showSuggestions5(event) {
             'op_id': session_p_id
         },
     })
-        .then(response => {
-            if (response.ok) {
-                return response.json();
-            } else {
-                console.error('Error:', response.status);
-                throw new Error(`HTTP error! Status: ${response.status}`);
-            }
-        })
-        .then(data => {
-            const suggestions = data.map(item => item.nic);
-            suggestionsContainer.innerHTML = '';
-            const filteredSuggestions = suggestions.filter(suggestion =>
-                suggestion.toUpperCase().includes(inputValue)
-            );
-            suggestionsContainer.style.maxHeight = '200px';
-            suggestionsContainer.style.overflowY = 'auto';
-            suggestionsContainer.style.width = '100%';
-            suggestionsContainer.style.left = `18px`;
-            if (filteredSuggestions.length === 0) {
-                const errorMessage = document.createElement('li');
-                errorMessage.textContent = 'No suggestions found';
-                suggestionsContainer.appendChild(errorMessage);
-            } else {
-                filteredSuggestions.forEach(suggestion => {
-                    const listItem = document.createElement('li');
-                    listItem.classList.add('autocomplete-list-item');
-                    listItem.textContent = suggestion;
-                    listItem.addEventListener('click', () => {
-                        input.value = suggestion;
-                        suggestionsContainer.innerHTML = '';
-                    });
-                    suggestionsContainer.appendChild(listItem);
+    .then(response => {
+        if (response.ok) {
+            return response.json();
+        } else {
+            console.error('Error:', response.status);
+            throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+    })
+    .then(data => {
+        const suggestions = data.map(item => item.nic);
+        suggestionsContainer.innerHTML = '';
+        const filteredSuggestions = suggestions.filter(suggestion =>
+            suggestion.toUpperCase().includes(inputValue)
+        );
+        suggestionsContainer.style.maxHeight = '200px';
+        suggestionsContainer.style.overflowY = 'auto';
+        suggestionsContainer.style.width = '100%';
+        suggestionsContainer.style.left = `18px`;
+        if (filteredSuggestions.length === 0) {
+            const errorMessage = document.createElement('li');
+            errorMessage.textContent = 'No suggestions found';
+            suggestionsContainer.appendChild(errorMessage);
+        } else {
+            filteredSuggestions.forEach(suggestion => {
+                const listItem = document.createElement('li');
+                listItem.classList.add('autocomplete-list-item');
+                listItem.textContent = suggestion;
+                listItem.addEventListener('click', () => {
+                    input.value = suggestion;
+                    suggestionsContainer.innerHTML = '';
                 });
-            }
-        })
-        .catch(error => {
-            console.error('Error:', error);
-        });
+                suggestionsContainer.appendChild(listItem);
+            });
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+    });
 }
 function showSuggestions6(event) {
     const input = event.target;
@@ -794,44 +794,44 @@ function showSuggestions6(event) {
             'op_id': session_p_id
         },
     })
-        .then(response => {
-            if (response.ok) {
-                return response.json();
-            } else {
-                console.error('Error:', response.status);
-                throw new Error(`HTTP error! Status: ${response.status}`);
-            }
-        })
-        .then(data => {
-            const suggestions = data.map(item => item.nic);
-            suggestionsContainer.innerHTML = '';
-            const filteredSuggestions = suggestions.filter(suggestion =>
-                suggestion.toUpperCase().includes(inputValue)
-            );
-            suggestionsContainer.style.maxHeight = '200px';
-            suggestionsContainer.style.overflowY = 'auto';
-            suggestionsContainer.style.width = '100%';
-            suggestionsContainer.style.left = `18px`;
-            if (filteredSuggestions.length === 0) {
-                const errorMessage = document.createElement('li');
-                errorMessage.textContent = 'No suggestions found';
-                suggestionsContainer.appendChild(errorMessage);
-            } else {
-                filteredSuggestions.forEach(suggestion => {
-                    const listItem = document.createElement('li');
-                    listItem.classList.add('autocomplete-list-item');
-                    listItem.textContent = suggestion;
-                    listItem.addEventListener('click', () => {
-                        input.value = suggestion;
-                        suggestionsContainer.innerHTML = '';
-                    });
-                    suggestionsContainer.appendChild(listItem);
+    .then(response => {
+        if (response.ok) {
+            return response.json();
+        } else {
+            console.error('Error:', response.status);
+            throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+    })
+    .then(data => {
+        const suggestions = data.map(item => item.nic);
+        suggestionsContainer.innerHTML = '';
+        const filteredSuggestions = suggestions.filter(suggestion =>
+            suggestion.toUpperCase().includes(inputValue)
+        );
+        suggestionsContainer.style.maxHeight = '200px';
+        suggestionsContainer.style.overflowY = 'auto';
+        suggestionsContainer.style.width = '100%';
+        suggestionsContainer.style.left = `18px`;
+        if (filteredSuggestions.length === 0) {
+            const errorMessage = document.createElement('li');
+            errorMessage.textContent = 'No suggestions found';
+            suggestionsContainer.appendChild(errorMessage);
+        } else {
+            filteredSuggestions.forEach(suggestion => {
+                const listItem = document.createElement('li');
+                listItem.classList.add('autocomplete-list-item');
+                listItem.textContent = suggestion;
+                listItem.addEventListener('click', () => {
+                    input.value = suggestion;
+                    suggestionsContainer.innerHTML = '';
                 });
-            }
-        })
-        .catch(error => {
-            console.error('Error:', error);
-        });
+                suggestionsContainer.appendChild(listItem);
+            });
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+    });
 }
 
 document.getElementById("update_bus_reg_no").addEventListener("input", showSuggestions4);

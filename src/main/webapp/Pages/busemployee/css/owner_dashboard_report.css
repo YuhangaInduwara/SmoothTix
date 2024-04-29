@@ -2,7 +2,6 @@ body{
     margin:0;
     background-color: white;
     max-height: 100vh;
-
 }
 
 .dashboard{
@@ -195,7 +194,6 @@ a{
     background-color: rgba(250, 0, 0, 0.47);
 }
 
-
 .button {
     background-color: #EA2427;
     border: none;
@@ -206,8 +204,8 @@ a{
     text-decoration: none;
     font-size: 16px;
     cursor: pointer;
-    margin-left: auto; /* Set left margin to auto */
-    margin-right: auto; /* Set right margin to auto */
+    margin-left: auto;
+    margin-right: auto;
     margin-top: 10px;
 }
 
@@ -233,7 +231,7 @@ a{
 #reportTable {
     width: 100%;
     border-collapse: collapse;
-    margin-top: 20px; /* Adding space above the table */
+    margin-top: 20px;
 }
 
 #reportTable th, #reportTable td {
@@ -245,7 +243,7 @@ a{
 #reportTable th {
     background-color: #f2f2f2;
     font-weight: bold;
-    width: 50%; /* Ensure headers take up 50% of the table width */
+    width: 50%;
 }
 
 .alertBody{
@@ -306,6 +304,7 @@ a{
 .okButton:hover {
     background: #D1191D;
 }
+
 .overlay {
     display: none;
     position: fixed;
@@ -316,6 +315,7 @@ a{
     background-color: rgba(0, 0, 0, 0.5);
     z-index: 999;
 }
+
 .search_box {
     position: relative;
 }

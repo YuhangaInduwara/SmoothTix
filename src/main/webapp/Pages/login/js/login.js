@@ -85,9 +85,6 @@ function openAlertSuccess(user_role) {
     } else if (user_role === 2) {
         landingPage = 'http://localhost:2000/SmoothTix_war_exploded/Pages/timekeeper/html/timekpr_dashboard_home.html';
     }
-    // else if (user_role === 3) {
-    //     landingPage = 'http://localhost:2000/SmoothTix_war_exploded/Pages/busemployee/html/owner_dashboard_home.html';
-    // }
     else if (user_role === 4) {
         landingPage = 'http://localhost:2000/SmoothTix_war_exploded/Pages/busemployee/html/driver_dashboard_home.html';
     } else if (user_role === 5) {
@@ -125,7 +122,6 @@ function forgotPassword(){
 document.querySelector(".getOTPButton").addEventListener("click", function(event) {
         event.preventDefault();
         const nic = document.getElementById("nicForgot").value;
-        console.log(nic);
         if (!nic) {
             alert("Please enter your NIC.");
             return;
@@ -324,7 +320,6 @@ function verifyOTP(){
                             openAlert( "Password Successfully Updated!", "alertSuccess");
                             document.getElementById("changePassword").style.display = "none";
                             document.getElementById("overlay").style.display = "none";
-                            console.log('Update successful');
                             setTimeout(function()
                                 {location.reload(true)},2000);
 
@@ -332,7 +327,6 @@ function verifyOTP(){
                             openAlert( "Password Update Failed!", "alertFail");
                             document.getElementById("changePassword").style.display = "none";
                             document.getElementById("overlay").style.display = "none";
-                            console.log('Update unsuccessful');
                         } else {
                             openAlert( "Password Update Unsuccessful", "alertFail");
                             document.getElementById("changePassword").style.display = "none";
@@ -350,14 +344,12 @@ function verifyOTP(){
                 openAlert( "Passwords Unmatched", "alertFail");
                 document.getElementById("changePassword").style.display = "none";
                 document.getElementById("overlay").style.display = "none";
-                console.log('Password mismatch');
             }
         });
     }else{
         openAlert("OTP Verification Failed !", "alertFail");
         document.getElementById("otpVerification").style.display = "none";
         document.getElementById("overlay").style.display = "none";
-        console.log('OTP mismatch');
         setTimeout(function()
             {location.reload(true)},2000);
     }
