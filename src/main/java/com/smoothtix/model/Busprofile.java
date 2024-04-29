@@ -7,10 +7,6 @@ public class Busprofile {
     String reg_no;
 
     public Busprofile(){
-        this.bus_profile_id = bus_profile_id;
-        this.reg_no = reg_no;
-        this.driver_nic = driver_nic;
-        this.conductor_nic = conductor_nic;
     }
 
     public String getBusprofile_id(){

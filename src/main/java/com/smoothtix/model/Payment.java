@@ -5,8 +5,6 @@ public class Payment {
     String date_time;
     Double amount;
 
-
-
     public Payment(String payment_id, String date_time, Double amount){
         this.payment_id = payment_id;
         this.date_time = date_time;
@@ -20,7 +18,6 @@ public class Payment {
         return date_time;
     }
     public Double getAmount(){ return amount; }
-
 
     public void setPayment_id(String payment_id){
         this.payment_id = payment_id;
