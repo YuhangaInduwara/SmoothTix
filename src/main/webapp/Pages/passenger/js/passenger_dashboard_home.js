@@ -115,17 +115,20 @@ function openForm_add() {
     });
 }
 
+// function to close add bus form
 function closeForm_add() {
     document.getElementById("busRegForm").style.display = "none";
     document.getElementById("overlay").style.display = "none";
 }
 
+// function to open success alert
 function openAlertSuccess() {
     bus_id = "";
     document.getElementById("successAlert").style.display = "block";
     document.getElementById("overlay").style.display = "block";
 }
 
+// function to close success alert
 function closeAlertSuccess() {
     bus_id = "";
     document.getElementById("successAlert").style.display = "none";
@@ -133,6 +136,7 @@ function closeAlertSuccess() {
     window.location.href = "../../busemployee/html/owner_dashboard_bus.html";
 }
 
+// function to open fail alert
 function openAlertFail(response) {
     bus_id = "";
     document.getElementById("failMsg").innerHTML = "Operation failed <br> (" + response + ")";
@@ -140,6 +144,7 @@ function openAlertFail(response) {
     document.getElementById("overlay").style.display = "block";
 }
 
+// function to close fail alert
 function closeAlertFail() {
     bus_id = "";
     document.getElementById("failAlert").style.display = "none";
