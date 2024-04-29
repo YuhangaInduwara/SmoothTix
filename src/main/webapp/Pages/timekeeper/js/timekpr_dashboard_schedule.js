@@ -10,6 +10,31 @@ let bus_profile_id_schedule;
 let isUpdate = false;
 let update_schedule_id;
 
+// Function to capitalize the first letter of stand
+function capitalizeStartAndDestination(data) {
+    function capitalizeFirstLetter(str) {
+        return str.charAt(0).toUpperCase() + str.slice(1);
+    }
+
+    if (data) {
+        data.forEach(row => {
+            if (row.start) {
+                row.start = capitalizeFirstLetter(row.start);
+            }
+
+            if (row.destination) {
+                row.destination = capitalizeFirstLetter(row.destination);
+            }
+
+            if (row.stand_list) {
+                row.stand_list = capitalizeFirstLetter(row.stand_list);
+            }
+        });
+    }
+
+    return data;
+}
+
 // session management (authentication and authorization)
 document.addEventListener('DOMContentLoaded', function () {
     isAuthenticated().then(() => getTimeKeeperData());
@@ -41,7 +66,7 @@ function setSearchStands() {
         .then(data => {
 
             if (data) {
-                standData = data;
+                standData = capitalizeStartAndDestination(data);
 
                 let dropdown_start = document.getElementById("dropdown_start");
                 let dropdown_destination = document.getElementById("dropdown_destination");
@@ -110,7 +135,7 @@ function fetchAllData() {
             }
         })
         .then(data => {
-            allData = data;
+            allData = capitalizeStartAndDestination(data);
             document.getElementById("noOfPages").textContent = parseInt(allData.length / 3) + 1;
             updatePage(currentPage);
         })
@@ -299,7 +324,7 @@ function searchData() {
         .then(data => {
             const tableBody = document.querySelector("#dataTable tbody");
             tableBody.innerHTML = "";
-            allData = data;
+            allData = capitalizeStartAndDestination(data);
             updatePage(currentPage);
         })
         .catch(error => {

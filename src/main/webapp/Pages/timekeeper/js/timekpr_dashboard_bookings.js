@@ -4,6 +4,31 @@ let allData = [];
 let allSearchData = [];
 let searchOption = 'booking_id';
 
+// Function to capitalize the first letter of stand
+function capitalizeStartAndDestination(data) {
+    function capitalizeFirstLetter(str) {
+        return str.charAt(0).toUpperCase() + str.slice(1);
+    }
+
+    if (data) {
+        data.forEach(row => {
+            if (row.start) {
+                row.start = capitalizeFirstLetter(row.start);
+            }
+
+            if (row.destination) {
+                row.destination = capitalizeFirstLetter(row.destination);
+            }
+
+            if (row.stand_list) {
+                row.stand_list = capitalizeFirstLetter(row.stand_list);
+            }
+        });
+    }
+
+    return data;
+}
+
 // session management (authentication and authorization)
 document.addEventListener('DOMContentLoaded', function () {
     isAuthenticated().then(() => fetchAllData());
@@ -31,7 +56,7 @@ function fetchAllData() {
             }
         })
         .then(data => {
-            allData = data;
+            allData = capitalizeStartAndDestination(data);
             updatePage(currentPage, false);
         })
         .catch(error => {
@@ -85,7 +110,7 @@ function displayDataAsTable(data) {
     // check for empty pages
     if(rowCount === 0){
         const noDataRow = document.createElement("tr");
-        noDataRow.innerHTML = `<td colspan="7">No data available</td>`;
+        noDataRow.innerHTML = `<td colspan="8">No data available</td>`;
         tableBody.appendChild(noDataRow);
         return;
     }

@@ -475,4 +475,7 @@ tbody tr:hover {
     margin-right: 0;
 }
 
+.conductor_form_require{
+    color: #ff0202;
+}
 

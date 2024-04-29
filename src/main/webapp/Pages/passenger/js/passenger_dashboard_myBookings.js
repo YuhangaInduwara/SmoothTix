@@ -7,6 +7,31 @@ let seat_delete = [];
 let all_seats = [];
 const errorMessages = {};
 
+// Function to capitalize the first letter of stand
+function capitalizeStartAndDestination(data) {
+    function capitalizeFirstLetter(str) {
+        return str.charAt(0).toUpperCase() + str.slice(1);
+    }
+
+    if (data) {
+        data.forEach(row => {
+            if (row.start) {
+                row.start = capitalizeFirstLetter(row.start);
+            }
+
+            if (row.destination) {
+                row.destination = capitalizeFirstLetter(row.destination);
+            }
+
+            if (row.stand_list) {
+                row.stand_list = capitalizeFirstLetter(row.stand_list);
+            }
+        });
+    }
+
+    return data;
+}
+
 // session management
 document.addEventListener('DOMContentLoaded', function () {
    isAuthenticated().then(() => fetchAllData());
@@ -32,7 +57,7 @@ function setSearchStands() {
         })
         .then(data => {
             if (data) {
-                standData = data;
+                standData = capitalizeStartAndDestination(data);
 
                 let dropdown_start = document.getElementById("dropdown_start");
                 let dropdown_destination = document.getElementById("dropdown_destination");
@@ -80,7 +105,8 @@ function fetchAllData(){
             }
         })
         .then(data => {
-            allData = data.sort((a, b) => {
+            let tempData = capitalizeStartAndDestination(data)
+            allData = tempData.sort((a, b) => {
                 const dateComparison = a.date.localeCompare(b.date);
                 if (dateComparison !== 0) {
                     return dateComparison;
@@ -88,6 +114,7 @@ function fetchAllData(){
 
                 return a.time.localeCompare(b.time);
             });
+
             displayDataAsScheduleTiles_0(allData);
             displayDataAsScheduleTiles_1(allData);
         })
@@ -655,7 +682,7 @@ function searchData() {
         .then(data => {
             document.getElementById("schedule_list").innerHTML = "";
             document.getElementById("schedule_list_old").innerHTML = "";
-            allData = data;
+            allData = capitalizeStartAndDestination(data);
             displayDataAsScheduleTiles_0(allData);
             displayDataAsScheduleTiles_1(allData);
         })

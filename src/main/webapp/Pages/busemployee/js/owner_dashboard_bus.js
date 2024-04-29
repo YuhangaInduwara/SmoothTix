@@ -7,6 +7,30 @@ let dataSearch = [];
 let allData = [];
 let allRequestData = [];
 
+// Function to capitalize the first letter of stand
+function capitalizeStartAndDestination(data) {
+    function capitalizeFirstLetter(str) {
+        return str.charAt(0).toUpperCase() + str.slice(1);
+    }
+
+    if (data) {
+        data.forEach(row => {
+            if (row.start) {
+                row.start = capitalizeFirstLetter(row.start);
+            }
+
+            if (row.destination) {
+                row.destination = capitalizeFirstLetter(row.destination);
+            }
+
+            if (row.stand_list) {
+                row.stand_list = capitalizeFirstLetter(row.stand_list);
+            }
+        });
+    }
+
+    return data;
+}
 
 document.addEventListener('DOMContentLoaded', function () {
     isAuthenticated().then(() => fetchAllData());
@@ -34,7 +58,7 @@ function fetchAllData() {
         return response.json();
     })
     .then(data => {
-        allData = data;
+        allData = capitalizeStartAndDestination(data);
         updatePage(currentPage);
     })
     .catch(error => {

@@ -55,13 +55,15 @@ public class feasibilityTable {
                 "JOIN\n" +
                 "    route r ON b.route_id = r.route_id\n" +
                 "WHERE\n" +
-                "    r.start = ?\n" +
-                "    AND r.destination = ?\n" +
+                "    ((r.start = ? AND r.destination = ?) OR (r.start = ? AND r.destination = ?))\n" +
                 "    AND fs.date = ?;");
         pst.setString(1, start);
         pst.setString(2, destination);
-        pst.setString(3, date);
+        pst.setString(3, destination);
+        pst.setString(4, start);
+        pst.setString(5, date);
         ResultSet rs = pst.executeQuery();
         return rs;
     }
+
 }

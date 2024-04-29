@@ -105,6 +105,22 @@ function renderPageControl() {
 
 // Function to display data in table format
 function displayDataAsTable(data) {
+    const tableBody = document.querySelector("#dataTable tbody");
+    tableBody.innerHTML = ''
+    const rowCount = data.length;
+
+    // check for empty pages
+    if(rowCount === 0){
+        const noDataRow = document.createElement("tr");
+        noDataRow.innerHTML = `<td colspan="8">No data available</td>`;
+        tableBody.appendChild(noDataRow);
+        return;
+    }
+
+    // display page controls if row count is greater than 10
+    if(rowCount >= 10){
+        renderPageControl()
+    }
     // Loop through each data item
     data.forEach(item => {
         // Create a table row element
