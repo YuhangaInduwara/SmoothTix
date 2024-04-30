@@ -121,7 +121,7 @@ function displayDataAsTable(data) {
     }
 
     // Renders page control if row count >= 10
-    if(rowCount >= 10){
+    if(data.length >= 10){
         renderPageControl()
     }
 

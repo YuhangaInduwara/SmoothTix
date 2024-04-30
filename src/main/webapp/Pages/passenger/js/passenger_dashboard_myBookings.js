@@ -620,14 +620,27 @@ function openSeeMore(page){
                 </span>
             `;
             } else if (page === 1) {
-                buttonsHTML = `
+                if (item.schedule_status === 1) {
+                    buttonsHTML = `
                 <span class="icon-container">
                     <i onclick="ViewLocation('${item.schedule_id}')"><img src="../../../images/vector_icons/location_icon.png" alt="location" class="action_icon"></i>
                 </span>
                 <span class="icon-container" style="margin-left: 1px;">
                     <i onclick="openReview('${item.schedule_id}', '${item.booking_id}')"><img src="../../../images/vector_icons/review_icon.png" alt="review" class="action_icon"></i>
-                </span>
+                </span>  
             `;
+                }
+                else if (item.schedule_status === 2) {
+                    buttonsHTML = `
+                <span class="icon-container" style="margin-left: 1px;">
+                    <i onclick="openReview('${item.schedule_id}', '${item.booking_id}')"><img src="../../../images/vector_icons/review_icon.png" alt="review" class="action_icon"></i>
+                </span>  
+            `;
+                }
+                else if (item.schedule_status === 0) {
+                    buttonsHTML = `
+            `;
+                }
             }
             const scheduleElement = document.createElement("div");
             scheduleElement.classList.add("schedule_tiles");

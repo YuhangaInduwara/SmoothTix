@@ -199,7 +199,7 @@ document.getElementById("busRegForm").addEventListener("submit", function(event)
     .then(response => {
         if (response.ok) {
             closeForm_add();
-            openAlertSuccess("Successfully Added!");
+            openAlertSuccess("Operation Successful! Your bus request is pending for approval.");
         } else if (response.status === 409) {
             return response.text().then(error_msg => {
                 openAlertFail(error_msg);
@@ -273,7 +273,7 @@ function updateRow(bus_id){
         .then(response => {
             if (response.ok) {
                 closeForm_update();
-                openAlertSuccess("Successfully");
+                openAlertSuccess("Successfully Updated");
             } else if (response.status === 401) {
                 openAlertFail(response.status);
                 console.log('Update unsuccessful');
@@ -410,7 +410,7 @@ if(action === 'add'){
         <div class="bus_form_left">
             <div class="form_div">
                 <label for="reg_no" class="bus_form_title">Registration No <span class="bus_form_require">*</span></label>
-                <input type="text" name="reg_no" id="reg_no" class="form_data" placeholder=" Eg : NB-xxxx" required="required" />
+                <input type="text" name="reg_no" id="reg_no" class="form_data" placeholder=" Eg : NB-XXXX" required="required" pattern="[A-Z]{2,3}-[0-9]{4}" title="Format: XX-1234 or XXX-1234"/>
             </div>
             <div class="form_div">
                 <label for="route_no" class="bus_form_title">Route No <span class="bus_form_require">*</span></label>
@@ -419,7 +419,7 @@ if(action === 'add'){
             </div>
             <div class="form_div">
                 <label for="no_of_Seats" class="bus_form_title">Number of Seats <span class="bus_form_require">*</span></label>
-                <input type="number" name="no_of_Seats" id="no_of_Seats" class="form_data" placeholder=" Eg : ##" required="required" />
+                <input type="number" name="no_of_Seats" id="no_of_Seats" class="form_data" placeholder=" Eg : XX" required="required" required="required" pattern="[0-9]{2}" title="Format:50"/>
             </div>
         </div>
         `;
