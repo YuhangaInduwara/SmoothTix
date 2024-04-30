@@ -43,7 +43,7 @@ public class busTable {
 
     private static String generateBusID() throws SQLException {
         Connection con = dbConnection.initializeDatabase();
-        String query = "SELECT MAX(CAST(SUBSTRING(bus_id, 2) AS SIGNED)) + 1 AS next_bus_id FROM bus_request";
+        String query = "SELECT COALESCE(MAX(CAST(SUBSTRING(bus_id, 2) AS SIGNED)), 0) + 1 AS next_bus_id FROM bus_request";
         Statement stmt = con.createStatement();
         ResultSet rs = stmt.executeQuery(query);
 
